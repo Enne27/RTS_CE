@@ -29,6 +29,8 @@ public class ScenesManager : MonoBehaviour
     {
         if (rememberCurrentScene)
             ViewManager.Instance.RememberCurrentView();
+
+        ChangeScene(sceneName);
     }
 
     /// <summary>

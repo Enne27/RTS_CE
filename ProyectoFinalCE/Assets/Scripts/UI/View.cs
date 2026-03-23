@@ -1,9 +1,9 @@
 using UnityEngine;
 
-// Todas las vistas necesitan un CanvasGroup y un script de efectos.
+// Todas las vistas necesitan un CanvasGroup y un ID.
 [RequireComponent(typeof(CanvasGroup))]
-[RequireComponent(typeof(UIEffects))]
 [RequireComponent(typeof(GuidComponent))]
+
 /// <summary>
 /// Clase abstracta que representa los diferentes Canvas o pantallas del juego.
 /// Cada uno de ellos tiene una vista personalizada que hereda de esta clase.
@@ -12,20 +12,25 @@ using UnityEngine;
 public abstract class View : MonoBehaviour
 {
     #region VARIABLES
+    [Header("Componentes vista")]
+
+    [Tooltip("Id específico de esta vista.")]
     [SerializeField] protected GuidComponent guidComponent;
+    
+    [Tooltip("CanvasGroup para ocultar y mostrar la vista.")]
+    [SerializeField] protected CanvasGroup object_cg;
+    #endregion
+
+    /// <summary>
+    /// Obtiene el componente requerido Guid.
+    /// </summary>
+    /// <returns></returns>
     public string GetGuid()
     {
         if (!guidComponent)
             guidComponent = GetComponent<GuidComponent>();
         return guidComponent.GetGuid().ToString();
     }
-
-    [Header("Componentes vista")]
-
-    [Tooltip("CanvasGroup para ocultar y mostrar la vista.")]
-    [SerializeField] private CanvasGroup cg;
-    [SerializeField] private UIEffects effects;
-    #endregion
 
     /// <summary>
     /// Inicializa todos los elementos necesarios del Canvas: botones, scroll views...
@@ -43,9 +48,5 @@ public abstract class View : MonoBehaviour
     /// </summary>
     public virtual void Hide() => gameObject.SetActive(false);
 
-
-    /* public virtual void ShowWithFade() => effects.;
-     * public virtual void HideWithFade() => effects.;
-     * 
-     * */
+    // REVISAR SI SOBREESCRIBIR SHOW Y HIDE AQUÍ CON LOS EFECTOS
 }

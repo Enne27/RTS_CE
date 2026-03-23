@@ -73,7 +73,6 @@ public class ViewManager : MonoBehaviour
 
     #endregion
 
-
     #region UNITY_METHODS
 
     private void Awake()
@@ -88,9 +87,7 @@ public class ViewManager : MonoBehaviour
         else
         {
             if (instance.otherViewManagers == null)
-            {
                 instance.otherViewManagers = new List<ViewManager>();
-            }
 
             // Añadir el nuevo ViewManager correctamente a la lista.
             if (!instance.otherViewManagers.Contains(this))
@@ -110,6 +107,10 @@ public class ViewManager : MonoBehaviour
     }
     #endregion
 
+    /// <summary>
+    /// Inicio interno del propio ViewManager.
+    /// Registra las vistas de escena en el diccionario interno, hace la inicialización de todas las vistas y las oculta al momento.
+    /// </summary>
     void InternalStart()
     {
         // Registramos todas las vistas en el diccionario utilizando su GuidComponent.
@@ -146,6 +147,11 @@ public class ViewManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Subscripción al cargar la escena.
+    /// </summary>
+    /// <param name="arg0"></param>
+    /// <param name="arg1"></param>
     private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
         if (goingBackwards)
@@ -177,6 +183,9 @@ public class ViewManager : MonoBehaviour
         DebugPrintHistory();
     }
 
+    /// <summary>
+    /// Debug en consola de cuántas vistas hay en el historial mediante los IDs registrados.
+    /// </summary>
     private void DebugPrintHistory()
     {
         Debug.Log("Historial de vistas (Count: " + viewsHistory.Count + "):");
@@ -285,7 +294,6 @@ public class ViewManager : MonoBehaviour
     /// <param name="remember">Indica si se debe guardar la vista actual en el historial.</param>
     public static void Show<T>(bool remember = true) where T : View
     {
-
         //Comprobar si la vista ya existe en el stack, pero no está la siguiente
         //Si no existe, funcioinamiento normal
         //Si si existe, llamada al Clear hasta llegar a la vista deseada y hacer Show de esta. Asegurandote de hacer Show con remember a false
@@ -332,6 +340,10 @@ public class ViewManager : MonoBehaviour
         instance.currentView = view;
     }
 
+    /// <summary>
+    /// Busca en la escena y oculta la vista indicada.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static void Hide<T>() where T : View
     {
         T view = FindFirstObjectByType<T>(); // Busca incluso objetos inactivos
@@ -341,6 +353,10 @@ public class ViewManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Retrocede a la vista anterior.
+    /// </summary>
+    /// <param name="remember"></param>
     private static void ShowLastViewInternal(bool remember = true)
     {
         // Mientras haya entradas en el historial...
@@ -370,6 +386,11 @@ public class ViewManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Llama al método para retroceder a la vista anterior.
+    /// </summary>
+    /// <param name="steps"></param>
+    /// <param name="remember"></param>
     public static void ShowLastView(int steps = 1, bool remember = true)
     {
         for (int i = 0; i < steps; i++)
@@ -419,6 +440,9 @@ public class ViewManager : MonoBehaviour
         return view != null && view.gameObject.activeInHierarchy;
     }
 
+    /// <summary>
+    /// Guarda la vista actual en el stack.
+    /// </summary>
     public void RememberCurrentView()
     {
         instance.viewsHistory.Push(instance.currentView.GetGuid());
