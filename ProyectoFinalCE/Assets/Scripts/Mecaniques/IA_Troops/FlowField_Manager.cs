@@ -6,6 +6,12 @@ public enum FlowFieldDisplayType { None, AllIcons, DestinationIcon, CostField, I
 
 public class FlowField_Manager : MonoBehaviour
 {
+
+    public Vector2Int gridSize;
+    public float cellRadius = 0.5f;
+
+    public List<FlowField> flowFields;
+
     #region Singleton
     public static FlowField_Manager Instance { get; private set; }
 
@@ -18,25 +24,32 @@ public class FlowField_Manager : MonoBehaviour
         }
 
         Instance = this;
+        flowFields = new List<FlowField>();
     }
     #endregion
 
-    public Vector2Int gridSize;
-    public float cellRadius = 0.5f;
-
-    public List<FlowField> flowFields;
-
-
-    public void InitializeFlowField(Vector3 worldMousePos)
+    public int InitializeFlowField(Vector3 worldMousePos)
     {
         FlowField flowField = new FlowField(cellRadius, gridSize, transform);
-        flowField.CreateGrid();
-        flowField.CreateCostField();
+        flowField.CreateGrid(); //TODO: Make the grid smaller(not all map)
         Cell destinationCell = flowField.GetCellFromWorldPos(worldMousePos);
+
+
+        for (int i = 0; i < flowFields.Count; i++) 
+        {
+            if (flowFields[i].destinationCell.worldPos == destinationCell.worldPos)
+            {
+                return i;
+            }
+            
+        }
+
+        flowField.CreateCostField();
         flowField.CreateIntegrationField(destinationCell);
         flowField.CreateFlowField();
 
         flowFields.Add(flowField);
+        return flowFields.Count -1;
     }
 
 

@@ -593,14 +593,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e265411489e2d9a4780152c03c2c4687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitController
-  flowField_Test: {fileID: 1735358969}
-  unitPrefab: {fileID: 7216534960791646569, guid: 95b004e13aae8bb42b68ca43ec0c73e3, type: 3}
+  flowField_Editor: {fileID: 1735358969}
+  unitPrefab: {fileID: 7034595134114008638, guid: 95b004e13aae8bb42b68ca43ec0c73e3, type: 3}
   numUnitsPerSpawn: 3
   moveSpeed: 10
-  unitsSelected: []
-  dragThreshold: 10
-  startMousePos: {x: 0, y: 0}
-  currentMousePos: {x: 0, y: 0}
   action:
     m_Name: Action
     m_Id: 54df2888-d3e6-413d-9c9d-786fe35de232
@@ -622,30 +618,6 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    - m_Name: leftClick
-      m_Type: 1
-      m_ExpectedControlType: Button
-      m_Id: 1201628b-f81e-4755-9b91-9b541df9acab
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    - m_Name: rightClick
-      m_Type: 1
-      m_ExpectedControlType: Button
-      m_Id: c0047afc-6a6a-46eb-bfd7-3f7c7c678f63
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
-    - m_Name: mousePositionAction
-      m_Type: 0
-      m_ExpectedControlType: Vector2
-      m_Id: 51c49015-a969-4699-88a3-257e519daac9
-      m_Processors: 
-      m_Interactions: 
-      m_SingletonActionBindings: []
-      m_Flags: 0
     m_Bindings:
     - m_Name: 
       m_Id: 0c942c30-ea64-498d-b600-2fd9764b4e11
@@ -663,31 +635,6 @@ MonoBehaviour:
       m_Groups: 
       m_Action: destroyUnits
       m_Flags: 0
-    - m_Name: 
-      m_Id: 6295f394-2f44-425b-9f2e-b47d47877655
-      m_Path: <Mouse>/leftButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: leftClick
-      m_Flags: 0
-    - m_Name: 
-      m_Id: 8120983f-f8d0-4cbc-ab18-4275dc02fbf5
-      m_Path: <Mouse>/rightButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: rightClick
-      m_Flags: 0
-    - m_Name: 
-      m_Id: 0f624808-fe95-42d1-8bc2-a34c1d2ab13e
-      m_Path: <Pointer>/position
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: mousePositionAction
-      m_Flags: 0
-  selectionArea: {fileID: 1344258867}
 --- !u!4 &1159321008
 Transform:
   m_ObjectHideFlags: 0
@@ -778,6 +725,109 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1344258866}
   m_CullTransparentMesh: 1
+--- !u!1 &1497908551
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1497908553}
+  - component: {fileID: 1497908552}
+  m_Layer: 0
+  m_Name: Troops selection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1497908552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497908551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30585fd1a344b3439393ad66bc50e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TroopsSelection
+  unitsSelected: []
+  dragThreshold: 5
+  startMousePos: {x: 0, y: 0}
+  currentMousePos: {x: 0, y: 0}
+  action:
+    m_Name: Action
+    m_Id: 54df2888-d3e6-413d-9c9d-786fe35de232
+    m_Asset: {fileID: 0}
+    m_Actions:
+    - m_Name: leftClick
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: 1201628b-f81e-4755-9b91-9b541df9acab
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    - m_Name: rightClick
+      m_Type: 1
+      m_ExpectedControlType: Button
+      m_Id: c0047afc-6a6a-46eb-bfd7-3f7c7c678f63
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    - m_Name: mousePositionAction
+      m_Type: 0
+      m_ExpectedControlType: Vector2
+      m_Id: 51c49015-a969-4699-88a3-257e519daac9
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Bindings:
+    - m_Name: 
+      m_Id: 6295f394-2f44-425b-9f2e-b47d47877655
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: leftClick
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 8120983f-f8d0-4cbc-ab18-4275dc02fbf5
+      m_Path: <Mouse>/rightButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: rightClick
+      m_Flags: 0
+    - m_Name: 
+      m_Id: 0f624808-fe95-42d1-8bc2-a34c1d2ab13e
+      m_Path: <Pointer>/position
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: mousePositionAction
+      m_Flags: 0
+  selectionArea: {fileID: 1344258867}
+--- !u!4 &1497908553
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497908551}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.41235, y: -0.1026, z: -0.07748}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1735358968
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +842,7 @@ GameObject:
   - component: {fileID: 1735358970}
   - component: {fileID: 1735358969}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: Plane/FlowField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -914,7 +964,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 189034303}
   - {fileID: 99803994}
-  - {fileID: 1735358973}
-  - {fileID: 1159321008}
   - {fileID: 533514191}
   - {fileID: 1035634415}
+  - {fileID: 1735358973}
+  - {fileID: 1159321008}
+  - {fileID: 1497908553}

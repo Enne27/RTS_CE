@@ -4,31 +4,19 @@ using UnityEngine.InputSystem;
 
 public class UnitController : MonoBehaviour
 {
-    public FlowField_Manager flowField_Test;
-    public GameObject unitPrefab;
+    public FlowField_Manager flowField_Editor;
+    public BaseAnt unitPrefab;
     public int numUnitsPerSpawn;
     public float moveSpeed;
 
-    private List<GameObject> unitsInGame;
-    [SerializeField]private List<GameObject> unitsSelected;
+    static public List<BaseAnt> antsInGame; //TODO: make singleton instead of static public var
+    static public List<BaseAnt> activeAnts; //TODO: make singleton instead of static public var
 
-    public float dragThreshold = 5f;
-
-    private bool isDragging;
-    [SerializeField]private Vector2 startMousePos;
-    [SerializeField]private Vector2 currentMousePos;
 
     //Input
     public InputActionMap action;
     private InputAction spawnUnits;
     private InputAction destroyUnits;
-    private InputAction leftClick;
-    private InputAction rightClick;
-    private InputAction mousePositionAction;
-
-    public RectTransform selectionArea;
-    private bool isLeftMouseDown;
-
 
     private void OnEnable()
     {
@@ -39,83 +27,77 @@ public class UnitController : MonoBehaviour
         destroyUnits = action.FindAction("destroyUnits");
         destroyUnits.performed += DestroyUnits;
         destroyUnits.Enable();
-
-        leftClick = action.FindAction("leftClick");
-        leftClick.started += OnLeftClickStarted;
-        leftClick.canceled += OnLeftClickCanceled;
-        leftClick.Enable();
-
-        rightClick = action.FindAction("rightClick");
-        rightClick.performed += OnRightClick;
-        rightClick.Enable();
     }
     private void Awake()
     {
-        unitsInGame = new List<GameObject>();
-    }
-
-    private void Update()
-    {
-        if (isLeftMouseDown)
-        {
-            currentMousePos = Mouse.current.position.ReadValue();
-
-            if (!isDragging)
-            {
-                float dist = Vector2.Distance(currentMousePos, startMousePos);
-                if (dist >= dragThreshold)
-                {
-                    isDragging = true;
-                }
-            }
-
-            if (isDragging && selectionArea != null)
-            {
-                UpdateSelectionBox(startMousePos, currentMousePos);
-            }
-        }
-
-        if (rightClick.WasPressedThisFrame())
-        {
-            Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
-            Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, 10f);
-            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-            FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
-        }
+        antsInGame = new List<BaseAnt>();
+        activeAnts = new List<BaseAnt>();
     }
 
     private void FixedUpdate()
     {
+        Debug.Log("Active ants: " + activeAnts.Count);
 
         //foreach (FlowField flowField in FlowField_Manager.Instance.flowFields)
         //{
-        //    foreach ()
+        //    foreach (Troop  troop in flowField)
         //    {
-
+        //        Cell cellBelow = flowField.GetCellFromWorldPos(troop.transform.position);
+        //        Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
+        //        Rigidbody troopRB = troop.GetComponent<Rigidbody>();
+        //        troopRB.linearVelocity = moveDirection * moveSpeed;
         //    }
         //}
-        //if (flowField_Test.curFlowField == null) { return; }
-        //foreach (GameObject unit in unitsInGame)
+
+        //foreach (GameObject troop in unitsInGame) //GameObject Should be of type (Troop/unit/baseAnt/ant)
         //{
-        //    Cell cellBelow = flowField_Test.curFlowField.GetCellFromWorldPos(unit.transform.position);
+        //    //Each ant should have a flowField index refearing to a flow field array
+        //    //it should exist a invalid flow field index in case this ant/unit has no instruction (0 in this example)
+        //    if (troop.flowFieldIndex == 0) continue;
+
+        //    Cell cellBelow = flowFieldArray[troop.flowFieldIndex].GetCellFromWorldPos(troop.transform.position);
         //    Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
-        //    Rigidbody unitRB = unit.GetComponent<Rigidbody>();
-        //    unitRB.linearVelocity = moveDirection * moveSpeed;
+        //    Rigidbody troopRB = troop.GetComponent<Rigidbody>();
+        //    troopRB.linearVelocity = moveDirection * moveSpeed;
+        //}
+
+
+        for (int i = 0; i < activeAnts.Count; i++)
+        {
+            Cell cellBelow = FlowField_Manager.Instance.flowFields[activeAnts[i].flowFieldInxex].GetCellFromWorldPos(activeAnts[i].transform.position);
+            if (cellBelow.worldPos == activeAnts[i].transform.position)
+            {
+                activeAnts.RemoveAt(i);
+                continue;
+            }
+            Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
+            Rigidbody troopRB = activeAnts[i].GetComponent<Rigidbody>();
+            troopRB.linearVelocity = moveDirection * moveSpeed;
+        }
+        //foreach (BaseAnt baseAnt in activeAnts) //GameObject Should be of type (Troop/unit/baseAnt/ant)
+        //                                                //activeUnitsInGame tries to avoid empty iterations where the troop has no instruction
+        //                                                //but maybe is worse baceuse has to exist another array/list with units added and removed each time thay get or lose instructuins
+        //{
+        //    //Each ant should have a flowField index refearing to a flow field array
+        //    //in this case shouldn't be needed the invalid index for no flow field
+        //    //if (troop.flowFieldIndex == 0) continue;
+
+
         //}
     }
 
     private void SpawnUnits(InputAction.CallbackContext context)
     {
         Debug.Log("Spawn");
-        Vector2Int gridSize = flowField_Test.gridSize;
-        float nodeRadius = flowField_Test.cellRadius;
+        Vector2Int gridSize = flowField_Editor.gridSize;
+        float nodeRadius = flowField_Editor.cellRadius;
         Vector2 maxSpawnPos = new Vector2(gridSize.x * nodeRadius * 2 + nodeRadius, gridSize.y * nodeRadius * 2 + nodeRadius);
         Vector3 newPos;
         for (int i = 0; i < numUnitsPerSpawn; i++)
         {
-            GameObject newUnit = Instantiate(unitPrefab);
+            BaseAnt newUnit = Instantiate(unitPrefab);
             newUnit.transform.parent = transform;
-            unitsInGame.Add(newUnit);
+            antsInGame.Add(newUnit);
 
             newPos = new Vector3(Random.Range(-maxSpawnPos.x / 2, maxSpawnPos.x / 2), 0, Random.Range(-maxSpawnPos.y / 2, maxSpawnPos.y / 2));
             newUnit.transform.position = newPos;
@@ -124,87 +106,10 @@ public class UnitController : MonoBehaviour
 
     private void DestroyUnits(InputAction.CallbackContext context)
     {
-        foreach (GameObject go in unitsInGame)
+        foreach (BaseAnt baseAnt in antsInGame)
         {
-            Destroy(go);
+            Destroy(baseAnt);
         }
-        unitsInGame.Clear();
-    }
-
-    private void OnRightClick(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    void OnLeftClickStarted(InputAction.CallbackContext ctx)
-    {
-        Debug.Log("Started");
-        startMousePos = Mouse.current.position.ReadValue();
-        isLeftMouseDown = true;
-        isDragging = false;
-        currentMousePos = startMousePos;
-    }
-
-    void OnLeftClickCanceled(InputAction.CallbackContext ctx)
-    {
-        isLeftMouseDown = false;
-
-        if (isDragging)
-        {
-            DragSelection();
-        }
-        else
-        {
-            // Single click select
-            //PerformSingleClick();
-        }
-        selectionArea.sizeDelta = Vector2.zero;
-        isDragging = false;
-    }
-    private void UpdateSelectionBox(Vector2 start, Vector2 current)
-    {
-        Vector2 size = current - start;
-
-        selectionArea.anchoredPosition = start;
-        selectionArea.sizeDelta = new Vector2(Mathf.Abs(size.x), Mathf.Abs(size.y));
-
-        // Fix direction (so it grows correctly)
-        selectionArea.pivot = new Vector2(
-            size.x >= 0 ? 0 : 1,
-            size.y >= 0 ? 0 : 1
-        );
-    }
-
-    private void DragSelection()
-    {
-        Vector2 min = Vector2.Min(startMousePos, currentMousePos);
-        Vector2 max = Vector2.Max(startMousePos, currentMousePos);
-        Rect selectionRect = new Rect(min, max - min);
-
-        for (int i = unitsSelected.Count - 1; i >= 0; i--)
-        {
-            GameObject go = unitsSelected[i];
-            go.transform.GetChild(0).gameObject.SetActive(false);
-            unitsSelected.RemoveAt(i);
-        }
-
-        foreach (GameObject go in unitsInGame)
-        {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(go.transform.position);
-            if (screenPos.z < 0)
-                continue;
-
-            if (selectionRect.Contains(screenPos))
-            {
-
-                go.transform.GetChild(0).gameObject.SetActive(true);
-                if (!unitsSelected.Contains(go))
-                    unitsSelected.Add(go);
-            }
-        }
-    }
-    private void SingleClickSelection()
-    {
-
+        antsInGame.Clear();
     }
 } 
