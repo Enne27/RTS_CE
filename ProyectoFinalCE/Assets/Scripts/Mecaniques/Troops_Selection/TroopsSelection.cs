@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,19 +21,19 @@ public class TroopsSelection : MonoBehaviour
 
     public List<BaseAnt> unitsSelected;
 
-    public float dragThreshold = 5f;
+    [SerializeField] private float dragThreshold = 5f;
+    private Vector2 startMousePos;
+    private Vector2 currentMousePos;
     private bool isDragging;
-    [SerializeField] private Vector2 startMousePos;
-    [SerializeField] private Vector2 currentMousePos;
 
 
     //Input
-    public InputActionMap action;
+    [SerializeField] private InputActionMap action;
     private InputAction leftClick;
     private InputAction rightClick;
     private InputAction mousePositionAction;
 
-    public RectTransform selectionArea;
+    [SerializeField] private RectTransform selectionArea;
     private bool isLeftMouseDown;
 
     private void OnEnable()
@@ -68,7 +67,7 @@ public class TroopsSelection : MonoBehaviour
             }
 
             if (isDragging && selectionArea != null)
-            {
+            {   
                 UpdateSelectionBox(startMousePos, currentMousePos);
             }
         }
@@ -89,10 +88,10 @@ public class TroopsSelection : MonoBehaviour
 
     private void OnRightClick(InputAction.CallbackContext context)
     {
-        //Every selected unit performs the action that right click is hivering, movment, atack, gather...
+        SingleClickSelection();
     }
 
-    void OnLeftClickStarted(InputAction.CallbackContext ctx)
+    private void OnLeftClickStarted(InputAction.CallbackContext ctx)
     {
         Debug.Log("Started");
         startMousePos = Mouse.current.position.ReadValue();
@@ -101,7 +100,7 @@ public class TroopsSelection : MonoBehaviour
         currentMousePos = startMousePos;
     }
 
-    void OnLeftClickCanceled(InputAction.CallbackContext ctx)
+    private void OnLeftClickCanceled(InputAction.CallbackContext ctx)
     {
         isLeftMouseDown = false;
 
@@ -116,6 +115,7 @@ public class TroopsSelection : MonoBehaviour
         selectionArea.sizeDelta = Vector2.zero;
         isDragging = false;
     }
+    
     private void UpdateSelectionBox(Vector2 start, Vector2 current)
     {
         Vector2 size = current - start;
@@ -157,7 +157,8 @@ public class TroopsSelection : MonoBehaviour
             }
         }
     }
-    private void SingleClickSelection()
+    
+    private void SingleClickSelection() 
     {
 
     }
