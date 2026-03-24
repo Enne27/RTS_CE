@@ -1,42 +1,27 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static PlayerConstants;
 
-public class Player
+public class Player : MonoBehaviour
 {
     #region Variables
-    protected int id;
-    protected string name;
-    //protected string color;
-    protected HIVE_ERAS currentEra;
+    public int id;
+    public string playerName;
+    [Tooltip("The outline color that this player's ants will have")]
+    public Color playerColor;
+    [Tooltip("An inventory GameObject will be created at runtime")]
+    public Inventory inventory;
+    [Tooltip("The era at wich the player's hive is at")]
+    public HIVE_ERAS currentEra;
     #endregion
 
     #region Methods
-    public int AddEggs(int playerEggs, int eggsToAdd)
+    private void Awake()
     {
-        return playerEggs + eggsToAdd;
-    }
-    public int RemoveEggs(int playerEggs, int eggsToRemove)
-    {
-        return playerEggs - eggsToRemove;
-    }
-
-    public int AddFood(int playerFood, int foodToRemove)
-    {
-        return playerFood - foodToRemove;
-    }
-    public int RemoveFood(int playerFood, int foodToRemove)
-    {
-        return playerFood - foodToRemove;
-    }
-
-    public int AddUpgradePoints(int playerUpgradePoints, int upgradePointsToAdd)
-    {
-        return playerUpgradePoints - upgradePointsToAdd;
-    }
-    public int RemoveUpgradePoints(int playerUpgradePoints, int upgradePointsToRemove)
-    {
-        return playerUpgradePoints - upgradePointsToRemove;
+        //Instanciamos el inventario
+        inventory = this.AddComponent<Inventory>();
     }
     #endregion
+
 }

@@ -5,22 +5,22 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static PlayerConstants;
 
-public class Inventory
+public class Inventory : MonoBehaviour
 {
     #region Variables
-    protected int eggs;
-    protected int food;
+    public int eggs;
+    public int food;
     [Tooltip("Maximum egg capacity for each era")]
-    public HIVE_ERAS currentEra;
-    protected int eggCapacity;
-    protected int foodCapacity;
-    protected int upgradePoints;
+    public int eggCapacity;
+    [Tooltip("Maximum Food capacity for each era")]
+    public int foodCapacity;
+    public int upgradePoints;
     #endregion
-
+        
     #region Methods
-    public int SetEggCapacity()
+    public int SetEggCapacity(HIVE_ERAS playerEra)
     {
-        return eggCapacity = EGG_CAPACITIES[currentEra];
+        return eggCapacity = EGG_CAPACITIES[playerEra];
     }
 
     public int AddEggs(int eggsToAdd)
