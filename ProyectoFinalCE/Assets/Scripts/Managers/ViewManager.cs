@@ -5,7 +5,8 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Esta clase sigue el patrón Singleton.
-/// Maneja todo el comportamiento de la clase abstracta UIView.
+/// Maneja todo el comportamiento de la clase abstracta View.
+/// El sistema de UI funciona mediante Views.
 /// Este script mantiene un seguimiento de cuál es la vista actual, y el historial de listas que hemos seguido hasta llegar a ella.
 /// </summary>
 public class ViewManager : MonoBehaviour
@@ -15,7 +16,7 @@ public class ViewManager : MonoBehaviour
     private static ViewManager instance; 
 
     /// <summary>
-    /// Acceder a la instancia singleton.
+    /// Accede a la instancia singleton.
     /// </summary>
     public static ViewManager Instance => instance;
     #endregion
@@ -62,7 +63,7 @@ public class ViewManager : MonoBehaviour
 
     [Header("RETROCESO")]
     /// <summary>
-    /// Historial de vistas para poder retroceder (por ejemplo, con un botón "Atrás")
+    /// Historial de vistas para poder retroceder.
     /// </summary>
     private readonly Stack<string> viewsHistory = new Stack<string>();
 
@@ -99,11 +100,11 @@ public class ViewManager : MonoBehaviour
 
     private void Start()
     {
-        InternalStart();
+        //InternalStart();
 
         // Mostramos la vista de inicio si está asignada.
         if (startingView != null)
-            Show(startingView, false);
+            Show(startingView, true);
     }
     #endregion
 
@@ -114,7 +115,6 @@ public class ViewManager : MonoBehaviour
     void InternalStart()
     {
         // Registramos todas las vistas en el diccionario utilizando su GuidComponent.
-        // Se espera que cada vista tenga asignado un GuidComponent para generar su ID único.
         foreach (View v in views)
         {
             var guidComp = v.GetComponent<GuidComponent>();
@@ -193,6 +193,8 @@ public class ViewManager : MonoBehaviour
         {
             Debug.Log(" - " + guid);
         }
+
+        // COMPARAR CON EL VIEW DICTIONARY Y PONER TAMBIÉN LA VIEW QUE ES
     }
 
     /// <summary>
@@ -226,7 +228,7 @@ public class ViewManager : MonoBehaviour
             // Se asume que la startingView está asignada en el Inspector en la nueva escena.
             if (localVM.startingView != null)
             {
-                // Se muestra sin guardar en el historial (remember = false). ESTO LO HE CAMBIADO, YO QUIERO QUE SE GUARDE
+                // Se muestra la vista guardandola en el historial.
                 Show(localVM.startingView, true);
             }
             else

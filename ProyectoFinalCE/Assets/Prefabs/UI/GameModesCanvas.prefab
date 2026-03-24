@@ -983,6 +983,9 @@ GameObject:
   - component: {fileID: 742481391761098038}
   - component: {fileID: 4969919989054915475}
   - component: {fileID: 1262544129660201345}
+  - component: {fileID: 6294482171834969165}
+  - component: {fileID: 7855641487570661814}
+  - component: {fileID: 8146659446971121356}
   m_Layer: 5
   m_Name: GameModesCanvas
   m_TagString: Untagged
@@ -1077,3 +1080,44 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6294482171834969165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437723647631760256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ec2bfe0a7f1d5340b0748dc879b2714, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameModesView
+  guidComponent: {fileID: 8146659446971121356}
+  object_cg: {fileID: 7855641487570661814}
+  singlePlayerButton: {fileID: 3728621325733351662}
+  creativeModeButton: {fileID: 1642313017041292393}
+--- !u!225 &7855641487570661814
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437723647631760256}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &8146659446971121356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437723647631760256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16dfabca28b5bd40824c52b1f37fa71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuidComponent
+  serializedGuid: 

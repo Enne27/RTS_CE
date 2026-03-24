@@ -26,6 +26,8 @@ public class MainMenuView : View
         {
             UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration);
             // Hide de esta view y cambio de escena a escena juego.
+            Hide();
+            ViewManager.Show<GameModesView>();
         });
 
         exitButton.onClick.AddListener(ScenesManager.Instance.ExitGame);
@@ -38,6 +40,8 @@ public class MainMenuView : View
         settingsButton.onClick.AddListener(() => 
         { 
             // Hide de esta view y Show de Settings.
+            Hide();
+
         });
 
     }
