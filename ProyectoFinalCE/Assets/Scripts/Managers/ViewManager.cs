@@ -94,13 +94,14 @@ public class ViewManager : MonoBehaviour
             if (!instance.otherViewManagers.Contains(this))
                 instance.otherViewManagers.Add(this);
 
-            InternalStart();
+            // En esta primera ejecución no se añaden las diferntes views a la lista, es necesario usar la segunda internalización, que está en el Start.
+            //InternalStart(); 
         }
     }
 
     private void Start()
     {
-        //InternalStart();
+        InternalStart();
 
         // Mostramos la vista de inicio si está asignada.
         if (startingView != null)
@@ -365,7 +366,7 @@ public class ViewManager : MonoBehaviour
         while (instance.viewsHistory.Count > 0)
         {
             string topGuid = instance.viewsHistory.Peek();
-            KeyValuePair<string, View> sceneView = FindViewById(topGuid); // FIND VIEW BY ID Y GET VIEW BY ID HACEN LO MISMO????
+            KeyValuePair<string, View> sceneView = FindViewById(topGuid); 
 
             if (sceneView.Value != null)
             {

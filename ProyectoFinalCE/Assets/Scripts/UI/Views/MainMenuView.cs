@@ -24,7 +24,7 @@ public class MainMenuView : View
 
         startButton.onClick.AddListener(() => 
         {
-            UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration);
+            //UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration);
             // Hide de esta view y cambio de escena a escena juego.
             Hide();
             ViewManager.Show<GameModesView>();
