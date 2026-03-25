@@ -18,7 +18,7 @@ public class CreditsView : View
 
         restartButton.onClick.AddListener(() =>
         {
-            ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, true);
+            ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, false);
         });
     }
 }

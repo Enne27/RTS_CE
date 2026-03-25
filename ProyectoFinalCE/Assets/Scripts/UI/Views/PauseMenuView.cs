@@ -34,7 +34,7 @@ public class PauseMenuView : View
         backButton.onClick.AddListener(() => 
         {
             Hide();
-            //ViewManager.ShowLastView(1, false);
+            ViewManager.ShowLastView(1, false);
         });
     }
 }

@@ -24,7 +24,7 @@ public class ScenesManager : MonoBehaviour
     /// Método para cambiar de escena usando el ViewManager.
     /// </summary>
     /// <param name="sceneName"></param>
-    /// <param name="rememberCurrentScene"></param>
+    /// <param name="rememberCurrentScene">Recordar la escena actual, no la nueva.</param>
     public void ChangeScene(string sceneName, bool rememberCurrentScene)
     {
         if (rememberCurrentScene)

@@ -14,6 +14,7 @@ public class MainMenuView : View
     [SerializeField] Button creditsButton;
     [SerializeField] Button settingsButton;
     #endregion
+
     public override void Initialize()
     {
         if(guidComponent == null) 
@@ -34,14 +35,15 @@ public class MainMenuView : View
 
         creditsButton.onClick.AddListener(() => 
         {
-            ScenesManager.Instance.ChangeScene(CREDITS_SCENE_NAME, true);
+            Hide();
+            ScenesManager.Instance.ChangeScene(CREDITS_SCENE_NAME, false);
         });
 
         settingsButton.onClick.AddListener(() => 
         { 
             // Hide de esta view y Show de Settings.
-            Hide();
-
+            //Hide();
+            //ViewManager.Show<SettingsView>();
         });
 
     }
