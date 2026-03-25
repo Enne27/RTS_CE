@@ -71,24 +71,19 @@ public class TroopsSelection : MonoBehaviour
                 UpdateSelectionBox(startMousePos, currentMousePos);
             }
         }
-
-        if (rightClick.WasPressedThisFrame())
-        {
-            Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
-            Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, 10f);
-            Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-            int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
-            foreach (BaseAnt ant in unitsSelected)
-            {
-                ant.flowFieldInxex = flowFieldIndex;
-                UnitController.activeAnts.Add(ant);
-            }
-        }
     }
 
     private void OnRightClick(InputAction.CallbackContext context)
     {
-        SingleClickSelection();
+        Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
+        Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, Camera.main.transform.position.y);
+        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
+        foreach (BaseAnt ant in unitsSelected)
+        {
+            ant.flowFieldInxex = flowFieldIndex;
+            UnitController.activeAnts.Add(ant);
+        }
     }
 
     private void OnLeftClickStarted(InputAction.CallbackContext ctx)
@@ -157,9 +152,28 @@ public class TroopsSelection : MonoBehaviour
             }
         }
     }
-    
-    private void SingleClickSelection() 
-    {
 
+    private void SingleClickSelection()
+    {
+        Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos2D);
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            BaseAnt clickedAnt = hit.collider.GetComponent<BaseAnt>();
+
+            for (int i = unitsSelected.Count - 1; i >= 0; i--)
+            {
+                BaseAnt ant = unitsSelected[i];
+                ant.transform.GetChild(0).gameObject.SetActive(false);
+                unitsSelected.RemoveAt(i);
+            }
+
+            if (clickedAnt != null)
+            {
+                clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+                unitsSelected.Add(clickedAnt);
+            }
+        }
     }
 }

@@ -27,14 +27,13 @@ public class FlowField
 
         Vector3 gridOrigin =
             origin.position
-            - new Vector3(gridSize.x * cellDiameter, 0f, gridSize.y * cellDiameter) * 0.5f
-            + new Vector3(cellRadius, 0f, cellRadius);
+            - new Vector3(gridSize.x * cellDiameter, 0f, gridSize.y * cellDiameter) * 0.5f;
 
         for (int x = 0; x < gridSize.x; x++)
         {
             for (int y = 0; y < gridSize.y; y++)
             {
-                Vector3 worldPos = gridOrigin + new Vector3(x * cellDiameter, 0f, y * cellDiameter);
+                Vector3 worldPos = gridOrigin + new Vector3(x * cellDiameter + cellRadius, 0f, y * cellDiameter + cellRadius);
                 grid[x, y] = new Cell(worldPos, new Vector2Int(x, y));
             }
         }
@@ -139,17 +138,17 @@ public class FlowField
 
     public Cell GetCellFromWorldPos(Vector3 worldPos)
     {
-        Vector3 gridOrigin =
+        Vector3 gridOrigin =    
             origin.position
             - new Vector3(gridSize.x * cellDiameter, 0f, gridSize.y * cellDiameter) * 0.5f;
 
         Vector3 local = worldPos - gridOrigin;
 
-        float percentX = Mathf.Clamp01(local.x / (gridSize.x * cellDiameter));
-        float percentY = Mathf.Clamp01(local.z / (gridSize.y * cellDiameter));
+        int x = Mathf.FloorToInt(local.x / cellDiameter);
+        int y = Mathf.FloorToInt(local.z / cellDiameter);
 
-        int x = Mathf.Clamp(Mathf.FloorToInt(gridSize.x * percentX), 0, gridSize.x - 1);
-        int y = Mathf.Clamp(Mathf.FloorToInt(gridSize.y * percentY), 0, gridSize.y - 1);
+        x = Mathf.Clamp(x, 0, gridSize.x - 1);
+        y = Mathf.Clamp(y, 0, gridSize.y - 1);
 
         return grid[x, y];
     }

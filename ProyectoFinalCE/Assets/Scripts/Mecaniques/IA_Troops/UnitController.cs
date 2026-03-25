@@ -10,7 +10,8 @@ public class UnitController : MonoBehaviour
     public float moveSpeed;
 
     static public List<BaseAnt> antsInGame; //TODO: make singleton instead of static public var
-    static public List<BaseAnt> activeAnts; //TODO: make singleton instead of static public var
+    static public HashSet<BaseAnt> activeAnts; //TODO: make singleton instead of static public var
+    private List<BaseAnt> antsToRemove = new List<BaseAnt>();
 
 
     //Input
@@ -31,13 +32,18 @@ public class UnitController : MonoBehaviour
     private void Awake()
     {
         antsInGame = new List<BaseAnt>();
-        activeAnts = new List<BaseAnt>();
+        activeAnts = new HashSet<BaseAnt>();
     }
 
     private void FixedUpdate()
     {
-        Debug.Log("Active ants: " + activeAnts.Count);
+        //If no units in are using a flow field. Flow field should be destroyed or reused in a pool
+        //If unit end his work should be removed from active ants
+        Debug.Log("Active ants: " + activeAnts.Count);  
+        Debug.Log("Active flowFields: " + FlowField_Manager.Instance.flowFields.Count);
 
+
+        #region Ideas
         //foreach (FlowField flowField in FlowField_Manager.Instance.flowFields)
         //{
         //    foreach (Troop  troop in flowField)
@@ -61,19 +67,6 @@ public class UnitController : MonoBehaviour
         //    troopRB.linearVelocity = moveDirection * moveSpeed;
         //}
 
-
-        for (int i = 0; i < activeAnts.Count; i++)
-        {
-            Cell cellBelow = FlowField_Manager.Instance.flowFields[activeAnts[i].flowFieldInxex].GetCellFromWorldPos(activeAnts[i].transform.position);
-            if (cellBelow.worldPos == activeAnts[i].transform.position)
-            {
-                activeAnts.RemoveAt(i);
-                continue;
-            }
-            Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
-            Rigidbody troopRB = activeAnts[i].GetComponent<Rigidbody>();
-            troopRB.linearVelocity = moveDirection * moveSpeed;
-        }
         //foreach (BaseAnt baseAnt in activeAnts) //GameObject Should be of type (Troop/unit/baseAnt/ant)
         //                                                //activeUnitsInGame tries to avoid empty iterations where the troop has no instruction
         //                                                //but maybe is worse baceuse has to exist another array/list with units added and removed each time thay get or lose instructuins
@@ -84,6 +77,71 @@ public class UnitController : MonoBehaviour
 
 
         //}
+
+        #endregion
+
+        antsToRemove.Clear();
+
+        foreach (BaseAnt ant in activeAnts)
+        {
+
+            //Cell cellBelow = FlowField_Manager.Instance
+            //.flowFields[ant.flowFieldInxex]
+            //.GetCellFromWorldPos(ant.transform.position);
+
+            //Vector3 moveDirection = new Vector3(cellBelow.bestDirection.Vector.x, 0, cellBelow.bestDirection.Vector.y);
+            //ant.transform.position += moveDirection * moveSpeed * Time.deltaTime;
+
+            
+            Cell cellBelow = FlowField_Manager.Instance
+                .flowFields[ant.flowFieldInxex]
+                .GetCellFromWorldPos(ant.transform.position);
+
+            // Dirección hacia la celda
+            Vector3 desiredDirection = new Vector3(
+                cellBelow.bestDirection.Vector.x,
+                0,
+                cellBelow.bestDirection.Vector.y
+            ).normalized;
+
+            // Si ya está en destino
+            //TODO: Quitar hormiga si esta bloqueada por otra en el destino por separacion.
+            if (desiredDirection == Vector3.zero)
+            {
+                Debug.Log("Hormiga ha llegado a su destino");
+                antsToRemove.Add(ant);
+                continue;
+            }
+
+            // --- STEERING ---
+            float maxSpeed = moveSpeed;
+            float steeringStrength = 5f;
+
+            Vector3 currentVelocity = ant.currentVelocity;
+            Vector3 desiredVelocity = desiredDirection * maxSpeed;
+            Vector3 steering = (desiredVelocity - currentVelocity) * steeringStrength;
+            currentVelocity += steering * Time.deltaTime;
+            currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
+            ant.currentVelocity = currentVelocity;
+            ant.transform.position += currentVelocity * Time.deltaTime;
+            if (currentVelocity != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(currentVelocity);
+                ant.transform.rotation = Quaternion.Slerp(
+                    ant.transform.rotation,
+                    targetRotation,
+                    10f * Time.deltaTime
+                );
+            }
+        }
+
+        // Remover ants
+        
+        foreach (BaseAnt ant in antsToRemove)
+        {
+            activeAnts.Remove(ant);
+        }
+
     }
 
 

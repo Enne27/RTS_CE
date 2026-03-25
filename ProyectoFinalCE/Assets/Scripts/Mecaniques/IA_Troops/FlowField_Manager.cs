@@ -6,7 +6,6 @@ public enum FlowFieldDisplayType { None, AllIcons, DestinationIcon, CostField, I
 
 public class FlowField_Manager : MonoBehaviour
 {
-
     public Vector2Int gridSize;
     public float cellRadius = 0.5f;
 
@@ -41,7 +40,6 @@ public class FlowField_Manager : MonoBehaviour
             {
                 return i;
             }
-            
         }
 
         flowField.CreateCostField();
@@ -53,6 +51,7 @@ public class FlowField_Manager : MonoBehaviour
     }
 
 
+#if UNITY_EDITOR
     #region Debug
     private FlowField debugFlowField;
     public FlowFieldDisplayType curDisplayType;
@@ -60,77 +59,79 @@ public class FlowField_Manager : MonoBehaviour
 
     private void OnValidate()
     {
+        Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
+        transform.localScale = new Vector3(gridSize.x / 10.0f * cellRadius * 2, 1, gridSize.y / 10.0f * cellRadius * 2);
         debugFlowField = new FlowField(cellRadius, gridSize, transform);
         debugFlowField.CreateGrid();
     }
-    private void OnDrawGizmos()
-    {
-        if (Application.isPlaying) return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (Application.isPlaying) return;
 
-        if (displayGrid)
-        {
-            DrawGrid(Color.yellow);
-        }
+    //    if (displayGrid)
+    //    {
+    //        DrawGrid(Color.yellow);
+    //    }
 
-        if (debugFlowField == null) { return; }
+    //    if (debugFlowField == null) { return; }
 
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.alignment = TextAnchor.MiddleCenter;
+    //    GUIStyle style = new GUIStyle(GUI.skin.label);
+    //    style.alignment = TextAnchor.MiddleCenter;
 
-        switch (curDisplayType)
-        {
-            case FlowFieldDisplayType.CostField:
+    //    switch (curDisplayType)
+    //    {
+    //        case FlowFieldDisplayType.CostField:
 
-                foreach (Cell curCell in debugFlowField.grid)
-                {
-                    Handles.Label(curCell.worldPos, curCell.cost.ToString(), style);
-                }
-                break;
+    //            foreach (Cell curCell in debugFlowField.grid)
+    //            {
+    //                Handles.Label(curCell.worldPos, curCell.cost.ToString(), style);
+    //            }
+    //            break;
 
-            case FlowFieldDisplayType.IntegrationField:
+    //        case FlowFieldDisplayType.IntegrationField:
 
-                foreach (Cell curCell in debugFlowField.grid)
-                {
-                    Handles.Label(curCell.worldPos, curCell.bestCost.ToString(), style);
-                }
-                break;
+    //            foreach (Cell curCell in debugFlowField.grid)
+    //            {
+    //                Handles.Label(curCell.worldPos, curCell.bestCost.ToString(), style);
+    //            }
+    //            break;
 
-            case FlowFieldDisplayType.DestinationIcon:
+    //        case FlowFieldDisplayType.DestinationIcon:
 
-                Gizmos.color = Color.yellow;
-                foreach (Cell curCell in debugFlowField.grid)
-                {
-                    if (curCell.cost == 0)
-                    {
-                        Handles.DrawWireDisc(curCell.worldPos, Vector3.up, debugFlowField.cellRadius);
-                    }
-                    else if (curCell.cost == byte.MaxValue)
-                    {
-                        Vector3 start1 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, -debugFlowField.cellRadius);
-                        Vector3 end1 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, debugFlowField.cellRadius);
+    //            Gizmos.color = Color.yellow;
+    //            foreach (Cell curCell in debugFlowField.grid)
+    //            {
+    //                if (curCell.cost == 0)
+    //                {
+    //                    Handles.DrawWireDisc(curCell.worldPos, Vector3.up, debugFlowField.cellRadius);
+    //                }
+    //                else if (curCell.cost == byte.MaxValue)
+    //                {
+    //                    Vector3 start1 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, -debugFlowField.cellRadius);
+    //                    Vector3 end1 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, debugFlowField.cellRadius);
 
-                        Vector3 start2 = curCell.worldPos + new Vector3(-debugFlowField.cellRadius, 0, debugFlowField.cellRadius);
-                        Vector3 end2 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, -debugFlowField.cellRadius);
+    //                    Vector3 start2 = curCell.worldPos + new Vector3(-debugFlowField.cellRadius, 0, debugFlowField.cellRadius);
+    //                    Vector3 end2 = curCell.worldPos + new Vector3(debugFlowField.cellRadius, 0, -debugFlowField.cellRadius);
 
-                        Gizmos.DrawLine(start1, end1);
-                        Gizmos.DrawLine(start2, end2);
-                    }
-                    else if (curCell.bestDirection != null)
-                    {
-                        Vector2 dir2D = curCell.bestDirection.Vector;
+    //                    Gizmos.DrawLine(start1, end1);
+    //                    Gizmos.DrawLine(start2, end2);
+    //                }
+    //                else if (curCell.bestDirection != null)
+    //                {
+    //                    Vector2 dir2D = curCell.bestDirection.Vector;
 
-                        Vector3 dir3D = new Vector3(dir2D.x, 0f, dir2D.y);
+    //                    Vector3 dir3D = new Vector3(dir2D.x, 0f, dir2D.y);
 
-                        DrawArrow(curCell.worldPos, dir3D, debugFlowField.cellRadius * 2, Color.yellow);
-                    }
-                }
-                break;
+    //                    DrawArrow(curCell.worldPos, dir3D, debugFlowField.cellRadius * 2, Color.yellow);
+    //                }
+    //            }
+    //            break;
 
-            default:
-                break;
-        }
+    //        default:
+    //            break;
+    //    }
 
-    }
+    //}
 
     public void SetFlowField(FlowField newFlowField)
     {
@@ -175,6 +176,6 @@ public class FlowField_Manager : MonoBehaviour
         }
     }
     #endregion
+#endif
 
 }
- 
