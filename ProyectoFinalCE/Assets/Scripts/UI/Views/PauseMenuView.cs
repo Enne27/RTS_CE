@@ -15,8 +15,8 @@ public class PauseMenuView : View
     {
         startButton.onClick.AddListener(() => 
         {
-            Hide();
-            ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, true);
+            //Hide();
+            ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, false);
         });
 
         controlsButton.onClick.AddListener(() => 
@@ -33,8 +33,9 @@ public class PauseMenuView : View
 
         backButton.onClick.AddListener(() => 
         {
-            Hide();
-            ViewManager.ShowLastView(1, false);
+            //Hide();
+            //ViewManager.ShowLastView(1, false);
+            PauseController.instance.TogglePause();
         });
     }
 }

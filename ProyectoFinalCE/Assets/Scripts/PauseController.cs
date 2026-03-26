@@ -12,6 +12,7 @@ public class PauseController : MonoBehaviour
 
     private InputAction escapeToPause;
     public bool pausableMoment;
+    private bool isPaused;
 
     [HideInInspector] public UnityEvent onPause;
     [HideInInspector] public UnityEvent onUnPause;
@@ -45,23 +46,26 @@ public class PauseController : MonoBehaviour
 
     void Update()
     {
-        // Detecta la tecla ESC
         if (escapeToPause.triggered)
         {
             if (pausableMoment)
                 TogglePause();
         }
+
     }
 
-    void TogglePause()
+    /// <summary>
+    /// Verifica el estado de pausa dependiendo de si se muestra la vista del menú de pausa.
+    /// </summary>
+    public void TogglePause()
     {
         // Verifica si la vista de pausa está activa
-        bool isPaused = ViewManager.IsViewActive<PauseMenuView>();
+        isPaused = ViewManager.IsViewActive<PauseMenuView>();
+        //Debug.Log(isPaused);
 
         if (isPaused)
         {
             ViewManager.Hide<PauseMenuView>();
-            //ViewManager.Show<GameHUDView>(); // AQUÍ DEBERÍAMOS REVISAR LA VIEW, NO SIEMPRE SERÁ LA DE GAME, PUEDE SER INFO GENERAL, ETC.
             ViewManager.ShowLastView();
             onUnPause?.Invoke();
         }
@@ -71,5 +75,6 @@ public class PauseController : MonoBehaviour
             ViewManager.Show<PauseMenuView>();
             onPause?.Invoke();
         }
+
     }
 }
