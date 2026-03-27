@@ -163,11 +163,21 @@ public class CameraMovement : MonoBehaviour
 
     private void ZoomCamera(InputAction.CallbackContext obj)
     {
-        float inputValue = -obj.ReadValue<Vector2>().y / 100f;
+        // 1. Leemos el valor puro
+        Vector2 scrollValue = obj.ReadValue<Vector2>();
 
-        if (Mathf.Abs(inputValue) > 0.1f)
+        // Descomenta esta línea para ver en consola qué valor exacto te manda tu ratón
+        // Debug.Log($"Scroll detectado: {scrollValue.y}");
+
+        // 2. Quitamos la división entre 100 por ahora y usamos el valor directo
+        float inputValue = -scrollValue.y;
+
+        // 3. Bajamos drásticamente el límite (threshold) para asegurarnos de que entra
+        if (Mathf.Abs(inputValue) > 0.01f)
         {
-            zoomHeight = cameraTransform.localPosition.y + inputValue * stepSize;
+            // 4. Aplicamos un multiplicador pequeño aquí en lugar de dividir antes
+            float zoomMultiplier = 0.5f; // Ajusta esto si el zoom es muy rápido o muy lento
+            zoomHeight = cameraTransform.localPosition.y + (inputValue * stepSize * zoomMultiplier);
 
             if (zoomHeight < minHeight)
                 zoomHeight = minHeight;

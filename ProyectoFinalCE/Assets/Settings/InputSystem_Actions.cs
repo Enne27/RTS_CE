@@ -1102,7 +1102,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""ZoomCamera"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""19c7e1c0-d8f0-49b9-8d30-5260240beb79"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
