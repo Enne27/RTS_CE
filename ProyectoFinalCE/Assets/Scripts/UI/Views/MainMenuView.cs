@@ -42,8 +42,8 @@ public class MainMenuView : View
         settingsButton.onClick.AddListener(() => 
         { 
             // Hide de esta view y Show de Settings.
-            //Hide();
-            //ViewManager.Show<SettingsView>();
+            Hide();
+            ViewManager.Show<SettingsView>();
         });
 
     }
