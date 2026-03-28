@@ -1,0 +1,52 @@
+using UnityEngine;
+
+// Todas las vistas necesitan un CanvasGroup y un ID.
+[RequireComponent(typeof(CanvasGroup))]
+[RequireComponent(typeof(GuidComponent))]
+
+/// <summary>
+/// Clase abstracta que representa los diferentes Canvas o pantallas del juego.
+/// Cada uno de ellos tiene una vista personalizada que hereda de esta clase.
+/// Contiene los métodos base que todos los Canvas o pantallas han de tener.
+/// </summary>
+public abstract class View : MonoBehaviour
+{
+    #region VARIABLES
+    [Header("Componentes vista")]
+
+    [Tooltip("Id específico de esta vista.")]
+    [SerializeField] protected GuidComponent guidComponent;
+    
+    [Tooltip("CanvasGroup para ocultar y mostrar la vista.")]
+    [SerializeField] protected CanvasGroup object_cg;
+    #endregion
+
+    /// <summary>
+    /// Obtiene el componente requerido Guid.
+    /// </summary>
+    /// <returns></returns>
+    public string GetGuid()
+    {
+        if (!guidComponent)
+            guidComponent = GetComponent<GuidComponent>();
+        return guidComponent.GetGuid().ToString();
+    }
+
+    /// <summary>
+    /// Inicializa todos los elementos necesarios del Canvas: botones, scroll views...
+    /// Es el primer método que toda pantalla debe ejecutar.
+    /// </summary>
+    public abstract void Initialize();
+
+    /// <summary>
+    /// Mostrar la vista en escena simplemente activando el objecto.
+    /// </summary>
+    public virtual void Show() => gameObject.SetActive(true);
+
+    /// <summary>
+    /// Ocultar la vista en escena simplemente desactivando el objeto.
+    /// </summary>
+    public virtual void Hide() => gameObject.SetActive(false);
+
+    // REVISAR SI SOBREESCRIBIR SHOW Y HIDE AQUÍ CON LOS EFECTOS
+}
