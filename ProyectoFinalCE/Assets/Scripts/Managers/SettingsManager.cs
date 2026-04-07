@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Localization.Settings;
@@ -21,6 +21,7 @@ public enum Language { Castellano, Catalan, Ingles }
 
 public class SettingsManager : MonoBehaviour
 {
+    #region VARIABLES
     public static SettingsManager Instance;
 
     [Header("Data")]
@@ -34,6 +35,7 @@ public class SettingsManager : MonoBehaviour
     public TMP_Dropdown languageDropdown;
 
     private Bus masterBus;
+    #endregion
 
     private void Awake()
     {
@@ -41,24 +43,24 @@ public class SettingsManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            masterBus = RuntimeManager.GetBus("bus:/");
-
-            LoadSettings();
-            ApplySettings();
-            SyncUI();
-        }
-        else
-        {
+        } else {
             Destroy(gameObject);
         }
     }
 
     private void Start()
     {
+        masterBus = RuntimeManager.GetBus("bus:/");
+
+        LoadSettings();
         HookUI();
+        ApplySettings();
+        SyncUI();
     }
 
+    /// <summary>
+    /// Añadir los listeners a los elementos de UI de la configuración general.
+    /// </summary>
     void HookUI()
     {
         qualityDropdown.onValueChanged.AddListener((i) => SetQuality((QualityLevel)i));
@@ -68,6 +70,9 @@ public class SettingsManager : MonoBehaviour
         languageDropdown.onValueChanged.AddListener((i) => SetLanguage((Language)i));
     }
 
+    /// <summary>
+    /// Actualizar los valores de la interfaz.
+    /// </summary>
     void SyncUI()
     {
         qualityDropdown.SetValueWithoutNotify((int)settings.quality);
