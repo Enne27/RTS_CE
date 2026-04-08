@@ -45,6 +45,15 @@ public class MainMenuView : View
             Hide();
             ViewManager.Show<SettingsView>();
         });
+    }
 
+    public override void Show()
+    {
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
     }
 }

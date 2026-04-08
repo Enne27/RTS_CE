@@ -125,8 +125,40 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 745407029}
     m_Modifications:
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 265399600833058466, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1085893330181354603, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
       propertyPath: m_Name
       value: SettingsCanvas
@@ -166,7 +198,7 @@ PrefabInstance:
     - target: {fileID: 2246589329418774961, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
       propertyPath: settings
       value: 
-      objectReference: {fileID: 11400000, guid: 72739f41dc787e34e852136ef31af2c9, type: 2}
+      objectReference: {fileID: 11400000, guid: eddf2b8e5c18fe144acc4e06f65968b1, type: 2}
     - target: {fileID: 2271246938733676737, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -271,6 +303,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4447360635932355199, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+      propertyPath: m_IsOn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6522952100836214165, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -323,12 +359,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2246589329418774961, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1085893330181354603, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
-      insertIndex: 4
+      insertIndex: -1
       addedObject: {fileID: 112041680}
     - targetCorrespondingSourceObject: {fileID: 1085893330181354603, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
       insertIndex: -1
@@ -382,6 +419,11 @@ MonoBehaviour:
   guidComponent: {fileID: 112041678}
   object_cg: {fileID: 112041679}
   backButton: {fileID: 968720636}
+--- !u!224 &112041681 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2271246938733676737, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &395133737
 GameObject:
   m_ObjectHideFlags: 0
@@ -392,8 +434,8 @@ GameObject:
   m_Component:
   - component: {fileID: 395133740}
   - component: {fileID: 395133739}
-  - component: {fileID: 395133738}
   - component: {fileID: 395133741}
+  - component: {fileID: 395133742}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -401,14 +443,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &395133738
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 395133737}
-  m_Enabled: 1
 --- !u!20 &395133739
 Camera:
   m_ObjectHideFlags: 0
@@ -519,6 +553,20 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &395133742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395133737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioListener
+  nonRigidbodyVelocity: 0
+  attenuationObject: {fileID: 0}
 --- !u!1 &410257399
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +630,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &589912419 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5756215420447885121, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
+--- !u!114 &731842476 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5890768166292327362, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
 --- !u!1 &745407027
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +664,7 @@ GameObject:
   - component: {fileID: 745407028}
   - component: {fileID: 745407031}
   - component: {fileID: 745407030}
+  - component: {fileID: 745407032}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -627,6 +698,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2006420990}
+  - {fileID: 112041681}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &745407030
@@ -667,6 +739,24 @@ MonoBehaviour:
       Data3: 2086370483
       Data4: 41472065
     Path: event:/Music/BackgroundGameMusic
+--- !u!114 &745407032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 745407027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b07360859982514384ce3b6d4ea262f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
+  settings: {fileID: 11400000, guid: eddf2b8e5c18fe144acc4e06f65968b1, type: 2}
+  qualityDropdown: {fileID: 589912419}
+  windowDropdown: {fileID: 1199466760}
+  volumeSlider: {fileID: 1405206551}
+  muteToggle: {fileID: 1194493522}
+  languageDropdown: {fileID: 731842476}
 --- !u!114 &968720636 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8138004866511501686, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
@@ -902,6 +992,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fad2c4248c760341a63f747e5d2460d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuView
+--- !u!114 &1194493522 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4447360635932355199, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Toggle
 --- !u!1 &1195362123
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,6 +1082,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1199466760 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2283091207524231675, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TMP_Dropdown
+--- !u!114 &1405206551 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3136322014551789978, guid: f5ea3d64b4322fc40a5a01e3463da8c9, type: 3}
+  m_PrefabInstance: {fileID: 112041676}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1673986848
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,7 +1532,6 @@ SceneRoots:
   - {fileID: 395133740}
   - {fileID: 1673986850}
   - {fileID: 1176591044}
-  - {fileID: 112041676}
   - {fileID: 2083615662}
   - {fileID: 745407029}
   - {fileID: 1747333546}

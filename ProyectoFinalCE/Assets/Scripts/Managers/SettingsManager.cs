@@ -5,15 +5,7 @@ using UnityEngine.Localization.Settings;
 using FMODUnity;
 using FMOD.Studio;
 
-[CreateAssetMenu(fileName = "GameSettings", menuName = "Settings/GameSettings")]
-public class GameSettings : ScriptableObject
-{
-    public QualityLevel quality;
-    public WindowMode windowMode;
-    public float masterVolume = 1f;
-    public bool isMuted = false;
-    public Language language;
-}
+
 
 public enum QualityLevel { MuyAlta, Alta, Media, Baja }
 public enum WindowMode { Ventana, SinBordes, PantallaCompleta }
