@@ -33,6 +33,18 @@ public class CameraMovement : MonoBehaviour
     [Range(0f, 0.1f)]
     private float edgeTolerance = 0.05f;
 
+    [SerializeField]
+    [Tooltip("Ángulo de la cámara al hacer zoom al máximo (más horizontal)")]
+    private float zoomedInAngle = 20f; 
+
+    [SerializeField]
+    [Tooltip("Ángulo de la cámara al alejarla al máximo (más vertical/picado)")]
+    private float zoomedOutAngle = 80f;
+
+    [SerializeField]
+    [Tooltip("Distancia en el eje Z a la que se aleja la cámara cuando está al máximo de zoom (cerca del suelo)")]
+    private float maxZoomDistance = 15f;
+
     //value set in various functions 
     //used to update the position of the camera base object.
     private Vector3 targetPosition;
@@ -76,7 +88,8 @@ public class CameraMovement : MonoBehaviour
     {
         //inputs
         GetKeyboardMovement();
-        CheckMouseAtScreenEdge();
+        //No está funcionando correctamente, y estoy intentando arreglarlo
+        //CheckMouseAtScreenEdge();
         DragCamera();
 
         //move base and camera objects
@@ -186,14 +199,25 @@ public class CameraMovement : MonoBehaviour
         }
     }
 
-    private void UpdateCameraPosition()
+private void UpdateCameraPosition()
     {
-        //set zoom target
-        Vector3 zoomTarget = new Vector3(cameraTransform.localPosition.x, zoomHeight, cameraTransform.localPosition.z);
-        //add vector for forward/backward zoom
-        zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
+        // 1. Calculamos el porcentaje del zoom (0 a 1).
+        // 0 = Estamos en minHeight (muy cerca del suelo).
+        // 1 = Estamos en maxHeight (muy alto).
+        float zoomPercent = (zoomHeight - minHeight) / (maxHeight - minHeight);
 
+        // 2. Calculamos la posición Z deseada usando ese porcentaje.
+        // Si el porcentaje es 1 (lejos), Z será 0 (justo encima, visión vertical).
+        // Si el porcentaje es 0 (cerca), Z será -maxZoomDistance (alejado, visión horizontal).
+        float targetZ = Mathf.Lerp(-maxZoomDistance, 0f, zoomPercent);
+
+        // 3. Creamos el target de posición local usando X=0 para mantenerla centrada.
+        Vector3 zoomTarget = new Vector3(0f, zoomHeight, targetZ);
+
+        // 4. Suavizamos la transición hacia ese punto local, usando tu variable zoomDampening.
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
+
+        // 5. Mirar al CameraRig. Al cambiar la posición en Z e Y, LookAt ajustará el ángulo X automáticamente[cite: 1].
         cameraTransform.LookAt(this.transform);
     }
 
