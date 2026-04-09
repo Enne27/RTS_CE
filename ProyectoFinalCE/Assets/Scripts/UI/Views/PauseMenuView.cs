@@ -17,6 +17,7 @@ public class PauseMenuView : View
         {
             //Hide();
             ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, false);
+            //ViewManager.ShowLastView();
         });
 
         controlsButton.onClick.AddListener(() => 
