@@ -1,50 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
-  m_Name: FMODStudioCache
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
-  EditorBanks:
-  - {fileID: 3366873555263581982}
-  - {fileID: 3633299139380811838}
-  EditorEvents: []
-  EditorParameters: []
-  MasterBanks:
-  - {fileID: 3633299139380811838}
-  StringsBanks:
-  - {fileID: 3366873555263581982}
-  cacheVersion: 131858
-  cacheTime: 639092817345799804
-  SerializableEventsDict: []
---- !u!114 &3366873555263581982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.strings.bank
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
-  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
-  Name: Master.strings
-  StudioPath: bank:/Master.strings
-  lastModified: 639092817345799804
-  FileSizes:
-  - Name: Desktop
-    Value: 724
-  Exists: 1
---- !u!114 &3633299139380811838
+--- !u!114 &-6419136282321164613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,8 +15,112 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639092817345799804
+  lastModified: 639113568880788326
   FileSizes:
   - Name: Desktop
-    Value: 1074
+    Value: 22555008
   Exists: 1
+--- !u!114 &-2976303485555902331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639113568880916324
+  FileSizes:
+  - Name: Desktop
+    Value: 972
+  Exists: 1
+--- !u!114 &-153622075817494281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/BackgroundGameMusic
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Music/BackgroundGameMusic
+  Guid:
+    Data1: -2088080425
+    Data2: 1133626413
+    Data3: 2086370483
+    Data4: 41472065
+  Banks:
+  - {fileID: -6419136282321164613}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1456169
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
+  EditorBanks:
+  - {fileID: -2976303485555902331}
+  - {fileID: -6419136282321164613}
+  EditorEvents:
+  - {fileID: 7617702367297222000}
+  - {fileID: -153622075817494281}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: -6419136282321164613}
+  StringsBanks:
+  - {fileID: -2976303485555902331}
+  cacheVersion: 131858
+  cacheTime: 639113568880916324
+  SerializableEventsDict:
+  - key: event:/Music/WarMusic
+    index: 0
+  - key: event:/Music/BackgroundGameMusic
+    index: 1
+--- !u!114 &7617702367297222000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/WarMusic
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Music/WarMusic
+  Guid:
+    Data1: -1389763942
+    Data2: 1163508580
+    Data3: -117001831
+    Data4: -1675027416
+  Banks:
+  - {fileID: -6419136282321164613}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 163056
