@@ -32,6 +32,7 @@ public class FlowField_Manager : MonoBehaviour
         FlowField flowField = new FlowField(cellRadius, gridSize, transform);
         flowField.CreateGrid(); //TODO: Make the grid smaller(not all map)
         Cell destinationCell = flowField.GetCellFromWorldPos(worldMousePos);
+        Debug.Log("Destination cell:" + destinationCell.gridIndex);
 
 
         for (int i = 0; i < flowFields.Count; i++) 
@@ -59,7 +60,7 @@ public class FlowField_Manager : MonoBehaviour
 
     private void OnValidate()
     {
-        Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
+        //Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
         transform.localScale = new Vector3(gridSize.x / 10.0f * cellRadius * 2, 1, gridSize.y / 10.0f * cellRadius * 2);
         debugFlowField = new FlowField(cellRadius, gridSize, transform);
         debugFlowField.CreateGrid();

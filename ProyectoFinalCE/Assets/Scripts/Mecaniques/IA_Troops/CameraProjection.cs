@@ -25,6 +25,11 @@ public class CameraProjection : MonoBehaviour
         RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
     }
 
+    private void OnValidate()
+    {
+        minimapCamera.orthographicSize = 5 * plane.transform.lossyScale.x;
+    }
+
     void Update()
     {
         if (mainCamera == null || plane == null) return;
@@ -55,7 +60,6 @@ public class CameraProjection : MonoBehaviour
         Vector3 tr = minimapCamera.WorldToViewportPoint(topRightPosition);
         Vector3 br = minimapCamera.WorldToViewportPoint(bottomRightPosition);
         Vector3 bl = minimapCamera.WorldToViewportPoint(bottomLeftPosition);
-        Debug.Log($"TL: {tl} TR: {tr}");
 
         GL.PushMatrix();
         GL.LoadOrtho();

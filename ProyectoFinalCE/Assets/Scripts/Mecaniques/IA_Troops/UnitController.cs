@@ -39,8 +39,8 @@ public class UnitController : MonoBehaviour
     {
         //If no units in are using a flow field. Flow field should be destroyed or reused in a pool
         //If unit end his work should be removed from active ants
-        Debug.Log("Active ants: " + activeAnts.Count);  
-        Debug.Log("Active flowFields: " + FlowField_Manager.Instance.flowFields.Count);
+        //Debug.Log("Active ants: " + activeAnts.Count);  
+        //Debug.Log("Active flowFields: " + FlowField_Manager.Instance.flowFields.Count);
 
 
         #region Ideas
