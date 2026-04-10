@@ -15,15 +15,48 @@ MonoBehaviour:
   EditorBanks:
   - {fileID: 3366873555263581982}
   - {fileID: 3633299139380811838}
-  EditorEvents: []
+  EditorEvents:
+  - {fileID: 1050287332260932354}
+  - {fileID: 7391235706263231894}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3633299139380811838}
   StringsBanks:
   - {fileID: 3366873555263581982}
   cacheVersion: 131858
-  cacheTime: 639092817345799804
-  SerializableEventsDict: []
+  cacheTime: 639113604928389545
+  SerializableEventsDict:
+  - key: event:/Music/WarMusic
+    index: 0
+  - key: event:/Music/BackgroundGameMusic
+    index: 1
+--- !u!114 &1050287332260932354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/WarMusic
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Music/WarMusic
+  Guid:
+    Data1: -1389763942
+    Data2: 1163508580
+    Data3: -117001831
+    Data4: -1675027416
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 163056
 --- !u!114 &3366873555263581982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39,10 +72,10 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639092817345799804
+  lastModified: 639113604928389545
   FileSizes:
   - Name: Desktop
-    Value: 724
+    Value: 972
   Exists: 1
 --- !u!114 &3633299139380811838
 MonoBehaviour:
@@ -59,8 +92,35 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639092817345799804
+  lastModified: 639113604928379370
   FileSizes:
   - Name: Desktop
-    Value: 1074
+    Value: 22555008
   Exists: 1
+--- !u!114 &7391235706263231894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/BackgroundGameMusic
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Music/BackgroundGameMusic
+  Guid:
+    Data1: -2088080425
+    Data2: 1133626413
+    Data3: 2086370483
+    Data4: 41472065
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1456169
