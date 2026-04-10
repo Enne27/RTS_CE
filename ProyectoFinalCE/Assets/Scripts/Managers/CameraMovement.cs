@@ -6,6 +6,7 @@ public class CameraMovement : MonoBehaviour
     private InputSystem_Actions cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
+    private Transform cameraRigTransform;
 
     [SerializeField]
     private float maxSpeed = 5f;
@@ -61,15 +62,16 @@ public class CameraMovement : MonoBehaviour
     private void Awake()
     {
         cameraActions = new InputSystem_Actions();
-        cameraTransform = this.GetComponentInChildren<Camera>().transform;
+        cameraTransform = GetComponentInChildren<Camera>().transform;
+        cameraRigTransform = transform;
     }
 
     private void OnEnable()
     {
         zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(this.transform);
+        cameraTransform.LookAt(cameraRigTransform);
 
-        lastPosition = this.transform.position;
+        lastPosition = cameraRigTransform.position;
 
         movement = cameraActions.CameraControls.Movement;
         cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
@@ -88,8 +90,7 @@ public class CameraMovement : MonoBehaviour
     {
         //inputs
         GetKeyboardMovement();
-        //No está funcionando correctamente, y estoy intentando arreglarlo
-        //CheckMouseAtScreenEdge();
+        CheckMouseAtScreenEdge();
         DragCamera();
 
         //move base and camera objects
@@ -100,9 +101,9 @@ public class CameraMovement : MonoBehaviour
 
     private void UpdateVelocity()
     {
-        horizontalVelocity = (this.transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity = (cameraRigTransform.position - lastPosition) / Time.deltaTime;
         horizontalVelocity.y = 0f;
-        lastPosition = this.transform.position;
+        lastPosition = cameraRigTransform.position;
     }
 
     private void GetKeyboardMovement()
@@ -161,13 +162,13 @@ public class CameraMovement : MonoBehaviour
         {
             //create a ramp up or acceleration
             speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
-            transform.position += targetPosition * speed * Time.deltaTime;
+            cameraRigTransform.position += targetPosition * speed * Time.deltaTime;
         }
         else
         {
             //create smooth slow down
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            cameraRigTransform.position += horizontalVelocity * Time.deltaTime;
         }
 
         //reset for next frame
@@ -218,7 +219,7 @@ private void UpdateCameraPosition()
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
 
         // 5. Mirar al CameraRig. Al cambiar la posición en Z e Y, LookAt ajustará el ángulo X automáticamente[cite: 1].
-        cameraTransform.LookAt(this.transform);
+        cameraTransform.LookAt(cameraRigTransform);
     }
 
     private void RotateCamera(InputAction.CallbackContext obj)
@@ -227,13 +228,13 @@ private void UpdateCameraPosition()
             return;
 
         float inputValue = obj.ReadValue<Vector2>().x;
-        transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
+        cameraRigTransform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + cameraRigTransform.rotation.eulerAngles.y, 0f);
     }
 
     //gets the horizontal forward vector of the camera
     private Vector3 GetCameraForward()
     {
-        Vector3 forward = cameraTransform.forward;
+        Vector3 forward = cameraRigTransform.forward;
         forward.y = 0f;
         return forward;
     }
@@ -241,7 +242,7 @@ private void UpdateCameraPosition()
     //gets the horizontal right vector of the camera
     private Vector3 GetCameraRight()
     {
-        Vector3 right = cameraTransform.right;
+        Vector3 right = cameraRigTransform.right;
         right.y = 0f;
         return right;
     }

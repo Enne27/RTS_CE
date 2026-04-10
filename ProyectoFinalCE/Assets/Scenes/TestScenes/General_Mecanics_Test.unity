@@ -390,6 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aa397b3bbfa1f4b9a2d171c70c7d8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMovement
+  cameraRigTransform: {fileID: 0}
   maxSpeed: 5
   acceleration: 10
   damping: 15
@@ -401,7 +402,7 @@ MonoBehaviour:
   maxRotationSpeed: 1
   edgeTolerance: 0
   zoomedInAngle: 10
-  zoomedOutAngle: 89.99999
+  zoomedOutAngle: 90
   maxZoomDistance: 5
 --- !u!1 &1324453587
 GameObject:
