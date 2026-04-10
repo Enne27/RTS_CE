@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public class UIEffects : MonoBehaviour
 {
@@ -28,21 +30,21 @@ public class UIEffects : MonoBehaviour
     /// </summary>
     /// <param name="objectCG">CanvasGroup del objeto.</param>
     /// <param name="duration">Tiempo que dura el efecto Fade.</param>
-    public void FadeInUIObject(CanvasGroup objectCG, float duration)
+    public void FadeInUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
-        StartCoroutine(FadeInCoroutine(objectCG, duration));
+        StartCoroutine(FadeInCoroutine(objectCG, duration, onComplete));
     }
     /// <summary>
     /// FadeOut del CanvasGroup.
     /// </summary>
     /// <param name="objectCG"></param>
     /// <param name="duration"></param>
-    public void FadeOutUIObject(CanvasGroup objectCG, float duration)
+    public void FadeOutUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
-        StartCoroutine(FadeOutCoroutine(objectCG, duration));
+        StartCoroutine(FadeOutCoroutine(objectCG, duration, onComplete));
     }
     #region Coroutines
-    IEnumerator FadeInCoroutine(CanvasGroup objectCG, float duration)
+    IEnumerator FadeInCoroutine(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
         float elapsedTime = 0f;
 
@@ -54,8 +56,9 @@ public class UIEffects : MonoBehaviour
             yield return null;
         }
         objectCG.alpha = 1f;
+        onComplete?.Invoke();
     }
-    IEnumerator FadeOutCoroutine(CanvasGroup objectCG, float duration)
+    IEnumerator FadeOutCoroutine(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
         float elapsedTime = 0f;
 
@@ -68,6 +71,7 @@ public class UIEffects : MonoBehaviour
 
         }
         objectCG.alpha = 0f;
+        onComplete?.Invoke();
     }
     #endregion
     #endregion
@@ -79,6 +83,26 @@ public class UIEffects : MonoBehaviour
 
 
     #region SCALE
+    /// <summary>
+    /// Incrementa la escala del objeto usando un multiplicador y su escala original.
+    /// </summary>
+    public void IncreaseScale(GameObject gameObject, Vector3 originalScale, float scaleFactor, float duration)
+    {
+        LeanTween.cancel(gameObject);
+        LeanTween.scale(gameObject, originalScale * scaleFactor, duration)
+            .setIgnoreTimeScale(true)
+            .setEase(LeanTweenType.easeOutBack);
+    }
 
+    /// <summary>
+    /// Devuelve la escala del objeto a su tamaño original.
+    /// </summary>
+    public void RestartScale(GameObject gameObject, Vector3 originalScale, float duration)
+    {
+        LeanTween.cancel(gameObject);
+        LeanTween.scale(gameObject, originalScale, duration)
+            .setIgnoreTimeScale(true)
+            .setEase(LeanTweenType.easeInOutQuad);
+    }
     #endregion
 }

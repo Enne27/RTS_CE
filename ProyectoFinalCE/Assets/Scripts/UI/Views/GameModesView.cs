@@ -28,4 +28,14 @@ public class GameModesView : View
             ViewManager.ShowLastView(1, false);
         });
     }
+
+    public override void Show()
+    {
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+    }
 }
