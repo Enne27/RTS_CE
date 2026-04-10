@@ -15,12 +15,12 @@ public class SettingsView : View
     public override void Show()
     {
         base.Show();
-        UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
+        //UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
     }
 
     public override void Hide()
     {
-        UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
-
+        base.Hide();
+        //UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
     }
 }
