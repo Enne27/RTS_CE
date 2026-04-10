@@ -25,7 +25,6 @@ public class MainMenuView : View
 
         startButton.onClick.AddListener(() => 
         {
-            //UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration);
             // Hide de esta view y cambio de escena a escena juego.
             Hide();
             ViewManager.Show<GameModesView>();
@@ -40,9 +39,9 @@ public class MainMenuView : View
         });
 
         settingsButton.onClick.AddListener(() => 
-        { 
+        {
             // Hide de esta view y Show de Settings.
-            Hide();
+            //Hide();
             ViewManager.Show<SettingsView>();
         });
     }
@@ -50,10 +49,14 @@ public class MainMenuView : View
     public override void Show()
     {
         base.Show();
+        UIEffects.instance.FadeInUIObject(object_cg, fadeDuration, ()=> { base.Show(); });
+        //object_cg.alpha = 1f;
     }
 
     public override void Hide()
     {
         base.Hide();
+        UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+
     }
 }
