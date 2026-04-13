@@ -172,6 +172,20 @@ namespace StateMachine.Runtime
             }
         }
 
+        public void ExecuteActionsBehaviour()
+        {
+            List<ScriptableAction> actions = GetCurrentStateActions();
+
+            if (actions == null || actions.Count == 0)
+                return;
+
+            foreach (var action in actions)
+            {
+                if (action != null)
+                    action.Execute(this);
+            }
+        }
+
         /// <summary>
         /// Funcion que te devuelve las acciones del estado en el que se encuentra la IA
         /// </summary>
