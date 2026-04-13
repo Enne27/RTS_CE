@@ -10,6 +10,7 @@ public enum Spectator
     Ia2_Side,
     Impartial
 }
+#if UNITY_EDITOR
 
 public class AI_Tool : EditorWindow
 {
@@ -323,3 +324,5 @@ public class AI_Tool : EditorWindow
 
     }
 }
+
+#endif
