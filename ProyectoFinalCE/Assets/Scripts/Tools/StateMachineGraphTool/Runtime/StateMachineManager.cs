@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 namespace StateMachine.Runtime
 {
@@ -14,17 +12,20 @@ namespace StateMachine.Runtime
         Dictionary<System.Type, object> executors = new Dictionary<System.Type, object>()
             {
                 { typeof(StartRuntimeNode), new StartNodeExecutor() },
+                { typeof(AnyStateRuntimeNode), new AnyStateNodeExecutor() },
                 { typeof(StateRuntimeNode), new StateNodeExecutor() },
-                { typeof(IfRuntimeNode), new IfNodeExecutor() } 
+                { typeof(IfRuntimeNode), new IfNodeExecutor() }
             };  
 
         StateMachineRuntimeNode currentNode;
 
-        public StateMachineManager(StateMachineController controller, BattleContext context)
+        StateMachineRuntimeNode anyState;
+
+        public StateMachineManager(StateMachineController controller, Context context)
         {
             this.controller = controller;
             currentNode = this.controller.Nodes[0];
-
+            anyState = this.controller.AnyStateNodes[0];
             mediator = new Condition(context);
         }
 
@@ -54,7 +55,29 @@ namespace StateMachine.Runtime
                 Debug.LogError($"No executor found for node type: {currentNode.GetType()}");
                 return;
             }
+                
+            foreach (var nextIndex in anyState.NextNodeIndices)
+            {
+                var nextNode = controller.AnyStateNodes[nextIndex];
 
+                if (nextNode is IfRuntimeNode ifNode)
+                {
+                    var ifExecutor = (IStateMachineNodeExecutor<IfRuntimeNode>)executors[typeof(IfRuntimeNode)];
+
+                    if (ifExecutor.Execute(ifNode, this) == true)
+                        if (ifNode.hasTrueOutput)
+                            currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[0]];
+                    else if (ifExecutor.Execute(ifNode, this) == false)
+                        if (ifNode.hasFalseOutput)
+                        {
+                            if (!ifNode.hasTrueOutput)
+                                currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[0]];
+                            else
+                                currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[1]];
+                        }
+                }
+            }
+            
             if(currentNode is StartRuntimeNode startNode)
             {
                 var startExecutor = (IStateMachineNodeExecutor<StartRuntimeNode>)executor;
@@ -160,6 +183,14 @@ namespace StateMachine.Runtime
                 return currentState.actions;
             }
             return null;
+        }
+
+        public string GetCurrentStateName()
+        {
+            if (currentNode is StateRuntimeNode nombre)
+                return nombre.StateName;
+            else
+                return "";
         }
     }
 }

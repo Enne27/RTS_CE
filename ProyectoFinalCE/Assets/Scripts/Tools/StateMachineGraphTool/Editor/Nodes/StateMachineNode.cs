@@ -23,6 +23,19 @@ namespace StateMachine.Editor
     }
 
     [Serializable]
+    internal class AnyState : StateMachineNode
+    {
+    
+        protected override void OnDefinePorts(IPortDefinitionContext context)
+        {
+            context.AddOutputPort (EXECUTION_PORT_DEFAULT_NAME)
+                .WithDisplayName("AnyState")
+                .WithConnectorUI(PortConnectorUI.Arrowhead)
+                .Build();
+        }
+    }
+
+    [Serializable]
     internal class State : StateMachineNode
     {
         private const string TRANSITION_PORT_PREFIX = "Transition";
@@ -171,7 +184,7 @@ namespace StateMachine.Editor
         protected override void OnDefinePorts(IPortDefinitionContext context)
         {
             
-            context.AddInputPort<BattleCondition>("Condition")
+            context.AddInputPort<Conditions>("Condition")
                 .WithDisplayName("Condition")
                 .WithDefaultValue(0)
                 .WithConnectorUI(PortConnectorUI.Circle)
