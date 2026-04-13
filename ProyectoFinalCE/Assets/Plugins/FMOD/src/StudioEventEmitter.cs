@@ -203,6 +203,11 @@ namespace FMODUnity
             }
         }
 
+        public void ForceLookUp()
+        {
+            Lookup();
+        }
+
         public void Play()
         {
             if (TriggerOnce && hasTriggered)
