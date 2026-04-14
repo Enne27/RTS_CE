@@ -1,7 +1,6 @@
 using UnityEngine;
 namespace StateMachine.Runtime
 {
-    //[CreateAssetMenu(fileName = "New ScriptableAction", menuName = "Tools/IA/New ScriptableAction")]
     public abstract class ScriptableAction : ScriptableObject
     {
         [Header("General Settings")]
@@ -11,4 +10,3 @@ namespace StateMachine.Runtime
         public abstract void Execute(StateMachineManager manager);
     }
 }
-
