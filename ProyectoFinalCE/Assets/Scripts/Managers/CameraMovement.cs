@@ -137,6 +137,8 @@ public class CameraMovement : MonoBehaviour
 
     private void CheckMouseAtScreenEdge()
     {
+        if (!Application.isFocused) return;
+
         //mouse position is in pixels
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Vector3 moveDirection = Vector3.zero;
