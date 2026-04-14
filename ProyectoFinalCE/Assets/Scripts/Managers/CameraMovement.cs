@@ -9,6 +9,7 @@ public class CameraMovement : MonoBehaviour
 
     [SerializeField]
     private float maxSpeed = 5f;
+    private float speed;
     [SerializeField]
     private float acceleration = 10f;
     [SerializeField]
@@ -46,7 +47,7 @@ public class CameraMovement : MonoBehaviour
 
     //value set in various functions 
     //used to update the position of the camera base object.
-    private Vector3 currentInputVector;
+    private Vector3 targetPosition;
 
     private float zoomHeight;
 
@@ -85,30 +86,35 @@ public class CameraMovement : MonoBehaviour
 
     private void Update()
     {
-        // 1. Limpiamos el input del frame anterior
-        currentInputVector = Vector3.zero;
-
-        // 2. Recogemos inputs de teclado y bordes
+        //inputs
         GetKeyboardMovement();
         CheckMouseAtScreenEdge();
-
-        // 3. Normalizamos el input para no movernos más rápido en diagonal
-        if (currentInputVector.magnitude > 1f)
-            currentInputVector.Normalize();
-
-        // 4. El drag se procesa de forma independiente
         DragCamera();
 
-        // 5. Aplicar movimiento
+        //move base and camera objects
+        UpdateVelocity();
         UpdateBasePosition();
-        UpdateCameraPosition(); // Tu método de zoom
+        UpdateCameraPosition();
     }
 
 
+
+    private void UpdateVelocity()
+    {
+        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity.y = 0f;
+        lastPosition = transform.position;
+    }
+
     private void GetKeyboardMovement()
     {
-        Vector2 input = movement.ReadValue<Vector2>();
-        currentInputVector += (input.x * GetCameraRigRight()) + (input.y * GetCameraRigForward());
+        Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRigRight()
+                    + movement.ReadValue<Vector2>().y * GetCameraRigForward();
+
+        inputValue = inputValue.normalized;
+
+        if (inputValue.sqrMagnitude > 0.1f)
+            targetPosition += inputValue;
     }
 
     private void DragCamera()
@@ -125,44 +131,48 @@ public class CameraMovement : MonoBehaviour
             if (Mouse.current.rightButton.wasPressedThisFrame)
                 startDrag = ray.GetPoint(distance);
             else
-                currentInputVector += startDrag - ray.GetPoint(distance);
+                targetPosition += startDrag - ray.GetPoint(distance);
         }
     }
 
     private void CheckMouseAtScreenEdge()
     {
+        //mouse position is in pixels
         Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector3 moveDirection = Vector3.zero;
 
-        // Evita que la cámara se mueva si estás clicando en otra ventana
-        if (!Application.isFocused) return;
-
+        //horizontal scrolling
         if (mousePosition.x < edgeTolerance * Screen.width)
-            currentInputVector += -GetCameraRigRight();
+            moveDirection += -GetCameraRigRight();
         else if (mousePosition.x > (1f - edgeTolerance) * Screen.width)
-            currentInputVector += GetCameraRigRight();
+            moveDirection += GetCameraRigRight();
 
+        //vertical scrolling
         if (mousePosition.y < edgeTolerance * Screen.height)
-            currentInputVector += -GetCameraRigForward();
+            moveDirection += -GetCameraRigForward();
         else if (mousePosition.y > (1f - edgeTolerance) * Screen.height)
-            currentInputVector += GetCameraRigForward();
+            moveDirection += GetCameraRigForward();
+
+        targetPosition += moveDirection;
     }
 
     private void UpdateBasePosition()
     {
-        if (currentInputVector.sqrMagnitude > 0.01f)
+        if (targetPosition.sqrMagnitude > 0.1f)
         {
-            // Si hay input, interpolamos nuestra velocidad actual hacia la velocidad máxima
-            Vector3 targetVelocity = currentInputVector * maxSpeed;
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, targetVelocity, Time.deltaTime * acceleration);
+            //create a ramp up or acceleration
+            speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
+            transform.position += targetPosition * speed * Time.deltaTime;
         }
         else
         {
-            // Si soltamos los controles, la velocidad frena suavemente hacia cero
+            //create smooth slow down
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
+            transform.position += horizontalVelocity * Time.deltaTime;
         }
 
-        // Aplicamos la física limpia al transform
-        transform.position += horizontalVelocity * Time.deltaTime;
+        //reset for next frame
+        targetPosition = Vector3.zero;
     }
 
     private void ZoomCamera(InputAction.CallbackContext obj)
