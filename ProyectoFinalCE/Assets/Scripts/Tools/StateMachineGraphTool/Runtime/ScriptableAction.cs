@@ -5,6 +5,7 @@ namespace StateMachine.Runtime
     {
         [Header("General Settings")]
         public string actionName;
+        [TextArea(2,5)]
         public string actionDescription;
 
         public abstract void Execute(StateMachineManager manager);

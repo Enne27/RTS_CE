@@ -87,15 +87,27 @@ public class ScriptableIconManager : EditorWindow
             if (rule.scriptableScript == null || rule.icon == null)
                 continue;
 
+            // 🔹 Aplicar icono al SCRIPT (.cs)
+            EditorGUIUtility.SetIconForObject(rule.scriptableScript, rule.icon);
+            EditorUtility.SetDirty(rule.scriptableScript);
+
+            totalChanges++;
+            logBuilder.AppendLine($"Applied icon '{rule.icon.name}' to SCRIPT '{rule.scriptableScript.name}'");
+
+            // 🔹 Obtener tipo
             Type type = rule.scriptableScript.GetClass();
+
+            // Si no es ScriptableObject, solo aplicamos al script
             if (type == null || !type.IsSubclassOf(typeof(ScriptableObject)))
                 continue;
 
+            // 🔹 Aplicar icono a los assets existentes
             var guids = AssetDatabase.FindAssets($"t:{type.Name}");
             foreach (var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var obj = AssetDatabase.LoadAssetAtPath(path, type) as ScriptableObject;
+
                 if (obj != null)
                 {
                     EditorGUIUtility.SetIconForObject(obj, rule.icon);
@@ -112,21 +124,21 @@ public class ScriptableIconManager : EditorWindow
 
         if (totalChanges > 0)
         {
-            Debug.Log($"Scriptable Icon Manager - {totalChanges} icons applied:\n{logBuilder}");
+            Debug.Log($"Scriptable Icon Manager - {totalChanges} changes applied:\n{logBuilder}");
         }
         else
         {
-            Debug.Log("No icons were applied. Check if your rules or icons are correctly assigned.");
+            Debug.Log("No icons were applied. Check your rules.");
         }
 
-
 #else
-        EditorUtility.DisplayDialog(
-            "Unity version not supported",
-            "SetIconForObject is only officially available from Unity 2022.2 onwards.",
-            "OK");
+    EditorUtility.DisplayDialog(
+        "Unity version not supported",
+        "SetIconForObject is only available from Unity 2022.2 onwards.",
+        "OK");
 #endif
     }
+
 
     [InitializeOnLoadMethod]
     private static void AutoApplyIconsOnLoad()
@@ -146,15 +158,27 @@ public class ScriptableIconManager : EditorWindow
             if (rule.scriptableScript == null || rule.icon == null)
                 continue;
 
+            // 🔹 Aplicar icono al SCRIPT (.cs)
+            EditorGUIUtility.SetIconForObject(rule.scriptableScript, rule.icon);
+            EditorUtility.SetDirty(rule.scriptableScript);
+
+            totalChanges++;
+            logBuilder.AppendLine($"Applied icon '{rule.icon.name}' to SCRIPT '{rule.scriptableScript.name}'");
+
+            // 🔹 Obtener tipo
             Type type = rule.scriptableScript.GetClass();
+
+            // Si no es ScriptableObject, solo aplicamos al script
             if (type == null || !type.IsSubclassOf(typeof(ScriptableObject)))
                 continue;
 
+            // 🔹 Aplicar icono a los assets existentes
             var guids = AssetDatabase.FindAssets($"t:{type.Name}");
             foreach (var guid in guids)
             {
                 var path = AssetDatabase.GUIDToAssetPath(guid);
                 var obj = AssetDatabase.LoadAssetAtPath(path, type) as ScriptableObject;
+
                 if (obj != null)
                 {
                     EditorGUIUtility.SetIconForObject(obj, rule.icon);

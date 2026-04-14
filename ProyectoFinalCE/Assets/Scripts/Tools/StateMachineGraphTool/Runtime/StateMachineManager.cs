@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace StateMachine.Runtime
 {
     [System.Serializable]
     public class StateMachineManager
     {
-        StateMachineController controller;
+        private StateMachineController controller;
 
-        Condition mediator;
+        private Condition mediator;
 
-        Dictionary<System.Type, object> executors = new Dictionary<System.Type, object>()
+        private Dictionary<System.Type, object> executors = new Dictionary<System.Type, object>()
             {
                 { typeof(StartRuntimeNode), new StartNodeExecutor() },
                 { typeof(AnyStateRuntimeNode), new AnyStateNodeExecutor() },
@@ -17,16 +18,30 @@ namespace StateMachine.Runtime
                 { typeof(IfRuntimeNode), new IfNodeExecutor() }
             };  
 
-        StateMachineRuntimeNode currentNode;
+        private StateMachineRuntimeNode currentNode;
 
-        StateMachineRuntimeNode anyState;
+        private StateMachineRuntimeNode anyState;
+
+        private bool loadDebugLog;
 
         public StateMachineManager(StateMachineController controller, Context context)
         {
             this.controller = controller;
             currentNode = this.controller.Nodes[0];
-            anyState = this.controller.AnyStateNodes[0];
+            if (this.controller.AnyStateNodes.Any())
+                anyState = this.controller.AnyStateNodes[0];
             mediator = new Condition(context);
+            loadDebugLog = false;
+        }
+
+        public StateMachineManager(StateMachineController controller, Context context, bool debugLog)
+        {
+            this.controller = controller;
+            currentNode = this.controller.Nodes[0];
+            if (this.controller.AnyStateNodes.Any())
+                anyState = this.controller.AnyStateNodes[0];
+            mediator = new Condition(context);
+            loadDebugLog = debugLog;
         }
 
         public StateMachineController GetController()
@@ -39,10 +54,18 @@ namespace StateMachine.Runtime
             controller = newController;
         }
 
-        public Condition GetConditionMediator()
+        public Condition GetConditionMediator() => this.mediator;
+
+        public void ActivateStateMachineLog()
         {
-            return this.mediator;
+            loadDebugLog = true;
         }
+
+        public void DeactivateStateMachineLog()
+        {
+            loadDebugLog = false;
+        }
+        
 
         /// <summary>
         /// Detetcta el tipo de nodo en el que se encuentra una maquina de estados y ejecuta la logica de 
@@ -55,26 +78,29 @@ namespace StateMachine.Runtime
                 Debug.LogError($"No executor found for node type: {currentNode.GetType()}");
                 return;
             }
-                
-            foreach (var nextIndex in anyState.NextNodeIndices)
+            
+            if(anyState != null)
             {
-                var nextNode = controller.AnyStateNodes[nextIndex];
-
-                if (nextNode is IfRuntimeNode ifNode)
+                foreach (var nextIndex in anyState.NextNodeIndices)
                 {
-                    var ifExecutor = (IStateMachineNodeExecutor<IfRuntimeNode>)executors[typeof(IfRuntimeNode)];
+                    var nextNode = controller.AnyStateNodes[nextIndex];
 
-                    if (ifExecutor.Execute(ifNode, this) == true)
-                        if (ifNode.hasTrueOutput)
-                            currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[0]];
-                    else if (ifExecutor.Execute(ifNode, this) == false)
-                        if (ifNode.hasFalseOutput)
-                        {
-                            if (!ifNode.hasTrueOutput)
+                    if (nextNode is IfRuntimeNode ifNode)
+                    {
+                        var ifExecutor = (IStateMachineNodeExecutor<IfRuntimeNode>)executors[typeof(IfRuntimeNode)];
+
+                        if (ifExecutor.Execute(ifNode, this) == true)
+                            if (ifNode.hasTrueOutput)
                                 currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[0]];
-                            else
-                                currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[1]];
-                        }
+                        else if (ifExecutor.Execute(ifNode, this) == false)
+                            if (ifNode.hasFalseOutput)
+                            {
+                                if (!ifNode.hasTrueOutput)
+                                    currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[0]];
+                                else
+                                    currentNode = controller.AnyStateNodes[ifNode.NextNodeIndices[1]];
+                            }
+                    }
                 }
             }
             
@@ -164,7 +190,19 @@ namespace StateMachine.Runtime
 
             if(currentNode is StateRuntimeNode nombre)
             {
-                Debug.Log($"El estado actual es {nombre.StateName}");
+                if (loadDebugLog)
+                {
+                    Debug.Log($"The current state is: {nombre.StateName}");
+                    foreach(var action in GetCurrentStateActions())
+                    {
+                        if(action!= null)
+                            Debug.Log($"The current state has this action: {action.actionName}");
+                        else
+                        {
+                            Debug.Log($"The current state has no actions");
+                        }
+                    }
+                }
             }
             else
             {
