@@ -15,8 +15,10 @@ public class GenerateMapResources : MonoBehaviour
     [SerializeField] public int antHillQuantity;
 
     [Header("Parameters")]
+    [Tooltip("Distancia mínima entre hormigueros (celdas).")]
+    [SerializeField] public int minDistanceAntHill = 10;
     [Tooltip("Distancia mínima entre estructuras (celdas).")]
-    [SerializeField] public int minDistance;
+    [SerializeField] public int minDistanceResources = 3;
     #endregion
 
     private void Awake()

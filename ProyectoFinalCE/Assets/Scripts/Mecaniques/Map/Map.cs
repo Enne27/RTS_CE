@@ -22,18 +22,92 @@ public class Map : MonoBehaviour
     [Header("Resources and parameters")]
     [Tooltip("Script que contiene los datos iniciales del mapa.")]
     [SerializeField] GenerateMapResources mapResources;
+
     private float cellSize = 1f;
-    private int minDistance = 1;
+
+    List<Vector2Int> selectedCells = new List<Vector2Int>();
+    List<Vector2Int> invalidCells = new List<Vector2Int>();
+    List<Vector2Int> antHillsPositions = new List<Vector2Int>();
     #endregion
 
     private void Start()
     {
         cellSize = FlowField_Manager.Instance.cellRadius;
-        minDistance = mapResources.minDistance;
 
         GenerateMap();
     }
 
+    #region RANDOM_CELLS
+    /// <summary>
+    /// Encontrar una celda válida.
+    /// </summary>
+    /// <returns></returns>
+    private Vector2Int GetRandomCell(int minDistance)
+    {
+        Vector2Int randomCell;
+        int attempts = 0;
+        do
+        {
+            randomCell = new Vector2Int(Random.Range(0, gridSize.x), Random.Range(0, gridSize.y));
+
+            attempts++;
+
+            if (attempts > 1000) // evitemos bucles infinitos
+            {
+                break;
+            }
+
+        } while (selectedCells.Contains(randomCell) || 
+            invalidCells.Contains(randomCell) || 
+            !IsValidCellDistance(randomCell, selectedCells, minDistance));
+
+        return randomCell;
+    }
+
+    /// <summary>
+    /// Encontrar una celda aleatoria, pero dentro de un rango.
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="minRadius">Distancia mínima entre recursos.</param>
+    /// <param name="maxRadius">Límite del mapa o rango.</param>
+    /// <returns></returns>
+    private Vector2Int GetRandomCellAround(Vector2Int center, int minRadius, int maxRadius)
+    {
+        int minX = Mathf.Max(0, center.x - minRadius);
+        int maxX = Mathf.Min(gridSize.x - 1, center.x + maxRadius);
+
+        int minY = Mathf.Max(0, center.y - minRadius);
+        int maxY = Mathf.Min(gridSize.y - 1, center.y + maxRadius);
+
+        return new Vector2Int(Random.Range(minX, maxX + 1), Random.Range(minY, maxY + 1));
+    }
+    #endregion
+
+    /// <summary>
+    /// Pasar el tamaño de las celdas a tamaño(Vector3 position) de mundo.
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    private Vector3 CellToWorldPosition(Vector2Int cell)
+    {
+        return new Vector3(cell.x * cellSize, 0, cell.y * cellSize);
+    }
+
+    /// <summary>
+    /// Asegurar una distancia mínima entre recursos para que todos los jugadores tengan las mismas posibilidades.
+    /// </summary>
+    private bool IsValidCellDistance(Vector2Int candidate, List<Vector2Int> selectedCells, int minDistance)
+    {
+        foreach(var cell in selectedCells)
+        {
+            float distance = Vector2Int.Distance(candidate, cell);
+            if (distance < minDistance)
+                return false;
+        }
+        return true;
+    }
+
+    #region GENERATION
     /// <summary>
     /// Método para generar el grid del mapa.
     /// </summary>
@@ -45,68 +119,86 @@ public class Map : MonoBehaviour
         {
             for (int j = 0; j < gridSize.y; j++) 
             {
-                gridCells[i,j] = new CELL_STATE();
+                gridCells[i,j] = CELL_STATE.EMPTY;
             }
         }
 
-        List<Vector2Int> selectedCells = new List<Vector2Int>();
-        List<Vector2Int> invalidCells = new List<Vector2Int>();
+        GenerateAntHills();
+        GenerateResourcesZones();
+    }
 
-
-        Vector2Int GetRandomCell()
-        {
-            Vector2Int randomCell;
-            do
-            {
-                randomCell = new Vector2Int(Random.Range(0, gridSize.x-1), Random.Range(0, gridSize.y-1));
-
-            } while (selectedCells.Contains(randomCell) || invalidCells.Contains(randomCell));
-
-            selectedCells.Add(randomCell);
-
-            return randomCell;
-        }
-
+    /// <summary>
+    /// Buscar una celda valida, ocuparla y generar el hormiguero.
+    /// </summary>
+    private void GenerateAntHills()
+    {
         for (int i = 0; i < mapResources.antHillQuantity; i++)
         {
-            Vector2Int pos = GetRandomCell();
+            Vector2Int pos = GetRandomCell(mapResources.minDistanceAntHill);
+
             gridCells[pos.x, pos.y] = CELL_STATE.OCUPPIED;
 
-            Vector3 cellPosWorld = CellToWorld(pos);
+            selectedCells.Add(pos);
+            antHillsPositions.Add(pos);
+
+            mapResources.InstantiateAntHill(CellToWorldPosition(pos));
             //Debug.Log("Hills: " + pos.x + ", " + pos.y);
-
-            mapResources.InstantiateAntHill(cellPosWorld);
         }
+    }
 
-        for (int i = 0; i < mapResources.resourcesQuantity; i++)
+    /// <summary>
+    /// Generar todas las zonas de recursos dividiendo más o menos entre todos los hormigueros.
+    /// </summary>
+    private void GenerateResourcesZones()
+    {
+        int hillsCount = mapResources.antHillQuantity;
+        int baseResourcesEachAntHill = mapResources.resourcesQuantity / hillsCount;
+        int extraResource = mapResources.resourcesQuantity % hillsCount;
+
+        for (int i = 0; i < hillsCount; i++)
         {
-            Vector2Int pos = GetRandomCell();
-            gridCells[pos.x, pos.y] = CELL_STATE.OCUPPIED;
-
-            Vector3 cellPosWorld = CellToWorld(pos);
-
-            //Debug.Log("Resources: " + pos.x + ", " + pos.y);
-
-            mapResources.InstantiateResourcesZone(cellPosWorld);
+            int amount = baseResourcesEachAntHill + (i < extraResource ? 1 : 0);
+            GenerateResourcesZonesAroundHill(antHillsPositions[i], amount);
         }
-
     }
 
     /// <summary>
-    /// Pasar el tamaño de las celdas a tamaño de mundo.
+    /// Generar la zona de recursos alrededor del hormiguero.
     /// </summary>
-    /// <param name="cell"></param>
-    /// <returns></returns>
-    private Vector3 CellToWorld(Vector2Int cell)
+    /// <param name="hillCell"></param>
+    /// <param name="amount"></param>
+    private void GenerateResourcesZonesAroundHill(Vector2Int hillCell, int amount)
     {
-        return new Vector3(cell.x * cellSize, 0, cell.y * cellSize);
-    }
+        int minRadius = mapResources.minDistanceResources;
+        int maxRadius = gridSize.x; // Cualquier lugar dentro del mapa.
 
-    /// <summary>
-    /// Asegurar una distancia mínima entre recursos para que todos los jugadores tengan las mismas posibilidades.
-    /// </summary>
-    private void DistanceInstantiation()
-    {
+        int generated = 0;
+        int attempts = 0; // Evitar bucles infinitos.
 
+        while (generated < amount && attempts < 5000)
+        {
+            attempts++;
+
+            Vector2Int cellPos = GetRandomCellAround(hillCell, minRadius, maxRadius);
+            float distanceToCenter = Vector2Int.Distance(cellPos, hillCell);
+
+            if (distanceToCenter < minRadius || distanceToCenter > maxRadius)
+                continue;
+
+            // Esta celda ya está ocupada.
+            if (gridCells[cellPos.x, cellPos.y] != CELL_STATE.EMPTY)
+                continue;
+
+            // Se intentan instanciar demasiado cerca.
+            if (!IsValidCellDistance(cellPos, selectedCells, mapResources.minDistanceResources))
+                continue;
+
+            gridCells[cellPos.x, cellPos.y] = CELL_STATE.OCUPPIED;
+            selectedCells.Add(cellPos);
+            mapResources.InstantiateResourcesZone(CellToWorldPosition(cellPos));
+
+            generated++;
+        }
     }
+    #endregion
 }
