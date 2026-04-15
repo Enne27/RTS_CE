@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
+    #region Variables
     private InputSystem_Actions cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
@@ -14,17 +15,14 @@ public class CameraMovement : MonoBehaviour
     private float acceleration = 10f;
     [SerializeField]
     private float damping = 15f;
-
     [SerializeField]
-    private float stepSize = 2f;
+    private float stepSize = 6f;
     [SerializeField]
     private float zoomDampening = 7.5f;
     [SerializeField]
-    private float minHeight = 5f;
+    private float minHeight = 3f;
     [SerializeField]
-    private float maxHeight = 50f;
-    [SerializeField]
-    private float zoomSpeed = 2f;
+    private float maxHeight = 30f;
 
     [SerializeField]
     private float maxRotationSpeed = 1f;
@@ -34,16 +32,11 @@ public class CameraMovement : MonoBehaviour
     private float edgeTolerance = 0.05f;
 
     [SerializeField]
-    [Tooltip("Ángulo de la cámara al hacer zoom al máximo (más horizontal)")]
-    private float zoomedInAngle = 20f;
-
-    [SerializeField]
-    [Tooltip("Ángulo de la cámara al alejarla al máximo (más vertical/picado)")]
-    private float zoomedOutAngle = 80f;
-
-    [SerializeField]
     [Tooltip("Distancia en el eje Z a la que se aleja la cámara cuando está al máximo de zoom (cerca del suelo)")]
-    private float maxZoomDistance = 15f;
+    private float maxZoomDistance = 5f;
+
+    [SerializeField]
+    private float zoomMultiplier = 0.5f;
 
     //value set in various functions 
     //used to update the position of the camera base object.
@@ -57,6 +50,7 @@ public class CameraMovement : MonoBehaviour
 
     //tracks where the dragging action started
     Vector3 startDrag;
+    #endregion
 
     private void Awake()
     {
@@ -97,15 +91,7 @@ public class CameraMovement : MonoBehaviour
         UpdateCameraPosition();
     }
 
-
-
-    private void UpdateVelocity()
-    {
-        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
-        horizontalVelocity.y = 0f;
-        lastPosition = transform.position;
-    }
-
+    #region Inputs
     private void GetKeyboardMovement()
     {
         Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRigRight()
@@ -115,24 +101,6 @@ public class CameraMovement : MonoBehaviour
 
         if (inputValue.sqrMagnitude > 0.1f)
             targetPosition += inputValue;
-    }
-
-    private void DragCamera()
-    {
-        if (!Mouse.current.rightButton.isPressed)
-            return;
-
-        //create plane to raycast to
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (plane.Raycast(ray, out float distance))
-        {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
-                startDrag = ray.GetPoint(distance);
-            else
-                targetPosition += startDrag - ray.GetPoint(distance);
-        }
     }
 
     private void CheckMouseAtScreenEdge()
@@ -158,6 +126,33 @@ public class CameraMovement : MonoBehaviour
         targetPosition += moveDirection;
     }
 
+    private void DragCamera()
+    {
+        if (!Mouse.current.rightButton.isPressed)
+            return;
+
+        //create plane to raycast to
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (plane.Raycast(ray, out float distance))
+        {
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+                startDrag = ray.GetPoint(distance);
+            else
+                targetPosition += startDrag - ray.GetPoint(distance);
+        }
+    }
+    #endregion
+
+    #region Movement
+    private void UpdateVelocity()
+    {
+        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity.y = 0f;
+        lastPosition = transform.position;
+    }
+
     private void UpdateBasePosition()
     {
         if (targetPosition.sqrMagnitude > 0.1f)
@@ -179,20 +174,11 @@ public class CameraMovement : MonoBehaviour
 
     private void ZoomCamera(InputAction.CallbackContext obj)
     {
-        // 1. Leemos el valor puro
         Vector2 scrollValue = obj.ReadValue<Vector2>();
-
-        // Descomenta esta línea para ver en consola qué valor exacto te manda tu ratón
-        // Debug.Log($"Scroll detectado: {scrollValue.y}");
-
-        // 2. Quitamos la división entre 100 por ahora y usamos el valor directo
         float inputValue = -scrollValue.y;
 
-        // 3. Bajamos drásticamente el límite (threshold) para asegurarnos de que entra
         if (Mathf.Abs(inputValue) > 0.01f)
         {
-            // 4. Aplicamos un multiplicador pequeño aquí en lugar de dividir antes
-            float zoomMultiplier = 0.5f; // Ajusta esto si el zoom es muy rápido o muy lento
             zoomHeight = cameraTransform.localPosition.y + (inputValue * stepSize * zoomMultiplier);
 
             if (zoomHeight < minHeight)
@@ -232,8 +218,8 @@ public class CameraMovement : MonoBehaviour
         float inputValue = obj.ReadValue<Vector2>().x;
         transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
     }
+    #endregion
 
-    //gets the horizontal forward vector of the camera
     private Vector3 GetCameraRigForward()
     {
         Vector3 forward = transform.forward;
@@ -241,7 +227,6 @@ public class CameraMovement : MonoBehaviour
         return forward;
     }
 
-    //gets the horizontal right vector of the camera
     private Vector3 GetCameraRigRight()
     {
         Vector3 right = transform.right;
