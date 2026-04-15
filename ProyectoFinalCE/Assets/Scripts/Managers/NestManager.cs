@@ -1,6 +1,10 @@
 using UnityEngine;
 
-
+public enum NestSlotType
+{
+    Empty,
+    Occupied
+}
 
 public class NestManager : MonoBehaviour
 {

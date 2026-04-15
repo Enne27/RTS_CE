@@ -1,10 +1,9 @@
 using UnityEngine;
 using StateMachine.Runtime;
 
-[CreateAssetMenu(fileName = "PooAction", menuName = "Tools/IA/Actions/PooAction")]
-public class PooAction : ScriptableAction
+[CreateAssetMenu(fileName = "PitoAction", menuName = "Tools/IA/Actions/PitoAction")]
+public class PitoAction : ScriptableAction
 {
-    
     public override void Execute(StateMachineManager manager)
     {
         // TODO: Implement action logic

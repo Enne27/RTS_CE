@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,10 +43,24 @@ namespace StateMachine.Runtime
             }
         }
 
+        /// <summary>
+        /// Get a reference of the StateMachineManager instance 
+        /// </summary>
+        /// <returns></returns>
         public StateMachineManager GetMachineManager() => manager;
 
+
+        /// <summary>
+        /// Get a reference of the Context that the State Machines uses for condition check
+        /// </summary>
+        /// <returns></returns>
         public Context GetStateContext() => context;
 
+
+        /// <summary>
+        /// Sets a new context for have a data change in the context (the StateMachine needs to not be running for this function to work)
+        /// </summary>
+        /// <param name="context">New Context</param>
         public void SetStateContext(Context context)
         {
             if (isStopped)
@@ -62,6 +77,9 @@ namespace StateMachine.Runtime
                 manager.DeactivateStateMachineLog();
         }
 
+        /// <summary>
+        /// Starts the execution flow of the State Machine
+        /// </summary>
         public void StartStateMachineExecution()
         {
             context = new Context();
@@ -70,6 +88,9 @@ namespace StateMachine.Runtime
             isStopped = false;
         }
 
+        /// <summary>
+        /// Stops the execution flow of the State Machine
+        /// </summary>
         public void StopStateMachineExecution()
         {
             execution = false;
@@ -78,21 +99,42 @@ namespace StateMachine.Runtime
             manager = null;
         }
 
+        /// <summary>
+        /// Resets to the start of the State Machine with new Context and Manager
+        /// </summary>
         public void ResetStateMachineExecution()
         {
             StopStateMachineExecution();
             StartStateMachineExecution();
         }
 
+        /// <summary>
+        /// Pauses the execution of the State Machine keeping the data
+        /// </summary>
         public void PauseStateMachineExecution()
         {
             execution = false;
         }
 
+        /// <summary>
+        /// UnPauses the execution of the State Machine
+        /// </summary>
         public void UnPauseSateMachineExecution()
         {
             execution = true;
         }
+
+        /// <summary>
+        /// Returns the name of the current State running in this moment
+        /// </summary>
+        /// <returns>String</returns>
+        public string GetCurrentStateName() => manager.GetCurrentStateName();
+
+        /// <summary>
+        /// Returns a list of all the actions of the current State running in this moment
+        /// </summary>
+        /// <returns>List of Scriptable Actions</returns>
+        public List<ScriptableAction> GetCurrentStateActions() => manager.GetCurrentStateActions();
 
         void OnValidate()
         {
@@ -100,8 +142,6 @@ namespace StateMachine.Runtime
 
             ChangeDebugLogShow();
         }
-
-        
     }
 
     public class GenerateStateMachineGameObject

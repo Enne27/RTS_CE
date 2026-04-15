@@ -57,7 +57,6 @@ public class StateMachineComponentEditor : Editor
                 }
             }
 
-            // 🟦 HelpBox solo para info
             EditorGUILayout.HelpBox(message, MessageType.Info, true);
 
             EditorGUILayout.Space();
@@ -99,7 +98,7 @@ public class StateMachineComponentEditor : Editor
 
         EditorGUILayout.LabelField("State Machine Controls", EditorStyles.boldLabel);
 
-        bool execution = comp.execution;   // Necesitas exponerlo (te explico abajo)
+        bool execution = comp.execution;
         bool isStopped = comp.isStopped;
 
         if (!execution && isStopped)
@@ -120,7 +119,6 @@ public class StateMachineComponentEditor : Editor
             {
                 comp.StopStateMachineExecution();
             }
-
             EditorGUILayout.Space();
             if (GUILayout.Button("Reset"))
             {
