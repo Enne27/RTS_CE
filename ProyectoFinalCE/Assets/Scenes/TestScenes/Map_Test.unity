@@ -356,6 +356,7 @@ GameObject:
   - component: {fileID: 1356056385}
   - component: {fileID: 1356056384}
   - component: {fileID: 1356056383}
+  - component: {fileID: 1356056388}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -375,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1466585891d1364b904c5c157f7c911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlowField_Test
-  gridSize: {x: 50, y: 50}
+  gridSize: {x: 25, y: 25}
   cellRadius: 1
   curDisplayType: 2
   displayGrid: 1
@@ -468,11 +469,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1356056388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356056382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b5ce2d018e6d7b448d240decdbe678e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Map
+  gridSize: {x: 25, y: 25}
+  mapResources: {fileID: 1462360802}
 --- !u!1 &1462360801
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,6 +613,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 794510282}
   - {fileID: 104814571}
-  - {fileID: 8685599739399779132}
-  - {fileID: 1356056387}
   - {fileID: 1462360803}
+  - {fileID: 1356056387}
+  - {fileID: 8685599739399779132}
