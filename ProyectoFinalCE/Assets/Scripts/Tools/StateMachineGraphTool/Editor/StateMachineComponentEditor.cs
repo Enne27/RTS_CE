@@ -93,5 +93,60 @@ public class StateMachineComponentEditor : Editor
 
             EditorGUILayout.EndVertical();
         }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.BeginVertical("box");
+
+        EditorGUILayout.LabelField("State Machine Controls", EditorStyles.boldLabel);
+
+        bool execution = comp.execution;   // Necesitas exponerlo (te explico abajo)
+        bool isStopped = comp.isStopped;
+
+        if (!execution && isStopped)
+        {
+            if (GUILayout.Button("Start"))
+            {
+                comp.StartStateMachineExecution();
+            }
+        }
+        else if (execution && !isStopped)
+        {
+            if (GUILayout.Button("Pause"))
+            {
+                comp.PauseStateMachineExecution();
+            }
+
+            if (GUILayout.Button("Stop"))
+            {
+                comp.StopStateMachineExecution();
+            }
+
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Reset"))
+            {
+                comp.ResetStateMachineExecution();
+            }
+        }
+        else if (!execution && !isStopped)
+        {
+            if (GUILayout.Button("Unpause"))
+            {
+                comp.UnPauseSateMachineExecution();
+            }
+
+            if (GUILayout.Button("Stop"))
+            {
+                comp.StopStateMachineExecution();
+            }
+
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Reset"))
+            {
+                comp.ResetStateMachineExecution();
+            }
+        }
+
+
+        EditorGUILayout.EndVertical();
     }
 }
