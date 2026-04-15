@@ -182,7 +182,7 @@ Camera:
   far clip plane: 60
   field of view: 60
   orthographic: 1
-  orthographic size: 5.51198
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -331,7 +331,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 5.51198
+    OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 60
     Dutch: 0
@@ -645,7 +645,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2003771296}
-  - component: {fileID: 2003771295}
+  - component: {fileID: 2003771297}
   m_Layer: 0
   m_Name: State Machine GameObject
   m_TagString: Untagged
@@ -653,20 +653,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2003771295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003771294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b79fd179bca6ada4b98b66091327b0aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: StateMachine.Runtime::StateMachineComponent
-  controller: {fileID: 2841676755933307327, guid: f1f0627358859f446a58ab4bdb3a9f1a, type: 3}
-  debugLog: 0
 --- !u!4 &2003771296
 Transform:
   m_ObjectHideFlags: 0
@@ -682,6 +668,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2003771297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003771294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79fd179bca6ada4b98b66091327b0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StateMachine.Runtime::StateMachineComponent
+  controller: {fileID: 2841676755933307327, guid: f1f0627358859f446a58ab4bdb3a9f1a, type: 3}
+  debugLog: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
