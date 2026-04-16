@@ -49,5 +49,18 @@ public class Inventory : MonoBehaviour
     {
         return upgradePoints - upgradePointsToRemove;
     }
+
+    /// <summary>
+    /// Devolver todos los valores a su estado inicial.
+    /// </summary>
+    public void ResetAllVariables()
+    {
+        eggs = 0;
+        food = 0;
+        upgradePoints = 0;
+
+        eggCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+        foodCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+    }
     #endregion
 }
