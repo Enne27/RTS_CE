@@ -1,20 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using static PlayerConstants;
 
-public class Inventory : MonoBehaviour
+[System.Serializable]
+public class Inventory
 {
     #region Variables
     public int eggs;
     public int food;
+    public int materials;
     [Tooltip("Maximum egg capacity for each era")]
     public int eggCapacity;
-    [Tooltip("Maximum Food capacity for each era")]
+    [Tooltip("Maximum Food capacity")]
     public int foodCapacity;
+    [Tooltip("Maximum Construction Materials capacity")]
+    public int materialsCapacity;
     public int upgradePoints;
+    [Tooltip("The nummber of worker ants the player has")]
+    public int workerAnts;
     #endregion
         
     #region Methods
@@ -48,6 +50,23 @@ public class Inventory : MonoBehaviour
     public int RemoveUpgradePoints(int upgradePointsToRemove)
     {
         return upgradePoints - upgradePointsToRemove;
+    }
+
+    /// <summary>
+    /// Devolver todos los valores a su estado inicial.
+    /// </summary>
+    public void ResetAllVariables()
+    {
+        eggs = GameManager.instance.startingEggs;
+        food = GameManager.instance.startingFood;
+        materials = GameManager.instance.startingMC;
+        upgradePoints = 0;
+
+        workerAnts = GameManager.instance.startingWorkerAnts;
+
+        eggCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+        foodCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+        materialsCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
     }
     #endregion
 }
