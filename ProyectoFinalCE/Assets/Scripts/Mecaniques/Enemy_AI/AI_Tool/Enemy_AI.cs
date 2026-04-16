@@ -124,6 +124,8 @@ public class Enemy_AI
             if (((int[])bestChoiceT.GetField("costs", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null))[0] > anthill.resources.eggs) return;
 
             Structure structure = anthill.CreateStructure(bestChoiceT, rect);
+            structure.UpgradeStructure();
+
             onStructureCreated?.Invoke();
             anthill.structureCounts[bestChoiceT]++;
             anthill.resources.eggs -= structure.Costs[structure.level];

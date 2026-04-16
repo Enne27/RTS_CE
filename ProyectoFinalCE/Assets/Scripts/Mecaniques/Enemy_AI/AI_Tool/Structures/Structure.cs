@@ -28,6 +28,7 @@ public abstract class Structure : ScriptableObject
     public int level;
     //public int cost;
     public double remainingUpgradeTime = 0;
+    public double remainingUpgradeTime_100;
     public abstract void update();
     public void UpgradeStructure()
     {
@@ -38,6 +39,7 @@ public abstract class Structure : ScriptableObject
     public void OnConstruction()
     {
         remainingUpgradeTime -= AI_Tool.deltaTime;
+        remainingUpgradeTime_100 = remainingUpgradeTime / TimeCosts[level] * 100;
         if (remainingUpgradeTime <= 0)
         {
             remainingUpgradeTime = 0;
