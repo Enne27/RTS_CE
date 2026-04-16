@@ -23,7 +23,7 @@ public class GenerateMapResources : MonoBehaviour
 
     private void Awake()
     {
-        // antHillQuantity = GAME_MANAGER CANTIDAD DE PLAYERS
+        antHillQuantity = GameManager.instance.antHillsQuantity;
     }
 
     public void InstantiateAntHill(Vector3 pos)
