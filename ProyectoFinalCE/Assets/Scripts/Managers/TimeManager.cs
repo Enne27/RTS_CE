@@ -73,25 +73,4 @@ public class TimeManager : MonoBehaviour
             timers.Remove(interval);
         }
     }
-
-    private void OnEnable()
-    {
-        TimeManager.Instance.Register(1f, TickCada1s);
-        TimeManager.Instance.Register(3f, TickCada3s);
-    }
-
-    private void OnDisable()
-    {
-        TimeManager.Instance.Unregister(1f, TickCada1s);
-        TimeManager.Instance.Unregister(3f, TickCada1s);
-    }
-
-    void TickCada1s()
-    {
-        Debug.Log(name + " TickCada1s");
-    }
-    void TickCada3s()
-    {
-        Debug.Log(name + " TickCada3s");
-    }
 }
