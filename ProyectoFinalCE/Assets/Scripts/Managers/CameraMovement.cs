@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -55,7 +56,7 @@ public class CameraMovement : MonoBehaviour
     private void Awake()
     {
         cameraActions = new InputSystem_Actions();
-        cameraTransform = GetComponentInChildren<Camera>().transform;
+        cameraTransform = GetComponentInChildren<CinemachineCamera>().transform;
     }
 
     private void OnEnable()
