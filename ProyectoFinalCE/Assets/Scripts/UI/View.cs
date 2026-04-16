@@ -47,6 +47,4 @@ public abstract class View : MonoBehaviour
     /// Ocultar la vista en escena simplemente desactivando el objeto.
     /// </summary>
     public virtual void Hide() => gameObject.SetActive(false);
-
-    // REVISAR SI SOBREESCRIBIR SHOW Y HIDE AQUÍ CON LOS EFECTOS
 }
