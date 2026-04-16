@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1273635104083841220}
   - component: {fileID: 1305216949680661476}
   m_Layer: 5
-  m_Name: RoeImage
+  m_Name: EggsImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -247,7 +247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9119678305629991936
 RectTransform:
   m_ObjectHideFlags: 0
@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 504406564917053975}
   - component: {fileID: 267635709244893362}
   m_Layer: 5
-  m_Name: RoeText
+  m_Name: EggsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,9 +1106,10 @@ MonoBehaviour:
   guidComponent: {fileID: 4543523007185052992}
   object_cg: {fileID: 204368640714498}
   foodText: {fileID: 113001251656853109}
-  roeText: {fileID: 267635709244893362}
-  mcText: {fileID: 0}
+  eggsText: {fileID: 267635709244893362}
+  mcText: {fileID: 1385974863734484185}
   antWorkersText: {fileID: 6063183607648108959}
+  constructionButton: {fileID: 6488386324952944242}
 --- !u!1 &6039283948564215952
 GameObject:
   m_ObjectHideFlags: 0

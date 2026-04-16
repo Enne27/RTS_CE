@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Player resources")]
-    Player player; // Jugador
-    Player playerIA; // IA
+    public Player player; // Jugador
+    public Player playerIA; // IA
 
 
     #endregion
