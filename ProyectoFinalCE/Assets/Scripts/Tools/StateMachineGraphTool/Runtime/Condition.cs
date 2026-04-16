@@ -39,6 +39,7 @@ public class Condition
         }
     }
 
+
     //TODO: Make functions for checking conditions booleans
     
 }
