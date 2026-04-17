@@ -1,8 +1,108 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildingSystem : MonoBehaviour
 {
     public const float CELL_SIZE = 1f;
 
+    [SerializeField] private BuildingData queenChamberData;
+    [SerializeField] private BuildingData broodChamberData;
+    [SerializeField] private BuildingData storageChamberData;
+    [SerializeField] private BuildingPreview previewPrefab;
+    [SerializeField] private Building buildingPrefab;
+    [SerializeField] private BuildingGrid grid;
 
+    private BuildingPreview preview;
+
+    private Keyboard keyboard;
+    private Mouse mouse;
+
+    private void Awake()
+    {
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
+    }
+
+    private void Update()
+    {
+
+        Vector3 mousePos = GetMouseWorldPosition();
+        Debug.Log(GetMouseWorldPosition());
+
+        if (preview != null)
+        {
+            HandlePreview(mousePos);
+        }
+        else
+        {
+            if (keyboard.digit1Key.wasPressedThisFrame)
+            {
+                preview = CreatePreview(queenChamberData, mousePos);
+            }
+            else if (keyboard.digit2Key.wasPressedThisFrame)
+            {
+                preview = CreatePreview(broodChamberData, mousePos);
+            }
+            else if (keyboard.digit3Key.wasPressedThisFrame)
+            {
+                preview = CreatePreview(storageChamberData, mousePos);
+            }
+        }
+    }
+
+    private void HandlePreview(Vector3 mouseWorldPosition)
+    {
+        preview.transform.position = mouseWorldPosition;
+        List<Vector3> buildPosition = preview.model.GetAllBuilddingPositions();
+        bool canBuild = grid.CanBuild(buildPosition);
+
+        if (canBuild)
+        {
+            preview.transform.position = GetSnappedCenterPosition(buildPosition);
+            preview.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
+
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                PlaceBuilding(buildPosition);
+            }
+        }
+        else
+        {
+            preview.ChangeState(BuildingPreview.BuildingPreviewState.NEGATIVE);
+        }
+    }
+
+    private void PlaceBuilding(List<Vector3> buildingPositions)
+    {
+        Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
+        building.Setup(preview.data, preview.model.Rotation);
+        grid.SetBuilding(building, buildingPositions);
+        Destroy(preview.gameObject);
+        preview = null;
+    }
+
+    private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
+    {
+        List<int> xs = allbuildingPositions.Select(p => Mathf.FloorToInt(p.x)).ToList();
+        List<int> ys = allbuildingPositions.Select(p => Mathf.FloorToInt(p.y)).ToList();
+        float centerx = (xs.Min() + xs.Max()) / 2f + CELL_SIZE / 2f;
+        float centery = (ys.Min() + ys.Max()) / 2f + CELL_SIZE / 2f;
+        return new(centerx, centery, 45f);
+    }
+
+    private Vector3 GetMouseWorldPosition()
+    {
+        Vector3 mouseScreen = mouse.position.ReadValue();
+        mouseScreen.z = Mathf.Abs(grid.transform.position.z);
+        return Camera.main.ScreenToWorldPoint(mouseScreen);
+    }
+
+    private BuildingPreview CreatePreview(BuildingData data, Vector3 position)
+    {
+        BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
+        buildingPreview.Setup(data);
+        return buildingPreview;
+    }
 }

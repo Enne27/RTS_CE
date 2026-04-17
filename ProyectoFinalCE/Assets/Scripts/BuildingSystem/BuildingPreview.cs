@@ -36,8 +36,29 @@ public class BuildingPreview : MonoBehaviour
         SetPreviewMaterial(state);
     }
 
+    public void ChangeState(BuildingPreviewState newState)
+    {
+        if(newState == state) return;
+        state = newState;
+        SetPreviewMaterial(state);
+    }
+
+    public void Rotate(int rotationStep)
+    {
+        model.Rotate(rotationStep);
+    }
+
     private void SetPreviewMaterial(BuildingPreviewState newState)
     {
-        
+        Material previewMat = newState == BuildingPreviewState.POSITIVE ? positiveMaterial : negativeMaterial;
+        foreach (var rend in renderers)
+        {
+            Material[] mats = new Material[rend.sharedMaterials.Length];
+            for (int i = 0; i < mats.Length; i++)
+            {
+                mats[i] = previewMat;
+            }
+            rend.materials = mats;
+        }
     }
 }

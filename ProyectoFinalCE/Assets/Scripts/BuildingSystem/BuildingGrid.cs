@@ -43,8 +43,11 @@ public class BuildingGrid : MonoBehaviour
 
     private (int x, int y) WorldToGridPosition(Vector3 worldPosition)
     {
-        int x = Mathf.FloorToInt((worldPosition = transform.position).x / BuildingSystem.CELL_SIZE);
-        int y = Mathf.FloorToInt((worldPosition = transform.position).y / BuildingSystem.CELL_SIZE);
+        Vector3 localPos = worldPosition - transform.position;
+
+        int x = Mathf.FloorToInt(localPos.x / BuildingSystem.CELL_SIZE);
+        int y = Mathf.FloorToInt(localPos.y / BuildingSystem.CELL_SIZE);
+
         return (x, y);
     }
 

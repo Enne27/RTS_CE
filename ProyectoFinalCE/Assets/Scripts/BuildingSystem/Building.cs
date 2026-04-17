@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    private BuildingModel model;
 
-    // Update is called once per frame
-    void Update()
+    private BuildingData data;
+
+    public void Setup(BuildingData data, float rotation)
     {
-        
+        this.data = data;
+        model = Instantiate(data.model, transform.position, Quaternion.identity, transform);
+        model.Rotate(rotation);
     }
 }
