@@ -57,12 +57,16 @@ public class Inventory
     /// </summary>
     public void ResetAllVariables()
     {
-        eggs = 0;
-        food = 0;
+        eggs = GameManager.instance.startingEggs;
+        food = GameManager.instance.startingFood;
+        materials = GameManager.instance.startingMC;
         upgradePoints = 0;
+
+        workerAnts = GameManager.instance.startingWorkerAnts;
 
         eggCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
         foodCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+        materialsCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
     }
     #endregion
 }
