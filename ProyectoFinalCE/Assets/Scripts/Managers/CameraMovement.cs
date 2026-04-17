@@ -1,8 +1,10 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraMovement : MonoBehaviour
 {
+    #region Variables
     private InputSystem_Actions cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
@@ -14,17 +16,14 @@ public class CameraMovement : MonoBehaviour
     private float acceleration = 10f;
     [SerializeField]
     private float damping = 15f;
-
     [SerializeField]
-    private float stepSize = 2f;
+    private float stepSize = 6f;
     [SerializeField]
     private float zoomDampening = 7.5f;
     [SerializeField]
-    private float minHeight = 5f;
+    private float minHeight = 3f;
     [SerializeField]
-    private float maxHeight = 50f;
-    [SerializeField]
-    private float zoomSpeed = 2f;
+    private float maxHeight = 30f;
 
     [SerializeField]
     private float maxRotationSpeed = 1f;
@@ -32,6 +31,13 @@ public class CameraMovement : MonoBehaviour
     [SerializeField]
     [Range(0f, 0.1f)]
     private float edgeTolerance = 0.05f;
+
+    [SerializeField]
+    [Tooltip("Distancia en el eje Z a la que se aleja la cámara cuando está al máximo de zoom (cerca del suelo)")]
+    private float maxZoomDistance = 5f;
+
+    [SerializeField]
+    private float zoomMultiplier = 0.5f;
 
     //value set in various functions 
     //used to update the position of the camera base object.
@@ -45,19 +51,20 @@ public class CameraMovement : MonoBehaviour
 
     //tracks where the dragging action started
     Vector3 startDrag;
+    #endregion
 
     private void Awake()
     {
         cameraActions = new InputSystem_Actions();
-        cameraTransform = this.GetComponentInChildren<Camera>().transform;
+        cameraTransform = GetComponentInChildren<CinemachineCamera>().transform;
     }
 
     private void OnEnable()
     {
         zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(this.transform);
+        cameraTransform.LookAt(transform);
 
-        lastPosition = this.transform.position;
+        lastPosition = transform.position;
 
         movement = cameraActions.CameraControls.Movement;
         cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
@@ -85,22 +92,39 @@ public class CameraMovement : MonoBehaviour
         UpdateCameraPosition();
     }
 
-    private void UpdateVelocity()
-    {
-        horizontalVelocity = (this.transform.position - lastPosition) / Time.deltaTime;
-        horizontalVelocity.y = 0f;
-        lastPosition = this.transform.position;
-    }
-
+    #region Inputs
     private void GetKeyboardMovement()
     {
-        Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRight()
-                    + movement.ReadValue<Vector2>().y * GetCameraForward();
+        Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRigRight()
+                    + movement.ReadValue<Vector2>().y * GetCameraRigForward();
 
         inputValue = inputValue.normalized;
 
         if (inputValue.sqrMagnitude > 0.1f)
             targetPosition += inputValue;
+    }
+
+    private void CheckMouseAtScreenEdge()
+    {
+        if (!Application.isFocused) return;
+
+        //mouse position is in pixels
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector3 moveDirection = Vector3.zero;
+
+        //horizontal scrolling
+        if (mousePosition.x < edgeTolerance * Screen.width)
+            moveDirection += -GetCameraRigRight();
+        else if (mousePosition.x > (1f - edgeTolerance) * Screen.width)
+            moveDirection += GetCameraRigRight();
+
+        //vertical scrolling
+        if (mousePosition.y < edgeTolerance * Screen.height)
+            moveDirection += -GetCameraRigForward();
+        else if (mousePosition.y > (1f - edgeTolerance) * Screen.height)
+            moveDirection += GetCameraRigForward();
+
+        targetPosition += moveDirection;
     }
 
     private void DragCamera()
@@ -120,26 +144,14 @@ public class CameraMovement : MonoBehaviour
                 targetPosition += startDrag - ray.GetPoint(distance);
         }
     }
+    #endregion
 
-    private void CheckMouseAtScreenEdge()
+    #region Movement
+    private void UpdateVelocity()
     {
-        //mouse position is in pixels
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        Vector3 moveDirection = Vector3.zero;
-
-        //horizontal scrolling
-        if (mousePosition.x < edgeTolerance * Screen.width)
-            moveDirection += -GetCameraRight();
-        else if (mousePosition.x > (1f - edgeTolerance) * Screen.width)
-            moveDirection += GetCameraRight();
-
-        //vertical scrolling
-        if (mousePosition.y < edgeTolerance * Screen.height)
-            moveDirection += -GetCameraForward();
-        else if (mousePosition.y > (1f - edgeTolerance) * Screen.height)
-            moveDirection += GetCameraForward();
-
-        targetPosition += moveDirection;
+        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity.y = 0f;
+        lastPosition = transform.position;
     }
 
     private void UpdateBasePosition()
@@ -163,20 +175,11 @@ public class CameraMovement : MonoBehaviour
 
     private void ZoomCamera(InputAction.CallbackContext obj)
     {
-        // 1. Leemos el valor puro
         Vector2 scrollValue = obj.ReadValue<Vector2>();
-
-        // Descomenta esta línea para ver en consola qué valor exacto te manda tu ratón
-        // Debug.Log($"Scroll detectado: {scrollValue.y}");
-
-        // 2. Quitamos la división entre 100 por ahora y usamos el valor directo
         float inputValue = -scrollValue.y;
 
-        // 3. Bajamos drásticamente el límite (threshold) para asegurarnos de que entra
         if (Mathf.Abs(inputValue) > 0.01f)
         {
-            // 4. Aplicamos un multiplicador pequeño aquí en lugar de dividir antes
-            float zoomMultiplier = 0.5f; // Ajusta esto si el zoom es muy rápido o muy lento
             zoomHeight = cameraTransform.localPosition.y + (inputValue * stepSize * zoomMultiplier);
 
             if (zoomHeight < minHeight)
@@ -188,13 +191,24 @@ public class CameraMovement : MonoBehaviour
 
     private void UpdateCameraPosition()
     {
-        //set zoom target
-        Vector3 zoomTarget = new Vector3(cameraTransform.localPosition.x, zoomHeight, cameraTransform.localPosition.z);
-        //add vector for forward/backward zoom
-        zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
+        // 1. Calculamos el porcentaje del zoom (0 a 1).
+        // 0 = Estamos en minHeight (muy cerca del suelo).
+        // 1 = Estamos en maxHeight (muy alto).
+        float zoomPercent = (zoomHeight - minHeight) / (maxHeight - minHeight);
 
+        // 2. Calculamos la posición Z deseada usando ese porcentaje.
+        // Si el porcentaje es 1 (lejos), Z será 0 (justo encima, visión vertical).
+        // Si el porcentaje es 0 (cerca), Z será -maxZoomDistance (alejado, visión horizontal).
+        float targetZ = Mathf.Lerp(-maxZoomDistance, 0f, zoomPercent);
+
+        // 3. Creamos el target de posición local usando X=0 para mantenerla centrada.
+        Vector3 zoomTarget = new Vector3(0f, zoomHeight, targetZ);
+
+        // 4. Suavizamos la transición hacia ese punto local, usando tu variable zoomDampening.
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
-        cameraTransform.LookAt(this.transform);
+
+        // 5. Mirar al CameraRig. Al cambiar la posición en Z e Y, LookAt ajustará el ángulo X automáticamente[cite: 1].
+        cameraTransform.LookAt(transform);
     }
 
     private void RotateCamera(InputAction.CallbackContext obj)
@@ -205,19 +219,18 @@ public class CameraMovement : MonoBehaviour
         float inputValue = obj.ReadValue<Vector2>().x;
         transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
     }
+    #endregion
 
-    //gets the horizontal forward vector of the camera
-    private Vector3 GetCameraForward()
+    private Vector3 GetCameraRigForward()
     {
-        Vector3 forward = cameraTransform.forward;
+        Vector3 forward = transform.forward;
         forward.y = 0f;
         return forward;
     }
 
-    //gets the horizontal right vector of the camera
-    private Vector3 GetCameraRight()
+    private Vector3 GetCameraRigRight()
     {
-        Vector3 right = cameraTransform.right;
+        Vector3 right = transform.right;
         right.y = 0f;
         return right;
     }
