@@ -747,6 +747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1141022641}
   - component: {fileID: 1141022642}
+  - component: {fileID: 1141022643}
   m_Layer: 0
   m_Name: NestManager
   m_TagString: Manager
@@ -784,6 +785,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NestManager
   NestSize: 10
   slots: []
+--- !u!156049354 &1141022643
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141022640}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 1}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
 --- !u!1 &1231115921
 GameObject:
   m_ObjectHideFlags: 0

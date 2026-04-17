@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 
-public abstract class Building
+public abstract class BuildingClass
 {
     public abstract LocalizedString BuildingName { get; set;}
     public abstract LocalizedString BuildingDescription { get; set;}
