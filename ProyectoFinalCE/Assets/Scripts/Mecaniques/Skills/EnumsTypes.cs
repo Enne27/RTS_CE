@@ -18,5 +18,9 @@ public enum StatType
     BuildSpeed,
     CostReduction,
     ExplorationSpeed,
-    ResourceGain //Sort
+    ResourceGain,
+    CarryCapacity,
+    WorkerEfficiency,
+    EggProduction,
+    CombatSpeed
 }

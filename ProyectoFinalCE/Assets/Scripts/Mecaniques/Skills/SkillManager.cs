@@ -70,7 +70,46 @@ public class SkillManager : MonoBehaviour
     {
         foreach (var effect in skill.Effects)
         {
-            StatManager.Instance.ModifyStat(effect.statType, effect.value);
+            switch (effect.effectType)
+            {
+                case EffectType.StatModifier:
+                    StatManager.Instance.ModifyStat(effect.statType, effect.value);
+                    break;
+
+                case EffectType.UnlockMechanic:
+                    GameManager.Instance.UnlockMechanic(effect.specialID);
+                    break;
+
+                case EffectType.PercentageModifier:
+                    StatManager.Instance.ModifyStat(effect.statType, effect.value);
+                    break;
+
+                case EffectType.Special:
+                    ApplySpecialEffect(effect.specialID, effect.value);
+                    break;
+            }
+        }
+    }
+
+    private void ApplySpecialEffect(string id, float value)
+    {
+        switch (id)
+        {
+            case "EggsAsFood":
+                GameManager.Instance.canUseEggsAsFood = true;
+                break;
+
+            case "InvisibleExplorers":
+                GameManager.Instance.explorersInvisible = true;
+                break;
+
+            case "WorkerBonusPer10":
+                GameManager.Instance.workerBonusPer10 += value;
+                break;
+
+            case "RecoverMaterials":
+                GameManager.Instance.recoverMaterialsPercent += value;
+                break;
         }
     }
     #endregion
