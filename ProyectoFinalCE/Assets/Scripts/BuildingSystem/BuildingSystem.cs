@@ -2,15 +2,7 @@ using UnityEngine;
 
 public class BuildingSystem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public const float CELL_SIZE = 1f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

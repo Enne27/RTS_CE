@@ -1,16 +1,10 @@
 using UnityEngine;
+using UnityEngine.Localization;
 
-public class BuildingData : MonoBehaviour
+[CreateAssetMenu(menuName = "BuildingData")]
+public class BuildingData : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [field: SerializeField] public LocalizedString Description {  get; set; }
+    [field: SerializeField] public int cost { get; set; }
+    [field: SerializeField] public BuildingModel model { get; private set; }
 }
