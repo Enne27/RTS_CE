@@ -90,7 +90,7 @@ public class Map : MonoBehaviour
     /// <returns></returns>
     private Vector3 CellToWorldPosition(Vector2Int cell)
     {
-        return new Vector3(cell.x * cellSize, 0, cell.y * cellSize);
+        return new Vector3((cell.x -gridSize.x /2) * cellSize * 2, 0, (cell.y - gridSize.y / 2) * cellSize * 2);
     }
 
     /// <summary>
