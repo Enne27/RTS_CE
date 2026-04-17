@@ -75,20 +75,35 @@ public class TroopsSelection : MonoBehaviour
 
     private void OnRightClick(InputAction.CallbackContext context)
     {
-        Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
-        Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, Camera.main.transform.position.y);
-        Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
-        foreach (BaseAnt ant in unitsSelected)
+        Vector2 mousePos = mousePositionAction.ReadValue<Vector2>();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            ant.flowFieldInxex = flowFieldIndex;
-            UnitController.activeAnts.Add(ant);
+            Vector3 worldMousePos = hit.point;
+
+            int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
+
+            foreach (BaseAnt ant in unitsSelected)
+            {
+                ant.flowFieldInxex = flowFieldIndex;
+                UnitController.activeAnts.Add(ant);
+            }
         }
+
+        //Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
+        //Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, Camera.main.transform.position.y);
+        //Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        //int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
+        //foreach (BaseAnt ant in unitsSelected)
+        //{
+        //    ant.flowFieldInxex = flowFieldIndex;
+        //    UnitController.activeAnts.Add(ant);
+        //}
     }
 
     private void OnLeftClickStarted(InputAction.CallbackContext ctx)
     {
-        Debug.Log("Started");
+        //Debug.Log("Started");
         startMousePos = Mouse.current.position.ReadValue();
         isLeftMouseDown = true;
         isDragging = false;
