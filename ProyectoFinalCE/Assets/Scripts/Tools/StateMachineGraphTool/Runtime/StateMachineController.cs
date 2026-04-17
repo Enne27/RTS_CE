@@ -6,6 +6,9 @@ namespace StateMachine.Runtime
     {
         [SerializeReference]
         public List<StateMachineRuntimeNode> Nodes = new();
+
+        [SerializeReference]
+        public List<StateMachineRuntimeNode> AnyStateNodes = new();
     }
 }
 
