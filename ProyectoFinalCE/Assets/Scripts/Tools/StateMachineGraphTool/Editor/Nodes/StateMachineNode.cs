@@ -1,7 +1,8 @@
+using StateMachine.Runtime;
 using System;
 using Unity.GraphToolkit.Editor;
 using UnityEngine;
-using StateMachine.Runtime;
+using UnityEngine.Windows;
 namespace StateMachine.Editor
 {
     [Serializable]
@@ -17,6 +18,19 @@ namespace StateMachine.Editor
         {
             context.AddOutputPort(EXECUTION_PORT_DEFAULT_NAME)
                 .WithDisplayName("Start")
+                .WithConnectorUI(PortConnectorUI.Arrowhead)
+                .Build();
+        }
+    }
+
+    [Serializable]
+    internal class AnyState : StateMachineNode
+    {
+
+        protected override void OnDefinePorts(IPortDefinitionContext context)
+        {
+            context.AddOutputPort(EXECUTION_PORT_DEFAULT_NAME)
+                .WithDisplayName("AnyState")
                 .WithConnectorUI(PortConnectorUI.Arrowhead)
                 .Build();
         }
@@ -49,7 +63,7 @@ namespace StateMachine.Editor
                 .WithDisplayName(string.Empty)
                 .WithConnectorUI(PortConnectorUI.Arrowhead)
                 .Build();
-           
+
             for (int i = 0; i < inputs; i++)
             {
                 context.AddInputPort<ScriptableAction>($"Skill{i}")
@@ -57,7 +71,7 @@ namespace StateMachine.Editor
                     .WithConnectorUI(PortConnectorUI.Circle)
                     .Build();
             }
-           
+
 
             context.AddOutputPort(TRANSITION_PORT_PREFIX)
                 .WithDisplayName(string.Empty)
@@ -65,8 +79,6 @@ namespace StateMachine.Editor
                 .Build();
         }
     }
-
-
 
     [Serializable]
     internal class If : StateMachineNode
@@ -161,8 +173,6 @@ namespace StateMachine.Editor
                 .WithConnectorUI(PortConnectorUI.Circle)
                 .Build();
         }
-
-
     }
 
     [Serializable]
@@ -170,15 +180,56 @@ namespace StateMachine.Editor
     {
         protected override void OnDefinePorts(IPortDefinitionContext context)
         {
-            
-            context.AddInputPort<BattleCondition>("Condition")
+
+            context.AddInputPort<Conditions>("Condition")
                 .WithDisplayName("Condition")
                 .WithDefaultValue(0)
                 .WithConnectorUI(PortConnectorUI.Circle)
                 .Build();
-            
+
             context.AddOutputPort<bool>("Result")
                 .WithDisplayName("Result")
+                .WithConnectorUI(PortConnectorUI.Circle)
+                .Build();
+        }
+    }
+
+    internal class Switch : StateMachineNode
+    {
+        public const string CASE_PORT = "Case";
+
+        private int outputs = 2;
+
+        protected override void OnDefineOptions(IOptionDefinitionContext context)
+        {
+            context.AddOption<int>("Cases").WithDisplayName("Cases").WithDefaultValue(outputs).Build().TryGetValue<int>(out outputs);
+
+            if (outputs < 1)
+            {
+                outputs = 1;
+            }
+        }
+
+        protected override void OnDefinePorts(IPortDefinitionContext context)
+        {
+
+            context.AddInputPort(EXECUTION_PORT_DEFAULT_NAME)
+                .WithDisplayName(string.Empty)
+                .WithConnectorUI(PortConnectorUI.Arrowhead)
+                .Build();
+
+
+            for (int i = 0; i < outputs; i++)
+            {
+                context.AddOutputPort($"{EXECUTION_PORT_DEFAULT_NAME} {i}")
+                .WithDisplayName($"Case {i}")
+                .WithConnectorUI(PortConnectorUI.Arrowhead)
+                .Build();
+            }
+
+
+            context.AddInputPort<int>(CASE_PORT)
+                .WithDisplayName(string.Empty)
                 .WithConnectorUI(PortConnectorUI.Circle)
                 .Build();
         }

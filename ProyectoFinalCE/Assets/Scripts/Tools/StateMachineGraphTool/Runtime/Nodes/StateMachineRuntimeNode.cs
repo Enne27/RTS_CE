@@ -19,6 +19,9 @@ namespace StateMachine.Runtime
     public class StartRuntimeNode : StateMachineRuntimeNode { }
 
     [Serializable]
+    public class AnyStateRuntimeNode : StateMachineRuntimeNode { }
+
+    [Serializable]
     public class StateRuntimeNode : StateMachineRuntimeNode
     {
         public string StateName;
@@ -44,19 +47,19 @@ namespace StateMachine.Runtime
     [Serializable]
     public class AndRuntimeNode : StateMachineRuntimeNode
     {
-        public List<BattleCondition> Conditions;
+        public List<Conditions> Conditions;
     }
 
     [Serializable]
     public class OrRuntimeNode : StateMachineRuntimeNode
     {
-        public List<BattleCondition> Conditions;
+        public List<Conditions> Conditions;
     }
 
     [Serializable]
     public class ConditionRuntimeNode : StateMachineRuntimeNode
     {
-        public BattleCondition BattleCondition;
+        public Conditions BattleCondition;
     }
 }
 
