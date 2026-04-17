@@ -77,7 +77,7 @@ public class SkillManager : MonoBehaviour
                     break;
 
                 case EffectType.UnlockMechanic:
-                    GameManager.Instance.UnlockMechanic(effect.specialID);
+                    GameManager.instance.UnlockMechanic(effect.specialID);
                     break;
 
                 case EffectType.PercentageModifier:
@@ -96,19 +96,19 @@ public class SkillManager : MonoBehaviour
         switch (id)
         {
             case "EggsAsFood":
-                GameManager.Instance.canUseEggsAsFood = true;
+                GameManager.instance.canUseEggsAsFood = true;
                 break;
 
             case "InvisibleExplorers":
-                GameManager.Instance.explorersInvisible = true;
+                GameManager.instance.explorersInvisible = true;
                 break;
 
             case "WorkerBonusPer10":
-                GameManager.Instance.workerBonusPer10 += value;
+                GameManager.instance.workerBonusPer10 += value; 
                 break;
 
             case "RecoverMaterials":
-                GameManager.Instance.recoverMaterialsPercent += value;
+                GameManager.instance.recoverMaterialsPercent += value;
                 break;
         }
     }
