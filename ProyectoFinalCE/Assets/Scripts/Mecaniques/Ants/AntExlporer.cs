@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using UnityEngine;
 
 public class AntExlporer : Ant
@@ -23,9 +24,10 @@ public class AntExlporer : Ant
     }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -43,6 +45,11 @@ public class AntExlporer : Ant
             damageTaken = other.GetStrength() - (armor * other.GetStrength());
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
+        }
+        if(HP <= 0)
+        {
+            HP = 0;
+            Die();
         }
     }
 
@@ -62,5 +69,10 @@ public class AntExlporer : Ant
          Move objetivo punt
         Collect()
          */
+    }
+
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

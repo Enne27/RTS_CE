@@ -17,6 +17,8 @@ public abstract class Ant : MonoBehaviour
     protected virtual void Carry() { }
     protected virtual void SpawnAnt() { }
 
+    protected virtual void Die() { }
+
     public float GetStrength()
     {
         return strength;

@@ -25,7 +25,11 @@ internal class AntSoldier : Ant
     public override void Attack(Ant target) {
         if (target != null)
         {
-            target.TakeDamage(target, strength,acidBased);
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage(this, strength, acidBased);
+            }
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -38,11 +42,19 @@ internal class AntSoldier : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
-        else if(other.GetAcidBased() == false)
+        else if (other.GetAcidBased() == false)
         {
             damageTaken = other.GetStrength() - (armor * other.GetStrength());
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
-        } 
+        }
+        if (HP <= 0) {
+            HP = 0;
+            Die();
+        }
+    }
+    protected override void Die()
+    {
+        gameObject.SetActive(false);    
     }
 }

@@ -21,9 +21,10 @@ public class AntAcidSpewer : Ant
     }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -31,6 +32,15 @@ public class AntAcidSpewer : Ant
         float damageTaken;
         damageTaken = other.GetStrength() - (armor * other.GetStrength());
         damageTaken = Mathf.Max(0, damageTaken);
-        HP -= damageTaken;      
+        HP -= damageTaken;
+        if (HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+    }
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }
