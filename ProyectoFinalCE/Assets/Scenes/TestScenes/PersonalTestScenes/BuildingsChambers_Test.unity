@@ -483,8 +483,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f956f95937fa0428b5c02a26ec7729, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::QueenChamberFunction
+  positionAntHill: {x: 0, y: 0}
+  currentStructureState: 0
+  currentLevel: 1
   timeToProduceEggs: 60
   quantityProduction: 0
+  queenBuildingScriptable: {fileID: 11400000, guid: f79eb65324116fe42b7b13bec7eb39f6, type: 2}
 --- !u!1 &1801445071
 GameObject:
   m_ObjectHideFlags: 0

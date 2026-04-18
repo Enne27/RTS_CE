@@ -1,19 +1,56 @@
 using UnityEngine;
 
-public class QueenChamberFunction : MonoBehaviour
+
+public class QueenChamberFunction : StructuresPlayer
 {
     #region VARIABLES
     [Header("Building parameters")]
-    [Tooltip("Tiempo que tarda en producir huevas.")]
+    [Tooltip("Tiempo que tarda en producir huevas (en segundos).")]
     [SerializeField] float timeToProduceEggs = 60f;
 
-    [Tooltip("Nivel del edificio.")]
-    private int lvl = 1;
 
-    [Tooltip("Cantidad de huevas que produce por minuto.")]
-    [SerializeField] float quantityProduction;
-    // DICCIONARIO O LO QUE SEA DE LOS VALORES DE CANTIDAD DE PRODUCCIÓN, COSTE DE HUEVAS, COSTE DE MC POR NIVEL.
-    // EN IA HAY MÁS COSAS PARA ESTOS
+    [Tooltip("Scriptable construction info")]
+    [SerializeField] BuildingData queenBuildingScriptable;
+
+    [Header("Characteristics by level")]
+    [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
+    int[] costsUpgradeHV_ = { 0, 25, 35, 50, 80 };
+
+    [Tooltip("Costes en materiales de construcción de las mejoras de cada nivel.")]
+    int[] costsUpgradeMC_ = { 5, 15, 25, 30, 45 };
+
+    [Tooltip("Tiempo que tarda el edificio en mejorarse en cada nivel.")]
+    int[] timeUpgrade_ = { 10, 75, 90, 90, 120 };
+
+
+    [Tooltip("Cantidad de huevas que produce por cada burst de producción.")]
+    int[] quantityProduction = { 20, 40, 60, 80, 100 };
+
+    // El límite de huevas está en playerConstants
+
+    [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
+    int[] maxLevelByEra_ = { 1, 2, 4, 5};
+
+    [Header("Class variables")]
+    public override int[] costsUpgradeHV => costsUpgradeHV_;
+
+    public override int[] costsUpgradeMC => costsUpgradeMC_;
+
+    public override int[] timeUpgrade => timeUpgrade_;
+
+    public override int[] maxLevelByEra => maxLevelByEra_;
+
+
+    [SerializeField] GameHUDView hudView;
+    #endregion
+
+
+    #region METHODS_STRUCTURES
+
+    public override void OnConstructionFinished()
+    {
+    }
+
     #endregion
 
     private void OnEnable()
@@ -33,10 +70,15 @@ public class QueenChamberFunction : MonoBehaviour
     {
        int currentEggs = GameManager.instance.player.inventory.eggs;
        int currentEggCapacity = GameManager.instance.player.inventory.eggCapacity;
+       int eggsToAdd = quantityProduction[currentLevel-1];
 
-       if (currentEggs < currentEggCapacity) 
-       {
-            GameManager.instance.player.inventory.eggs += currentEggCapacity - currentEggs;
+       if (currentEggs + eggsToAdd < currentEggCapacity) 
+            GameManager.instance.player.inventory.AddEggs(eggsToAdd);
+       else { 
+            GameManager.instance.player.inventory.eggs = currentEggCapacity; 
        }
+
+       //if(hudView != null) hudView.
     }
+
 }
