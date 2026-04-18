@@ -34,5 +34,7 @@ public class Player
             structuresCount[type] = 0;
         }
         */
+
+        currentEra = HIVE_ERAS.BROTE;
     }
 }

@@ -49,6 +49,11 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    private void OnEnable()
+    {
+        player = new Player();
+    }
+
     /// <summary>
     /// Reiniciar los valores por los iniciales.
     /// </summary>

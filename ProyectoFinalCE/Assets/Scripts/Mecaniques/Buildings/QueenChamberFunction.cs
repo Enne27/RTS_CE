@@ -8,9 +8,9 @@ public class QueenChamberFunction : StructuresPlayer
     [Tooltip("Tiempo que tarda en producir huevas (en segundos).")]
     [SerializeField] float timeToProduceEggs = 60f;
 
-
     [Tooltip("Scriptable construction info")]
     [SerializeField] BuildingData queenBuildingScriptable;
+
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -22,7 +22,6 @@ public class QueenChamberFunction : StructuresPlayer
     [Tooltip("Tiempo que tarda el edificio en mejorarse en cada nivel.")]
     int[] timeUpgrade_ = { 10, 75, 90, 90, 120 };
 
-
     [Tooltip("Cantidad de huevas que produce por cada burst de producción.")]
     int[] quantityProduction = { 20, 40, 60, 80, 100 };
 
@@ -31,7 +30,7 @@ public class QueenChamberFunction : StructuresPlayer
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     int[] maxLevelByEra_ = { 1, 2, 4, 5};
 
-    [Header("Class variables")]
+    [Header("ParentClass variables")]
     public override int[] costsUpgradeHV => costsUpgradeHV_;
 
     public override int[] costsUpgradeMC => costsUpgradeMC_;
@@ -49,6 +48,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
+        //TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
     }
 
     #endregion
@@ -72,13 +72,14 @@ public class QueenChamberFunction : StructuresPlayer
        int currentEggCapacity = GameManager.instance.player.inventory.eggCapacity;
        int eggsToAdd = quantityProduction[currentLevel-1];
 
-       if (currentEggs + eggsToAdd < currentEggCapacity) 
-            GameManager.instance.player.inventory.AddEggs(eggsToAdd);
-       else { 
+        if (currentEggs + eggsToAdd < currentEggCapacity)
+            GameManager.instance.player.inventory.AddEggs(eggsToAdd); 
+            
+       else {
             GameManager.instance.player.inventory.eggs = currentEggCapacity; 
        }
 
-       //if(hudView != null) hudView.
+       if(hudView != null) hudView.UpdateEggsText();
     }
 
 }
