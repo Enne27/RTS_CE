@@ -22,8 +22,8 @@ public class Inventory
     public Inventory()
     {
         SetEggCapacity(HIVE_ERAS.BROTE);
-        SetFoodCapacity(100); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
-        SetMaterialsCapacity(100);
+        //UpdateFoodCapacity(FOOD_CAPACITY); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
+        //UpdateMC_Capacity(MC_CAPACITY);
     }
 
     #region Methods
@@ -33,14 +33,14 @@ public class Inventory
         return eggCapacity = EGG_CAPACITIES[playerEra];
     }
 
-    public int SetFoodCapacity(int calculatedMaxStorage)
+    public int UpdateFoodCapacity(int calculatedMaxStorage)
     {
-        return foodCapacity = calculatedMaxStorage;
+        return foodCapacity += calculatedMaxStorage;
     }
 
-    public int SetMaterialsCapacity(int calculatedMaxStorage)
+    public int UpdateMC_Capacity(int calculatedMaxStorage)
     {
-        return materialsCapacity = calculatedMaxStorage;
+        return materialsCapacity += calculatedMaxStorage;
     }
 
     #endregion
@@ -54,13 +54,21 @@ public class Inventory
         return eggs -= eggsToRemove;
     }
 
-    public int AddFood(int foodToRemove)
+    public int AddFood(int foodToAdd)
     {
-        return food += foodToRemove;
+        return food += foodToAdd;
     }
     public int RemoveFood(int foodToRemove)
     {
         return food -= foodToRemove;
+    }
+    public int AddMC(int mcToAdd)
+    {
+        return materials += mcToAdd;
+    }
+    public int RemoveMC(int mcToRemove)
+    {
+        return materials -= mcToRemove;
     }
 
     public int AddUpgradePoints(int upgradePointsToAdd)
@@ -85,8 +93,8 @@ public class Inventory
         workerAnts = GameManager.instance.startingWorkerAnts;
 
         eggCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
-        //foodCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
-        //materialsCapacity = EGG_CAPACITIES[HIVE_ERAS.BROTE];
+        foodCapacity = FOOD_CAPACITY;
+        materialsCapacity = MC_CAPACITY;
     }
     #endregion
 }

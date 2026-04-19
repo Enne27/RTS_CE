@@ -19,4 +19,8 @@ public static class PlayerConstants
         { HIVE_ERAS.DOMINIO , 875 },
         { HIVE_ERAS.IMPERIO , 1000 }
     };
+
+    public static readonly int FOOD_CAPACITY = 100;
+    public static readonly int MC_CAPACITY = 100;
+    public static readonly int FORRAJEO_STORAGE_CAPACITY = 5;
 }

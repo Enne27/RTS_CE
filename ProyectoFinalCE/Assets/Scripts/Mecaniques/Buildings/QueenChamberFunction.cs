@@ -39,7 +39,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     public override int[] maxLevelByEra => maxLevelByEra_;
 
-
+    [Header("Visual player")]
     [SerializeField] GameHUDView hudView;
     #endregion
 
@@ -53,10 +53,10 @@ public class QueenChamberFunction : StructuresPlayer
 
     #endregion
 
-    private void OnEnable()
+    /*private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden
     {
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
-    }
+    }*/
 
     private void OnDisable()
     {

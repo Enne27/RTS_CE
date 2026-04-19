@@ -22,13 +22,23 @@ public abstract class StructuresPlayer : MonoBehaviour
 
     #endregion
 
-
+    /// <summary>
+    /// Mientras se está actualizando la construcción.
+    /// </summary>
     public void UpgradeStructure()
     {
         currentStructureState = StructureState.OnUpdate;
         OnUpgradeFinished();
     }
+
+    /// <summary>
+    /// Cuando termina de construirse al inicio.
+    /// </summary>
     public abstract void OnConstructionFinished();
+
+    /// <summary>
+    /// Cuando termina de actualizarse la construcción.
+    /// </summary>
     public virtual void OnUpgradeFinished() 
     { 
         currentStructureState = StructureState.Idle;

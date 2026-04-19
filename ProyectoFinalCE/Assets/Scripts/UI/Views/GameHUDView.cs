@@ -18,9 +18,9 @@ public class GameHUDView : View
 
     public override void Initialize()
     {
-        foodText.text = GameManager.instance.startingFood.ToString() + "/" + GameManager.instance.player.inventory.foodCapacity;
+        foodText.text = GameManager.instance.startingFood.ToString();
         eggsText.text = GameManager.instance.startingEggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
-        mcText.text = GameManager.instance.startingMC.ToString() + "/" + GameManager.instance.player.inventory.materialsCapacity;
+        mcText.text = GameManager.instance.startingMC.ToString();
         antWorkersText.text = GameManager.instance.startingWorkerAnts.ToString();
 
         //if(constructionButton != null)

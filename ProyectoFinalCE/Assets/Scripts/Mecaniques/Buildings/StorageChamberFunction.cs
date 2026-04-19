@@ -40,17 +40,27 @@ public class StorageChamberFunction : StructuresPlayer
     public override int[] costsUpgradeMC => costsUpgradeMC_;
     public override int[] timeUpgrade => timeUpgrade_;
     public override int[] maxLevelByEra => maxLevelByEra_;
+
+    [Header("Visual player")]
+    [SerializeField] GameHUDView hudView;
     #endregion
 
     public override void OnConstructionFinished()
     {
-        //TimeManager.Instance.Unregister(timeToProduceFood, ProduceFood);
+        TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
+        UpdateCapacityLimits();
+    }
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        UpdateCapacityLimits();
     }
 
-    private void OnEnable()
+   /* private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden. PRUEBASSS
     {
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-    }
+        UpdateCapacityLimits();
+    }*/
 
     private void OnDisable()
     {
@@ -59,6 +69,53 @@ public class StorageChamberFunction : StructuresPlayer
 
     private void ProduceFood()
     {
+        FoodAcquired(quantityProduction[currentLevel - 1]);
+    }
 
+    /// <summary>
+    /// Cuando la comida llega de la cámara de forrajeo a las de almacenamiento.
+    /// También se llama mediante la generación que da la "granja de hongos".
+    /// </summary>
+    void FoodAcquired(int foodToAdd)
+    {
+        int currentFood = GameManager.instance.player.inventory.food;
+        int currentFoodCapacity = GameManager.instance.player.inventory.foodCapacity;
+
+        if (currentFood + foodToAdd < currentFoodCapacity)
+            GameManager.instance.player.inventory.AddFood(foodToAdd);
+        else
+        {
+            GameManager.instance.player.inventory.food = currentFoodCapacity;
+        }
+
+        if(hudView != null) hudView.UpdateFoodText();
+    }
+
+    /// <summary>
+    /// Cuando llegan los materiales de la cámara de forrajeo. (Se obtiene la cantidad de las exploraciones.)
+    /// </summary>
+    /// <param name="mcToAdd"></param>
+    void MC_Acquired(int mcToAdd)
+    {
+        int currentMC = GameManager.instance.player.inventory.materials;
+        int currentMC_Capacity = GameManager.instance.player.inventory.materialsCapacity;
+
+        if (currentMC + mcToAdd < currentMC_Capacity)
+            GameManager.instance.player.inventory.AddMC(mcToAdd);
+        else
+        {
+            GameManager.instance.player.inventory.materials = currentMC_Capacity;
+        }
+
+        if (hudView != null) hudView.UpdateMCText();
+    }
+
+    /// <summary>
+    /// Método interno para actualizar los valores límite de los almacenes cuando estos se actualizan o construyen.
+    /// </summary>
+    private void UpdateCapacityLimits()
+    {
+        GameManager.instance.player.inventory.UpdateFoodCapacity(quantityStorage[currentLevel-1]);
+        GameManager.instance.player.inventory.UpdateMC_Capacity(quantityStorage[currentLevel-1]);
     }
 }
