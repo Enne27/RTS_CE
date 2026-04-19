@@ -11,6 +11,17 @@ public static class PlayerConstants
         IMPERIO
     }
 
+    public enum ANT_TYPES
+    {
+        ACID,
+        BERSERKER,
+        EXPLORER, 
+        SOLDIER,
+        CRAZY,
+        KAMIKAZE,
+        WORKER
+    }
+
     public static readonly Dictionary<HIVE_ERAS, int> EGG_CAPACITIES = new() 
     {
         { HIVE_ERAS.BROTE , 500 },

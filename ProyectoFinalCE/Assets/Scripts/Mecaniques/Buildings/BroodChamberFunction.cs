@@ -1,4 +1,5 @@
 using UnityEngine;
+using static PlayerConstants;
 
 public class BroodChamberFunction : StructuresPlayer
 {
@@ -6,6 +7,15 @@ public class BroodChamberFunction : StructuresPlayer
     [Header("Building parameters")]
     [Tooltip("Scriptable construction info")]
     [SerializeField] BuildingData broodBuildingScriptable;
+
+    [Header("Ants")]
+    [SerializeField] GameObject soldierAnt;
+    [SerializeField] GameObject explorerAnt;
+    [SerializeField] GameObject workerAnt;
+    [SerializeField] GameObject berserkerAnt;
+    [SerializeField] GameObject acidAnt;
+    [SerializeField] GameObject crazyAnt;
+    [SerializeField] GameObject kamikazeAnt;
 
 
     [Header("Characteristics by level")]
@@ -38,6 +48,50 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
     #endregion
 
+    public void CreateAnt(ANT_TYPES antType, Transform position)
+    {
+        Debug.Log(antType);
+        GameObject antInstantiate = workerAnt;
+
+        if (position != null)
+        {
+            switch (antType)
+            {
+                case ANT_TYPES.ACID:
+                    antInstantiate = acidAnt;
+                    break;
+                case ANT_TYPES.BERSERKER:
+                    antInstantiate = berserkerAnt;
+                    break;
+                case ANT_TYPES.EXPLORER:
+                    antInstantiate = explorerAnt;
+                    break;
+                case ANT_TYPES.SOLDIER:
+                    antInstantiate = soldierAnt;
+                    break;
+                case ANT_TYPES.CRAZY: 
+                    antInstantiate = crazyAnt;
+                    break;
+                case ANT_TYPES.KAMIKAZE:
+                    antInstantiate = kamikazeAnt;
+                    break;
+                case ANT_TYPES.WORKER:
+                    antInstantiate = workerAnt;
+                    break;
+            }
+
+            
+            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
+            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
+            if(SpawnAnt())
+                Instantiate(antInstantiate, position.position, Quaternion.identity);
+        }
+    }
+
+    private bool SpawnAnt()
+    {
+        return true;
+    }
 
     public override void OnConstructionFinished()
     {
