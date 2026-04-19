@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using static PlayerConstants;
 
@@ -18,7 +16,7 @@ public class Player
     public HIVE_ERAS currentEra;
     public Dictionary<Type, int> structuresCount;
     //public List<Structure> structures;
-    //public List<Ant> ants;
+    public List<Ant> ants;
 
     public Player()
     {
