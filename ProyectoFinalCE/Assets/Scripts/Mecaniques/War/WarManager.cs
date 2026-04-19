@@ -14,17 +14,19 @@ public class WarManager : MonoBehaviour
 
     private void Update()
     {
-        if(state == WarState.Neutral)
+        switch (state)
         {
+            case WarState.Neutral:
+                // logica
+                break;
 
-        }
-        else if(state == WarState.Tense)
-        {
+            case WarState.Tense:
+                // logica
+                break;
 
-        }
-        else if(state == WarState.War)
-        {
-
+            case WarState.War:
+                // logica
+                break;
         }
     }
 }
