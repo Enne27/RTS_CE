@@ -6,7 +6,7 @@ public class SkillEffect
     public EffectType effectType;
     // Stats
     public StatType statType;
-    public float value;
+    public float value; 
     // Efectos especiales
     public string specialID;
 }
