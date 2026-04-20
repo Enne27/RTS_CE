@@ -1,0 +1,80 @@
+:root {
+}
+
+#node-border {
+    background-color: rgb(56, 56, 56);
+    border-left-color: rgb(37, 37, 37);
+    border-right-color: rgb(37, 37, 37);
+    border-top-color: rgb(37, 37, 37);
+    border-bottom-color: rgb(37, 37, 37);
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#title {
+}
+
+#selection-border {
+    border-left-color: rgb(48, 101, 178);
+    border-right-color: rgb(48, 101, 178);
+    border-top-color: rgb(48, 101, 178);
+    border-bottom-color: rgb(48, 101, 178);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+:hover > #slection-border {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+}
+
+:selected > #selection-border {
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+}
+
+#divider {
+    max-height: 1px;
+    background-color: rgb(255, 0, 0);
+}
+
+.Camara_de_Almacenamiento #title {
+    background-color: rgb(225, 170, 125);
+}
+
+.Camara_de_Cria #title {
+    background-color: rgb(140, 186, 128);
+}
+
+.Camara_de_la_Reina #title {
+    background-color: rgb(101, 142, 156);
+}
+
+.Monticulo #title {
+    background-color: rgb(57, 47, 90);
+}
+
+.Zona_de_Forrajeo #title {
+    background-color: rgb(177, 94, 108);
+}

@@ -19,12 +19,16 @@ public class SettingsManager : MonoBehaviour
     [Header("Data")]
     public GameSettings settings;
 
-    [Header("UI References (TextMeshPro)")]
+    [Header("UI References General")]
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown windowDropdown;
     public Slider volumeSlider;
     public Toggle muteToggle;
     public TMP_Dropdown languageDropdown;
+
+    [Header("UI References Advanced")]
+    public Slider sfxSlider;
+    public Slider musicSlider;
 
     private Bus masterBus;
     #endregion
@@ -43,6 +47,8 @@ public class SettingsManager : MonoBehaviour
     private void Start()
     {
         masterBus = RuntimeManager.GetBus("bus:/");
+        settings.musicVCA = RuntimeManager.GetVCA("vca:/Music");
+        settings.sfxVCA = RuntimeManager.GetVCA("vca:/SFX");
 
         LoadSettings();
         HookUI();
@@ -55,11 +61,16 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     void HookUI()
     {
+        // General
         qualityDropdown.onValueChanged.AddListener((i) => SetQuality((QualityLevel)i));
         windowDropdown.onValueChanged.AddListener((i) => SetWindowMode((WindowMode)i));
         volumeSlider.onValueChanged.AddListener(SetVolume);
         muteToggle.onValueChanged.AddListener(ToggleMute);
         languageDropdown.onValueChanged.AddListener((i) => SetLanguage((Language)i));
+
+        // Advanced
+        musicSlider.onValueChanged.AddListener(SetMusicVolume);
+        sfxSlider.onValueChanged.AddListener(SetSFXVolume);
     }
 
     /// <summary>
@@ -67,13 +78,19 @@ public class SettingsManager : MonoBehaviour
     /// </summary>
     void SyncUI()
     {
+        // General
         qualityDropdown.SetValueWithoutNotify((int)settings.quality);
         windowDropdown.SetValueWithoutNotify((int)settings.windowMode);
         volumeSlider.SetValueWithoutNotify(settings.masterVolume);
         muteToggle.SetIsOnWithoutNotify(settings.isMuted);
         languageDropdown.SetValueWithoutNotify((int)settings.language);
+
+        // Advanced
+        musicSlider.SetValueWithoutNotify(settings.musicVolume);
+        sfxSlider.SetValueWithoutNotify(settings.sfxVolume);
     }
 
+    #region SCREEN
     public void SetQuality(QualityLevel level)
     {
         settings.quality = level;
@@ -101,12 +118,28 @@ public class SettingsManager : MonoBehaviour
 
         PlayerPrefs.SetInt("WindowMode", (int)mode);
     }
+    #endregion
 
+    #region AUDIO
     public void SetVolume(float volume)
     {
         settings.masterVolume = volume;
         ApplyVolume();
         PlayerPrefs.SetFloat("Volume", volume);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        settings.musicVolume = volume;
+        ApplyVolume();
+        PlayerPrefs.SetFloat("MusiVolume", volume);
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        settings.sfxVolume = volume;
+        ApplyVolume();
+        PlayerPrefs.SetFloat("SFXVolume", volume);
     }
 
     public void ToggleMute(bool mute)
@@ -119,8 +152,15 @@ public class SettingsManager : MonoBehaviour
     private void ApplyVolume()
     {
         float volume = settings.isMuted ? 0f : settings.masterVolume;
+        float musicVolume = settings.isMuted ? 0f : settings.musicVolume;
+        float sfxVolume = settings.isMuted ? 0f : settings.sfxVolume;
+        
         masterBus.setVolume(volume);
+        settings.musicVCA.setVolume(musicVolume);
+        settings.sfxVCA.setVolume(sfxVolume);
+
     }
+    #endregion
 
     public void SetLanguage(Language lang)
     {
@@ -155,6 +195,8 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt("Language", (int)lang);
     }
 
+
+    #region PLAYER_PREFS
     public void LoadSettings()
     {
         settings.quality = (QualityLevel)PlayerPrefs.GetInt("Quality", 2);
@@ -162,6 +204,10 @@ public class SettingsManager : MonoBehaviour
         settings.masterVolume = PlayerPrefs.GetFloat("Volume", 1f);
         settings.isMuted = PlayerPrefs.GetInt("Mute", 0) == 1;
         settings.language = (Language)PlayerPrefs.GetInt("Language", 0);
+
+        //Advanced
+        settings.musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        settings.sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
     }
 
     public void ApplySettings()
@@ -176,4 +222,5 @@ public class SettingsManager : MonoBehaviour
     {
         PlayerPrefs.Save();
     }
+    #endregion
 }
