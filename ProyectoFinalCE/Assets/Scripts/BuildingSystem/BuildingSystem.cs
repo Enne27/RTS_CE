@@ -67,10 +67,23 @@ public class BuildingSystem : MonoBehaviour
             {
                 PlaceBuilding(buildPosition);
             }
+            if (mouse.middleButton.wasPressedThisFrame)
+            {
+                CancelPreview();
+                return;
+            }
         }
         else
         {
             preview.ChangeState(BuildingPreview.BuildingPreviewState.NEGATIVE);
+        }
+    }
+    private void CancelPreview()
+    {
+        if (preview != null)
+        {
+            Destroy(preview.gameObject);
+            preview = null;
         }
     }
 

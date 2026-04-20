@@ -1,6 +1,7 @@
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
+using UnityEngine.UIElements;
 
 public class CameraMovement2D : MonoBehaviour
 {
@@ -29,13 +30,16 @@ public class CameraMovement2D : MonoBehaviour
     [SerializeField] private Vector2 minBounds = new Vector2(-20, -20);
     [SerializeField] private Vector2 maxBounds = new Vector2(20, 20);
 
-
-
     private Vector3 targetPosition;
     private float targetZoom;
     private Vector3 startDrag;
 
     private Vector3 cameraInitialPosition;
+
+    private Vector3 focusTarget;
+    private bool isFocusing = false;
+
+    [SerializeField] private float focusSpeed = 10f;
     #endregion
 
     private void Awake()
@@ -73,6 +77,21 @@ public class CameraMovement2D : MonoBehaviour
         ApplyMovement();
         ApplyZoom();
         ClampPosition();
+
+        if (isFocusing)
+        {
+            Vector3 direction = focusTarget - transform.position;
+
+            if (direction.magnitude < 0.01f)
+            {
+                transform.position = focusTarget;
+                isFocusing = false;
+            }
+            else
+            {
+                targetPosition += direction * focusSpeed * Time.deltaTime;
+            }
+        }
     }
 
     #region Movement
@@ -199,6 +218,22 @@ public class CameraMovement2D : MonoBehaviour
         );
 
         Gizmos.DrawWireCube(center, size);
+    }
+    #endregion
+
+    #region Outside Controll
+    public void ZoomOnBuilding(Transform building)
+    {
+        if (building == null) return;
+
+        focusTarget = new Vector3(
+            building.position.x,
+            building.position.y,
+            transform.position.z
+        );
+
+        targetZoom = minZoom;
+        isFocusing = true;
     }
     #endregion
 }
