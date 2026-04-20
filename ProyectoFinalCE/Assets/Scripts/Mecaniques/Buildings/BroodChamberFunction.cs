@@ -46,6 +46,9 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] costsUpgradeMC => costsUpgradeMC_;
     public override int[] timeUpgrade => timeUpgrade_;
     public override int[] maxLevelByEra => maxLevelByEra_;
+
+    [Header("UI")]
+    [SerializeField] GameHUDView gameHUDView;
     #endregion
 
     public void CreateAnt(ANT_TYPES antType, Transform position)
@@ -93,7 +96,13 @@ public class BroodChamberFunction : StructuresPlayer
             // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
             // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
             if(SpawnAnt(foodCosts, hvCosts))
-                Instantiate(antInstantiate, position.position, Quaternion.identity);
+            {
+                GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
+                if(antType != ANT_TYPES.WORKER)
+                    GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
+
+                gameHUDView.UpdateAntText(antType, 1);
+            }
             else
             {
                 Debug.Log("Insuficient hv or food");

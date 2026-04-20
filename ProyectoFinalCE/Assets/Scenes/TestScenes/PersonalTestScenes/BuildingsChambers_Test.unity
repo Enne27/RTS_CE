@@ -275,11 +275,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7229df355b973c4d88e9850c9082a40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ViewManager
-  startingView: {fileID: 6975735880227877133}
+  startingView: {fileID: 746954548}
   views:
   - {fileID: 6975735880227877133}
-  - {fileID: 6975735880227877133}
-  currentView: {fileID: 6975735880227877133}
+  - {fileID: 746954548}
+  currentView: {fileID: 746954548}
 --- !u!4 &640506508
 Transform:
   m_ObjectHideFlags: 0
@@ -799,6 +799,7 @@ MonoBehaviour:
       upgradePoints: 0
       workerAnts: 0
     currentEra: 0
+    ants: []
   playerIA:
     id: 0
     playerName: 
@@ -813,6 +814,7 @@ MonoBehaviour:
       upgradePoints: 0
       workerAnts: 0
     currentEra: 0
+    ants: []
 --- !u!114 &1794271291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -976,6 +978,7 @@ MonoBehaviour:
   acidAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
   crazyAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
   kamikazeAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  gameHUDView: {fileID: 746954548}
 --- !u!1001 &1831077435
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1021,72 +1024,76 @@ PrefabInstance:
       value: GameHUDCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: serializedGuid.Array.size
       value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[0]'
-      value: 7
+      value: 104
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[1]'
-      value: 200
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[2]'
-      value: 170
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[3]'
-      value: 18
+      value: 83
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[4]'
-      value: 217
+      value: 163
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[5]'
-      value: 137
+      value: 116
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[6]'
-      value: 151
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
-      propertyPath: 'serializedGuid.Array.data[7]'
-      value: 75
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
-      propertyPath: 'serializedGuid.Array.data[8]'
-      value: 130
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
-      propertyPath: 'serializedGuid.Array.data[9]'
-      value: 145
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
-      propertyPath: 'serializedGuid.Array.data[10]'
-      value: 123
-      objectReference: {fileID: 0}
-    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
-      propertyPath: 'serializedGuid.Array.data[11]'
       value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: 'serializedGuid.Array.data[7]'
+      value: 67
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: 'serializedGuid.Array.data[8]'
+      value: 170
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: 'serializedGuid.Array.data[9]'
+      value: 188
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: 'serializedGuid.Array.data[10]'
+      value: 37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
+      propertyPath: 'serializedGuid.Array.data[11]'
+      value: 132
+      objectReference: {fileID: 0}
+    - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[12]'
-      value: 236
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[13]'
-      value: 51
+      value: 102
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[14]'
-      value: 119
+      value: 224
       objectReference: {fileID: 0}
     - target: {fileID: 4543523007185052992, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: 'serializedGuid.Array.data[15]'
-      value: 29
+      value: 149
       objectReference: {fileID: 0}
     - target: {fileID: 4640137120646676756, guid: 00ef1db21086aea44b0c270b50d535ef, type: 3}
       propertyPath: m_AnchorMax.y
