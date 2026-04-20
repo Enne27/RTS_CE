@@ -185,6 +185,12 @@ namespace StateMachine.Runtime
                             
                         }
                     }
+                    else
+                    {
+                        currentNode = stateNode.NextNodeIndices.Count > 0
+                            ? controller.Nodes[stateNode.NextNodeIndices[0]]
+                            : null;
+                    }
                 }
             }
 

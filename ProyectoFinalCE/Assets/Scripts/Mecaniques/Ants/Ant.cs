@@ -28,4 +28,9 @@ public abstract class Ant : MonoBehaviour
     {
         return acidBased;
     }
+
+    public int[] GetBreedingCost()
+    {
+        return breedingCost;
+    }
 }
