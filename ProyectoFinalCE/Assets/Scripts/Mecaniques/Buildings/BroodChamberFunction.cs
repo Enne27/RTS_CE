@@ -100,6 +100,7 @@ public class BroodChamberFunction : StructuresPlayer
                 GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
                 if(antType != ANT_TYPES.WORKER)
                     GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
+                else { GameManager.instance.player.inventory.workerAnts++; }
 
                 gameHUDView.UpdateAntText(antType, 1);
             }

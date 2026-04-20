@@ -23,7 +23,7 @@ public class Player
         inventory = new Inventory();
         structuresCount = new Dictionary<Type, int>();
         //structures = new List<Structure>();
-        //ants = new List<Ant>();
+        ants = new List<Ant>();
 
         /* TBI
         foreach (var type in TypeCache.GetTypesDerivedFrom<Structure>())
