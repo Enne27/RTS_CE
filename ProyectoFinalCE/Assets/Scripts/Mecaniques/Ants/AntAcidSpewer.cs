@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class AntAcidSpewer : Ant
 {
+    int[] breedingCost = new int[] { 10, 18 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 15f;
@@ -11,7 +14,6 @@ public class AntAcidSpewer : Ant
         reach = 9;
         vision = 1;
         linePriority = 10;
-        breedingCost = new int[] { 10, 18 };
         acidBased = true;
     }
 
@@ -38,6 +40,7 @@ public class AntAcidSpewer : Ant
             HP = 0;
             Die();
         }
+        OnAnyAntDamaged?.Invoke(this);
     }
     protected override void Die()
     {

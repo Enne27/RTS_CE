@@ -2,6 +2,8 @@
 
 public class AntBerserker : Ant
 {
+    int[] breedingCost = new int[] { 15, 30 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 80f;
@@ -11,7 +13,6 @@ public class AntBerserker : Ant
         reach = 1;
         vision = 1;
         linePriority = 2;
-        breedingCost = new int[] { 15, 30 };
         acidBased = false;
     }
 
@@ -48,6 +49,7 @@ public class AntBerserker : Ant
             HP = 0;
             Die();
         }
+        OnAnyAntDamaged?.Invoke(this);
     }
     protected override void Die()
     {

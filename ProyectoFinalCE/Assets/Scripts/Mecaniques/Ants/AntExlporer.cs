@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class AntExlporer : Ant
 {
     private int food;
     private int constructionMaterial;
+    int[] breedingCost = new int[] { 7, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 15f;
@@ -13,7 +16,6 @@ public class AntExlporer : Ant
         reach = 1;
         vision = 4;
         linePriority = 8;
-        breedingCost = new int[] { 7, 12 };
         acidBased = false;
     }
 
@@ -50,6 +52,7 @@ public class AntExlporer : Ant
             HP = 0;
             Die();
         }
+        OnAnyAntDamaged?.Invoke(this);
     }
 
     public void Collect()

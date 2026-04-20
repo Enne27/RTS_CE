@@ -1,10 +1,13 @@
+using System;
 using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class AntKamikaze : Ant
 {
+    public static event Action<Ant> OnAnyAntDamaged;
     private float maxHP;
     private Ant target;
+    int[] breedingCost = new int[] { 7, 18 };
     private void Awake()
     {
         HP = 11f;
@@ -14,10 +17,9 @@ public class AntKamikaze : Ant
         reach = 1;
         vision = 1;
         linePriority = 2;
-        breedingCost = new int[] { 7, 18 };
         acidBased = false;
         maxHP = HP;
-}
+    }
 
     public void Update()
     {
@@ -55,6 +57,12 @@ public class AntKamikaze : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if (HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
     }
 
     public void Explode(Ant target)
@@ -62,5 +70,12 @@ public class AntKamikaze : Ant
         strength = 10;
         acidBased = true;
         target.TakeDamage(target,strength,acidBased);
+        Die();
     }
+
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
+    }
+
 }

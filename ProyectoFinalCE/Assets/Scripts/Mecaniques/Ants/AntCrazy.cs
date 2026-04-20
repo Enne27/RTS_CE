@@ -1,8 +1,11 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class AntCrazy : Ant
 {
+    int[] breedingCost = new int[] { 11, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 17f;
@@ -12,7 +15,6 @@ public class AntCrazy : Ant
         reach = 1;
         vision = 1;
         linePriority = 6;
-        breedingCost = new int[] { 11, 12 };
         acidBased = false;
     }
 
@@ -43,5 +45,16 @@ public class AntCrazy : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if (HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
+    }
+
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

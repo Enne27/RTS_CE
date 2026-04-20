@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -5,6 +6,8 @@ using static UnityEngine.GraphicsBuffer;
 
 internal class AntSoldier : Ant
 {
+    int[] breedingCost = new int[] { 9, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 25f;
@@ -14,7 +17,6 @@ internal class AntSoldier : Ant
         reach = 1;
         vision = 1;
         linePriority = 2;
-        breedingCost = new int[] { 9, 12 };
         acidBased = false;
     }
 
@@ -52,6 +54,7 @@ internal class AntSoldier : Ant
             HP = 0;
             Die();
         }
+        OnAnyAntDamaged?.Invoke(this);
     }
     protected override void Die()
     {

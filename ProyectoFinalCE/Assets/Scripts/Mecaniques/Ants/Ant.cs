@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 public abstract class Ant : MonoBehaviour 
-{ 
+{
+    public static event Action<Ant> OnAnyAntDamaged;
     protected float HP; 
     protected float armor;
     protected float speed; 
@@ -8,7 +10,7 @@ public abstract class Ant : MonoBehaviour
     protected int reach; 
     protected int vision; 
     protected int linePriority; 
-    protected int[] breedingCost = new int[2];
+    public int[] breedingCost = new int[2];
     protected bool acidBased;
     
     protected virtual void Move() { }
