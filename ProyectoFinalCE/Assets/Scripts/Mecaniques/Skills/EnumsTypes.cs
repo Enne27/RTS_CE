@@ -17,10 +17,10 @@ public enum StatType
     ReproductionRate,
     BuildSpeed,
     CostReduction,
-    ExplorationSpeed,
     ResourceGain,
     CarryCapacity,
     WorkerEfficiency,
     EggProduction,
+    Special,
     CombatSpeed
 }

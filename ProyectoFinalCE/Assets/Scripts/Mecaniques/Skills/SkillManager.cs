@@ -10,6 +10,7 @@ public class SkillManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Debug.Log("SkillManager READY");
     }
     #endregion
 
@@ -30,6 +31,11 @@ public class SkillManager : MonoBehaviour
     }
 
     #region Methods
+
+    public bool IsSkillUnlocked(SkillData skill)
+    {
+        return playerSkills.IsUnlocked(skill);
+    }
     /// <summary>
     /// Revisa si una skill se puede desbloquear
     /// </summary>
