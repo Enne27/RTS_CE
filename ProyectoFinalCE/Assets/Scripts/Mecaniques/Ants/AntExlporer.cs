@@ -1,12 +1,17 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class AntExlporer : Ant
 {
-    private int food;
-    private int constructionMaterial;
+    public int food;
+    public int MC;
     int[] breedingCost = new int[] { 7, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
+    public Transform targetTransform;   
+    private Vector3 targetPosition;
+    public Vector3 antHillPositionOwner; 
+    private bool useTransformTarget;     
     private void Awake()
     {
         HP = 15f;
@@ -21,7 +26,20 @@ public class AntExlporer : Ant
 
     protected override void Move()
     {
+        Vector3 target;
 
+        if (useTransformTarget)
+        {
+            if (targetTransform == null) return;
+            target = targetTransform.position;
+        }
+        else
+        {
+            target = targetPosition;
+        }
+
+        Vector3 direction = (target - transform.position).normalized;
+        transform.position += direction * speed * Time.deltaTime;
     }
     public override void Attack(Ant target)
     {
@@ -29,6 +47,12 @@ public class AntExlporer : Ant
         if (distance <= reach)
         {
             target.TakeDamage(this, strength, acidBased);
+        }
+        else
+        {
+            useTransformTarget = true;
+            targetTransform = target.transform;
+            Move();
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -57,20 +81,25 @@ public class AntExlporer : Ant
 
     public void Collect()
     {
-        /*
-         Cooldown
-        se termina
-        se añaden recursos
-        se llama Carry()
-         */
+        Move();
+        TimeManager.Instance.Register(3f,Collect);
+        food = UnityEngine.Random.Range(5, 11);
+        MC = UnityEngine.Random.Range(1,5);
+        TimeManager.Instance.Unregister(3f,Collect);
+        Carry();
     }
 
     public void Carry()
     {
+        useTransformTarget = false;
+        //zero -> placeholder per posicio del formiguer
+        targetPosition = antHillPositionOwner;
+        Move();
         /*
-         Move objetivo punt
-        Collect()
+            Dejar comida y materiales en la zona de forrajeo 
          */
+        food = 0;
+        MC = 0;
     }
 
     protected override void Die()

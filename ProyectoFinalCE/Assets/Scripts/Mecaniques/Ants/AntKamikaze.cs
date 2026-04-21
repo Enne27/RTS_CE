@@ -67,7 +67,7 @@ public class AntKamikaze : Ant
 
     public void Explode(Ant target)
     {
-        strength = 10;
+        strength = 15;
         acidBased = true;
         target.TakeDamage(target,strength,acidBased);
         Die();
@@ -77,5 +77,4 @@ public class AntKamikaze : Ant
     {
         gameObject.SetActive(false);
     }
-
 }

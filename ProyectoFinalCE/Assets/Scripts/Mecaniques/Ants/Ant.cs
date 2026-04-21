@@ -35,4 +35,8 @@ public abstract class Ant : MonoBehaviour
     {
         return breedingCost;
     }
+    public int GetVision()
+    { 
+        return vision;
+    }
 }
