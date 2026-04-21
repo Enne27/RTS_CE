@@ -45,8 +45,8 @@ public class BuildingGrid : MonoBehaviour
     {
         Vector3 localPos = worldPosition - transform.position;
 
-        int x = Mathf.FloorToInt(localPos.x / BuildingSystem.CELL_SIZE);
-        int y = Mathf.FloorToInt(localPos.y / BuildingSystem.CELL_SIZE);
+        int x = Mathf.FloorToInt(localPos.x / BuildingManager.CELL_SIZE);
+        int y = Mathf.FloorToInt(localPos.y / BuildingManager.CELL_SIZE);
 
         return (x, y);
     }
@@ -54,18 +54,18 @@ public class BuildingGrid : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        if (BuildingSystem.CELL_SIZE <= 0 || width <= 0 || height <= 0) return;
+        if (BuildingManager.CELL_SIZE <= 0 || width <= 0 || height <= 0) return;
         Vector3 origin = transform.position;
         for (int y = 0; y <= height; y++)
         {
-            Vector3 start = origin + new Vector3(0, y * BuildingSystem.CELL_SIZE, 0.01f);
-            Vector3 end = origin + new Vector3(width * BuildingSystem.CELL_SIZE , y * BuildingSystem.CELL_SIZE, 0.01f);
+            Vector3 start = origin + new Vector3(0, y * BuildingManager.CELL_SIZE, 0.01f);
+            Vector3 end = origin + new Vector3(width * BuildingManager.CELL_SIZE , y * BuildingManager.CELL_SIZE, 0.01f);
             Gizmos.DrawLine(start, end);
         }
         for (int x = 0; x <= width; x++)
         {
-            Vector3 start = origin + new Vector3(x * BuildingSystem.CELL_SIZE, 0, 0.01f);
-            Vector3 end = origin + new Vector3(x * BuildingSystem.CELL_SIZE, height * BuildingSystem.CELL_SIZE, 0.01f);
+            Vector3 start = origin + new Vector3(x * BuildingManager.CELL_SIZE, 0, 0.01f);
+            Vector3 end = origin + new Vector3(x * BuildingManager.CELL_SIZE, height * BuildingManager.CELL_SIZE, 0.01f);
             Gizmos.DrawLine(start, end);
         }
     }

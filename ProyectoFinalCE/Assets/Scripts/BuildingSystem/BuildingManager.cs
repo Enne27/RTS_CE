@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class BuildingSystem : MonoBehaviour
+public class BuildingManager : MonoBehaviour
 {
     public const float CELL_SIZE = 1f;
 
@@ -29,7 +29,7 @@ public class BuildingSystem : MonoBehaviour
     {
 
         Vector3 mousePos = GetMouseWorldPosition();
-        Debug.Log(GetMouseWorldPosition());
+        //Debug.Log(GetMouseWorldPosition());
 
         if (preview != null)
         {
