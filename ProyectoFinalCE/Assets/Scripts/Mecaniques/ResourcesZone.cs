@@ -14,12 +14,14 @@ public class ResourcesZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        int randomFoodFound = Random.Range(randomFood_min+1, randomFood_max+1);
-        int randomMCFound = Random.Range(randomMC_min+1, randomMC_max+1);
+        int randomFoodFound = Random.Range(randomFood_min, randomFood_max+1);
+        int randomMCFound = Random.Range(randomMC_min, randomMC_max+1);
 
-        if (other.gameObject.GetComponent<AntExlporer>())
+        AntExlporer antExlporer = other.gameObject.GetComponent<AntExlporer>();
+        if (antExlporer != null)
         {
             Debug.Log("Ant collecting MC: " + randomMCFound + " and food: " + randomFoodFound);
+            antExlporer.Collect();
         }
         else Debug.Log("Not a explorer."); 
     }
