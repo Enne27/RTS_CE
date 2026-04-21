@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class FogRevealer : MonoBehaviour
 {
+    public int visionRadius;
 
-    [SerializeField]
-    int visionRadius;
+    
 
-    void Start()
+    void Enable()
     {
+        if (gameObject.GetType() == typeof(Ant))
+        
+        FogOfWarManager.instance.RegisterRevealer(this);
+
         
     }
 
-    void OnDestroy()
+    void Disable()
     {
         
     }

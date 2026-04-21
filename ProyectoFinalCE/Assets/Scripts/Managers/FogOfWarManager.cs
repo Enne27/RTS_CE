@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FogoOfWarManager : MonoBehaviour
+public class FogOfWarManager : MonoBehaviour
 {
-    [SerializeField]
-    Texture2D fogTexture;
-    [SerializeField]
-    Color32[] pixels;
-    [SerializeField]
-    List<FogRevealer> activeRevealers;
+    public static FogOfWarManager instance;
 
-    float mapSize;
-    int textureRes;
+    [SerializeField]
+    private Texture2D fogTexture;
+    [SerializeField]
+    private Color32[] pixels;
+    //This can be player.ants
+    [SerializeField]
+    public List<FogRevealer> activeRevealers;
+    
+    private float mapSize;
+    private int textureRes;
+
     void Start()
     {
         
