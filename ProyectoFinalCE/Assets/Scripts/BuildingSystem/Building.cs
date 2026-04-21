@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
+
 public class Building : MonoBehaviour
 {
     private BuildingModel model;
@@ -78,7 +80,21 @@ public class Building : MonoBehaviour
     private void OnDoubleClick()
     {
         Debug.Log("Double click en building");
-
         cameraMovement.ZoomOnBuilding(transform);
+
+        switch (data.buildingType)
+        {
+            case BuildingType.QueenChamber:
+                break;
+            case BuildingType.BroodChamber:
+                ViewManager.Show<BroodChamberView>();
+                ViewManager.GetView<GameHUDView>().Show();
+                break;
+            case BuildingType.StorageChamber:
+                break;
+            default:
+                break;
+        }
     }
+
 }

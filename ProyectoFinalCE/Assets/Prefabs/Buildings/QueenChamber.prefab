@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8373442268290398740}
   - component: {fileID: 7425391439823131492}
+  - component: {fileID: 7888856040263650522}
   m_Layer: 0
   m_Name: QueenChamber
   m_TagString: Building
@@ -82,6 +83,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModel
   wrapper: {fileID: 7771971885941686316}
+--- !u!114 &7888856040263650522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946614698616480869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f956f95937fa0428b5c02a26ec7729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QueenChamberFunction
+  positionAntHill: {x: 0, y: 0}
+  currentStructureState: 0
+  currentLevel: 1
+  timeToProduceEggs: 5
+  queenBuildingScriptable: {fileID: 11400000, guid: f79eb65324116fe42b7b13bec7eb39f6, type: 2}
+  hudView: {fileID: 0}
 --- !u!1 &8791725377817695805
 GameObject:
   m_ObjectHideFlags: 0

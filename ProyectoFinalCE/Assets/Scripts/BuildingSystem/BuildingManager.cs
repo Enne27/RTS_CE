@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,12 @@ public class BuildingManager : MonoBehaviour
     private Keyboard keyboard;
     private Mouse mouse;
 
+    public List<Building> constructionsBuilt;
+
+    public int queenChambersCount;
+    public int broodChambersCount;
+    public int storageChambersCount;
+
     private void Awake()
     {
         keyboard = Keyboard.current;
@@ -33,26 +40,26 @@ public class BuildingManager : MonoBehaviour
 
         if (preview != null)
         {
-            HandlePreview(mousePos);
+            HandlePreview(preview.data ,mousePos);
         }
         else
         {
-            if (keyboard.digit1Key.wasPressedThisFrame)
+            if (keyboard.digit1Key.wasPressedThisFrame && queenChambersCount < queenChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
             {
                 preview = CreatePreview(queenChamberData, mousePos);
             }
-            else if (keyboard.digit2Key.wasPressedThisFrame)
+            else if (keyboard.digit2Key.wasPressedThisFrame && broodChambersCount < broodChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
             {
                 preview = CreatePreview(broodChamberData, mousePos);
             }
-            else if (keyboard.digit3Key.wasPressedThisFrame)
+            else if (keyboard.digit3Key.wasPressedThisFrame && storageChambersCount < broodChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
             {
                 preview = CreatePreview(storageChamberData, mousePos);
             }
         }
     }
 
-    private void HandlePreview(Vector3 mouseWorldPosition)
+    private void HandlePreview(BuildingData data ,Vector3 mouseWorldPosition)
     {
         preview.transform.position = mouseWorldPosition;
         List<Vector3> buildPosition = preview.model.GetAllBuilddingPositions();
@@ -61,17 +68,31 @@ public class BuildingManager : MonoBehaviour
         if (canBuild)
         {
             preview.transform.position = GetSnappedCenterPosition(buildPosition);
-            preview.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
+            if((GameManager.instance.player.inventory.materials >= data.costMC) && (GameManager.instance.player.inventory.eggs >= data.costHV))
+            {
+                preview.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
 
-            if (mouse.leftButton.wasPressedThisFrame)
-            {
-                PlaceBuilding(buildPosition);
+                if (mouse.leftButton.wasPressedThisFrame)
+                {
+                    PlaceBuilding(buildPosition);
+                }
+                if (mouse.middleButton.wasPressedThisFrame)
+                {
+                    CancelPreview();
+                    return;
+                }
             }
-            if (mouse.middleButton.wasPressedThisFrame)
+            else
             {
-                CancelPreview();
-                return;
+                preview.ChangeState(BuildingPreview.BuildingPreviewState.NEGATIVE);
+
+                if (mouse.middleButton.wasPressedThisFrame)
+                {
+                    CancelPreview();
+                    return;
+                }
             }
+            
         }
         else
         {
@@ -92,6 +113,25 @@ public class BuildingManager : MonoBehaviour
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
+        
+        switch (preview.data.buildingType)
+        {
+            case BuildingType.QueenChamber:
+                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
+                queenChambersCount++;
+                break;
+            case BuildingType.BroodChamber:
+                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
+                broodChambersCount++;
+                break;
+            case BuildingType.StorageChamber:
+                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
+                storageChambersCount++;
+                break;
+            default:
+                break;
+        }
+        constructionsBuilt.Add(building);
         Destroy(preview.gameObject);
         preview = null;
     }

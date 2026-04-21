@@ -51,6 +51,7 @@ public class BuildingPreview : MonoBehaviour
     private void SetPreviewMaterial(BuildingPreviewState newState)
     {
         Material previewMat = newState == BuildingPreviewState.POSITIVE ? positiveMaterial : negativeMaterial;
+
         foreach (var rend in renderers)
         {
             Material[] mats = new Material[rend.sharedMaterials.Length];

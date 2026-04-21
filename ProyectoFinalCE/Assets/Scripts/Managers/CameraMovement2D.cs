@@ -1,4 +1,5 @@
 using Unity.Cinemachine;
+using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -40,6 +41,8 @@ public class CameraMovement2D : MonoBehaviour
     private bool isFocusing = false;
 
     [SerializeField] private float focusSpeed = 10f;
+
+    private GameObject targuetFocus;
     #endregion
 
     private void Awake()
@@ -70,6 +73,12 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Update()
     {
+        if (HasCameraInput())
+        {
+            targuetFocus = null;
+            isFocusing = false;
+        }
+
         HandleKeyboardMovement();
         HandleEdgeMovement();
         HandleDrag();
@@ -92,7 +101,43 @@ public class CameraMovement2D : MonoBehaviour
                 targetPosition += direction * focusSpeed * Time.deltaTime;
             }
         }
+
+        if (targuetFocus == null)
+        {
+            ViewManager.Show<GameHUDView>();
+        }
     }
+
+    #region Input Detection
+    private bool HasCameraInput()
+    {
+        // Teclado
+        if (movement.ReadValue<Vector2>() != Vector2.zero)
+            return true;
+
+        // Movimiento por bordes
+        if (useEdgeMovement)
+        {
+            Vector2 mouse = Mouse.current.position.ReadValue();
+
+            if (mouse.x < edgeTolerance * Screen.width ||
+                mouse.x > (1f - edgeTolerance) * Screen.width ||
+                mouse.y < edgeTolerance * Screen.height ||
+                mouse.y > (1f - edgeTolerance) * Screen.height)
+                return true;
+        }
+
+        // Drag (botón derecho)
+        if (Mouse.current.rightButton.isPressed)
+            return true;
+
+        // Zoom (scroll)
+        if (Mathf.Abs(Mouse.current.scroll.ReadValue().y) > 0.1f)
+            return true;
+
+        return false;
+    }
+    #endregion
 
     #region Movement
     private void HandleKeyboardMovement()
@@ -149,7 +194,7 @@ public class CameraMovement2D : MonoBehaviour
     }
     #endregion
 
-    #region Zoom (tipo Unity editor)
+    #region Zoom
     private void ZoomCamera(InputAction.CallbackContext ctx)
     {
         float scroll = -ctx.ReadValue<Vector2>().y;
@@ -171,7 +216,6 @@ public class CameraMovement2D : MonoBehaviour
 
         Vector3 mouseWorldAfter = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
-        // Esto hace el zoom hacia el cursor (clave estilo Unity)
         Vector3 offset = mouseWorldBefore - mouseWorldAfter;
         transform.position += offset;
     }
@@ -234,6 +278,7 @@ public class CameraMovement2D : MonoBehaviour
 
         targetZoom = minZoom;
         isFocusing = true;
+        targuetFocus = building.gameObject;
     }
     #endregion
 }

@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8373442268290398740}
   - component: {fileID: 7425391439823131492}
+  - component: {fileID: 8512116562563295590}
   m_Layer: 0
   m_Name: BroodChamber
   m_TagString: Building
@@ -82,6 +83,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModel
   wrapper: {fileID: 7771971885941686316}
+--- !u!114 &8512116562563295590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946614698616480869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6ca3a6726a94b149a811ce62955cd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BroodChamberFunction
+  positionAntHill: {x: 0, y: 0}
+  currentStructureState: 0
+  currentLevel: 1
+  broodBuildingScriptable: {fileID: 11400000, guid: c7c7f355c61600440a3630b76ce60626, type: 2}
+  soldierAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  explorerAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  workerAnt: {fileID: 31855747436371167, guid: 50350f63146a4ab4788b4ed0aa1f8c90, type: 3}
+  berserkerAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  acidAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  crazyAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
+  kamikazeAnt: {fileID: 5085413255181918136, guid: ff1df7b165162ad40b4b2b4d8ea43198, type: 3}
 --- !u!1 &8791725377817695805
 GameObject:
   m_ObjectHideFlags: 0
