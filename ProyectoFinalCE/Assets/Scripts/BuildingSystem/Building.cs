@@ -6,7 +6,8 @@ public class Building : MonoBehaviour
 {
     [SerializeField] private BuildingData data;
 
-    private BuildingModel model;
+    [SerializeField] private BuildingModel model;
+
     private bool isHovered = false;
 
     private CameraMovement2D cameraMovement;
@@ -74,17 +75,26 @@ public class Building : MonoBehaviour
     private void OnDoubleClick()
     {
         Debug.Log("Double click en building");
-        cameraMovement.ZoomOnBuilding(transform);
+        
 
         switch (data.buildingType)
         {
             case BuildingType.QueenChamber:
+                cameraMovement.ZoomOnBuilding(transform);
                 break;
             case BuildingType.BroodChamber:
+                cameraMovement.ZoomOnBuilding(transform);
                 ViewManager.Show<BroodChamberView>();
                 ViewManager.GetView<GameHUDView>().Show();
                 break;
             case BuildingType.StorageChamber:
+                cameraMovement.ZoomOnBuilding(transform);
+                break;
+            case BuildingType.Entrance:
+                CameraController.instance.ChangeCameraMode(CameraState.Outside);
+                break;
+            case BuildingType.Mound:
+                CameraController.instance.ChangeCameraMode(CameraState.Inside);
                 break;
             default:
                 break;

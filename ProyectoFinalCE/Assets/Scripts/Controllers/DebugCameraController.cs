@@ -2,42 +2,70 @@ using Unity.Cinemachine;
 using UnityEngine;
 
 
-
-public class DebugCameraController : MonoBehaviour
+public enum CameraState
 {
-    private enum CameraState
+    Outside,
+    Inside
+}
+
+public class CameraController : MonoBehaviour
+{
+    static CameraController cameraController;
+    public static CameraController instance
     {
-        Outside,
-        Inside
+        get
+        {
+            return FindOrGetPauseController();
+        }
     }
 
+    static CameraController FindOrGetPauseController()
+    {
+        if (cameraController == null)
+            cameraController = FindFirstObjectByType<CameraController>();
+
+        return cameraController;
+    }
+
+
     [Header("Camera Control")]
-    [SerializeField] private bool cameraChangeButton = false;
-    [SerializeField] private CameraState cameraState = CameraState.Inside;
+    [SerializeField] private CameraState cameraState;
 
     [Header("Virtual Camera References")]
     [SerializeField] private GameObject OutsideCamera;
     [SerializeField] private GameObject InsideCamera;
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeCameraMode()
     {
-        if (cameraChangeButton)
+        switch (cameraState)
         {
-            switch (cameraState)
-            {
-                case CameraState.Inside:
-                    OutsideCamera.gameObject.SetActive(true);
-                    InsideCamera.gameObject.SetActive(false);
-                    cameraState = CameraState.Outside;
-                    break;
-                case CameraState.Outside:
-                    InsideCamera.gameObject.SetActive(true);
-                    OutsideCamera.gameObject.SetActive(false);
-                    cameraState = CameraState.Inside;
-                    break;
-            }
+            case CameraState.Inside:
+                OutsideCamera.SetActive(true);
+                InsideCamera.SetActive(false);
+                cameraState = CameraState.Outside;
+                break;
+            case CameraState.Outside:
+                InsideCamera.SetActive(true);
+                OutsideCamera.SetActive(false);
+                cameraState = CameraState.Inside;
+                break;
         }
-        cameraChangeButton = false;
+    }
+
+    public void ChangeCameraMode(CameraState changeCameraState)
+    {
+        switch (changeCameraState)
+        {
+            case CameraState.Outside:
+                OutsideCamera.SetActive(true);
+                InsideCamera.SetActive(false);
+                cameraState = CameraState.Outside;
+                break;
+            case CameraState.Inside:
+                InsideCamera.SetActive(true);
+                OutsideCamera.SetActive(false);
+                cameraState = CameraState.Inside;
+                break;
+        }
     }
 }
