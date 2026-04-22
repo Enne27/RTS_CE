@@ -1,5 +1,4 @@
-using UnityEngine;
-
+#if UNITY_EDITOR
 public class Camara_de_Almacenamiento : Structure
 {
     private static readonly int levels = 5;
@@ -26,6 +25,6 @@ public class Camara_de_Almacenamiento : Structure
     {
     }
 }
-
+#endif
 
 

@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEngine;
 
 public abstract class Structure : ScriptableObject
@@ -49,6 +48,6 @@ public abstract class Structure : ScriptableObject
         }
     }
 }
-
+#endif
 
 

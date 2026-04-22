@@ -144,6 +144,7 @@ namespace StateMachine.Runtime
         }
     }
 
+#if UNITY_EDITOR
     public class GenerateStateMachineGameObject
     {
         [MenuItem("GameObject/State Machine GameObject", false, 10)]
@@ -154,4 +155,5 @@ namespace StateMachine.Runtime
             Selection.activeGameObject = go;
         }
     }
+#endif
 }

@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
+
+#if UNITY_EDITOR
 namespace ScriptableIconManager{
 
     [Serializable]
@@ -201,3 +202,4 @@ namespace ScriptableIconManager{
         }
     }
 }
+#endif

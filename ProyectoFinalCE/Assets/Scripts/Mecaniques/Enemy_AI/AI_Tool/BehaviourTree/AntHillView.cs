@@ -1,7 +1,7 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
-using Unity.GraphToolkit.Editor;
 using UnityEditor;
 using System;
 
@@ -85,3 +85,4 @@ public partial class AntHillView : GraphView
         AddElement(structureView);
     }
 }
+#endif
