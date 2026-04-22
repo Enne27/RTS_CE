@@ -6,12 +6,12 @@ public class AntExlporer : Ant
 {
     public int food;
     public int MC;
-    int[] breedingCost = new int[] { 7, 12 };
+    //int[] breedingCost = { 7, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
     public Transform targetTransform;   
     private Vector3 targetPosition;
-    public Vector3 antHillPositionOwner; 
-    private bool useTransformTarget;     
+    public Vector3 antHillPositionOwner;
+    private bool useTransformTarget;   
     private void Awake()
     {
         HP = 15f;
