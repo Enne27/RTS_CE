@@ -47,6 +47,11 @@ public class BroodChamberView : View
 
     }
 
+    private void OnEnable()
+    {
+        Initialize();
+    }
+
     private void OnDisable()
     {
         soldierButton.onClick.RemoveAllListeners();
