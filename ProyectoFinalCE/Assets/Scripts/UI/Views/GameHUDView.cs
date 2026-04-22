@@ -1,7 +1,9 @@
-using DG.Tweening.Core.Easing;
+using Palmmedia.ReportGenerator.Core.Common;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static PlayerConstants;
 
 public class GameHUDView : View
 {
@@ -14,21 +16,54 @@ public class GameHUDView : View
 
     [Header("Buttons")]
     [SerializeField] Button constructionButton;
+
+    [Header("ANTS")]
+    [SerializeField] Button fakeAntsDropwdownButton;
+    [SerializeField] GameObject fakeAntsDropdown;
+    bool isActive = false;
+    
+    [SerializeField] TextMeshProUGUI totalAntsText;
+    [SerializeField] TextMeshProUGUI explorerAntsText;
+    [SerializeField] TextMeshProUGUI soldierAntsText;
+    [SerializeField] TextMeshProUGUI berserkerAntsText;
+    [SerializeField] TextMeshProUGUI acidAntsText;
+    [SerializeField] TextMeshProUGUI crazyAntsText;
+    [SerializeField] TextMeshProUGUI kamikazeAntsText;
     #endregion
 
     public override void Initialize()
     {
-        if(foodText == null) 
-            foodText.text = GameManager.instance.startingFood.ToString();
-        if (eggsText == null) 
-            eggsText.text = GameManager.instance.startingEggs.ToString();
-        if(mcText == null)
-            mcText.text = GameManager.instance.startingMC.ToString();
-        if (antWorkersText == null) 
-            antWorkersText.text = GameManager.instance.startingWorkerAnts.ToString();
+        foodText.text = GameManager.instance.startingFood.ToString();
+        eggsText.text = GameManager.instance.startingEggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
+        mcText.text = GameManager.instance.startingMC.ToString();
+        antWorkersText.text = GameManager.instance.startingWorkerAnts.ToString();
+
+        totalAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
+        explorerAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
+        soldierAntsText.text = "0";
+        berserkerAntsText.text = "0";
+        acidAntsText.text = "0";
+        crazyAntsText.text = "0";
+        kamikazeAntsText.text = "0";
 
         //if(constructionButton != null)
         //  constructionButton.onClick.AddListener();
+
+        if (fakeAntsDropwdownButton != null)
+            fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
+    }
+
+    private void ShowAntsUI()
+    {
+        if (isActive)
+        {
+            fakeAntsDropdown.gameObject.SetActive(false);
+            isActive = false;
+        } else
+        {
+            fakeAntsDropdown.gameObject.SetActive(true);
+            isActive = true;
+        }
     }
 
     #region UPDATE_TEXTS
@@ -68,7 +103,63 @@ public class GameHUDView : View
     public void UpdateWorkerAntsText()
     {
         int newValue = GameManager.instance.player.inventory.workerAnts;
-        eggsText.text = newValue.ToString();
+        antWorkersText.text = newValue.ToString();
+    }
+
+    /// <summary>
+    /// Actualiza las cantidades de hormigas del jugador.
+    /// </summary>
+    /// <param name="antType">Tipo de hormiga para actualizar le texto.</param>
+    /// <param name="num">Si es positivo añade una hormiga, si es negativo, la resta.</param>
+    public void UpdateAntText(ANT_TYPES antType, int num)
+    {
+        switch (antType)
+        {
+            case ANT_TYPES.ACID:
+                acidAntsText.text = AddAntToCurrentTextValue(acidAntsText.text, num);
+                break;
+
+            case ANT_TYPES.BERSERKER:
+                berserkerAntsText.text = AddAntToCurrentTextValue(berserkerAntsText.text, num);
+                break;
+
+            case ANT_TYPES.EXPLORER:
+                explorerAntsText.text = AddAntToCurrentTextValue(explorerAntsText.text, num);
+                break;
+
+            case ANT_TYPES.SOLDIER:
+                soldierAntsText.text = AddAntToCurrentTextValue(soldierAntsText.text, num);
+                break;
+
+            case ANT_TYPES.CRAZY:
+                crazyAntsText.text = AddAntToCurrentTextValue(crazyAntsText.text, num);
+                break;
+
+            case ANT_TYPES.KAMIKAZE:
+                kamikazeAntsText.text = AddAntToCurrentTextValue(kamikazeAntsText.text, num);
+                break;
+
+            case ANT_TYPES.WORKER:
+                UpdateWorkerAntsText();
+                break;
+        }
+
+        if(antType != ANT_TYPES.WORKER)
+            totalAntsText.text = AddAntToCurrentTextValue(totalAntsText.text, num);
     }
     #endregion
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="antText"></param>
+    /// <param name="num">Positivo suma, negativo resta.</param>
+    /// <returns></returns>
+    private string AddAntToCurrentTextValue(string antText, int num)
+    {
+        int intValue = Int32.Parse(antText);
+        if (intValue + num < 0)
+            return "0";
+        else { return antText = (intValue + num).ToString(); }     
+    }
 }

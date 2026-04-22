@@ -49,6 +49,14 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    private void OnEnable()
+    {
+        player = new Player();
+        player.inventory.AddEggs(startingEggs);
+        player.inventory.AddFood(startingFood);
+        player.inventory.AddMC(startingMC);
+    }
+
     /// <summary>
     /// Reiniciar los valores por los iniciales.
     /// </summary>

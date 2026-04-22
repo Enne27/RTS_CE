@@ -1,10 +1,12 @@
+using StateMachine.Runtime;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Unity.GraphToolkit.Editor;
-using UnityEditor.AssetImporters;
 using System.Linq;
-using StateMachine.Runtime;
+using Unity.GraphToolkit.Editor;
+using UnityEditor;
+using UnityEditor.AssetImporters;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 namespace StateMachine.Editor
 {
     [ScriptedImporter(1, StateMachineGraphWindow.AssetExtension)]
@@ -22,21 +24,39 @@ namespace StateMachine.Editor
 
             var startNodeModel = graph.GetNodes().OfType<Start>().FirstOrDefault();
 
+            var anyStateNodeModel = graph.GetNodes().OfType<AnyState>().FirstOrDefault();
+
             if (startNodeModel == null)
             {
                 Debug.LogError($"No Start in State Machine Graph asset: {ctx.assetPath}");
                 return;
             }
 
+
             var runtimeAsset = ScriptableObject.CreateInstance<StateMachineController>();
             var nodeMap = new Dictionary<INode, int>();
+            var anyStateNodeMap = new Dictionary<INode, int>();
+
+            if (anyStateNodeModel == null)
+            {
+                runtimeAsset.AnyStateNodes.Clear();
+            }
+            else
+            {
+                if (!ValidateAnyStateConnections(anyStateNodeModel))
+                {
+                    return;
+                }
+                CreateRuntimeAnyStateNodes(anyStateNodeModel, runtimeAsset, anyStateNodeMap);
+                SetupAnyStateConnections(runtimeAsset, anyStateNodeMap);
+            }
 
             CreateRuntimeNodes(startNodeModel, runtimeAsset, nodeMap);
-
-            SetupConnections(startNodeModel, runtimeAsset, nodeMap);
+            SetupConnections(runtimeAsset, nodeMap);
 
             ctx.AddObjectToAsset("RuntimeAsset", runtimeAsset);
             ctx.SetMainObject(runtimeAsset);
+            Debug.Log("State Machine Import Successful!");
         }
 
         void CreateRuntimeNodes(INode startNode, StateMachineController runtimeGraph, Dictionary<INode, int> nodeMap)
@@ -69,7 +89,7 @@ namespace StateMachine.Editor
             }
         }
 
-        void SetupConnections(INode startNode, StateMachineController runtimeGraph, Dictionary<INode, int> nodeMap)
+        void SetupConnections(StateMachineController runtimeGraph, Dictionary<INode, int> nodeMap)
         {
             foreach (var kvp in nodeMap)
             {
@@ -89,6 +109,56 @@ namespace StateMachine.Editor
             }
         }
 
+        void SetupAnyStateConnections(StateMachineController runtimeGraph, Dictionary<INode, int> nodeMap)
+        {
+            foreach (var kvp in nodeMap)
+            {
+                var editorNode = kvp.Key;
+                var runtimeIndex = kvp.Value;
+                var runtimeNode = runtimeGraph.AnyStateNodes[runtimeIndex];
+
+                for (int i = 0; i < editorNode.outputPortCount; i++)
+                {
+                    var port = editorNode.GetOutputPort(i);
+
+                    if (port.isConnected && nodeMap.TryGetValue(port.firstConnectedPort.GetNode(), out int nextIndex))
+                    {
+                        runtimeNode.NextNodeIndices.Add(nextIndex);
+                    }
+                }
+            }
+        }
+
+        void CreateRuntimeAnyStateNodes(INode anyStateNode, StateMachineController runtimeGraph, Dictionary<INode, int> nodeMap)
+        {
+            var nodesToProcess = new Queue<INode>();
+            nodesToProcess.Enqueue(anyStateNode);
+
+            while (nodesToProcess.Count > 0)
+            {
+                var currentNode = nodesToProcess.Dequeue();
+
+                if (nodeMap.ContainsKey(currentNode)) continue;
+
+                var runtimeNodes = TranslateNodeModelToRuntimeNodes(currentNode);
+
+                foreach (var runtimeNode in runtimeNodes)
+                {
+                    nodeMap[currentNode] = runtimeGraph.AnyStateNodes.Count;
+                    runtimeGraph.AnyStateNodes.Add(runtimeNode);
+                }
+
+                for (int i = 0; i < currentNode.outputPortCount; i++)
+                {
+                    var port = currentNode.GetOutputPort(i);
+                    if (port.isConnected)
+                    {
+                        nodesToProcess.Enqueue(port.firstConnectedPort.GetNode());
+                    }
+                }
+            }
+        }
+
         static List<StateMachineRuntimeNode> TranslateNodeModelToRuntimeNodes(INode nodemodel)
         {
             const string CONDITION_NODE = "StateMachine.Editor.Condition";
@@ -100,6 +170,9 @@ namespace StateMachine.Editor
             {
                 case Start:
                     returnedNodes.Add(new StartRuntimeNode());
+                    break;
+                case AnyState anyState:
+                    returnedNodes.Add(new AnyStateRuntimeNode());
                     break;
                 case State stateNode:
                     string stateName = "New State";
@@ -126,7 +199,7 @@ namespace StateMachine.Editor
                     if (ifConditionPort.isConnected)
                     {
                        if (ifConditionPort.firstConnectedPort.GetNode().ToString() == CONDITION_NODE) {
-                            BattleCondition condition = 0;
+                            Conditions condition = 0;
                             ifConditionPort.firstConnectedPort.GetNode().GetInputPort(0)?.TryGetValue(out condition);
                             returnedNodes.Add(new IfRuntimeNode
                             {
@@ -140,10 +213,10 @@ namespace StateMachine.Editor
                        {
                             int condQuantity = 2;
                             ifNode.GetNodeOptionByName("Links")?.TryGetValue(out condQuantity);
-                            List<BattleCondition> conditions = new();
+                            List<Conditions> conditions = new();
                             for(int i = 0; i < condQuantity; i++)
                             {
-                                BattleCondition condition = 0;
+                                Conditions condition = 0;
                                 ifConditionPort.firstConnectedPort.GetNode().GetInputPort(i)?.TryGetValue(out condition);
                                 conditions.Add(condition);
                             }
@@ -159,10 +232,10 @@ namespace StateMachine.Editor
                        {
                             int condQuantity = 2;
                             ifNode.GetNodeOptionByName("Links")?.TryGetValue(out condQuantity);
-                            List<BattleCondition> conditions = new();
+                            List<Conditions> conditions = new();
                             for (int i = 0; i < condQuantity; i++)
                             {
-                                BattleCondition condition = 0;
+                                Conditions condition = 0;
                                 ifConditionPort.firstConnectedPort.GetNode().GetInputPort(i)?.TryGetValue(out condition);
                                 conditions.Add(condition);
                             }
@@ -182,6 +255,40 @@ namespace StateMachine.Editor
 
             return returnedNodes;
         }
+        bool ValidateAnyStateConnections(INode anyStateNode)
+        {
+            var visited = new HashSet<INode>();
+            var queue = new Queue<(INode node, bool passedIf)>();
+
+            queue.Enqueue((anyStateNode, false));
+
+            while (queue.Count > 0)
+            {
+                var (currentNode, passedIf) = queue.Dequeue();
+
+                if (!visited.Add(currentNode))
+                    continue;
+
+                bool isIfNode = currentNode is If;
+                bool newPassedIf = passedIf || isIfNode;
+                if (currentNode is State && !newPassedIf)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < currentNode.outputPortCount; i++)
+                {
+                    var port = currentNode.GetOutputPort(i);
+                    if (port.isConnected)
+                    {
+                        queue.Enqueue((port.firstConnectedPort.GetNode(), newPassedIf));
+                    }
+                }
+            }
+
+            return true;
+        }
+
 
         static T GetInputPortValue<T>(IPort port)
         {
@@ -208,8 +315,6 @@ namespace StateMachine.Editor
 
             return value;
         }
-
-        
     }
 }
 
