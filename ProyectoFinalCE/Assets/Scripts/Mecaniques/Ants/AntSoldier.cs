@@ -6,7 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 
 internal class AntSoldier : Ant
 {
-    int[] breedingCost = new int[] { 9, 12 };
+    //int[] breedingCost = { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
