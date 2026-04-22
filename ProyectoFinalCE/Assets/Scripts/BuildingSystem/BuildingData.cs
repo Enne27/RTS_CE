@@ -7,7 +7,8 @@ public enum BuildingType
     QueenChamber,
     BroodChamber,
     StorageChamber,
-    Tunnel
+    Tunnel,
+    Entrance
 }
 
 [CreateAssetMenu(menuName = "BuildingData")]
