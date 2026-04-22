@@ -1,3 +1,4 @@
+using Unity.Plastic.Antlr3.Runtime;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,10 @@ public enum Conditions
 {
    //TODO: Make Conditions
    isHP0,
+   isAttack,
+   isCollect,
+   isMove,
+   isInRange,
 }
 
 /// <summary>
@@ -17,6 +22,7 @@ public class Context
 {
     //TODO: Make context booleans for conditions
     public int HP = 0;
+    public int Range = 0;
 }
 
 /// <summary>
@@ -29,6 +35,7 @@ public class Condition
     public Condition(Context context)
     {
         context.HP = 0;
+        context.Range = 0;
         Context = context;
     }
 
@@ -38,6 +45,8 @@ public class Condition
         {
             case Conditions.isHP0:
                 return IsHP0();
+            case Conditions.isInRange:
+                return IsInRange();
             default:
                 Debug.LogError($"Unhandled Condition: {condition}");
                 return false;
@@ -52,6 +61,12 @@ public class Condition
         }
         return false;
     }
+
+    public bool IsInRange()
+    {
+        return true;
+    }
+
     //TODO: Make functions for checking conditions booleans
     
 }
