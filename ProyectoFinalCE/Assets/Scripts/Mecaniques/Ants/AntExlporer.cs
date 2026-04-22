@@ -81,6 +81,8 @@ public class AntExlporer : Ant
 
     public void Collect()
     {
+        targetPosition = transform.position;
+        useTransformTarget = false;
         Move();
         TimeManager.Instance.Register(3f,Collect);
         food = UnityEngine.Random.Range(5, 11);
