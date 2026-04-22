@@ -43,11 +43,19 @@ public class GameManager : MonoBehaviour
 
 
     [Header("Player resources")]
-    Player player; // Jugador
-    Player playerIA; // IA
+    public Player player; // Jugador
+    public Player playerIA; // IA
 
 
     #endregion
+
+    private void OnEnable()
+    {
+        player = new Player();
+        player.inventory.AddEggs(startingEggs);
+        player.inventory.AddFood(startingFood);
+        player.inventory.AddMC(startingMC);
+    }
 
     /// <summary>
     /// Reiniciar los valores por los iniciales.

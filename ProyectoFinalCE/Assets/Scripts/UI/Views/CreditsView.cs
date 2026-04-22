@@ -21,4 +21,10 @@ public class CreditsView : View
             ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, false);
         });
     }
+
+    public void ActivateButtons()
+    {
+        restartButton.gameObject.SetActive(true);
+        exitButton.gameObject.SetActive(true);
+    }
 }

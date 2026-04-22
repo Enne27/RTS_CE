@@ -1,0 +1,36 @@
+using UnityEngine;
+
+public class AntAcidSpewer : Ant
+{
+    private void Awake()
+    {
+        HP = 15f;
+        armor = 0.30f;
+        speed = 10f;
+        strength = 5f;
+        reach = 9;
+        vision = 1;
+        linePriority = 10;
+        breedingCost = new int[] { 10, 18 };
+        acidBased = true;
+    }
+
+    protected override void Move()
+    {
+
+    }
+    public override void Attack(Ant target)
+    {
+        if (target != null)
+        {
+            target.TakeDamage(target, strength, acidBased);
+        }
+    }
+    public override void TakeDamage(Ant other, float strenght, bool acidBased)
+    {
+        float damageTaken;
+        damageTaken = other.GetStrength() - (armor * other.GetStrength());
+        damageTaken = Mathf.Max(0, damageTaken);
+        HP -= damageTaken;      
+    }
+}

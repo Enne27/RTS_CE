@@ -4,8 +4,19 @@ using UnityEngine;
 
 public enum FlowFieldDisplayType { None, AllIcons, DestinationIcon, CostField, IntegrationField };
 
+public enum CellType
+{
+    empty,
+    
+}
+public class Map : MonoBehaviour
+{
+    public static Vector2Int gridSize = new Vector2Int(20, 20);
+    public static List<CellType> cellTypes = new List<CellType>();
+}
 public class FlowField_Manager : MonoBehaviour
 {
+
     public Vector2Int gridSize;
     public float cellRadius = 0.5f;
 
@@ -58,6 +69,7 @@ public class FlowField_Manager : MonoBehaviour
     //public FlowFieldDisplayType curDisplayType;
     //public bool displayGrid;
 
+<<<<<<< HEAD
     //private void OnValidate()
     //{
     //    //Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
@@ -65,6 +77,16 @@ public class FlowField_Manager : MonoBehaviour
     //    debugFlowField = new FlowField(cellRadius, gridSize, transform);
     //    debugFlowField.CreateGrid();
     //}
+=======
+    private void OnValidate()
+    {
+        //gridSize = Map.gridSize;
+        //Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
+        transform.localScale = new Vector3(gridSize.x / 10.0f * cellRadius * 2, 1, gridSize.y / 10.0f * cellRadius * 2);
+        debugFlowField = new FlowField(cellRadius, gridSize, transform);
+        debugFlowField.CreateGrid();
+    }
+>>>>>>> Programacion-Guillem
     //private void OnDrawGizmos()
     //{
     //    if (Application.isPlaying) return;
@@ -178,5 +200,6 @@ public class FlowField_Manager : MonoBehaviour
     //}
     #endregion
 #endif
+
 
 }

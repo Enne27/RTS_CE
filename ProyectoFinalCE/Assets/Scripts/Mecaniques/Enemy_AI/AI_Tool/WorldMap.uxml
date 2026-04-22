@@ -2,7 +2,8 @@
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: auto; height: auto; justify-content: center; align-content: flex-start;">
         <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: column; align-self: center; align-items: stretch; flex-shrink: 1;">
             <ui:IntegerField label="Dimension" value="10" name="nSideField" max-length="1000" binding-path="nSide" style="align-items: center; flex-direction: row; justify-content: space-between; align-self: stretch;"/>
-            <ui:IntegerField label="Resources" value="5" name="nResources" max-length="1000" binding-path="nSide" style="align-items: center; flex-direction: row; justify-content: space-between; align-self: stretch;"/>
+            <ui:IntegerField label="Food Resources" value="5" name="nFoodResources" max-length="1000" binding-path="nSide" style="align-items: center; flex-direction: row; justify-content: space-between; align-self: stretch;"/>
+            <ui:IntegerField label="Cosntruction Resources" value="5" name="nConstructionResources" max-length="1000" binding-path="nSide" style="align-items: center; flex-direction: row; justify-content: space-between; align-self: stretch;"/>
             <ui:Button text="GenerateMap" name="GenerateMap"/>
         </ui:VisualElement>
         <ui:VisualElement name="Map" style="flex-grow: 0; aspect-ratio: 1; justify-content: flex-start; align-self: auto; background-color: rgb(128, 128, 128); flex-direction: column;"/>

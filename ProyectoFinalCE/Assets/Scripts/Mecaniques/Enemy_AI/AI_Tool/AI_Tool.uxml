@@ -1,26 +1,40 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <ui:Template name="WorldMap" src="project://database/Assets/Scripts/Mecaniques/Enemy_AI/AI_Tool/WorldMap.uxml?fileID=9197481963319205126&amp;guid=8ab18934ec158bd499450ec3ae398964&amp;type=3#WorldMap"/>
     <Style src="project://database/Assets/Scripts/Mecaniques/Enemy_AI/AI_Tool/AI_Tool.uss?fileID=7433441132597879392&amp;guid=85d3d402555bae541a32cc619b9a2047&amp;type=3#AI_Tool"/>
-    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
-        <ui:VisualElement name="IA_1" class="ia1" style="flex-shrink: 0;">
-            <ui:Button text="Select IA 1 Vision" name="Select_IA1_Vision" parse-escape-sequences="false" style="font-size: 9px;"/>
-        </ui:VisualElement>
-        <ui:VisualElement style="flex-grow: 1;">
-            <ui:TabView reorderable="false" focusable="false" style="flex-grow: 0; justify-content: flex-start; align-self: auto; align-content: flex-start; visibility: visible; display: flex; overflow: visible; position: relative; align-items: stretch; flex-shrink: 0;">
-                <ui:Tab label="WorldMap" name="WorldMap_Tab" style="flex-direction: column; justify-content: flex-start;">
-                    <ui:Instance template="WorldMap" style="flex-grow: 1; flex-shrink: 0;"/>
-                </ui:Tab>
-                <ui:Tab label="AntHill" name="AntHill_Tab"/>
-            </ui:TabView>
-            <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: column-reverse; flex-shrink: 0;">
-                <ui:Button text="StopSimulation" name="StopSimulation"/>
-                <ui:Button text="StartSimulation" name="StartSimulation"/>
-                <ui:Button text="Select_ImpartialVision&#10;" name="Select_ImpartialVision"/>
+    <ui:VisualElement enabled="true" style="flex-grow: 1; flex-direction: row;">
+        <SplitView fixed-pane-initial-dimension="258">
+            <SplitView orientation="Vertical" fixed-pane-initial-dimension="350" style="width: 185px; flex-grow: 0;">
+                <ui:VisualElement name="IA1" style="flex-grow: 1;">
+                    <ui:Label text="Blackboard" name="BlackboardLabel" style="background-color: rgb(45, 45, 45);"/>
+                    <ui:IMGUIContainer name="blackboardView_ia1"/>
+                    <ui:Label text="Inspector" name="InspectorLabel" enable-rich-text="false" style="background-color: rgb(45, 45, 45);"/>
+                    <InspectorView name="InspectorView_IA1"/>
+                    <ui:Button text="Select IA 1 Vision" name="Select_IA1_Vision" parse-escape-sequences="false" style="font-size: 9px;"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="IA2" style="flex-grow: 1;">
+                    <ui:Label text="Blackboard" name="BlackboardLabel" style="background-color: rgb(45, 45, 45);"/>
+                    <ui:IMGUIContainer name="blackboardView_ia2"/>
+                    <ui:Label text="Inspector" name="InspectorLabel" enable-rich-text="false" style="background-color: rgb(45, 45, 45);"/>
+                    <InspectorView name="InspectorView_IA2"/>
+                    <ui:Button text="Select IA 2 Vision" name="Select_IA2_Vision" parse-escape-sequences="false" style="font-size: 9px;"/>
+                </ui:VisualElement>
+            </SplitView>
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:TabView reorderable="false" focusable="false" style="flex-grow: 1; justify-content: flex-start; align-self: auto; align-content: flex-start; visibility: visible; display: flex; overflow: visible; position: relative; align-items: stretch; flex-shrink: 0; flex-direction: column;">
+                    <ui:Tab label="WorldMap" name="WorldMap_Tab" style="flex-direction: column; justify-content: flex-start;">
+                        <ui:Instance template="WorldMap" style="flex-grow: 1; flex-shrink: 0;"/>
+                    </ui:Tab>
+                    <ui:Tab label="AntHill" name="AntHill_Tab" style="flex-grow: 1; flex-shrink: 1; flex-direction: column; position: relative; flex-basis: auto;">
+                        <AntHillView style="flex-grow: 1; flex-shrink: 0;"/>
+                    </ui:Tab>
+                </ui:TabView>
+                <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-direction: column; flex-shrink: 0;">
+                    <ui:Button text="StopSimulation" name="StopSimulation"/>
+                    <ui:Button text="StartSimulation" name="StartSimulation"/>
+                    <ui:Button text="Select_ImpartialVision&#10;" name="Select_ImpartialVision"/>
+                </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
-        <ui:VisualElement name="IA_2" class="ia2" style="flex-shrink: 0;">
-            <ui:Button text="Select IA 2 Vision" name="Select_IA2_Vision" parse-escape-sequences="false" style="font-size: 9px;"/>
-        </ui:VisualElement>
+        </SplitView>
         <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: auto; height: auto; justify-content: center; align-content: flex-start; display: none;">
             <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: column; align-self: center; align-items: stretch; flex-shrink: 1;">
                 <ui:IntegerField label="Dimension" value="10" name="nSideField" max-length="1000" binding-path="nSide" style="align-items: center; flex-direction: row; justify-content: space-between; align-self: stretch;"/>
