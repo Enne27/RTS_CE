@@ -1,4 +1,4 @@
-using UnityEngine;
+#if UNITY_EDITOR
 public class Cámara_de_la_Reina : Structure
 {
     private static readonly int levels = 5;
@@ -28,6 +28,6 @@ public class Cámara_de_la_Reina : Structure
         anthill.resources.eggs += benefit[level-1];
     }
 }
-
+#endif
 
 
