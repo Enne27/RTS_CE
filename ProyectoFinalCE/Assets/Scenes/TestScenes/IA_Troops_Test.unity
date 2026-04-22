@@ -905,7 +905,7 @@ MonoBehaviour:
     bestCost: 0
   showSingleCell: 0
   showQuadTree: 0
-  showGrid: 0
+  showGrid: 1
   selectedCell: 0
   depth: 0
   nodeStepDelay: 1
@@ -1056,6 +1056,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e29bec9d115491547b1d347feae884f6, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e29bec9d115491547b1d347feae884f6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
