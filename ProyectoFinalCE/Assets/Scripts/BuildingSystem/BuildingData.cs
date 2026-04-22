@@ -6,17 +6,18 @@ public enum BuildingType
 {
     QueenChamber,
     BroodChamber,
-    StorageChamber
+    StorageChamber,
+    Tunnel
 }
 
 [CreateAssetMenu(menuName = "BuildingData")]
 public class BuildingData : ScriptableObject
 {
+    [Header("General Data")]
     [field: SerializeField] public BuildingType buildingType;
-
-    [field: SerializeField] public LocalizedString Description {  get; set; }
-
-    [field: SerializeField] public BuildingModel model { get; private set; }
+    [field: SerializeField] public LocalizedString buildName {  get; set; }
+    [field: SerializeField] public LocalizedString buildDescription {  get; set; }
+    [field: SerializeField] public BuildingModel buildModel { get; private set; }
 
     [Tooltip("Tiempo en segundos que tarda en construirse.")]
     [field: SerializeField] public float constructionTime;

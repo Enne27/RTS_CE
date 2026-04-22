@@ -9,7 +9,7 @@ public class BuildingModel : MonoBehaviour
 
     private BuildingShapeUnit[] shapeUnits;
     private Material buildingMaterial;
-
+    
     private Renderer model;
 
     private void Awake()

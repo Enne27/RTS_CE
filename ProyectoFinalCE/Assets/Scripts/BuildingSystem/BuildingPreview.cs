@@ -26,7 +26,7 @@ public class BuildingPreview : MonoBehaviour
     public void Setup(BuildingData data)
     {
         this.data = data;
-        model = Instantiate(data.model, transform.position, Quaternion.identity, transform);
+        model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         renderers.AddRange(model.GetComponentsInChildren<Renderer>());
         colliders.AddRange(model.GetComponentsInChildren<Collider>());
         foreach (var col in colliders)

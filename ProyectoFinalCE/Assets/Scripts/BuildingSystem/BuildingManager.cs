@@ -7,10 +7,13 @@ using UnityEngine.InputSystem;
 public class BuildingManager : MonoBehaviour
 {
     public const float CELL_SIZE = 1f;
-
+    [Header("Chambers Data")]
     [SerializeField] private BuildingData queenChamberData;
     [SerializeField] private BuildingData broodChamberData;
     [SerializeField] private BuildingData storageChamberData;
+    [SerializeField] private BuildingData tunnelChamberData;
+
+    [Header("Building References")]
     [SerializeField] private BuildingPreview previewPrefab;
     [SerializeField] private Building buildingPrefab;
     [SerializeField] private BuildingGrid grid;
@@ -20,8 +23,10 @@ public class BuildingManager : MonoBehaviour
     private Keyboard keyboard;
     private Mouse mouse;
 
+    [Header("Builds")]
     public List<Building> constructionsBuilt;
 
+    [Header("Build Counts")]
     public int queenChambersCount;
     public int broodChambersCount;
     public int storageChambersCount;
@@ -52,9 +57,13 @@ public class BuildingManager : MonoBehaviour
             {
                 preview = CreatePreview(broodChamberData, mousePos);
             }
-            else if (keyboard.digit3Key.wasPressedThisFrame && storageChambersCount < broodChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
+            else if (keyboard.digit3Key.wasPressedThisFrame && storageChambersCount < storageChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
             {
                 preview = CreatePreview(storageChamberData, mousePos);
+            }
+            else if (keyboard.digit4Key.wasPressedThisFrame )
+            {
+                preview = CreatePreview(tunnelChamberData, mousePos);
             }
         }
     }
@@ -97,6 +106,12 @@ public class BuildingManager : MonoBehaviour
         else
         {
             preview.ChangeState(BuildingPreview.BuildingPreviewState.NEGATIVE);
+
+            if (mouse.middleButton.wasPressedThisFrame)
+            {
+                CancelPreview();
+                return;
+            }
         }
     }
     private void CancelPreview()
