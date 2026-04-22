@@ -48,3 +48,18 @@
     flex-grow: 1;
     background-color: rgb(0, 0, 255);
 }
+
+GridBackground {
+--grid-background-color: rgb(40, 40, 40);
+--line-color: rgba(193, 196, 192, 0.1);
+--thick-line-color: rgba(193, 196, 192, 0.1);
+--spacing: 15;
+}
+
+.unity-tab-view__content-container {
+    flex-grow: 1;
+}
+
+.unity-tab__content-container {
+    flex-grow: 1;
+}

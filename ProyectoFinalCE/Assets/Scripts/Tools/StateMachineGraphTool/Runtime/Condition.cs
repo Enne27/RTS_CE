@@ -20,7 +20,7 @@ public class Context
 }
 
 /// <summary>
-/// La clase Condition evalúa las condiciones de IA.
+/// La clase Condition evalï¿½a las condiciones de IA.
 /// </summary>
 public class Condition
 {

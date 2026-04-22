@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: auto; height: auto; justify-content: center; align-content: flex-start;">
+        <ui:Label text="Name: " name="Name"/>
+        <ui:Label text="LVL:  " name="LVL"/>
+        <ui:ProgressBar value="100" title="Construction Time: " name="ConstructionTime"/>
+    </ui:VisualElement>
+</ui:UXML>
