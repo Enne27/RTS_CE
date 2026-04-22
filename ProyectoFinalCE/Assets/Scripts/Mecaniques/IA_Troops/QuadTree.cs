@@ -17,10 +17,8 @@ public struct Box
     public void Include(Vector3 p)
     {
         Min = new Vector2(MathF.Min(Min.x, p.x), MathF.Min(Min.y, p.z));
-        //Min = new Vector2(MathF.Min(Min.x, Min.y), MathF.Min(Min.x, Min.y));
 
         Max = new Vector2(MathF.Max(Max.x, p.x), MathF.Max(Max.y, p.z));
-        //Max = new Vector2(MathF.Max(Max.x, Max.y), MathF.Max(Max.x, Max.y));
     }
 
     public static Box FromPoints<T>(IReadOnlyList<T> items, Func<T, Vector3> getPos)
@@ -85,7 +83,7 @@ public sealed class Quadtree<T>
         int id = Nodes.Count;
         Nodes.Add(new Node(bbox));
 
-        if (/*end - begin <= 1 || */depthLimit == 0)
+        if (depthLimit == 0)
             return id;
         
         var center = bbox.Center;
