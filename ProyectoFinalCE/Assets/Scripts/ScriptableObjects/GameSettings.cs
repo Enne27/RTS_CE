@@ -9,7 +9,7 @@ public class GameSettings : ScriptableObject
     public WindowMode windowMode;
 
     [Header("Audio")]
-    public float masterVolume = 1f;
+    [SerializeField, Range(0, 1)] public float masterVolume;
     public bool isMuted = false;
     [SerializeField, Range(0, 1)] public float musicVolume;
     [SerializeField, Range(0, 1)] public float sfxVolume;

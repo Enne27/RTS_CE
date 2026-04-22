@@ -5,8 +5,6 @@ using UnityEngine.Localization.Settings;
 using FMODUnity;
 using FMOD.Studio;
 
-
-
 public enum QualityLevel { MuyAlta, Alta, Media, Baja }
 public enum WindowMode { Ventana, SinBordes, PantallaCompleta }
 public enum Language { Castellano, Catalan, Ingles }
@@ -14,7 +12,7 @@ public enum Language { Castellano, Catalan, Ingles }
 public class SettingsManager : MonoBehaviour
 {
     #region VARIABLES
-    public static SettingsManager Instance;
+    public static SettingsManager settingsManager;
 
     [Header("Data")]
     public GameSettings settings;
@@ -33,15 +31,20 @@ public class SettingsManager : MonoBehaviour
     private Bus masterBus;
     #endregion
 
-    private void Awake()
+    public static SettingsManager instance
     {
-        if (Instance == null)
+        get
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
+            return FindOrGetPauseController();
         }
+    }
+
+    static SettingsManager FindOrGetPauseController()
+    {
+        if (settingsManager == null)
+            settingsManager = FindFirstObjectByType<SettingsManager>();
+
+        return settingsManager;
     }
 
     private void Start()
@@ -76,7 +79,7 @@ public class SettingsManager : MonoBehaviour
     /// <summary>
     /// Actualizar los valores de la interfaz.
     /// </summary>
-    void SyncUI()
+    public void SyncUI()
     {
         // General
         qualityDropdown.SetValueWithoutNotify((int)settings.quality);
@@ -132,7 +135,7 @@ public class SettingsManager : MonoBehaviour
     {
         settings.musicVolume = volume;
         ApplyVolume();
-        PlayerPrefs.SetFloat("MusiVolume", volume);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
     public void SetSFXVolume(float volume)
