@@ -69,15 +69,6 @@ public class FlowField_Manager : MonoBehaviour
     //public FlowFieldDisplayType curDisplayType;
     //public bool displayGrid;
 
-<<<<<<< HEAD
-    //private void OnValidate()
-    //{
-    //    //Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
-    //    transform.localScale = new Vector3(gridSize.x / 10.0f * cellRadius * 2, 1, gridSize.y / 10.0f * cellRadius * 2);
-    //    debugFlowField = new FlowField(cellRadius, gridSize, transform);
-    //    debugFlowField.CreateGrid();
-    //}
-=======
     private void OnValidate()
     {
         //gridSize = Map.gridSize;
@@ -86,7 +77,6 @@ public class FlowField_Manager : MonoBehaviour
         debugFlowField = new FlowField(cellRadius, gridSize, transform);
         debugFlowField.CreateGrid();
     }
->>>>>>> Programacion-Guillem
     //private void OnDrawGizmos()
     //{
     //    if (Application.isPlaying) return;
