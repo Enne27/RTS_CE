@@ -1,9 +1,17 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class AntExlporer : Ant
 {
-    private int food;
-    private int constructionMaterial;
+    public int food;
+    public int MC;
+    int[] breedingCost = new int[] { 7, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
+    public Transform targetTransform;   
+    private Vector3 targetPosition;
+    public Vector3 antHillPositionOwner; 
+    private bool useTransformTarget;     
     private void Awake()
     {
         HP = 15f;
@@ -13,19 +21,39 @@ public class AntExlporer : Ant
         reach = 1;
         vision = 4;
         linePriority = 8;
-        breedingCost = new int[] { 7, 12 };
         acidBased = false;
+        //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     protected override void Move()
     {
+        Vector3 target;
 
+        if (useTransformTarget)
+        {
+            if (targetTransform == null) return;
+            target = targetTransform.position;
+        }
+        else
+        {
+            target = targetPosition;
+        }
+
+        Vector3 direction = (target - transform.position).normalized;
+        transform.position += direction * speed * Time.deltaTime;
     }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
+        }
+        else
+        {
+            useTransformTarget = true;
+            targetTransform = target.transform;
+            Move();
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -44,23 +72,40 @@ public class AntExlporer : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if(HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void Collect()
+    public void Collect(Vector3 target)
     {
-        /*
-         Cooldown
-        se termina
-        se añaden recursos
-        se llama Carry()
-         */
+        targetPosition = target;
+        useTransformTarget = false;
+        Move();
+        TimeManager.Instance.Register(3f,()=>Collect(target));
+        food = UnityEngine.Random.Range(5, 11);
+        MC = UnityEngine.Random.Range(1,5);
+        TimeManager.Instance.Unregister(3f, () => Collect(target));
+        Carry();
     }
 
     public void Carry()
     {
+        useTransformTarget = false;
+        targetPosition = antHillPositionOwner;
+        Move();
         /*
-         Move objetivo punt
-        Collect()
+            Dejar comida y materiales en la zona de forrajeo 
          */
+        food = 0;
+        MC = 0;
+    }
+
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

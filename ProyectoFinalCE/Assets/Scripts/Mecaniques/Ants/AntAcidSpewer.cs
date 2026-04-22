@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class AntAcidSpewer : Ant
 {
+    int[] breedingCost = new int[] { 10, 18 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 15f;
@@ -11,7 +14,6 @@ public class AntAcidSpewer : Ant
         reach = 9;
         vision = 1;
         linePriority = 10;
-        breedingCost = new int[] { 10, 18 };
         acidBased = true;
     }
 
@@ -21,9 +23,10 @@ public class AntAcidSpewer : Ant
     }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -31,6 +34,16 @@ public class AntAcidSpewer : Ant
         float damageTaken;
         damageTaken = other.GetStrength() - (armor * other.GetStrength());
         damageTaken = Mathf.Max(0, damageTaken);
-        HP -= damageTaken;      
+        HP -= damageTaken;
+        if (HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
+    }
+    protected override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -1,22 +1,20 @@
 using System;
-using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
-using static UnityEngine.GraphicsBuffer;
 
-internal class AntSoldier : Ant
+public class AntCrazy : Ant
 {
-    int[] breedingCost = new int[] { 9, 12 };
+    int[] breedingCost = new int[] { 11, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 25f;
-        armor = 0.50f;
-        speed = 12f;
-        strength = 3f;
+        HP = 17f;
+        armor = 0.35f;
+        speed = 17f;
+        strength = 2f;
         reach = 1;
         vision = 1;
-        linePriority = 2;
+        linePriority = 6;
         acidBased = false;
     }
 
@@ -24,20 +22,17 @@ internal class AntSoldier : Ant
     {
 
     }
-    public override void Attack(Ant target) {
+    public override void Attack(Ant target)
+    {
         if (target != null)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
-                target.TakeDamage(this, strength, acidBased);
-            }
+            target.TakeDamage(target, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
     {
         float damageTaken;
-        float acidArmor = 0.65f;
+        float acidArmor = 0.6f;
         if (other.GetAcidBased() == true)
         {
             damageTaken = other.GetStrength() - (acidArmor * other.GetStrength());
@@ -50,14 +45,16 @@ internal class AntSoldier : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
-        if (HP <= 0) {
+        if (HP <= 0)
+        {
             HP = 0;
             Die();
         }
         OnAnyAntDamaged?.Invoke(this);
     }
+
     protected override void Die()
     {
-        gameObject.SetActive(false);    
+        gameObject.SetActive(false);
     }
 }

@@ -59,5 +59,26 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a03b404df410fad47b448debb6a47157, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7205156154406575182}
   m_SourcePrefab: {fileID: 100100000, guid: a03b404df410fad47b448debb6a47157, type: 3}
+--- !u!1 &4762535053382884396 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a03b404df410fad47b448debb6a47157, type: 3}
+  m_PrefabInstance: {fileID: 5680874988168978813}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7205156154406575182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4762535053382884396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ba7a211c0cddfe409a7f8be8afc85ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AntBerserker
+  breedingCost: 0000000000000000
