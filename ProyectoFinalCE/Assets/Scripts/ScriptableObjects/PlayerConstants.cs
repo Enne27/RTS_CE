@@ -7,7 +7,6 @@ public static class PlayerConstants
         BROTE,
         NIDO,
         COLONIA,
-        DOMINIO,
         IMPERIO
     }
 
@@ -22,12 +21,18 @@ public static class PlayerConstants
         WORKER
     }
 
+    //Fog entity tags
+    public enum ENTITY_TYPE
+    {
+        ENEMY,
+        RESOURCE
+    }
+
     public static readonly Dictionary<HIVE_ERAS, int> EGG_CAPACITIES = new() 
     {
         { HIVE_ERAS.BROTE , 500 },
         { HIVE_ERAS.NIDO , 625 },
         { HIVE_ERAS.COLONIA , 750 },
-        { HIVE_ERAS.DOMINIO , 875 },
         { HIVE_ERAS.IMPERIO , 1000 }
     };
 
