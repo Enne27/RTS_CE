@@ -1428,7 +1428,7 @@ GameObject:
   - component: {fileID: 4422514888933985986}
   m_Layer: 5
   m_Name: GameHUDCanvas
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2865,7 +2865,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tree
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2932,7 +2932,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6537938231825679203
@@ -3426,7 +3426,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Construct
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3493,7 +3493,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &8385653013269521372
@@ -3754,6 +3754,7 @@ GameObject:
   - component: {fileID: 2374386872289751493}
   - component: {fileID: 1502797715801252422}
   - component: {fileID: 5726117808512086460}
+  - component: {fileID: 2093582135670547277}
   m_Layer: 5
   m_Name: pauseText
   m_TagString: Untagged
@@ -3810,8 +3811,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'PAUSA : P'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
+  m_sharedMaterial: {fileID: 1973153549898254127, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3835,7 +3836,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.15
+  m_fontSize: 39.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
