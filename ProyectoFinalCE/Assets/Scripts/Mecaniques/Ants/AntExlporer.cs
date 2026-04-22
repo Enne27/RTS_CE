@@ -22,6 +22,7 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
+        //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     protected override void Move()
@@ -79,22 +80,21 @@ public class AntExlporer : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void Collect()
+    public void Collect(Vector3 target)
     {
-        targetPosition = transform.position;
+        targetPosition = target;
         useTransformTarget = false;
         Move();
-        TimeManager.Instance.Register(3f,Collect);
+        TimeManager.Instance.Register(3f,()=>Collect(target));
         food = UnityEngine.Random.Range(5, 11);
         MC = UnityEngine.Random.Range(1,5);
-        TimeManager.Instance.Unregister(3f,Collect);
+        TimeManager.Instance.Unregister(3f, () => Collect(target));
         Carry();
     }
 
     public void Carry()
     {
         useTransformTarget = false;
-        //zero -> placeholder per posicio del formiguer
         targetPosition = antHillPositionOwner;
         Move();
         /*
