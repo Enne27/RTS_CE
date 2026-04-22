@@ -1,37 +1,44 @@
 using System;
-using System.Runtime.CompilerServices;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
-using UnityEngine.Scripting.APIUpdating;
-using static UnityEngine.GraphicsBuffer;
 
-internal class AntSoldier : Ant
+public class AntKamikaze : Ant
 {
-    int[] breedingCost = new int[] { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
+    private float maxHP;
+    private Ant target;
+    int[] breedingCost = new int[] { 7, 18 };
     private void Awake()
     {
-        HP = 25f;
-        armor = 0.50f;
-        speed = 12f;
-        strength = 3f;
+        HP = 11f;
+        armor = 0.3f;
+        speed = 13f;
+        strength = 2f;
         reach = 1;
         vision = 1;
         linePriority = 2;
         acidBased = false;
+        maxHP = HP;
     }
+
+    public void Update()
+    {
+        if (HP < maxHP * 0.2f && target != null)
+        {
+            Explode(target);
+        }
+    }
+
 
     protected override void Move()
     {
 
     }
-    public override void Attack(Ant target) {
+    public override void Attack(Ant target)
+    {
         if (target != null)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
-                target.TakeDamage(this, strength, acidBased);
-            }
+            target.TakeDamage(target, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -50,14 +57,24 @@ internal class AntSoldier : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
-        if (HP <= 0) {
+        if (HP <= 0)
+        {
             HP = 0;
             Die();
         }
         OnAnyAntDamaged?.Invoke(this);
     }
+
+    public void Explode(Ant target)
+    {
+        strength = 15;
+        acidBased = true;
+        target.TakeDamage(target,strength,acidBased);
+        Die();
+    }
+
     protected override void Die()
     {
-        gameObject.SetActive(false);    
+        gameObject.SetActive(false);
     }
 }
