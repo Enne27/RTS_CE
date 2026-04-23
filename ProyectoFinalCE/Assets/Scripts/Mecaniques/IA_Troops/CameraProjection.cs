@@ -1,29 +1,109 @@
-using UnityEditor;
 using UnityEngine;
-
-public class CreateTexture2DAsset
-{
-    [MenuItem("Tools/Create Minimap Texture")]
-    static void CreateTexture()
-    {
-        Texture2D tex = new Texture2D(256, 256);
-        Color clear = Color.black;
-        for (int x = 0; x < tex.width; x++)
-            for (int y = 0; y < tex.height; y++)
-                tex.SetPixel(x, y, clear);
-
-        tex.Apply();
-
-        AssetDatabase.CreateAsset(tex, "Assets/MinimapTexture.asset");
-        AssetDatabase.SaveAssets();
-
-        Debug.Log("MinimapTexture.asset created in Assets folder!");
-    }
-}
+using UnityEngine.Rendering;
 
 public class CameraProjection : MonoBehaviour
 {
+
+    [SerializeField] Camera mainCamera;
+    [SerializeField] Camera minimapCamera;
     [SerializeField] GameObject plane;
+
+    Vector3 bottomLeftPosition;
+    Vector3 topLeftPosition;
+    Vector3 topRightPosition;
+    Vector3 bottomRightPosition;
+
+    static Material lineMaterial;
+
+    void Start()
+    {
+        RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+    }
+
+    void OnDestroy()
+    {
+        RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+    }
+
+    private void OnValidate()
+    {
+        //minimapCamera.orthographicSize = 5 * plane.transform.lossyScale.x;
+    }
+
+    void Update()
+    {
+        if (mainCamera == null || plane == null) return;
+
+        float planeY = plane.transform.position.y;
+
+        Ray bottomLeft = mainCamera.ViewportPointToRay(new Vector3(0, 0, 0));
+        Ray topLeft = mainCamera.ViewportPointToRay(new Vector3(0, 1, 0));
+        Ray topRight = mainCamera.ViewportPointToRay(new Vector3(1, 1, 0));
+        Ray bottomRight = mainCamera.ViewportPointToRay(new Vector3(1, 0, 0));
+
+        bottomLeftPosition = GetPointAtHeight(bottomLeft, planeY);
+        topLeftPosition = GetPointAtHeight(topLeft, planeY);
+        topRightPosition = GetPointAtHeight(topRight, planeY);
+        bottomRightPosition = GetPointAtHeight(bottomRight, planeY);
+    }
+
+    void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        if (camera != minimapCamera) return;
+
+        if (minimapCamera == null) return;
+
+        CreateMaterial();
+        lineMaterial.SetPass(0);
+
+        Vector3 tl = minimapCamera.WorldToViewportPoint(topLeftPosition);
+        Vector3 tr = minimapCamera.WorldToViewportPoint(topRightPosition);
+        Vector3 br = minimapCamera.WorldToViewportPoint(bottomRightPosition);
+        Vector3 bl = minimapCamera.WorldToViewportPoint(bottomLeftPosition);
+
+        GL.PushMatrix();
+        GL.LoadOrtho();
+
+        GL.Begin(GL.LINES);
+        GL.Color(Color.red);
+
+        GL.Vertex(new Vector3(tl.x, tl.y, 0));
+        GL.Vertex(new Vector3(tr.x, tr.y, 0));
+
+        GL.Vertex(new Vector3(tr.x, tr.y, 0));
+        GL.Vertex(new Vector3(br.x, br.y, 0));
+
+        GL.Vertex(new Vector3(br.x, br.y, 0));
+        GL.Vertex(new Vector3(bl.x, bl.y, 0));
+
+        GL.Vertex(new Vector3(bl.x, bl.y, 0));
+        GL.Vertex(new Vector3(tl.x, tl.y, 0));
+
+        GL.End();
+        GL.PopMatrix();
+    }
+
+    static void CreateMaterial()
+    {
+        if (lineMaterial != null) return;
+
+        Shader shader = Shader.Find("Hidden/Internal-Colored");
+        lineMaterial = new Material(shader);
+        lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+
+        lineMaterial.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
+        lineMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
+        lineMaterial.SetInt("_Cull", (int)CullMode.Off);
+        lineMaterial.SetInt("_ZWrite", 0);
+    }
+
+    public static Vector3 GetPointAtHeight(Ray ray, float height)
+    {
+        return ray.origin + (((ray.origin.y - height) / -ray.direction.y) * ray.direction);
+    }
+
+
+    /*
 
     [Header("Minimap Settings")]
     [SerializeField] float mapOriginX = -50f;
@@ -34,6 +114,7 @@ public class CameraProjection : MonoBehaviour
     [SerializeField] int texHeight = 256;
 
     [SerializeField]private Texture2D minimapTex;
+
 
     void Update()
     {
@@ -47,45 +128,79 @@ public class CameraProjection : MonoBehaviour
         Ray topRight = camera.ViewportPointToRay(new Vector3(1, 1, 0));
         Ray bottomRight = camera.ViewportPointToRay(new Vector3(1, 0, 0));
 
-        Vector3 bl = GetPointAtHeight(bottomLeft, planeY);
-        Vector3 tl = GetPointAtHeight(topLeft, planeY);
-        Vector3 tr = GetPointAtHeight(topRight, planeY);
-        Vector3 br = GetPointAtHeight(bottomRight, planeY);
+        bottomLeftPosition = GetPointAtHeight(bottomLeft, planeY);
+        topLeftPosition    = GetPointAtHeight(topLeft, planeY);
+        topRightPosition   = GetPointAtHeight(topRight, planeY);
+        bottomRightPosition= GetPointAtHeight(bottomRight, planeY);
 
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawSphere(bl, 0.1f);
-        //Gizmos.DrawSphere(tl, 0.1f);
-        //Gizmos.DrawSphere(tr, 0.1f);
-        //Gizmos.DrawSphere(br, 0.1f);
+        //Vector3 bl = GetPointAtHeight(bottomLeft, planeY);
+        //Vector3 tl = GetPointAtHeight(topLeft, planeY);
+        //Vector3 tr = GetPointAtHeight(topRight, planeY);
+        //Vector3 br = GetPointAtHeight(bottomRight, planeY);
 
-        Vector2 worldMin = new Vector2(mapOriginX, mapOriginZ);
-        Vector2 worldMax = new Vector2(mapOriginX + mapWidth, mapOriginZ + mapHeight);
+        //Vector2 worldMin = new Vector2(mapOriginX, mapOriginZ);
+        //Vector2 worldMax = new Vector2(mapOriginX + mapWidth, mapOriginZ + mapHeight);
 
-        Vector2 blUV = WorldToUV(bl, worldMin, worldMax);
-        Vector2 tlUV = WorldToUV(tl, worldMin, worldMax);
-        Vector2 trUV = WorldToUV(tr, worldMin, worldMax);
-        Vector2 brUV = WorldToUV(br, worldMin, worldMax);
+        //Vector2 blUV = WorldToUV(bl, worldMin, worldMax);
+        //Vector2 tlUV = WorldToUV(tl, worldMin, worldMax);
+        //Vector2 trUV = WorldToUV(tr, worldMin, worldMax);
+        //Vector2 brUV = WorldToUV(br, worldMin, worldMax);
 
-        Vector2 blPixel = new Vector2(blUV.x * texWidth, blUV.y * texHeight);
-        Vector2 tlPixel = new Vector2(tlUV.x * texWidth, tlUV.y * texHeight);
-        Vector2 trPixel = new Vector2(trUV.x * texWidth, trUV.y * texHeight);
-        Vector2 brPixel = new Vector2(brUV.x * texWidth, brUV.y * texHeight);
+        //Vector2 blPixel = new Vector2(blUV.x * texWidth, blUV.y * texHeight);
+        //Vector2 tlPixel = new Vector2(tlUV.x * texWidth, tlUV.y * texHeight);
+        //Vector2 trPixel = new Vector2(trUV.x * texWidth, trUV.y * texHeight);
+        //Vector2 brPixel = new Vector2(brUV.x * texWidth, brUV.y * texHeight);
 
-        if (minimapTex == null || minimapTex.width != texWidth || minimapTex.height != texHeight)
-            minimapTex = new Texture2D(texWidth, texHeight);
+        //if (minimapTex == null || minimapTex.width != texWidth || minimapTex.height != texHeight)
+        //    minimapTex = new Texture2D(texWidth, texHeight);
 
-        Color clear = Color.black;
-        Color lineColor = Color.yellow;
-        for (int x = 0; x < texWidth; x++)
-            for (int y = 0; y < texHeight; y++)
-                minimapTex.SetPixel(x, y, clear);
+        //Color clear = Color.black;
+        //Color lineColor = Color.yellow;
+        //for (int x = 0; x < texWidth; x++)
+        //    for (int y = 0; y < texHeight; y++)
+        //        minimapTex.SetPixel(x, y, clear);
 
-        DrawLine(minimapTex, blPixel, tlPixel, lineColor);
-        DrawLine(minimapTex, tlPixel, trPixel, lineColor);
-        DrawLine(minimapTex, trPixel, brPixel, lineColor);
-        DrawLine(minimapTex, brPixel, blPixel, lineColor);
+        //DrawLine(minimapTex, blPixel, tlPixel, lineColor);
+        //DrawLine(minimapTex, tlPixel, trPixel, lineColor);
+        //DrawLine(minimapTex, trPixel, brPixel, lineColor);
+        //DrawLine(minimapTex, brPixel, blPixel, lineColor);
 
-        minimapTex.Apply();
+        //minimapTex.Apply();
+    }
+
+
+    void Start()
+    {
+        RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+    }
+
+    void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+    {
+        GL.PushMatrix();
+        {
+            GL.LoadOrtho();
+            GL.Begin(GL.LINES);
+            {
+                GL.Color(Color.red);
+                GL.Vertex(topLeftPosition);
+                GL.Vertex(topRightPosition);
+                GL.Vertex(topRightPosition);
+                GL.Vertex(bottomRightPosition);
+                GL.Vertex(bottomRightPosition);
+                GL.Vertex(bottomLeftPosition);
+                GL.Vertex(bottomLeftPosition);
+                GL.Vertex(topLeftPosition);
+            }
+            //GL.Begin(GL.TRIANGLES);
+            //{
+            //    GL.Color(Color.red);
+            //    GL.Vertex(new Vector3(-1f, 1f, -1f));
+            //    GL.Vertex(new Vector3(1f, 1f, 1f));
+            //    GL.Vertex(new Vector3(1f, 1f, -1f));
+            //}
+            GL.End();
+        }
+        GL.PopMatrix();
     }
 
     public static Vector3 GetPointAtHeight(Ray ray, float height)
@@ -124,4 +239,5 @@ public class CameraProjection : MonoBehaviour
             if (e2 < dx) { err += dx; y0 += sy; }
         }
     }
-}   
+    */
+}

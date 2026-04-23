@@ -1,0 +1,65 @@
+.custom-label {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(68, 138, 255);
+}
+
+.slot-icon {
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+    min-width: 150px;
+    min-height: 150px;
+    border-left-color: rgb(75, 75, 75);
+    border-right-color: rgb(75, 75, 75);
+    border-top-color: rgb(75, 75, 75);
+    border-bottom-color: rgb(75, 75, 75);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+.row {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.column {
+    flex-grow: 0;
+    aspect-ratio: 1;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.ia1 {
+    flex-grow: 1;
+    background-color: rgb(255, 0, 0);
+}
+
+.ia2 {
+    flex-grow: 1;
+    background-color: rgb(0, 0, 255);
+}
+
+GridBackground {
+--grid-background-color: rgb(40, 40, 40);
+--line-color: rgba(193, 196, 192, 0.1);
+--thick-line-color: rgba(193, 196, 192, 0.1);
+--spacing: 15;
+}
+
+.unity-tab-view__content-container {
+    flex-grow: 1;
+}
+
+.unity-tab__content-container {
+    flex-grow: 1;
+}

@@ -12,11 +12,7 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
-
-    private Material antMaterial;
-    private Color baseColor;
-    private Color selectionColor = Color.yellow;
-
+    
     //protected virtual void Move() { }
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
@@ -46,11 +42,6 @@ public abstract class Ant : MonoBehaviour
     private bool hasObjective = false;
     private Vector3 objective;
 
-    private void Awake()
-    {
-        antMaterial = GetComponent<Renderer>().material;
-        baseColor = antMaterial.GetColor("_Outline_Color");
-    }
     private void FixedUpdate()
     {
         if (hasObjective)
@@ -74,14 +65,5 @@ public abstract class Ant : MonoBehaviour
     public void StopMove()
     {
         hasObjective = false;
-    }
-
-    public void SelectedAntcolor(bool selected)
-    {
-        Debug.Log(antMaterial);
-        Debug.Log(selectionColor);
-        Debug.Log(baseColor);
-        //if(selected) antMaterial.SetColor("_Outline_Color", selectionColor);
-        //else antMaterial.SetColor("_Outline_Color", baseColor);
     }
 }

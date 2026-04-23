@@ -17,6 +17,14 @@ namespace StateMachine.Runtime
         }
     }
 
+    public class AnyStateNodeExecutor : IStateMachineNodeExecutor<AnyStateRuntimeNode>
+    {
+        public bool Execute(AnyStateRuntimeNode node, StateMachineManager ctx)
+        {
+            return true;
+        }
+    }
+
     public class StateNodeExecutor : IStateMachineNodeExecutor<StateRuntimeNode>
     {
         public bool Execute(StateRuntimeNode node, StateMachineManager ctx)
@@ -47,7 +55,7 @@ namespace StateMachine.Runtime
                     break;
                 case ConectionType.And:
                     conditions = new List<bool>();
-                    foreach (BattleCondition battleCondition in node.AndRuntimeNode.Conditions)
+                    foreach (Conditions battleCondition in node.AndRuntimeNode.Conditions)
                     {
                         bool cond = mediator.GetConditionValue(battleCondition);
                         conditions.Add(cond);
@@ -56,7 +64,7 @@ namespace StateMachine.Runtime
                     break;
                 case ConectionType.Or:
                     conditions = new List<bool>();
-                    foreach (BattleCondition battleCondition in node.OrRuntimeNode.Conditions)
+                    foreach (Conditions battleCondition in node.OrRuntimeNode.Conditions)
                     {
                         bool cond = mediator.GetConditionValue(battleCondition);
                         conditions.Add(cond);

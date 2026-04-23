@@ -21,27 +21,11 @@ public struct Box
         Max = new Vector2(MathF.Max(Max.x, p.x), MathF.Max(Max.y, p.z));
     }
 
-    public void MakeSquare()
-    {
-        float sizeX = Max.x - Min.x;
-        float sizeY = Max.y - Min.y;
-
-        float maxSize = Mathf.Max(sizeX, sizeY);
-
-        Vector2 center = (Min + Max) * 0.5f;
-        Vector2 halfSize = new Vector2(maxSize, maxSize) * 0.5f;
-
-        Min = center - halfSize;
-        Max = center + halfSize;
-    }
-
     public static Box FromPoints<T>(IReadOnlyList<T> items, Func<T, Vector3> getPos)
     {
         var b = Empty;
         for (int i = 0; i < items.Count; i++)
             b.Include(getPos(items[i]));
-
-        b.MakeSquare();
         return b;
     }
 
