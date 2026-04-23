@@ -46,16 +46,14 @@ public class FogEntity : MonoBehaviour
     {
         // 1. Preguntamos al Manager por el color del píxel en nuestra posición actual
         Color32 visibilityState = FogOfWarManager.Instance.GetVisibilityAtPosition(transform.position);
+        Debug.Log(visibilityState);
+
 
         bool shouldBeVisible = false;
 
         // 2. Lógica de los tres estados
         // visibilityState.r -> Visión en tiempo real (128 o más = Visible)
         // visibilityState.g -> Historial de exploración (128 o más = Explorado)
-
-        Debug.Log ("red = " + visibilityState.r);
-        Debug.Log ("green = " + visibilityState.g);
-        Debug.Log ("blue = " + visibilityState.b);
         if (visibilityState.r > 128)
         {
             // ESTADO: VISIBLE (Dentro del rango de una unidad aliada)
