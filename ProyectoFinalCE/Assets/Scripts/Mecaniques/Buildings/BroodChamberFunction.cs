@@ -47,9 +47,13 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] timeUpgrade => timeUpgrade_;
     public override int[] maxLevelByEra => maxLevelByEra_;
 
-    [Header("UI")]
-    [SerializeField] GameHUDView gameHUDView;
+    public GameHUDView gameHUDView;
     #endregion
+
+    private void Awake()
+    {
+        gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
+    }
 
     public void CreateAnt(ANT_TYPES antType, Transform position)
     {
@@ -100,9 +104,18 @@ public class BroodChamberFunction : StructuresPlayer
                 GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
                 if(antType != ANT_TYPES.WORKER)
                     GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                else { GameManager.instance.player.inventory.workerAnts++; }
+                else
+                    GameManager.instance.player.inventory.workerAnts++;
+                if (antType == ANT_TYPES.EXPLORER)
+                    newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
 
-                gameHUDView.UpdateAntText(antType, 1);
+                if (gameHUDView != null)
+                    gameHUDView.UpdateAntText(antType, 1);
+                else
+                {
+                    gameHUDView = FindFirstObjectByType<GameHUDView>();
+                    gameHUDView.UpdateAntText(antType, 1);
+                }
             }
             else
             {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AntBerserker : Ant
 {
-    int[] breedingCost = new int[] { 15, 30 };
+    //int[] breedingCost = { 15, 30 };
     public static event Action<Ant> OnAnyAntDamaged;
     public Transform targetTransform;
     private Vector3 targetPosition;

@@ -1,7 +1,8 @@
+#if UNITY_EDITOR
 using System;
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public class StructureView : UnityEditor.Experimental.GraphView.Node
@@ -64,3 +65,4 @@ public class StructureView : UnityEditor.Experimental.GraphView.Node
         }
     }
 }
+#endif

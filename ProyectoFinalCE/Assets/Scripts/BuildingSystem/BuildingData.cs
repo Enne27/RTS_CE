@@ -2,24 +2,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 
+public enum BuildingType
+{
+    QueenChamber,
+    BroodChamber,
+    StorageChamber,
+    Tunnel,
+    Entrance,
+    Mound
+}
+
 [CreateAssetMenu(menuName = "BuildingData")]
 public class BuildingData : ScriptableObject
 {
-    [field: SerializeField] public LocalizedString Description {  get; set; }
-
-    [Tooltip("Coste de construcción, a nivel grid.")]
-    [field: SerializeField] public int cost { get; set; }
-    [field: SerializeField] public BuildingModel model { get; private set; }
+    [Header("General Data")]
+    [field: SerializeField] public BuildingType buildingType;
+    [field: SerializeField] public LocalizedString buildName {  get; set; }
+    [field: SerializeField] public LocalizedString buildDescription {  get; set; }
+    [field: SerializeField] public BuildingModel buildModel { get; private set; }
 
     [Tooltip("Tiempo en segundos que tarda en construirse.")]
     [field: SerializeField] public float constructionTime;
 
-    [Tooltip("Cantidad máxima que se pueden construir hasta la era final.")]
-    [field: SerializeField] public int maxQuantity;
-
-    [Header("Level gestion")]
-    [Tooltip("Nivel máximo al que se puede mejorar la construcción.")]
-    [field: SerializeField] public int max_lvl;
 
     [Header("Construction Costs")]
     [Tooltip("Coste de huevas para construir.")]
@@ -27,4 +31,12 @@ public class BuildingData : ScriptableObject
 
     [Tooltip("Coste de materiales de construcción para construir.")]
     [field: SerializeField] public int costMC;
+
+
+    [Header("Upgrades")]
+    [Tooltip("Cantidad máxima que se puede construir por cada era.")]
+    [field: SerializeField]public int[] maxQuantityByEra = new int[4];
+
+    [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
+    [field: SerializeField]public int[] maxLevelByEra = new int[4];
 }

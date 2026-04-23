@@ -25,6 +25,9 @@ public class SettingsView : View
     public override void Show()
     {
         base.Show();
+        SettingsManager.instance.LoadSettings();
+        SettingsManager.instance.ApplySettings();
+        SettingsManager.instance.SyncUI();
         //UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
     }
 

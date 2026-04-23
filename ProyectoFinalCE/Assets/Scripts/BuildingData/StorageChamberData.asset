@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 097f1622898c46f42abcf50825ccef21, type: 3}
   m_Name: StorageChamberData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  <Description>k__BackingField:
+  buildingType: 2
+  <buildName>k__BackingField:
     m_TableReference:
       m_TableCollectionName: 
     m_TableEntryReference:
@@ -21,13 +22,21 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
-  <cost>k__BackingField: 1
-  <model>k__BackingField: {fileID: 7425391439823131492, guid: e6719aef604702b4d872ac3371dcfcb5, type: 3}
+  <buildDescription>k__BackingField:
+    m_TableReference:
+      m_TableCollectionName: GUID:de42bd94b24b0c54c8e83de18dd1f294
+    m_TableEntryReference:
+      m_KeyId: 21265031168
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  <buildModel>k__BackingField: {fileID: 7425391439823131492, guid: e6719aef604702b4d872ac3371dcfcb5, type: 3}
   constructionTime: 30
-  maxQuantity: 5
-  max_lvl: 6
   costHV: 50
   costMC: 5
+  maxQuantityByEra: 01000000020000000300000005000000
+  maxLevelByEra: 01000000030000000500000006000000
   references:
     version: 2
     RefIds: []

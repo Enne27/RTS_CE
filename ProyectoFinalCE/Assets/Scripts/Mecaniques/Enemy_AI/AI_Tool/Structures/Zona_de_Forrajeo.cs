@@ -1,5 +1,4 @@
-using UnityEngine;
-
+#if UNITY_EDITOR
 public class Zona_de_Forrajeo : Structure
 {
     private static readonly int levels = 5;
@@ -23,6 +22,6 @@ public class Zona_de_Forrajeo : Structure
     {
     }
 }
-
+#endif
 
 
