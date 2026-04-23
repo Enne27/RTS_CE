@@ -18,10 +18,6 @@ public class AntCrazy : Ant
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target)
     {
         if (target != null)

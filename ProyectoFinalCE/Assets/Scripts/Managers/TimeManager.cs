@@ -25,12 +25,20 @@ public class TimeManager : MonoBehaviour
         public List<Action> callbacks = new List<Action>();
     }
 
+    private class OneShotTimerData
+    {
+        public float remainingTime;
+        public Action callback;
+    }
+
+    private List<OneShotTimerData> oneShots = new List<OneShotTimerData>();
     private Dictionary<float, TimerGroup> timers = new Dictionary<float, TimerGroup>();
 
     private void Update()
     {
         float dt = Time.deltaTime;
 
+        //Repeated Timers
         foreach (var kvp in timers)
         {
             float interval = kvp.Key;
@@ -48,6 +56,27 @@ public class TimeManager : MonoBehaviour
                 }
             }
         }
+
+        //One shot timers
+        for (int i = oneShots.Count - 1; i >= 0; i--)
+        {
+            oneShots[i].remainingTime -= dt;
+
+            if (oneShots[i].remainingTime <= 0f)
+            {
+                oneShots[i].callback?.Invoke();
+                oneShots.RemoveAt(i);
+            }
+        }
+    }
+
+    public void OneShotTimer(float time, Action callback)
+    {
+        oneShots.Add(new OneShotTimerData
+        {
+            remainingTime = time,
+            callback = callback
+        });
     }
 
     public void Register(float interval, Action callback)
