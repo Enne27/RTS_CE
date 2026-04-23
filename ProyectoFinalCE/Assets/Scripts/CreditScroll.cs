@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class CreditScroll : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class CreditScroll : MonoBehaviour
 
     private void Awake()
     {
-        doubleSpeed = scrollSpeed*multiplyFastSpeed;
+        doubleSpeed = scrollSpeed * multiplyFastSpeed;
         initialSpeed = scrollSpeed;
     }
 
@@ -28,9 +26,11 @@ public class CreditScroll : MonoBehaviour
         // Con el translate podemos mover hacia donde queramos.
         transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime);
 
-        if (Input.anyKey)
+        if (Keyboard.current.anyKey.isPressed || Mouse.current.leftButton.isPressed ||
+        Mouse.current.rightButton.isPressed || Mouse.current.middleButton.isPressed)
         {
             scrollSpeed = doubleSpeed;
+            Debug.Log("pulsarcosa");
         }
         else
         {

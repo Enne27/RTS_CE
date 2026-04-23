@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class GridDirection
 {
-    public readonly Vector2Int Vector;
+    public readonly Vector2 Vector;
 
     private GridDirection(int x, int y)
     {
         Vector = new Vector2Int(x, y);
     }
 
-    public static implicit operator Vector2Int(GridDirection direction)
+    public static implicit operator Vector2(GridDirection direction)
     {
         return direction.Vector;
     }
 
-    public static GridDirection GetDirectionFromV2I(Vector2Int vector)
+    public static GridDirection GetDirectionFromV2I(Vector2 vector)
     {
         return CardinalAndIntercardinalDirections.DefaultIfEmpty(None).FirstOrDefault(direction => direction == vector);
     }
