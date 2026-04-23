@@ -1,4 +1,3 @@
-using Unity.Plastic.Antlr3.Runtime;
 using UnityEngine;
 
 /// <summary>
@@ -22,7 +21,7 @@ public class Context
 {
     //TODO: Make context booleans for conditions
     public int HP = 0;
-    public int Range = 0;
+    public bool Range = false;
 }
 
 /// <summary>
@@ -35,7 +34,7 @@ public class Condition
     public Condition(Context context)
     {
         context.HP = 0;
-        context.Range = 0;
+        context.Range = false;
         Context = context;
     }
 
@@ -59,12 +58,14 @@ public class Condition
         {
             return true;
         }
-        return false;
+        else return false;
     }
 
     public bool IsInRange()
     {
-        return true;
+      if(Context.Range == true)
+            return true;
+      else return false;
     }
 
     //TODO: Make functions for checking conditions booleans

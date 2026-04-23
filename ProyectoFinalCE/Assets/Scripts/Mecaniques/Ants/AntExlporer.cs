@@ -82,14 +82,21 @@ public class AntExlporer : Ant
 
     public void Collect(Vector3 target)
     {
+        float distance = Vector3.Distance(transform.position, target);
+        if (distance > reach)
+        {
         targetPosition = target;
         useTransformTarget = false;
         Move();
-        TimeManager.Instance.Register(3f,()=>Collect(target));
+        }
+        else
+        {
+        TimeManager.Instance.Register(3f, () => Collect(target));
         food = UnityEngine.Random.Range(5, 11);
         MC = UnityEngine.Random.Range(1,5);
         TimeManager.Instance.Unregister(3f, () => Collect(target));
         Carry();
+        }
     }
 
     public void Carry()
