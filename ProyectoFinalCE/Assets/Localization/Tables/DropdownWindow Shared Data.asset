@@ -10,39 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
-  m_Name: DropdownQuality Shared Data
+  m_Name: DropdownWindow Shared Data
   m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
-  m_TableCollectionName: DropdownQuality
-  m_TableCollectionNameGuidString: d32daf60c27e3024a99e85c65c82677f
+  m_TableCollectionName: DropdownWindow
+  m_TableCollectionNameGuidString: 5c25abccd82a7804d8d9c110a04c30a5
   m_Entries:
-  - m_Id: 31966547968
-    m_Key: DropdownQuality.VeryHigh
+  - m_Id: 7106908160
+    m_Key: DropdownWindow.Window
     m_Metadata:
       m_Items: []
-  - m_Id: 125461778432
-    m_Key: DropdownQuality.High
+  - m_Id: 67420999680
+    m_Key: DropdownWindow.NoBorder
     m_Metadata:
       m_Items: []
-  - m_Id: 2201998774272
-    m_Key: DropdownQuality.Medium
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2217886797824
-    m_Key: DropdownQuality.Low
-    m_Metadata:
-      m_Items: []
-  - m_Id: 2224853536768
-    m_Key: DropdownQuality.Custom
+  - m_Id: 104125353984
+    m_Key: DropdownWindow.Fullscreen
     m_Metadata:
       m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    rid: 4512037749905424478
+    rid: 4512037817423495271
   references:
     version: 2
     RefIds:
-    - rid: 4512037749905424478
+    - rid: 4512037817423495271
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
-        m_CustomEpoch: 1776709924396
+        m_CustomEpoch: 1776967332441
