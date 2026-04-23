@@ -36,6 +36,7 @@ public class TroopsSelection : MonoBehaviour
     [SerializeField] private RectTransform selectionArea;
     private bool isLeftMouseDown;
 
+    
     private void OnEnable()
     {
         leftClick = action.FindAction("leftClick");
@@ -132,23 +133,40 @@ public class TroopsSelection : MonoBehaviour
 
         for (int i = unitsSelected.Count - 1; i >= 0; i--)
         {
+<<<<<<< Updated upstream
             BaseAnt baseAnt = unitsSelected[i];
             baseAnt.transform.GetChild(0).gameObject.SetActive(false);
             unitsSelected.RemoveAt(i);
         }
 
         foreach (BaseAnt baseAnt in UnitController.antsInGame)
+=======
+            Ant ant = unitsSelected[i];
+            ant.SelectedAntcolor(false);
+            //baseAnt.transform.GetChild(0).gameObject.SetActive(false);
+            unitsSelected.RemoveAt(i);
+        }
+
+        foreach (Ant ant in GameManager.instance.player.ants)
+>>>>>>> Stashed changes
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(baseAnt.transform.position);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(ant.transform.position);
             if (screenPos.z < 0)
                 continue;
 
             if (selectionRect.Contains(screenPos))
             {
+<<<<<<< Updated upstream
 
                 baseAnt.transform.GetChild(0).gameObject.SetActive(true);
                 if (!unitsSelected.Contains(baseAnt))
                     unitsSelected.Add(baseAnt);
+=======
+                ant.SelectedAntcolor(true);
+                //baseAnt.transform.GetChild(0).gameObject.SetActive(true);
+                if (!unitsSelected.Contains(ant))
+                    unitsSelected.Add(ant);
+>>>>>>> Stashed changes
             }
         }
     }
@@ -164,14 +182,25 @@ public class TroopsSelection : MonoBehaviour
 
             for (int i = unitsSelected.Count - 1; i >= 0; i--)
             {
+<<<<<<< Updated upstream
                 BaseAnt ant = unitsSelected[i];
                 ant.transform.GetChild(0).gameObject.SetActive(false);
+=======
+                Ant ant = unitsSelected[i];
+                ant.SelectedAntcolor(false);
+                //ant.transform.GetChild(0).gameObject.SetActive(false);
+>>>>>>> Stashed changes
                 unitsSelected.RemoveAt(i);
             }
 
             if (clickedAnt != null)
             {
+<<<<<<< Updated upstream
                 clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+=======
+                clickedAnt.SelectedAntcolor(true);
+                //clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+>>>>>>> Stashed changes
                 unitsSelected.Add(clickedAnt);
             }
         }
