@@ -22,6 +22,9 @@ public class Context
     //TODO: Make context booleans for conditions
     public int HP = 0;
     public bool Range = false;
+    public bool isAttack = false;
+    public bool isCollect = false;
+    public bool isMove = false;
 }
 
 /// <summary>
@@ -35,6 +38,9 @@ public class Condition
     {
         context.HP = 0;
         context.Range = false;
+        context.isAttack = false;
+        context.isCollect = false;
+        context.isMove = false;
         Context = context;
     }
 
@@ -46,6 +52,12 @@ public class Condition
                 return IsHP0();
             case Conditions.isInRange:
                 return IsInRange();
+            case Conditions.isAttack:
+                return IsAttack();
+            case Conditions.isCollect:
+                return IsCollect();
+            case Conditions.isMove:
+                return IsMove();
             default:
                 Debug.LogError($"Unhandled Condition: {condition}");
                 return false;
@@ -68,6 +80,25 @@ public class Condition
       else return false;
     }
 
+    public bool IsAttack()
+    {
+        if (Context.isAttack == true)
+            return true;
+        else return false;
+    }
+
+    public bool IsCollect()
+    {
+        if (Context.isCollect == true)
+            return true;
+        else return false;
+    }
+
+    public bool IsMove()
+    {
+        if (Context.isMove) 
+            return true;    
+        else return false;
+    }
     //TODO: Make functions for checking conditions booleans
-    
 }
