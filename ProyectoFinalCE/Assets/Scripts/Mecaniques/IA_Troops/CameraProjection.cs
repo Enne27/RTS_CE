@@ -17,12 +17,18 @@ public class CameraProjection : MonoBehaviour
 
     void Start()
     {
-        RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+        SetRenderingEnabled(true);
     }
 
     void OnDestroy()
     {
-        RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+        SetRenderingEnabled(false);
+    }
+
+    public void SetRenderingEnabled(bool enabled)
+    {
+        if (enabled) RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+        else RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
     }
 
     private void OnValidate()
