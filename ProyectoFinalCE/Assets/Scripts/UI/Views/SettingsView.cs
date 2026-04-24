@@ -16,10 +16,10 @@ public class SettingsView : View
     {
         backButton.onClick.AddListener(()=> ViewManager.ShowLastView());
 
+        advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
         //advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsControlsView>());
-        //advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
     }
 
     public override void Show()
