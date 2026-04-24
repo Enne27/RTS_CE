@@ -5,9 +5,15 @@ using UnityEngine.Localization.Settings;
 using FMODUnity;
 using FMOD.Studio;
 
-public enum QualityLevel { MuyAlta, Alta, Media, Baja }
-public enum WindowMode { Ventana, SinBordes, PantallaCompleta }
-public enum Language { Castellano, Catalan, Ingles }
+public enum QualityLevel { VeryHigh, High, Medium, Low, Custom }
+public enum WindowMode { Window, Borderless, Fullscreen }
+public enum AspectRatio { [InspectorName("16:9")] _16x9, [InspectorName("16:10")] _16x10, [InspectorName("21:9")] _21x9, [InspectorName("32:9")] _32x9  }
+public enum Resolution { HD, PHD, FHD, QHD, UHD}
+public enum UpscalingFilter { Automatic, Bilinear, NearestNeighbor, FidelityFXSuperResolution, SpatialTemporalPostProcessing}
+public enum AntiAliasing { _8x, _4x, _2x, Disabled }
+public enum ShadowQuality { High, Medium, Low }
+public enum ShadowDistance { VeryFar, Far, Close, VeryClose }
+public enum Language { Spanish, Catalan, English }
 
 public class SettingsManager : MonoBehaviour
 {
@@ -108,13 +114,13 @@ public class SettingsManager : MonoBehaviour
 
         switch (mode)
         {
-            case WindowMode.Ventana:
+            case WindowMode.Window:
                 Screen.fullScreenMode = FullScreenMode.Windowed;
                 break;
-            case WindowMode.SinBordes:
+            case WindowMode.Borderless:
                 Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
                 break;
-            case WindowMode.PantallaCompleta:
+            case WindowMode.Fullscreen:
                 Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
                 break;
         }
@@ -173,13 +179,13 @@ public class SettingsManager : MonoBehaviour
 
         switch (lang)
         {
-            case Language.Castellano:
+            case Language.Spanish:
                 localeCode = "es-ES";
                 break;
             case Language.Catalan:
                 localeCode = "ca";
                 break;
-            case Language.Ingles:
+            case Language.English:
                 localeCode = "en";
                 break;
         }
