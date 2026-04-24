@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 
 public class AntExlporer : Ant
@@ -25,35 +24,12 @@ public class AntExlporer : Ant
         //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
-    protected override void Move()
-    {
-        Vector3 target;
-
-        if (useTransformTarget)
-        {
-            if (targetTransform == null) return;
-            target = targetTransform.position;
-        }
-        else
-        {
-            target = targetPosition;
-        }
-
-        Vector3 direction = (target - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
-    }
     public override void Attack(Ant target)
     {
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
             target.TakeDamage(this, strength, acidBased);
-        }
-        else
-        {
-            useTransformTarget = true;
-            targetTransform = target.transform;
-            Move();
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -82,33 +58,18 @@ public class AntExlporer : Ant
 
     public void Collect(Vector3 target)
     {
-        float distance = Vector3.Distance(transform.position, target);
-        if (distance > reach)
-        {
-        targetPosition = target;
-        useTransformTarget = false;
-        Move();
-        }
-        else
-        {
-        TimeManager.Instance.Register(3f, () => Collect(target));
-        food = UnityEngine.Random.Range(5, 11);
-        MC = UnityEngine.Random.Range(1,5);
-        TimeManager.Instance.Unregister(3f, () => Collect(target));
-        Carry();
-        }
-    }
 
-    public void Carry()
-    {
-        useTransformTarget = false;
-        targetPosition = antHillPositionOwner;
-        Move();
-        /*
-            Dejar comida y materiales en la zona de forrajeo 
-         */
-        food = 0;
-        MC = 0;
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            food = UnityEngine.Random.Range(5, 11);
+            MC = UnityEngine.Random.Range(1, 5);
+            //Move to anthill instruction
+        });
+        //TimeManager.Instance.Register(3f,()=>Collect(target));
+        //food = UnityEngine.Random.Range(5, 11);
+        //MC = UnityEngine.Random.Range(1,5);
+        //TimeManager.Instance.Unregister(3f, () => Collect(target));
+        //Carry();
     }
 
     protected override void Die()

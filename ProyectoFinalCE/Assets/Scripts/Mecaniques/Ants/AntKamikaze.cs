@@ -7,9 +7,6 @@ public class AntKamikaze : Ant
     private float maxHP;
     private Ant target;
     int[] breedingCost = new int[] { 7, 18 };
-    public Transform targetTransform;
-    private Vector3 targetPosition;
-    private bool useTransformTarget;
     private void Awake()
     {
         HP = 11f;
@@ -31,36 +28,11 @@ public class AntKamikaze : Ant
         }
     }
 
-
-    protected override void Move()
-    {
-        Vector3 target;
-
-        if (useTransformTarget)
-        {
-            if (targetTransform == null) return;
-            target = targetTransform.position;
-        }
-        else
-        {
-            target = targetPosition;
-        }
-
-        Vector3 direction = (target - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
-    }
     public override void Attack(Ant target)
     {
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= reach)
+        if (target != null)
         {
-            target.TakeDamage(this, strength, acidBased);
-        }
-        else
-        {
-            useTransformTarget = true;
-            targetTransform = target.transform;
-            Move();
+            target.TakeDamage(target, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)

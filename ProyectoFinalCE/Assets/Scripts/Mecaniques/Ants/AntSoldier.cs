@@ -8,9 +8,6 @@ internal class AntSoldier : Ant
 {
     //int[] breedingCost = { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
-    public Transform targetTransform;
-    private Vector3 targetPosition;
-    private bool useTransformTarget;
     private void Awake()
     {
         HP = 25f;
@@ -23,35 +20,14 @@ internal class AntSoldier : Ant
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-        Vector3 target;
-
-        if (useTransformTarget)
+    public override void Attack(Ant target) {
+        if (target != null)
         {
-            if (targetTransform == null) return;
-            target = targetTransform.position;
-        }
-        else
-        {
-            target = targetPosition;
-        }
-
-        Vector3 direction = (target - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
-    }
-    public override void Attack(Ant target)
-    {
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= reach)
-        {
-            target.TakeDamage(this, strength, acidBased);
-        }
-        else
-        {
-            useTransformTarget = true;
-            targetTransform = target.transform;
-            Move();
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage(this, strength, acidBased);
+            }
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)

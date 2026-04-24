@@ -19,7 +19,7 @@ public class TroopsSelection : MonoBehaviour
     }
     #endregion
 
-    public List<BaseAnt> unitsSelected;
+    public List<Ant> unitsSelected;
 
     [SerializeField] private float dragThreshold = 5f;
     private Vector2 startMousePos;
@@ -83,10 +83,11 @@ public class TroopsSelection : MonoBehaviour
 
             int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
 
-            foreach (BaseAnt ant in unitsSelected)
+            foreach (Ant ant in unitsSelected)
             {
-                ant.flowFieldInxex = flowFieldIndex;
-                UnitController.activeAnts.Add(ant);
+                ant.MoveTo(worldMousePos);
+                //ant.flowFieldInxex = flowFieldIndex;
+                //UnitController.activeAnts.Add(ant);
             }
         }
 
@@ -103,7 +104,6 @@ public class TroopsSelection : MonoBehaviour
 
     private void OnLeftClickStarted(InputAction.CallbackContext ctx)
     {
-        //Debug.Log("Started");
         startMousePos = Mouse.current.position.ReadValue();
         isLeftMouseDown = true;
         isDragging = false;
@@ -147,12 +147,12 @@ public class TroopsSelection : MonoBehaviour
 
         for (int i = unitsSelected.Count - 1; i >= 0; i--)
         {
-            BaseAnt baseAnt = unitsSelected[i];
-            baseAnt.transform.GetChild(0).gameObject.SetActive(false);
+            Ant baseAnt = unitsSelected[i];
+            //baseAnt.transform.GetChild(0).gameObject.SetActive(false);
             unitsSelected.RemoveAt(i);
         }
 
-        foreach (BaseAnt baseAnt in UnitController.antsInGame)
+        foreach (Ant baseAnt in GameManager.instance.player.ants)
         {
             Vector3 screenPos = Camera.main.WorldToScreenPoint(baseAnt.transform.position);
             if (screenPos.z < 0)
@@ -161,7 +161,7 @@ public class TroopsSelection : MonoBehaviour
             if (selectionRect.Contains(screenPos))
             {
 
-                baseAnt.transform.GetChild(0).gameObject.SetActive(true);
+                //baseAnt.transform.GetChild(0).gameObject.SetActive(true);
                 if (!unitsSelected.Contains(baseAnt))
                     unitsSelected.Add(baseAnt);
             }
@@ -175,18 +175,18 @@ public class TroopsSelection : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            BaseAnt clickedAnt = hit.collider.GetComponent<BaseAnt>();
+            Ant clickedAnt = hit.collider.GetComponent<Ant>();
 
             for (int i = unitsSelected.Count - 1; i >= 0; i--)
             {
-                BaseAnt ant = unitsSelected[i];
-                ant.transform.GetChild(0).gameObject.SetActive(false);
+                Ant ant = unitsSelected[i];
+                //ant.transform.GetChild(0).gameObject.SetActive(false);
                 unitsSelected.RemoveAt(i);
             }
 
             if (clickedAnt != null)
             {
-                clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+                //clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
                 unitsSelected.Add(clickedAnt);
             }
         }

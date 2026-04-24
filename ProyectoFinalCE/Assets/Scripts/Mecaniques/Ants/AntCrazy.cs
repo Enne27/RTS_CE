@@ -6,9 +6,6 @@ public class AntCrazy : Ant
 {
     int[] breedingCost = new int[] { 11, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
-    public Transform targetTransform;
-    private Vector3 targetPosition;
-    private bool useTransformTarget;
     private void Awake()
     {
         HP = 17f;
@@ -21,35 +18,11 @@ public class AntCrazy : Ant
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-        Vector3 target;
-
-        if (useTransformTarget)
-        {
-            if (targetTransform == null) return;
-            target = targetTransform.position;
-        }
-        else
-        {
-            target = targetPosition;
-        }
-
-        Vector3 direction = (target - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
-    }
     public override void Attack(Ant target)
     {
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= reach)
+        if (target != null)
         {
-            target.TakeDamage(this, strength, acidBased);
-        }
-        else
-        {
-            useTransformTarget = true;
-            targetTransform = target.transform;
-            Move();
+            target.TakeDamage(target, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
