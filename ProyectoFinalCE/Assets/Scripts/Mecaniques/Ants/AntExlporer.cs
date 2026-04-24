@@ -1,9 +1,16 @@
+using System;
 using UnityEngine;
 
 public class AntExlporer : Ant
 {
-    private int food;
-    private int constructionMaterial;
+    public int food;
+    public int MC;
+    //int[] breedingCost = { 7, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
+    public Transform targetTransform;   
+    private Vector3 targetPosition;
+    public Vector3 antHillPositionOwner;
+    private bool useTransformTarget;   
     private void Awake()
     {
         HP = 15f;
@@ -13,19 +20,16 @@ public class AntExlporer : Ant
         reach = 1;
         vision = 4;
         linePriority = 8;
-        breedingCost = new int[] { 7, 12 };
         acidBased = false;
+        //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -44,23 +48,32 @@ public class AntExlporer : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if(HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void Collect()
+    public void Collect(Vector3 target)
     {
-        /*
-         Cooldown
-        se termina
-        se añaden recursos
-        se llama Carry()
-         */
+
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            food = UnityEngine.Random.Range(5, 11);
+            MC = UnityEngine.Random.Range(1, 5);
+            //Move to anthill instruction
+        });
+        //TimeManager.Instance.Register(3f,()=>Collect(target));
+        //food = UnityEngine.Random.Range(5, 11);
+        //MC = UnityEngine.Random.Range(1,5);
+        //TimeManager.Instance.Unregister(3f, () => Collect(target));
+        //Carry();
     }
 
-    public void Carry()
+    protected override void Die()
     {
-        /*
-         Move objetivo punt
-        Collect()
-         */
+        gameObject.SetActive(false);
     }
 }

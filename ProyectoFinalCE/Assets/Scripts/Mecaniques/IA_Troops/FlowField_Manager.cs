@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public enum FlowFieldDisplayType { None, AllIcons, DestinationIcon, CostField, IntegrationField };
@@ -65,17 +64,17 @@ public class FlowField_Manager : MonoBehaviour
 
 #if UNITY_EDITOR
     #region Debug
-    private FlowField debugFlowField;
-    public FlowFieldDisplayType curDisplayType;
-    public bool displayGrid;
+    //private FlowField debugFlowField;
+    //public FlowFieldDisplayType curDisplayType;
+    //public bool displayGrid;
 
     private void OnValidate()
     {
         //gridSize = Map.gridSize;
         //Camera.main.transform.position = new Vector3(0, Mathf.Max(gridSize.x, gridSize.y), 0);
         transform.localScale = new Vector3(gridSize.x / 10.0f * cellRadius * 2, 1, gridSize.y / 10.0f * cellRadius * 2);
-        debugFlowField = new FlowField(cellRadius, gridSize, transform);
-        debugFlowField.CreateGrid();
+        //debugFlowField = new FlowField(cellRadius, gridSize, transform);
+        //debugFlowField.CreateGrid();
     }
     //private void OnDrawGizmos()
     //{
@@ -146,48 +145,48 @@ public class FlowField_Manager : MonoBehaviour
 
     //}
 
-    public void SetFlowField(FlowField newFlowField)
-    {
-        debugFlowField = newFlowField;
-        cellRadius = newFlowField.cellRadius;
-        gridSize = newFlowField.gridSize;
-    }
+    //public void SetFlowField(FlowField newFlowField)
+    //{
+    //    debugFlowField = newFlowField;
+    //    cellRadius = newFlowField.cellRadius;
+    //    gridSize = newFlowField.gridSize;
+    //}
 
-    public void ClearCellDisplay()
-    {
-        foreach (Transform t in transform)
-        {
-            GameObject.Destroy(t.gameObject);
-        }
-    }
+    //public void ClearCellDisplay()
+    //{
+    //    foreach (Transform t in transform)
+    //    {
+    //        GameObject.Destroy(t.gameObject);
+    //    }
+    //}
 
-    void DrawArrow(Vector3 center, Vector3 direction, float length, Color color)
-    {
-        Vector3 dir = direction.normalized;
+    //void DrawArrow(Vector3 center, Vector3 direction, float length, Color color)
+    //{
+    //    Vector3 dir = direction.normalized;
 
-        Vector3 start = center - dir * (length * 0.5f);
-        Vector3 end = center + dir * (length * 0.5f);
+    //    Vector3 start = center - dir * (length * 0.5f);
+    //    Vector3 end = center + dir * (length * 0.5f);
 
-        Debug.DrawLine(start, end, color);
+    //    Debug.DrawLine(start, end, color);
 
-        float headSize = 0.25f * length;
+    //    float headSize = 0.25f * length;
 
-        Vector3 right = Quaternion.Euler(0, 30, 0) * -dir;
-        Vector3 left = Quaternion.Euler(0, -30, 0) * -dir;
+    //    Vector3 right = Quaternion.Euler(0, 30, 0) * -dir;
+    //    Vector3 left = Quaternion.Euler(0, -30, 0) * -dir;
 
-        Debug.DrawLine(end, end + right * headSize, color);
-        Debug.DrawLine(end, end + left * headSize, color);
-    }
+    //    Debug.DrawLine(end, end + right * headSize, color);
+    //    Debug.DrawLine(end, end + left * headSize, color);
+    //}
 
-    private void DrawGrid(Color drawColor)
-    {
-        Gizmos.color = drawColor;
-        foreach (Cell cell in debugFlowField.grid)
-        {
-            Vector3 size = new Vector3(debugFlowField.cellRadius * 2, 0.0f, debugFlowField.cellRadius * 2);
-            Gizmos.DrawWireCube(cell.worldPos, size);
-        }
-    }
+    //private void DrawGrid(Color drawColor)
+    //{
+    //    Gizmos.color = drawColor;
+    //    foreach (Cell cell in debugFlowField.grid)
+    //    {
+    //        Vector3 size = new Vector3(debugFlowField.cellRadius * 2, 0.0f, debugFlowField.cellRadius * 2);
+    //        Gizmos.DrawWireCube(cell.worldPos, size);
+    //    }
+    //}
     #endregion
 #endif
 

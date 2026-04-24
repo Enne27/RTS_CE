@@ -26,7 +26,7 @@ public class BuildingPreview : MonoBehaviour
     public void Setup(BuildingData data)
     {
         this.data = data;
-        model = Instantiate(data.model, transform.position, Quaternion.identity, transform);
+        model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         renderers.AddRange(model.GetComponentsInChildren<Renderer>());
         colliders.AddRange(model.GetComponentsInChildren<Collider>());
         foreach (var col in colliders)
@@ -36,8 +36,30 @@ public class BuildingPreview : MonoBehaviour
         SetPreviewMaterial(state);
     }
 
+    public void ChangeState(BuildingPreviewState newState)
+    {
+        if(newState == state) return;
+        state = newState;
+        SetPreviewMaterial(state);
+    }
+
+    public void Rotate(int rotationStep)
+    {
+        model.Rotate(rotationStep);
+    }
+
     private void SetPreviewMaterial(BuildingPreviewState newState)
     {
-        
+        Material previewMat = newState == BuildingPreviewState.POSITIVE ? positiveMaterial : negativeMaterial;
+
+        foreach (var rend in renderers)
+        {
+            Material[] mats = new Material[rend.sharedMaterials.Length];
+            for (int i = 0; i < mats.Length; i++)
+            {
+                mats[i] = previewMat;
+            }
+            rend.materials = mats;
+        }
     }
 }

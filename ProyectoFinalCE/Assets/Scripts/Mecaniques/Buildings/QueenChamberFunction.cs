@@ -40,15 +40,20 @@ public class QueenChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     [Header("Visual player")]
-    [SerializeField] GameHUDView hudView;
+    GameHUDView hudView;
     #endregion
 
 
     #region METHODS_STRUCTURES
+    private void Awake()
+    {
+        hudView = FindFirstObjectByType<GameHUDView>();
+    }
+
 
     public override void OnConstructionFinished()
     {
-        //TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
+        TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
     }
 
     #endregion

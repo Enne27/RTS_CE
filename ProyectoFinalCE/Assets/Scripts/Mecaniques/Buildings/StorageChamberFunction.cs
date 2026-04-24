@@ -42,7 +42,7 @@ public class StorageChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     [Header("Visual player")]
-    [SerializeField] GameHUDView hudView;
+    GameHUDView hudView;
     #endregion
 
     public override void OnConstructionFinished()
@@ -56,11 +56,16 @@ public class StorageChamberFunction : StructuresPlayer
         UpdateCapacityLimits();
     }
 
-   /* private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden. PRUEBASSS
+    /* private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden. PRUEBASSS
+     {
+         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
+         UpdateCapacityLimits();
+     }*/
+
+    private void Awake()
     {
-        TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-        UpdateCapacityLimits();
-    }*/
+        hudView = FindFirstObjectByType<GameHUDView>();
+    }
 
     private void OnDisable()
     {

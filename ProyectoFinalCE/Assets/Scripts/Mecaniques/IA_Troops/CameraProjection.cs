@@ -27,7 +27,7 @@ public class CameraProjection : MonoBehaviour
 
     private void OnValidate()
     {
-        minimapCamera.orthographicSize = 5 * plane.transform.lossyScale.x;
+        //minimapCamera.orthographicSize = 5 * plane.transform.lossyScale.x;
     }
 
     void Update()

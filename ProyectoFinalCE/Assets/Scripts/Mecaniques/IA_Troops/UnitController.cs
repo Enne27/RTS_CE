@@ -21,13 +21,13 @@ public class UnitController : MonoBehaviour
 
     private void OnEnable()
     {
-        spawnUnits = action.FindAction("spawnUnits");
-        spawnUnits.performed += SpawnUnits;
-        spawnUnits.Enable();
+        //spawnUnits = action.FindAction("spawnUnits");
+        //spawnUnits.performed += SpawnUnits;
+        //spawnUnits.Enable();
 
-        destroyUnits = action.FindAction("destroyUnits");
-        destroyUnits.performed += DestroyUnits;
-        destroyUnits.Enable();
+        //destroyUnits = action.FindAction("destroyUnits");
+        //destroyUnits.performed += DestroyUnits;
+        //destroyUnits.Enable();
     }
     private void Awake()
     {
