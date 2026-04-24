@@ -86,9 +86,4 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Unlocked mechanic: " + id);
     }
-
-    private void OnEnable()
-    {
-        player = new Player();
-    }
 }
