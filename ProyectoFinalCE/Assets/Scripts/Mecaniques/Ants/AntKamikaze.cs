@@ -28,11 +28,6 @@ public class AntKamikaze : Ant
         }
     }
 
-
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target)
     {
         if (target != null)

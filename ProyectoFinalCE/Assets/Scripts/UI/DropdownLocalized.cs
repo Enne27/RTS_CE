@@ -3,25 +3,23 @@ using TMPro;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Localization.Tables;
 
-/// <summary>
-/// Script para traducir las opciones del dropdown quality, ubicado en settings
-/// </summary>
-public class QualityDropdownLocalize : MonoBehaviour
+public class DropdownLocalized : MonoBehaviour
 {
-    #region VARIABLES
     public TMP_Dropdown dropdown;
+    public string tableReference;
 
-    [Header("Keys en la tabla DropdownQuality")]
-    public string[] keys =
+    private List<string> keys = new List<string>();
+
+    void Awake()
     {
-        "DropdownQuality.VeryHigh",
-        "DropdownQuality.High",
-        "DropdownQuality.Medium",
-        "DropdownQuality.Low",
-        "DropdownQuality.Custom"
-    };
-    #endregion
+        foreach (var option in dropdown.options)
+        {
+            keys.Add(option.text);
+        }
+    }
 
     void OnEnable()
     {
@@ -41,22 +39,29 @@ public class QualityDropdownLocalize : MonoBehaviour
 
     IEnumerator UpdateDropdown()
     {
-        dropdown.options.Clear();
+        int selectedIndex = dropdown.value;
+
+        dropdown.ClearOptions();
+
+        List<TMP_Dropdown.OptionData> newOptions = new List<TMP_Dropdown.OptionData>();
 
         foreach (var key in keys)
         {
             var localizedString = new LocalizedString
             {
-                TableReference = "DropdownQuality",
+                TableReference = tableReference,
                 TableEntryReference = key
             };
 
             var handle = localizedString.GetLocalizedStringAsync();
             yield return handle;
 
-            dropdown.options.Add(new TMP_Dropdown.OptionData(handle.Result));
+            newOptions.Add(new TMP_Dropdown.OptionData(handle.Result));
         }
 
+        dropdown.AddOptions(newOptions);
+
+        dropdown.value = selectedIndex;
         dropdown.RefreshShownValue();
     }
 }

@@ -8,15 +8,6 @@ public class BroodChamberFunction : StructuresPlayer
     [Tooltip("Scriptable construction info")]
     [SerializeField] BuildingData broodBuildingScriptable;
 
-    [Header("Ants")]
-    [SerializeField] GameObject soldierAnt;
-    [SerializeField] GameObject explorerAnt;
-    [SerializeField] GameObject workerAnt;
-    [SerializeField] GameObject berserkerAnt;
-    [SerializeField] GameObject acidAnt;
-    [SerializeField] GameObject crazyAnt;
-    [SerializeField] GameObject kamikazeAnt;
-
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -47,86 +38,17 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] timeUpgrade => timeUpgrade_;
     public override int[] maxLevelByEra => maxLevelByEra_;
 
-    public GameHUDView gameHUDView;
     #endregion
 
-    private void Awake()
-    {
-        gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
-    }
-
+    /// <summary>
+    /// Creación de hormigas desde la cámara de cria.
+    /// </summary>
+    /// <param name="antType"></param>
+    /// <param name="position"></param>
     public void CreateAnt(ANT_TYPES antType, Transform position)
     {
-        //Debug.Log(antType);
-        GameObject antInstantiate = workerAnt;
-
-        if (position != null)
-        {
-            switch (antType)
-            {
-                case ANT_TYPES.ACID:
-                    antInstantiate = acidAnt;
-                    break;
-                case ANT_TYPES.BERSERKER:
-                    antInstantiate = berserkerAnt;
-                    break;
-                case ANT_TYPES.EXPLORER:
-                    antInstantiate = explorerAnt;
-                    break;
-                case ANT_TYPES.SOLDIER:
-                    antInstantiate = soldierAnt;
-                    break;
-                case ANT_TYPES.CRAZY: 
-                    antInstantiate = crazyAnt;
-                    break;
-                case ANT_TYPES.KAMIKAZE:
-                    antInstantiate = kamikazeAnt;
-                    break;
-                case ANT_TYPES.WORKER:
-                    antInstantiate = workerAnt;
-                    break;
-            }
-
-            Ant antScript = antInstantiate.GetComponent<Ant>();
-            int foodCosts = 0;
-            int hvCosts = 0;
-            if (antScript != null)
-            {
-                foodCosts = antScript.GetBreedingCost()[0];
-                hvCosts = antScript.GetBreedingCost()[1];
-            }
-
-            
-            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
-            if(SpawnAnt(foodCosts, hvCosts))
-            {
-                GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
-                if(antType != ANT_TYPES.WORKER)
-                    GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                else
-                    GameManager.instance.player.inventory.workerAnts++;
-                if (antType == ANT_TYPES.EXPLORER)
-                    newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
-
-                if (gameHUDView != null)
-                    gameHUDView.UpdateAntText(antType, 1);
-                else
-                {
-                    gameHUDView = FindFirstObjectByType<GameHUDView>();
-                    gameHUDView.UpdateAntText(antType, 1);
-                }
-            }
-            else
-            {
-                Debug.Log("Insuficient hv or food");
-            }
-        }
-    }
-
-    private bool SpawnAnt(int foodCosts, int hvCosts)
-    {
-        return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
+        if (AntCreation.Instance != null)
+            AntCreation.Instance.PlayerAntCreation(antType, position);
     }
 
     public override void OnConstructionFinished()

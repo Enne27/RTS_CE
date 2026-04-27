@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AntAcidSpewer : Ant
 {
-    int[] breedingCost = new int[] { 10, 18 };
+    //int[] breedingCost = new int[] { 10, 18 };
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
@@ -15,11 +15,6 @@ public class AntAcidSpewer : Ant
         vision = 1;
         linePriority = 10;
         acidBased = true;
-    }
-
-    protected override void Move()
-    {
-
     }
     public override void Attack(Ant target)
     {

@@ -9,7 +9,7 @@ public class AssignAntHill : MonoBehaviour
     [SerializeField] GameObject[] antHills; 
     #endregion
 
-    private void Start()
+    private void OnEnable()
     {
         AssignHill();
     }
@@ -31,7 +31,7 @@ public class AssignAntHill : MonoBehaviour
             antHillsNotOwned.RemoveAt(i);
         }
 
-        Debug.Log("Player Hill Position: " + GameManager.instance.player.structures[0].transform.position);
-        Debug.Log("IA Hill Position: " + GameManager.instance.playerIA.structures[0].transform.position); ;
+        /*Debug.Log("Player Hill Position: " + GameManager.instance.player.structures[0].transform.position);
+        Debug.Log("IA Hill Position: " + GameManager.instance.playerIA.structures[0].transform.position); */
     }
 }
