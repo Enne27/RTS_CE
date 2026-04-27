@@ -50,6 +50,8 @@ public class SettingsManager : MonoBehaviour
 
     private Bus masterBus;
 
+    public bool isLoading = false;
+
     public static SettingsManager instance
     {
         get
@@ -66,11 +68,18 @@ public class SettingsManager : MonoBehaviour
         settings.musicVCA = RuntimeManager.GetVCA("vca:/Music");
         settings.sfxVCA = RuntimeManager.GetVCA("vca:/SFX");
 
+        isLoading = true;
+
         LoadSettings();
-        HookUI();
-        ApplySettings();
         SyncUI();
+        ApplySettings();
+
+        isLoading = false;
+
+        HookUI();
         UpdatePresetText();
+
+
     }
 
     void HookUI()
@@ -119,9 +128,14 @@ public class SettingsManager : MonoBehaviour
 
     void SetCustomQuality()
     {
-        settings.quality = QualityLevel.Custom;
-        qualityDropdown.SetValueWithoutNotify((int)QualityLevel.Custom);
-        UpdatePresetText();
+        if (isLoading) 
+            return;
+        else
+        {
+            SetQuality(QualityLevel.Custom);
+            qualityDropdown.SetValueWithoutNotify((int)QualityLevel.Custom);
+            UpdatePresetText();
+        }
     }
 
     #region GRAPHICS
@@ -151,20 +165,14 @@ public class SettingsManager : MonoBehaviour
     public void SetAspectRatio(AspectRatio ratio)
     {
         settings.aspectRatio = ratio;
-
         ApplyResolution();
-
-        SetCustomQuality();
         PlayerPrefs.SetInt("AspectRatio", (int)ratio);
     }
 
     public void SetResolution(Resolution res)
     {
         settings.resolution = res;
-
         ApplyResolution();
-
-        SetCustomQuality();
         PlayerPrefs.SetInt("Resolution", (int)res);
     }
 
@@ -405,7 +413,7 @@ public class SettingsManager : MonoBehaviour
 
     public void ApplySettings()
     {
-        SetQuality(settings.quality);
+        
         SetWindowMode(settings.windowMode);
         ApplyResolution();
         SetRenderScale(settings.renderScale);
@@ -414,7 +422,72 @@ public class SettingsManager : MonoBehaviour
         SetAA(settings.antiAliasing);
         SetShadowQuality(settings.shadowQuality);
         SetShadowDistance(settings.shadowDistance);
+        SetQuality(settings.quality);
         ApplyVolume();
+        SetLanguage(settings.language);
+    }
+
+    public void ApplySettingsInternal()
+    {
+        // NO usan SetCustomQuality
+        SetQuality(settings.quality);
+        // Graphics
+        CustomRenderer.renderScale = settings.renderScale;
+
+        CustomRenderer.upscalingFilter = settings.upscalingFilter switch
+        {
+            UpscalingFilter.Automatic => UpscalingFilterSelection.Auto,
+            UpscalingFilter.Bilinear => UpscalingFilterSelection.Linear,
+            UpscalingFilter.NearestNeighbor => UpscalingFilterSelection.Point,
+            UpscalingFilter.FidelityFXSuperResolution => UpscalingFilterSelection.FSR,
+            UpscalingFilter.SpatialTemporalPostProcessing => UpscalingFilterSelection.STP,
+            _ => UpscalingFilterSelection.Auto
+        };
+
+        CustomRenderer.supportsHDR = settings.highDynamicRange;
+
+        CustomRenderer.msaaSampleCount = settings.antiAliasing switch
+        {
+            AntiAliasing._8x => 8,
+            AntiAliasing._4x => 4,
+            AntiAliasing._2x => 2,
+            AntiAliasing.Disabled => 1,
+            _ => 1
+        };
+
+        CustomRenderer.mainLightShadowmapResolution = settings.shadowQuality switch
+        {
+            ShadowQuality.High => 2048,
+            ShadowQuality.Medium => 1024,
+            ShadowQuality.Low => 512,
+            _ => 1024
+        };
+
+        CustomRenderer.additionalLightsShadowmapResolution = settings.shadowQuality switch
+        {
+            ShadowQuality.High => 1024,
+            ShadowQuality.Medium => 512,
+            ShadowQuality.Low => 256,
+            _ => 512
+        };
+
+        CustomRenderer.shadowDistance = settings.shadowDistance switch
+        {
+            ShadowDistance.VeryFar => 1000f,
+            ShadowDistance.Far => 500f,
+            ShadowDistance.Close => 100f,
+            ShadowDistance.VeryClose => 50f,
+            _ => 100f
+        };
+
+        // Screen
+        SetWindowMode(settings.windowMode);
+        ApplyResolution();
+
+        // Audio
+        ApplyVolume();
+
+        // Language
         SetLanguage(settings.language);
     }
 
