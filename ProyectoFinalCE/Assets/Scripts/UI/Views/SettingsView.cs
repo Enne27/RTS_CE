@@ -26,7 +26,7 @@ public class SettingsView : View
     {
         base.Show();
         SettingsManager.instance.LoadSettings();
-
+        SettingsManager.instance.UpdateResolutionDropdownLabels();
         SettingsManager.instance.ApplySettingsInternal();
         SettingsManager.instance.SyncUI();
         //UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
