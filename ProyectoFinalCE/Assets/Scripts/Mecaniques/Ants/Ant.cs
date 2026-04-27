@@ -12,13 +12,14 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
+    public GameObject target;
     
     //protected virtual void Move() { }
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
     //protected virtual void SpawnAnt() { }
 
-    protected virtual void Die() { }
+    public virtual void Die() { }
 
     public float GetStrength()
     {
@@ -37,6 +38,11 @@ public abstract class Ant : MonoBehaviour
     public int GetVision()
     { 
         return vision;
+    }
+
+    public GameObject GetTarget()
+    {
+        return target;
     }
 
     private bool hasObjective = false;

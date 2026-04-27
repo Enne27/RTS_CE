@@ -52,7 +52,7 @@ internal class AntSoldier : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);    
     }

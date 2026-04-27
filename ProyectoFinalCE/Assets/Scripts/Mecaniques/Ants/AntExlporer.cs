@@ -72,7 +72,7 @@ public class AntExlporer : Ant
         //Carry();
     }
 
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);
     }
