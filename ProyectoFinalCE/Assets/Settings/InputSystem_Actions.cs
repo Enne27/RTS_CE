@@ -1202,6 +1202,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextDialogueLine"",
+                    ""type"": ""Button"",
+                    ""id"": ""96f67170-011d-49aa-9b32-5eed5ece82e6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1224,6 +1233,28 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35a3bf95-74fa-4d3d-86b7-9b86968f1c3d"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextDialogueLine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34b76e29-a641-45d0-b460-05cc401149c0"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextDialogueLine"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1324,6 +1355,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // General
         m_General = asset.FindActionMap("General", throwIfNotFound: true);
         m_General_Pause = m_General.FindAction("Pause", throwIfNotFound: true);
+        m_General_NextDialogueLine = m_General.FindAction("NextDialogueLine", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1905,6 +1937,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_General;
     private List<IGeneralActions> m_GeneralActionsCallbackInterfaces = new List<IGeneralActions>();
     private readonly InputAction m_General_Pause;
+    private readonly InputAction m_General_NextDialogueLine;
     /// <summary>
     /// Provides access to input actions defined in input action map "General".
     /// </summary>
@@ -1920,6 +1953,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "General/Pause".
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_General_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action "General/NextDialogueLine".
+        /// </summary>
+        public InputAction @NextDialogueLine => m_Wrapper.m_General_NextDialogueLine;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1949,6 +1986,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @NextDialogueLine.started += instance.OnNextDialogueLine;
+            @NextDialogueLine.performed += instance.OnNextDialogueLine;
+            @NextDialogueLine.canceled += instance.OnNextDialogueLine;
         }
 
         /// <summary>
@@ -1963,6 +2003,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @NextDialogueLine.started -= instance.OnNextDialogueLine;
+            @NextDialogueLine.performed -= instance.OnNextDialogueLine;
+            @NextDialogueLine.canceled -= instance.OnNextDialogueLine;
         }
 
         /// <summary>
@@ -2253,5 +2296,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "NextDialogueLine" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextDialogueLine(InputAction.CallbackContext context);
     }
 }
