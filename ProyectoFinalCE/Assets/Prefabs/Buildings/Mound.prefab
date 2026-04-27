@@ -46,6 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8990491941184085997}
   - component: {fileID: 8909023257187644432}
+  - component: {fileID: 2735734487796864170}
   m_Layer: 0
   m_Name: Mound
   m_TagString: Untagged
@@ -82,6 +83,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingModel
   wrapper: {fileID: 5262055031318844015}
+--- !u!114 &2735734487796864170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3793221710283316865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba3fd1c2b2024c4693bff5155ff2091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoundFunction
+  positionAntHill: {x: 0, y: 0}
+  currentStructureState: 2
+  currentLevel: 1
+  moundHealthPoints: 0
+  regenerationPower: 0
+  intervalToRegenerateAfterDamage: 0
+  moundBuildingScriptable: {fileID: 11400000, guid: 79a52e2face9df646b8f3a26ee0e94e9, type: 2}
 --- !u!1 &5188700480099544435
 GameObject:
   m_ObjectHideFlags: 0
