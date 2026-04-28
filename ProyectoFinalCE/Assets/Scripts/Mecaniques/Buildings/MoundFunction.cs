@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoundFunction : StructuresPlayer
 {
@@ -46,17 +48,28 @@ public class MoundFunction : StructuresPlayer
     private bool isRegenerating = false;
     private bool allowRegeneration = false;
     private bool isDead = false;
+
+    public bool takeDamageDebugButton;
+    public int debugDamage;
+
+    [Header("UI References")]
+    [SerializeField] Slider sliderHPBar;
+    [SerializeField] TextMeshProUGUI textHPLabel;
     #endregion
 
     #region METHODS_STRUCTURES
     private void Awake()
     {
         hudView = FindFirstObjectByType<GameHUDView>();
+        moundHealthPoints = maxHealthByUpgrade[currentLevel-1];
+        regenerationPower = healthRegenPowerByUpgrade[currentLevel-1];
+        UpdateUI();
     }
 
     public override void OnConstructionFinished()
     {
-        moundHealthPoints = maxHealthByUpgrade[currentLevel];
+        moundHealthPoints = maxHealthByUpgrade[currentLevel-1];
+        UpdateUI();
         TakeDamage(50);
     }
     #endregion
@@ -64,36 +77,38 @@ public class MoundFunction : StructuresPlayer
     void Update()
     {
         if(isDead) return;
+
+        if (takeDamageDebugButton) TakeDamage(debugDamage);
+        
+        takeDamageDebugButton = false;
     }
 
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
-        if((damage - moundHealthPoints) > 0)
+        if((moundHealthPoints - damage) > 0)
         {
             moundHealthPoints -= damage;
-            intervalToRegenerateAfterDamage = 0;
         }
         else
         {
             moundHealthPoints = 0;
             MoundDestruction();
+            return;
         }
 
         // Resetear regeneración
         allowRegeneration = false;
         intervalToRegenerateAfterDamage = 0;
+        TimeManager.Instance.Unregister(1, AllowToRegenerate);
+        TimeManager.Instance.Unregister(1, Regenerate);
+        isRegenerating = false;
 
-        // Parar regeneración si estaba activa
-        if (isRegenerating)
-        {
-            TimeManager.Instance.Unregister(1, Regenerate);
-            isRegenerating = false;
-        }
 
         // Empezar contador para poder regenerar
         TimeManager.Instance.Register(1, AllowToRegenerate);
+        UpdateUI();
     }
 
     public void AllowToRegenerate()
@@ -104,8 +119,8 @@ public class MoundFunction : StructuresPlayer
         {
             allowRegeneration = true;
 
-            TimeManager.Instance.Unregister(1, AllowToRegenerate);
             TimeManager.Instance.Register(1, Regenerate);
+            TimeManager.Instance.Unregister(1, AllowToRegenerate);
         }
         else
         {
@@ -115,32 +130,38 @@ public class MoundFunction : StructuresPlayer
 
     public void Regenerate()
     {
-        if (moundHealthPoints >= maxHealthByUpgrade[currentLevel])
-        {
-            moundHealthPoints = maxHealthByUpgrade[currentLevel];
 
-            TimeManager.Instance.Unregister(1, Regenerate);
+        if (moundHealthPoints >= maxHealthByUpgrade[currentLevel - 1])
+        {
+            moundHealthPoints = maxHealthByUpgrade[currentLevel - 1];
+
             isRegenerating = false;
             allowRegeneration = false;
-
             return;
         }
 
         isRegenerating = true;
 
         int healthPointsRegeneration =
-            healthRegenPowerByUpgrade[currentLevel] * maxHealthByUpgrade[currentLevel] / 100;
+            healthRegenPowerByUpgrade[currentLevel - 1] * maxHealthByUpgrade[currentLevel - 1] / 100;
 
         moundHealthPoints += healthPointsRegeneration;
 
         // Clamp para no pasarse
-        if (moundHealthPoints > maxHealthByUpgrade[currentLevel])
-            moundHealthPoints = maxHealthByUpgrade[currentLevel];
+        if (moundHealthPoints > maxHealthByUpgrade[currentLevel - 1])
+            moundHealthPoints = maxHealthByUpgrade[currentLevel - 1];
+        UpdateUI();
     }
 
     void MoundDestruction()
     {
         isDead = true;
         Debug.Log("AUAUAU me muero deberia morirme porfavor poned el codigo para que me muera quiero morir ahora matadme no requiero vivir terminad con mi sufrimiento AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    }
+
+    void UpdateUI()
+    {
+        textHPLabel.text = $"{maxHealthByUpgrade[currentLevel-1]}/{moundHealthPoints}";
+        sliderHPBar.value = moundHealthPoints * maxHealthByUpgrade[currentLevel - 1] / 100;
     }
 }
