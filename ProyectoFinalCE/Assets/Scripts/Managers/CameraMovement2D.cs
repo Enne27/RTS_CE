@@ -46,16 +46,16 @@ public class CameraMovement2D : MonoBehaviour
     #endregion
 
     private void Awake()
-    {
-        cameraActions = new InputSystem_Actions();
+    { 
         mainCamera = Camera.main;
+
     }
 
     private void OnEnable()
     {
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.General.Movement;
+        cameraActions.General.ZoomCamera.performed += ZoomCamera;
+        cameraActions.General.Enable();
 
         targetZoom = virtualCamera.Lens.OrthographicSize;
     }
@@ -67,8 +67,8 @@ public class CameraMovement2D : MonoBehaviour
 
     private void OnDisable()
     {
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        cameraActions.General.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.General.Disable();
     }
 
     private void Update()
@@ -83,7 +83,7 @@ public class CameraMovement2D : MonoBehaviour
         HandleEdgeMovement();
         HandleDrag();
 
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) {}
+        //if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) {}
 
         ApplyMovement();
         ApplyZoom();

@@ -55,7 +55,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
+        //cameraActions = new InputSystem_Actions();
         cameraTransform = GetComponentInChildren<CinemachineCamera>().transform;
     }
 
@@ -66,17 +66,17 @@ public class CameraMovement : MonoBehaviour
 
         lastPosition = transform.position;
 
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.General.Movement;
+        cameraActions.General.RotateCamera.performed += RotateCamera;
+        cameraActions.General.ZoomCamera.performed += ZoomCamera;
+        cameraActions.General.Enable();
     }
 
     private void OnDisable()
     {
-        cameraActions.CameraControls.RotateCamera.performed -= RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        cameraActions.General.RotateCamera.performed -= RotateCamera;
+        cameraActions.General.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.General.Disable();
     }
 
     private void Update()

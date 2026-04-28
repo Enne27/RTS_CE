@@ -8,7 +8,7 @@ public class PauseController : MonoBehaviour
     static PauseController pauseController;
 
     [Tooltip("Esto son el conjunto de inputs del juego")]
-    [SerializeField] InputActionAsset inputActions;
+    [SerializeField] public InputActionAsset inputActions;
 
     private InputAction escapeToPause;
     public bool pausableMoment;
@@ -16,6 +16,7 @@ public class PauseController : MonoBehaviour
 
     [HideInInspector] public UnityEvent onPause;
     [HideInInspector] public UnityEvent onUnPause;
+    Keyboard keyboard;
     #endregion
 
     #region SINGLETON
@@ -39,14 +40,16 @@ public class PauseController : MonoBehaviour
 
     private void Awake()
     {
+        
         escapeToPause = inputActions.FindActionMap("General").FindAction("Pause");
         escapeToPause.Enable();
+        keyboard = Keyboard.current;
     }
 
 
     void Update()
     {
-        if (escapeToPause.triggered)
+        if ( keyboard.pKey.wasPressedThisFrame)
         {
             if (pausableMoment)
                 TogglePause();
