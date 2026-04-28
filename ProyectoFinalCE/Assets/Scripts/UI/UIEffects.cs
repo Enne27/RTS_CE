@@ -33,7 +33,7 @@ public class UIEffects : MonoBehaviour
     public void FadeInUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
         // StartCoroutine(FadeInCoroutine(objectCG, duration, onComplete));
-        FadeUI(objectCG, 0f, duration, onComplete);
+        FadeUI(objectCG, 1f, duration, onComplete);
     }
     /// <summary>
     /// FadeOut del CanvasGroup.
@@ -43,7 +43,7 @@ public class UIEffects : MonoBehaviour
     public void FadeOutUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
         // StartCoroutine(FadeOutCoroutine(objectCG, duration, onComplete));
-        FadeUI(objectCG, 1f, duration, onComplete);
+        FadeUI(objectCG, 0f, duration, onComplete);
     }
 
     /// <summary>
