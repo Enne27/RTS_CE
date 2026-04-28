@@ -17,7 +17,6 @@ public class GameHUDView : View
     [Header("Buttons")]
     [SerializeField] Button constructionButton;
     [SerializeField] Button generalInfoButton;
-    [SerializeField] Button antsInfoButton;
 
     [Header("ANTS")]
     [SerializeField] Button fakeAntsDropwdownButton;
@@ -58,6 +57,9 @@ public class GameHUDView : View
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
+        
+        if (generalInfoButton != null)
+            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
     }
 
     private void ShowAntsUI()
