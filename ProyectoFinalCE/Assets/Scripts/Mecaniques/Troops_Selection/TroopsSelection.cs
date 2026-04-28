@@ -19,6 +19,8 @@ public class TroopsSelection : MonoBehaviour
     }
     #endregion
 
+    public Texture2D defaultCursor;
+    public Texture2D farmCursor;
     public List<Ant> unitsSelected;
 
     [SerializeField] private float dragThreshold = 5f;
@@ -73,6 +75,31 @@ public class TroopsSelection : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        Vector2 mousePos = mousePositionAction.ReadValue<Vector2>();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
+            {
+                Cursor.SetCursor(farmCursor, Vector2.zero, CursorMode.Auto);
+            }
+            else if (hit.transform.gameObject.CompareTag("Terrain"))
+            {
+                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+            }
+            else if (false/*self anthill*/)
+            {
+                //Home cursor
+            }
+            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            {
+                //atack cursor
+            }
+        }
+    }
+
     private void OnRightClick(InputAction.CallbackContext context)
     {
         if (unitsSelected.Count < 1) return;
@@ -83,10 +110,34 @@ public class TroopsSelection : MonoBehaviour
             Vector3 worldMousePos = hit.point;
 
 
-            foreach (Ant ant in unitsSelected)
+            if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
             {
-                UnitController.MoveTo(ant, worldMousePos);
+                foreach (Ant ant in unitsSelected)
+                {
+                    if(ant is AntExlporer antExlporer){
+                        antExlporer.asignedResourceZone = hit.transform.gameObject;
+                    }
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
             }
+            else if (hit.transform.gameObject.CompareTag("Terrain"))
+            {
+                foreach (Ant ant in unitsSelected)
+                {
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
+            }
+            else if (false/*self anthill*/)
+            {
+                //Home cursor
+            }
+            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            {
+                //atack cursor
+            }
+
+
+
         }
     }
 

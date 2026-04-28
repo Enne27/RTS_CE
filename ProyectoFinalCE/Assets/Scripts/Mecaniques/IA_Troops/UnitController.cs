@@ -24,6 +24,7 @@ public class UnitController : MonoBehaviour
 
             //Agregar simulacion de flocking con hormigas cercanas.
             //Agregar comparacion de objetivos entre las hormigas cercanas.
+            //Agregar evasion de obstaculos
         }
     }
 

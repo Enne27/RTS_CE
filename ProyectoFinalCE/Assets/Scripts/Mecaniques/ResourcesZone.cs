@@ -15,7 +15,7 @@ public class ResourcesZone : MonoBehaviour
         AntExlporer antExlporer = other.gameObject.GetComponent<AntExlporer>();
         if (antExlporer != null)
         {
-            antExlporer.Collect(location);
+            antExlporer.Collect();
         }
         else Debug.Log("Not a explorer."); 
     }
