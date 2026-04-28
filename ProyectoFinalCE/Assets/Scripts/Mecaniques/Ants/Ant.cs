@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 public abstract class Ant : MonoBehaviour 
 {
     public static event Action<Ant> OnAnyAntDamaged;
@@ -15,6 +16,7 @@ public abstract class Ant : MonoBehaviour
     
     public int flowFieldInxex;
     public Vector3 currentVelocity;
+    public Vector3 objective;
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
 
@@ -37,5 +39,10 @@ public abstract class Ant : MonoBehaviour
     public int GetVision()
     { 
         return vision;
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
     }
 }

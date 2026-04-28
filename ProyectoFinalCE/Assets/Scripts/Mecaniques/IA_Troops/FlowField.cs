@@ -34,7 +34,7 @@ public class FlowField
             for (int y = 0; y < gridSize.y; y++)
             {
                 Vector3 worldPos = gridOrigin + new Vector3(x * cellDiameter + cellRadius, 0f, y * cellDiameter + cellRadius);
-                grid[x, y] = new Cell(worldPos, new Vector2(x, y));
+                grid[x, y] = new Cell(worldPos, new Vector2Int(x, y));
             }
         }
     }
@@ -113,7 +113,7 @@ public class FlowField
     {
         List<Cell> neighborCells = new List<Cell>();
 
-        foreach (Vector2 curDirection in directions)
+        foreach (Vector2Int curDirection in directions)
         {
             Cell newNeighbor = GetCellAtRelativePos(nodeIndex, curDirection);
             if (newNeighbor != null)
