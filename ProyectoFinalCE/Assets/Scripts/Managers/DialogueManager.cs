@@ -204,12 +204,13 @@ public class DialogueManager : MonoBehaviour
 
 
 
-
     /// <summary>
     /// Método para obtener las líneas de la tabla correspondiente con la key adecuada.
+    /// Para facilitar el uso, en las tablas de localización juntar todas las línias de un mismo diálogo con la misma clave 
+    /// y separar mediante .1, .2, etc.
     /// </summary>
-    /// <param name="tableName"></param>
-    /// <param name="dialogueKey"></param>
+    /// <param name="tableName">Nombre de la tabla.</param>
+    /// <param name="dialogueKey">Key de la tabla que se quiere mostrar. (Antes del .num)</param>
     /// <returns></returns>
     public List<string> GetLinesWithKey(string tableName, string dialogueKey)
     {

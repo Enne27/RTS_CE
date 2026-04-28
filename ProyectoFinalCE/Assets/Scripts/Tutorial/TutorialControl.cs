@@ -10,8 +10,9 @@ public class TutorialControl : MonoBehaviour
     [Header("Base")]
     public GameObject invertedMask;
 
-    [Header("View")]
+    [Header("View & cameras")]
     [SerializeField] public DialogueView dialogueView;
+    [SerializeField] CameraMovement cameraMoveScript;
 
     [Header("Items")]
     public GameObject resources;
@@ -37,10 +38,13 @@ public class TutorialControl : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        DialogueManager.instance.startLine.AddListener(TutorialController);
-        // SHOW DIALOGUE PANEL
-        dialogueView.ShowDialogue(TABLE_DIALOGUES, KEY_DIALOGUES_TUTORIAL);
-        DialogueManager.instance.endDialogue.AddListener(EndTutorial);
+        if (tutorialShowed == false)
+        {
+            DialogueManager.instance.startLine.AddListener(TutorialController);
+            dialogueView.ShowDialogue(TABLE_DIALOGUES, KEY_DIALOGUES_TUTORIAL);
+            DialogueManager.instance.endDialogue.AddListener(EndTutorial);
+            cameraMoveScript.DisableCameraInput();
+        }
     }
 
     void TutorialController()
@@ -88,6 +92,8 @@ public class TutorialControl : MonoBehaviour
         invertedMask.SetActive(false);
         ViewManager.Show<GameHUDView>(false);
         PauseController.instance.pausableMoment = true;
+        tutorialShowed = true;
+        cameraMoveScript.EnableCameraInput();
     }
 
     IEnumerator MoverSuavemente(Transform objeto, Vector3 destino, float duracion)

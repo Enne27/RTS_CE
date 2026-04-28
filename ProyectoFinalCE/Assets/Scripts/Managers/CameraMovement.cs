@@ -51,6 +51,8 @@ public class CameraMovement : MonoBehaviour
 
     //tracks where the dragging action started
     Vector3 startDrag;
+
+    private bool cameraCanMove = true;
     #endregion
 
     private void Awake()
@@ -61,35 +63,28 @@ public class CameraMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(transform);
-
-        lastPosition = transform.position;
-
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        EnableCameraInput();
     }
 
     private void OnDisable()
     {
-        cameraActions.CameraControls.RotateCamera.performed -= RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        DisableCameraInput();
     }
 
     private void Update()
     {
-        //inputs
-        GetKeyboardMovement();
-        CheckMouseAtScreenEdge();
-        DragCamera();
+        if (cameraCanMove) 
+        {
+            //inputs
+            GetKeyboardMovement();
+            CheckMouseAtScreenEdge();
+            DragCamera();
 
-        //move base and camera objects
-        UpdateVelocity();
-        UpdateBasePosition();
-        UpdateCameraPosition();
+            //move base and camera objects
+            UpdateVelocity();
+            UpdateBasePosition();
+            UpdateCameraPosition();
+        }
     }
 
     #region Inputs
@@ -221,6 +216,31 @@ public class CameraMovement : MonoBehaviour
     }
     #endregion
 
+    #region Input
+    public void EnableCameraInput()
+    {
+        cameraCanMove = true;
+
+        zoomHeight = cameraTransform.localPosition.y;
+        cameraTransform.LookAt(transform);
+
+        lastPosition = transform.position;
+
+        movement = cameraActions.CameraControls.Movement;
+        cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
+        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
+        cameraActions.CameraControls.Enable();
+    }
+
+    public void DisableCameraInput()
+    {
+        cameraCanMove = false;
+
+        cameraActions.CameraControls.RotateCamera.performed -= RotateCamera;
+        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.CameraControls.Disable();
+    }
+    #endregion
     private Vector3 GetCameraRigForward()
     {
         Vector3 forward = transform.forward;
