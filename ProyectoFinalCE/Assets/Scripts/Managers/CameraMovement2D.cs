@@ -83,6 +83,8 @@ public class CameraMovement2D : MonoBehaviour
         HandleEdgeMovement();
         HandleDrag();
 
+        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) {}
+
         ApplyMovement();
         ApplyZoom();
         ClampPosition();
@@ -104,7 +106,7 @@ public class CameraMovement2D : MonoBehaviour
 
         if (targuetFocus == null)
         {
-            ViewManager.Show<GameHUDView>();
+           ViewManager.Show<GameHUDView>();
         }
     }
 
@@ -127,7 +129,7 @@ public class CameraMovement2D : MonoBehaviour
                 return true;
         }
 
-        // Drag (botón derecho)
+        // Drag (botï¿½n derecho)
         if (Mouse.current.rightButton.isPressed)
             return true;
 
