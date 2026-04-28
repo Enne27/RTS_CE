@@ -72,4 +72,6 @@ public abstract class Ant : MonoBehaviour
     {
         hasObjective = false;
     }
+
+    public virtual void AttackStructure(float strenght){ }
 }

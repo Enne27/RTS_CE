@@ -28,5 +28,10 @@ public class AntScript : ScriptableAction
             ant.MoveTo(_objective);
       }
         
+      void AttackStructure(float strength)
+      {
+            Ant ant = this.GetComponent<Ant>();
+            ant.AttackStructure(strength);
+      }
     }
 }
