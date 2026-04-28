@@ -1,6 +1,8 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using System.Collections;
 
 public class Building : MonoBehaviour
 {
@@ -11,7 +13,8 @@ public class Building : MonoBehaviour
     private bool isHovered = false;
 
     private CameraMovement2D cameraMovement;
-    public TextMeshProUGUI descriptionTextBlock; 
+    public TextMeshProUGUI descriptionTextBlock;
+    [SerializeField] public CameraProjection cameraMinimap;
 
     private float lastClickTime;
     private const float doubleClickThreshold = 0.3f;
@@ -75,7 +78,7 @@ public class Building : MonoBehaviour
     private void OnDoubleClick()
     {
         Debug.Log("Double click en building");
-        
+
 
         switch (data.buildingType)
         {
@@ -92,13 +95,22 @@ public class Building : MonoBehaviour
                 break;
             case BuildingType.Entrance:
                 CameraController.instance.ChangeCameraMode(CameraState.Outside);
+                StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
                 CameraController.instance.ChangeCameraMode(CameraState.Inside);
+                if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:
                 break;
         }
+    }
+    IEnumerator ActivarMinimap()
+    {
+        yield return new WaitForSeconds(2f);
+
+        if (cameraMinimap != null)
+            cameraMinimap.SetRenderingEnabled(true);
     }
 
 }
