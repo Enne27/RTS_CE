@@ -45,7 +45,7 @@ public static class SaveConverter
     {
         List<StructureSaveData> list = new();
 
-        foreach (var b in BuildingManagerInstance.Instance.constructionsBuilt)
+        foreach (var b in BuildingManager.Instance.constructionsBuilt)
         {
             list.Add(new StructureSaveData
             {
