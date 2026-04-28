@@ -11,6 +11,15 @@ public class AdvancedSettingsQualityView : View
     public override void Initialize()
     {
         backButton.onClick.AddListener(() => ViewManager.ShowLastView(1, false));
+    }
 
+    public override void Show()
+    {
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
     }
 }
