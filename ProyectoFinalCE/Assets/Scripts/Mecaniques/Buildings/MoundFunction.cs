@@ -70,7 +70,6 @@ public class MoundFunction : StructuresPlayer
     {
         moundHealthPoints = maxHealthByUpgrade[currentLevel-1];
         UpdateUI();
-        TakeDamage(50);
     }
     #endregion
 
@@ -82,6 +81,8 @@ public class MoundFunction : StructuresPlayer
         
         takeDamageDebugButton = false;
     }
+
+    
 
     public void TakeDamage(int damage)
     {
