@@ -9,6 +9,7 @@ public class PauseMenuView : View
     [SerializeField] Button settingsButton;
     [SerializeField] Button startButton;
     [SerializeField] Button controlsButton;
+    [SerializeField] Button saveButton;
     [SerializeField] Button backButton;
     #endregion
     public override void Initialize()
@@ -30,6 +31,12 @@ public class PauseMenuView : View
         {
             //Hide();
             ViewManager.Show<SettingsView>();
+        });
+
+        saveButton.onClick.AddListener(() =>
+        {
+            //Hide();
+            SaveSystem.SaveGame();
         });
 
         backButton.onClick.AddListener(() => 
