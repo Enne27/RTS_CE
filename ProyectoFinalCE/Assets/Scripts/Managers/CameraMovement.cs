@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class CameraMovement : MonoBehaviour
 {
     #region Variables
-    private InputSystem_Actions cameraActions;
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
 
@@ -55,7 +56,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        //cameraActions = new InputSystem_Actions();
+        cameraActions = inputAsset.FindActionMap("General");
         cameraTransform = GetComponentInChildren<CinemachineCamera>().transform;
     }
 
@@ -66,17 +67,16 @@ public class CameraMovement : MonoBehaviour
 
         lastPosition = transform.position;
 
-        movement = cameraActions.General.Movement;
-        cameraActions.General.RotateCamera.performed += RotateCamera;
-        cameraActions.General.ZoomCamera.performed += ZoomCamera;
-        cameraActions.General.Enable();
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
     }
 
     private void OnDisable()
     {
-        cameraActions.General.RotateCamera.performed -= RotateCamera;
-        cameraActions.General.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.General.Disable();
+        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
 
     private void Update()

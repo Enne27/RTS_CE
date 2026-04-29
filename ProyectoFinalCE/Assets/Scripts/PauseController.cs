@@ -12,11 +12,10 @@ public class PauseController : MonoBehaviour
 
     private InputAction escapeToPause;
     public bool pausableMoment;
-    private bool isPaused;
+    public bool isPaused;
 
     [HideInInspector] public UnityEvent onPause;
     [HideInInspector] public UnityEvent onUnPause;
-    Keyboard keyboard;
     #endregion
 
     #region SINGLETON
@@ -38,18 +37,16 @@ public class PauseController : MonoBehaviour
     }
     #endregion
 
-    private void Awake()
+    private void OnEnable()
     {
-        
         escapeToPause = inputActions.FindActionMap("General").FindAction("Pause");
         escapeToPause.Enable();
-        keyboard = Keyboard.current;
     }
 
 
     void Update()
     {
-        if ( keyboard.pKey.wasPressedThisFrame)
+        if ( escapeToPause.WasPerformedThisFrame())
         {
             if (pausableMoment)
                 TogglePause();
@@ -64,7 +61,7 @@ public class PauseController : MonoBehaviour
     {
         // Verifica si la vista de pausa está activa
         isPaused = ViewManager.IsViewActive<PauseMenuView>();
-        //Debug.Log(isPaused);
+        Debug.Log(isPaused);
 
         if (isPaused)
         {
