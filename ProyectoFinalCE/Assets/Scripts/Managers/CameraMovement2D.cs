@@ -45,6 +45,7 @@ public class CameraMovement2D : MonoBehaviour
 
     private GameObject targuetFocus;
 
+    private bool hadFocusLastFrame = false;
     private bool cameraCanMove = false;
     #endregion
 
@@ -66,6 +67,9 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Update()
     {
+        bool hasFocusNow = targuetFocus != null;
+
+        if (HasCameraInput())
         if (cameraCanMove) 
         {
             if (HasCameraInput())
@@ -97,6 +101,13 @@ public class CameraMovement2D : MonoBehaviour
                 }
             }
         }
+
+        if (hadFocusLastFrame && !hasFocusNow)
+        {
+            ViewManager.Show<GameHUDView>();
+        }
+
+        hadFocusLastFrame = hasFocusNow;
     }
 
     #region Input Detection

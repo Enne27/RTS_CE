@@ -52,8 +52,15 @@ internal class AntSoldier : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);    
+    }
+
+    public override void AttackStructure(float strenght)
+    {
+        Structure targetStructure;
+        //targetStructure = new Structure();
+        //targetStructure.
     }
 }

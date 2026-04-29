@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 public abstract class Ant : MonoBehaviour 
 {
     public static event Action<Ant> OnAnyAntDamaged;
@@ -13,14 +12,14 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
+    public GameObject target;
     
-    public int flowFieldInxex;
-    public Vector3 currentVelocity;
-    public Vector3 objective;
+    //protected virtual void Move() { }
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
+    //protected virtual void SpawnAnt() { }
 
-    protected virtual void Die() { }
+    public virtual void Die() { }
 
     public float GetStrength()
     {
@@ -41,8 +40,38 @@ public abstract class Ant : MonoBehaviour
         return vision;
     }
 
-    public float GetSpeed()
+    public GameObject GetTarget()
     {
-        return speed;
+        return target;
     }
+
+    private bool hasObjective = false;
+    private Vector3 objective;
+
+    private void FixedUpdate()
+    {
+        if (hasObjective)
+        {
+            Vector3 direction = (objective - transform.position).normalized;
+
+            Vector3 newPos = transform.position + direction * speed * Time.fixedDeltaTime;
+
+            //newPos.y = Terrain.activeTerrain.SampleHeight(newPos);
+
+            transform.position = newPos;
+        }
+    }
+
+    public void MoveTo(Vector3 _objective)
+    {
+        hasObjective = true;
+        objective = _objective;
+    }
+
+    public void StopMove()
+    {
+        hasObjective = false;
+    }
+
+    public virtual void AttackStructure(float strenght){ }
 }

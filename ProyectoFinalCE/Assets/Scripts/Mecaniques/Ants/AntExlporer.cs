@@ -80,7 +80,7 @@ public class AntExlporer : Ant
         });
     }
 
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);
     }
