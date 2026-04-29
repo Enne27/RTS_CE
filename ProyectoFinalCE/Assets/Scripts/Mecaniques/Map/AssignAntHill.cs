@@ -1,7 +1,5 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class AssignAntHill : MonoBehaviour
 {
@@ -20,12 +18,14 @@ public class AssignAntHill : MonoBehaviour
         {
             List<GameObject> antHillsNotOwned = new List<GameObject>(antHills);
             int i = Random.Range(0, antHillsNotOwned.Count);
+            i = 0;
 
             GameManager.instance.player.structures.Add(antHillsNotOwned[i]);
             GameManager.instance.player.structuresCount.Add(typeof(BuildingData), 1);
             antHillsNotOwned.RemoveAt(i);
 
             i = Random.Range(0, antHillsNotOwned.Count);
+            i = 1;
             GameManager.instance.playerIA.structures.Add(antHillsNotOwned[i]);
             GameManager.instance.playerIA.structuresCount.Add(typeof(BuildingData), 1);
             antHillsNotOwned.RemoveAt(i);
