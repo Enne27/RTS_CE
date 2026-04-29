@@ -66,6 +66,7 @@ public class PauseController : MonoBehaviour
         if (isPaused)
         {
             ViewManager.Hide<PauseMenuView>();
+            ViewManager.Hide<ControlsView>();
             ViewManager.Show<GameHUDView>();
             onUnPause?.Invoke();
         }
