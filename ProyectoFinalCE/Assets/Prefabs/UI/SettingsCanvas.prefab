@@ -429,7 +429,6 @@ GameObject:
   - component: {fileID: 1407830653986728554}
   - component: {fileID: 5018721804517172806}
   - component: {fileID: 5756215420447885121}
-  - component: {fileID: 8884867323285696236}
   m_Layer: 5
   m_Name: QualityDropdown
   m_TagString: Untagged
@@ -548,39 +547,25 @@ MonoBehaviour:
   m_MultiSelect: 0
   m_Options:
     m_Options:
-    - m_Text: DropdownQuality.VeryHigh
+    - m_Text: Muy Alta
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownQuality.High
+    - m_Text: Alta
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownQuality.Medium
+    - m_Text: Media
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownQuality.Low
+    - m_Text: Baja
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownQuality.Custom
+    - m_Text: Personalizada
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
---- !u!114 &8884867323285696236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 937966908239984360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4236466a84108104eb375228539722a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DropdownLocalized
-  dropdown: {fileID: 5756215420447885121}
-  tableReference: DropdownQuality
 --- !u!1 &1085893330181354603
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +733,6 @@ GameObject:
   - component: {fileID: 3862047705857360870}
   - component: {fileID: 5151302043460736646}
   - component: {fileID: 2283091207524231675}
-  - component: {fileID: 2753108378533741866}
   m_Layer: 5
   m_Name: WindowDropdown
   m_TagString: Untagged
@@ -867,33 +851,19 @@ MonoBehaviour:
   m_MultiSelect: 0
   m_Options:
     m_Options:
-    - m_Text: DropdownWindow.Window
+    - m_Text: Ventana
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownWindow.NoBorder
+    - m_Text: Sin Bordes
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: DropdownWindow.Fullscreen
+    - m_Text: Pantalla Completa
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
   m_AlphaFadeSpeed: 0.15
---- !u!114 &2753108378533741866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1193190169780715327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4236466a84108104eb375228539722a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DropdownLocalized
-  dropdown: {fileID: 2283091207524231675}
-  tableReference: DropdownWindow
 --- !u!1 &1249360107442481764
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,10 +1084,10 @@ MonoBehaviour:
     - m_Text: Castellano
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: "Catal\xE0"
+    - m_Text: Catalan
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
-    - m_Text: English
+    - m_Text: Ingles
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
@@ -1389,7 +1359,6 @@ GameObject:
   - component: {fileID: 405434352824031645}
   - component: {fileID: 389545893913309055}
   - component: {fileID: 3526290590594043114}
-  - component: {fileID: 4820232399743577450}
   m_Layer: 5
   m_Name: AdvancedQualitySettingsButton
   m_TagString: Untagged
@@ -1499,21 +1468,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &4820232399743577450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1831245931466975766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b4bec604d603aa4bb1e4db4ccf2ae80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIScaleOnHover
-  scaleFactor: 1.1
-  duration: 0.2
-  onHoverEmitter: {fileID: 0}
 --- !u!1 &1993415132069141909
 GameObject:
   m_ObjectHideFlags: 0
@@ -3195,7 +3149,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DropdownQuality.VeryHigh
+  m_text: Muy Alta
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_sharedMaterial: {fileID: 1973153549898254127, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
@@ -4944,7 +4898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8078432, g: 0.57254905, b: 0.33333334, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8544,7 +8498,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DropdownWindow.Window
+  m_text: Ventana
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_sharedMaterial: {fileID: 1973153549898254127, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
