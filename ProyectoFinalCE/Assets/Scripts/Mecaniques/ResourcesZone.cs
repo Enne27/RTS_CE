@@ -4,11 +4,15 @@ public class ResourcesZone : MonoBehaviour
 {
     #region VARIABLES
         Vector3 location;
+        GameHUDView hudView;
+
+
     #endregion
 
     private void Awake()
     {
         location = gameObject.transform.position;
+        hudView = FindFirstObjectByType<GameHUDView>();
     }
     private void OnTriggerEnter(Collider other)
     {

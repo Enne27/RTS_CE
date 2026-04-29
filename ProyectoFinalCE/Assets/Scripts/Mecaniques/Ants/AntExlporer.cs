@@ -9,7 +9,7 @@ public class AntExlporer : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     public Transform targetTransform;   
     private Vector3 targetPosition;
-    public Vector3 antHillPosition;
+    public Vector3 antHillPositionOwner;
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
@@ -23,7 +23,7 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
-        antHillPosition = GameManager.instance.player.structures[0].transform.position;
+        antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     public override void Attack(Ant target)
@@ -64,7 +64,7 @@ public class AntExlporer : Ant
         {
             food = UnityEngine.Random.Range(5, 11);
             MC = UnityEngine.Random.Range(1, 5);
-            UnitController.MoveTo(this, antHillPosition);
+            UnitController.MoveTo(this, antHillPositionOwner);
             Debug.Log("Finished Collecting");
         });
     }
@@ -72,8 +72,8 @@ public class AntExlporer : Ant
     {
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
-            //Anthill.resources.food.add(food);
-            //Anthill.resources.MC.add(MC);
+            GameManager.instance.player.inventory.AddFood(food);
+            GameManager.instance.player.inventory.AddMC(MC);
             food = 0;
             MC = 0;
             UnitController.MoveTo(this, asignedResourceZone.transform.position);

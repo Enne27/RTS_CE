@@ -14,13 +14,33 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float separationRadius = 2f;
+        float separationStrength = 3f;
+
         foreach (Ant ant in activeAnts)
         {
+            Vector3 separation = Vector3.zero;
+            foreach (Ant other in activeAnts)
+            {
+                if (ant == other) continue;
+                float dist = Vector3.Distance(ant.transform.position, other.transform.position);
+                if (dist < separationRadius && dist > 0.001f)
+                {
+                    Vector3 away = (ant.transform.position - other.transform.position).normalized;
+
+                    // Stronger when closer
+                    separation += away / dist;
+                }
+                separation *= separationStrength;
+
+            }
+
             Vector3 direction = (ant.objective - ant.transform.position).normalized;
-            Vector3 newPos = ant.transform.position + direction * ant.GetSpeed() * Time.fixedDeltaTime;
+            Vector3 finalDir = (direction + separation).normalized;
+            Vector3 newPos = ant.transform.position + finalDir * ant.GetSpeed() * Time.fixedDeltaTime;
             newPos.y = terrain.SampleHeight(newPos) + terrain.transform.position.y;
+            ant.transform.LookAt(direction);
             ant.transform.position = newPos;
-            if (ant.transform.position == ant.objective) activeAnts.Remove(ant);
 
             //Agregar simulacion de flocking con hormigas cercanas.
             //Agregar comparacion de objetivos entre las hormigas cercanas.
