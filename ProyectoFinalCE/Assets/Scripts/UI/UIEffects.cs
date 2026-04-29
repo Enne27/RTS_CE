@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -32,7 +32,8 @@ public class UIEffects : MonoBehaviour
     /// <param name="duration">Tiempo que dura el efecto Fade.</param>
     public void FadeInUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
-        StartCoroutine(FadeInCoroutine(objectCG, duration, onComplete));
+        // StartCoroutine(FadeInCoroutine(objectCG, duration, onComplete));
+        FadeUI(objectCG, 1f, duration, onComplete);
     }
     /// <summary>
     /// FadeOut del CanvasGroup.
@@ -41,10 +42,38 @@ public class UIEffects : MonoBehaviour
     /// <param name="duration"></param>
     public void FadeOutUIObject(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
-        StartCoroutine(FadeOutCoroutine(objectCG, duration, onComplete));
+        // StartCoroutine(FadeOutCoroutine(objectCG, duration, onComplete));
+        FadeUI(objectCG, 0f, duration, onComplete);
+    }
+
+    /// <summary>
+    /// Internamente hace los fades dependiendo de la intenciï¿½n.
+    /// </summary>
+    /// <param name="objectCG">Canvas group del objeto a Fade.</param>
+    /// <param name="targetAlpha">Alfa deseado para el cg</param>
+    /// <param name="duration">Duraciï¿½n del fade</param>
+    /// <param name="onComplete">Evento que sucede al completar el efecto.</param>
+    private void FadeUI(CanvasGroup objectCG, float targetAlpha, float duration, System.Action onComplete = null)
+    {
+        LeanTween.cancel(objectCG.gameObject);
+
+        // Que solo sea interactuable mientras es medio visible. (El nï¿½mero es decisiï¿½n de diseï¿½o.)
+        objectCG.interactable = targetAlpha > 0.5f;
+        objectCG.blocksRaycasts = targetAlpha > 0.5f;
+
+        LeanTween.value(objectCG.gameObject, objectCG.alpha, targetAlpha, duration)
+            .setOnUpdate((float val) => objectCG.alpha = val)
+            .setEase(LeanTweenType.linear)
+            .setIgnoreTimeScale(true)
+            .setOnComplete(() =>
+            {
+                objectCG.interactable = targetAlpha > 0.5f;
+                objectCG.blocksRaycasts = targetAlpha > 0.5f;
+                onComplete?.Invoke();
+            });
     }
     #region Coroutines
-    IEnumerator FadeInCoroutine(CanvasGroup objectCG, float duration, System.Action onComplete = null)
+    /*IEnumerator FadeInCoroutine(CanvasGroup objectCG, float duration, System.Action onComplete = null)
     {
         float elapsedTime = 0f;
 
@@ -72,7 +101,7 @@ public class UIEffects : MonoBehaviour
         }
         objectCG.alpha = 0f;
         onComplete?.Invoke();
-    }
+    }*/
     #endregion
     #endregion
 
@@ -81,6 +110,20 @@ public class UIEffects : MonoBehaviour
 
     #endregion
 
+    #region MOVEMENTS
+    public void SlideUI(RectTransform rect, Vector2 targetPosition, float duration, System.Action onComplete = null)
+    {
+        LeanTween.cancel(rect.gameObject);
+
+        LeanTween.value(rect.gameObject, rect.anchoredPosition, targetPosition, duration)
+            .setOnUpdate((Vector2 val) => rect.anchoredPosition = val)
+            .setEase(LeanTweenType.easeOutCubic)
+            .setIgnoreTimeScale(true)
+            .setOnComplete(() => onComplete?.Invoke());
+    }
+
+
+    #endregion
 
     #region SCALE
     /// <summary>
@@ -95,7 +138,7 @@ public class UIEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Devuelve la escala del objeto a su tamaño original.
+    /// Devuelve la escala del objeto a su tamaï¿½o original.
     /// </summary>
     public void RestartScale(GameObject gameObject, Vector3 originalScale, float duration)
     {
