@@ -29,7 +29,7 @@ public class PauseMenuView : View
         controlsButton.onClick.AddListener(() => 
         {
             //Hide();
-            //ViewManager.Show<ControlsView>();
+            ViewManager.Show<ControlsView>();
         });
 
         settingsButton.onClick.AddListener(() =>
@@ -38,11 +38,13 @@ public class PauseMenuView : View
             ViewManager.Show<SettingsView>();
         });
 
+        /* TBI
         saveButton.onClick.AddListener(() =>
         {
             //Hide();
             SaveSystem.SaveGame();
         });
+        */
 
         backButton.onClick.AddListener(() => 
         {
