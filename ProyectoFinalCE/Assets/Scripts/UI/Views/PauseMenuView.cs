@@ -29,7 +29,7 @@ public class PauseMenuView : View
         controlsButton.onClick.AddListener(() => 
         {
             //Hide();
-            ViewManager.Show<ControlsView>();
+            //ViewManager.Show<ControlsView>();
         });
 
         settingsButton.onClick.AddListener(() =>
