@@ -37,6 +37,14 @@ public class StatManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Guardar Stats
+    /// </summary>
+    public void SetStat(StatType type, float value)
+    {
+        stats[type] = value;
+    }
+
+    /// <summary>
     /// Modify a stat value
     /// </summary>
     public void ModifyStat(StatType type, float value)

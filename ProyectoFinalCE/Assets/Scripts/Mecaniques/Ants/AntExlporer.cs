@@ -10,7 +10,9 @@ public class AntExlporer : Ant
     public Transform targetTransform;   
     private Vector3 targetPosition;
     public Vector3 antHillPositionOwner;
-    private bool useTransformTarget;   
+    private bool useTransformTarget;
+
+    public GameObject asignedResourceZone;
     private void Awake()
     {
         HP = 15f;
@@ -21,7 +23,7 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
-        //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
+        antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     public override void Attack(Ant target)
@@ -56,20 +58,26 @@ public class AntExlporer : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void Collect(Vector3 target)
+    public void Collect()
     {
-
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
             food = UnityEngine.Random.Range(5, 11);
             MC = UnityEngine.Random.Range(1, 5);
-            //Move to anthill instruction
+            UnitController.MoveTo(this, antHillPositionOwner);
+            Debug.Log("Finished Collecting");
         });
-        //TimeManager.Instance.Register(3f,()=>Collect(target));
-        //food = UnityEngine.Random.Range(5, 11);
-        //MC = UnityEngine.Random.Range(1,5);
-        //TimeManager.Instance.Unregister(3f, () => Collect(target));
-        //Carry();
+    }
+    public void Deposit()
+    {
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            GameManager.instance.player.inventory.AddFood(food);
+            GameManager.instance.player.inventory.AddMC(MC);
+            food = 0;
+            MC = 0;
+            UnitController.MoveTo(this, asignedResourceZone.transform.position);
+        });
     }
 
     protected override void Die()
