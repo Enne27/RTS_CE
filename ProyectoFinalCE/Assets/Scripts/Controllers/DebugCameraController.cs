@@ -40,13 +40,13 @@ public class CameraController : MonoBehaviour
         switch (cameraState)
         {
             case CameraState.Inside:
-                OutsideCamera.SetActive(true);
+                //OutsideCamera.SetActive(true);
                 InsideCamera.SetActive(false);
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Outside:
                 InsideCamera.SetActive(true);
-                OutsideCamera.SetActive(false);
+                //OutsideCamera.SetActive(false);
                 cameraState = CameraState.Inside;
                 break;
         }
@@ -57,13 +57,13 @@ public class CameraController : MonoBehaviour
         switch (changeCameraState)
         {
             case CameraState.Outside:
-                OutsideCamera.SetActive(true);
+                //OutsideCamera.SetActive(true);
                 InsideCamera.SetActive(false);
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Inside:
                 InsideCamera.SetActive(true);
-                OutsideCamera.SetActive(false);
+                //OutsideCamera.SetActive(false);
                 cameraState = CameraState.Inside;
                 break;
         }

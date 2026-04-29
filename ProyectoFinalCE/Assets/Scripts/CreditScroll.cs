@@ -10,8 +10,18 @@ public class CreditScroll : MonoBehaviour
     float doubleSpeed;
     float initialSpeed;
 
-    [SerializeField, Tooltip("Distancia a la que quiero que se active el botón cuando los créditos lleguen.")] float yDistance;
-    [SerializeField, Tooltip("Vista de la escena.")] CreditsView view; 
+    [SerializeField, Tooltip("Vista de la escena.")] CreditsView view;
+
+    [Header("Effects values")]
+
+    [Tooltip("Distancia a la que quiero que se active el botón cuando los créditos lleguen.")] 
+    [SerializeField]float yDistance;
+
+    Vector2 lastMousePos;
+    [SerializeField] float hideDelay = 2f;
+    bool buttonsShown = false;
+    bool hideTimerRunning = false;
+    bool showTimerRunning = false;
 
     #endregion
 
@@ -19,6 +29,8 @@ public class CreditScroll : MonoBehaviour
     {
         doubleSpeed = scrollSpeed * multiplyFastSpeed;
         initialSpeed = scrollSpeed;
+
+        lastMousePos = Mouse.current.position.ReadValue();
     }
 
     void Update()
@@ -30,16 +42,45 @@ public class CreditScroll : MonoBehaviour
         Mouse.current.rightButton.isPressed || Mouse.current.middleButton.isPressed)
         {
             scrollSpeed = doubleSpeed;
-            Debug.Log("pulsarcosa");
         }
-        else
+        else scrollSpeed = initialSpeed;
+
+        bool mouseMoved = Mouse.current.position.ReadValue() != lastMousePos;
+
+        if (transform.position.y >= yDistance || mouseMoved)
         {
-            scrollSpeed = initialSpeed;
+            ShowButtons();
         }
 
-        if (transform.position.y >= yDistance)
+        if(!hideTimerRunning)
+            return;
+        else HideButtons();
+
+        lastMousePos = Mouse.current.position.ReadValue();
+    }
+
+    private void HideButtons() 
+    { 
+        TimeManager.Instance.OneShotTimer(hideDelay, ()=>
         {
-            view.ActivateButtons();
+            buttonsShown = false;
+            hideTimerRunning = false;
+            view.ActivateButtons(false);
+         });
+    }
+    private void ShowButtons()
+    {
+        if (!buttonsShown && (!showTimerRunning || !hideTimerRunning))
+        {
+            showTimerRunning = true;
+
+            TimeManager.Instance.OneShotTimer(hideDelay, () => 
+            {
+                buttonsShown = true;
+                hideTimerRunning = true;
+                showTimerRunning = false;
+                view.ActivateButtons(true);
+            });
         }
     }
 }

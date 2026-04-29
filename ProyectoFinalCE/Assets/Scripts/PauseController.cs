@@ -8,11 +8,11 @@ public class PauseController : MonoBehaviour
     static PauseController pauseController;
 
     [Tooltip("Esto son el conjunto de inputs del juego")]
-    [SerializeField] InputActionAsset inputActions;
+    [SerializeField] public InputActionAsset inputActions;
 
     private InputAction escapeToPause;
     public bool pausableMoment;
-    private bool isPaused;
+    public bool isPaused;
 
     [HideInInspector] public UnityEvent onPause;
     [HideInInspector] public UnityEvent onUnPause;
@@ -37,7 +37,7 @@ public class PauseController : MonoBehaviour
     }
     #endregion
 
-    private void Awake()
+    private void OnEnable()
     {
         escapeToPause = inputActions.FindActionMap("General").FindAction("Pause");
         escapeToPause.Enable();
@@ -46,7 +46,7 @@ public class PauseController : MonoBehaviour
 
     void Update()
     {
-        if (escapeToPause.triggered)
+        if ( escapeToPause.WasPerformedThisFrame())
         {
             if (pausableMoment)
                 TogglePause();
@@ -60,7 +60,7 @@ public class PauseController : MonoBehaviour
     public void TogglePause()
     {
         // Verifica si la vista de pausa está activa
-        isPaused = ViewManager.IsViewActive<PauseMenuView>();
+        isPaused = ViewManager.IsViewActive<PauseMenuView>() || ViewManager.IsViewActive<ControlsView>();
         //Debug.Log(isPaused);
 
         if (isPaused)

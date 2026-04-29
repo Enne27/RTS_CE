@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 public class CameraMovement2D : MonoBehaviour
 {
     #region Variables
-    private InputSystem_Actions cameraActions;
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap cameraActions;
     private InputAction movement;
 
     [SerializeField] private CinemachineCamera virtualCamera;
@@ -43,21 +44,19 @@ public class CameraMovement2D : MonoBehaviour
     [SerializeField] private float focusSpeed = 10f;
 
     private GameObject targuetFocus;
+
+    private bool cameraCanMove = false;
     #endregion
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
+        cameraActions = inputAsset.FindActionMap("General");
         mainCamera = Camera.main;
     }
 
     private void OnEnable()
     {
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
-
-        targetZoom = virtualCamera.Lens.OrthographicSize;
+        EnableCameraInput();
     }
 
     private void Start()
@@ -65,48 +64,38 @@ public class CameraMovement2D : MonoBehaviour
         cameraInitialPosition = virtualCamera.transform.position;
     }
 
-    private void OnDisable()
-    {
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
-    }
-
     private void Update()
     {
-        if (HasCameraInput())
+        if (cameraCanMove) 
         {
-            targuetFocus = null;
-            isFocusing = false;
-        }
-
-        HandleKeyboardMovement();
-        HandleEdgeMovement();
-        HandleDrag();
-
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) {}
-
-        ApplyMovement();
-        ApplyZoom();
-        ClampPosition();
-
-        if (isFocusing)
-        {
-            Vector3 direction = focusTarget - transform.position;
-
-            if (direction.magnitude < 0.01f)
+            if (HasCameraInput())
             {
-                transform.position = focusTarget;
+                targuetFocus = null;
                 isFocusing = false;
             }
-            else
-            {
-                targetPosition += direction * focusSpeed * Time.deltaTime;
-            }
-        }
 
-        if (targuetFocus == null)
-        {
-           ViewManager.Show<GameHUDView>();
+            HandleKeyboardMovement();
+            HandleEdgeMovement();
+            HandleDrag();
+
+            ApplyMovement();
+            ApplyZoom();
+            ClampPosition();
+
+            if (isFocusing)
+            {
+                Vector3 direction = focusTarget - transform.position;
+
+                if (direction.magnitude < 0.01f)
+                {
+                    transform.position = focusTarget;
+                    isFocusing = false;
+                }
+                else
+                {
+                    targetPosition += direction * focusSpeed * Time.deltaTime;
+                }
+            }
         }
     }
 
@@ -281,6 +270,26 @@ public class CameraMovement2D : MonoBehaviour
         targetZoom = minZoom;
         isFocusing = true;
         targuetFocus = building.gameObject;
+    }
+    #endregion
+
+    #region Inputs
+    public void EnableCameraInput()
+    {
+        cameraCanMove = true;
+
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
+
+        targetZoom = virtualCamera.Lens.OrthographicSize;
+    }
+
+    public void DisableCameraInput()
+    {
+        cameraCanMove = false;
+
+        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
     #endregion
 }

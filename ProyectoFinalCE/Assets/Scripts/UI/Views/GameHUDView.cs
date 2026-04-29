@@ -13,8 +13,10 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI mcText; // Materiales de construcción
     [SerializeField] TextMeshProUGUI antWorkersText;
 
+
     [Header("Buttons")]
     [SerializeField] Button constructionButton;
+    [SerializeField] Button generalInfoButton;
 
     [Header("ANTS")]
     [SerializeField] Button fakeAntsDropwdownButton;
@@ -28,6 +30,9 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI acidAntsText;
     [SerializeField] TextMeshProUGUI crazyAntsText;
     [SerializeField] TextMeshProUGUI kamikazeAntsText;
+
+    [Header("General Info Texts")]
+    [SerializeField] TextMeshProUGUI currentEraText;
     #endregion
 
     public override void Initialize()
@@ -45,11 +50,16 @@ public class GameHUDView : View
         crazyAntsText.text = "0";
         kamikazeAntsText.text = "0";
 
+        currentEraText.text = GameManager.instance.player.currentEra.ToString();
+
         //if(constructionButton != null)
         //  constructionButton.onClick.AddListener();
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
+        
+        if (generalInfoButton != null)
+            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
     }
 
     private void ShowAntsUI()
