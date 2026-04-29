@@ -12,12 +12,17 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
-    
+
     //protected virtual void Move() { }
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
     //protected virtual void SpawnAnt() { }
 
+
+    public float GetCurrentHP()
+    {
+        return HP;
+    }
     protected virtual void Die() { }
 
     public float GetStrength()
@@ -47,11 +52,7 @@ public abstract class Ant : MonoBehaviour
         if (hasObjective)
         {
             Vector3 direction = (objective - transform.position).normalized;
-
             Vector3 newPos = transform.position + direction * speed * Time.fixedDeltaTime;
-
-            //newPos.y = Terrain.activeTerrain.SampleHeight(newPos);
-
             transform.position = newPos;
         }
     }

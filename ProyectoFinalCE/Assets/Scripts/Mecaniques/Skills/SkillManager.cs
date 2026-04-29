@@ -36,6 +36,15 @@ public class SkillManager : MonoBehaviour
     {
         return playerSkills.IsUnlocked(skill);
     }
+
+    /// <summary>
+    /// Recoger todas las skills
+    /// </summary>
+    public List<SkillData> GetAllSkills()
+    {
+        return allSkills;
+    }
+
     /// <summary>
     /// Revisa si una skill se puede desbloquear
     /// </summary>
@@ -67,6 +76,14 @@ public class SkillManager : MonoBehaviour
         ApplyEffects(skill);
         OnSkillUnlocked?.Invoke(skill);
         Debug.Log("Unlocked skill: " + skill.SkillName);
+    }
+
+    public void ForceUnlockSkill(SkillData skill)
+    {
+        if (!playerSkills.IsUnlocked(skill))
+        {
+            playerSkills.UnlockSkill(skill);
+        }
     }
 
     /// <summary>

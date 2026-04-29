@@ -19,6 +19,8 @@ public class Building : MonoBehaviour
     private float lastClickTime;
     private const float doubleClickThreshold = 0.3f;
 
+    public string buildingID;
+
     private void Awake()
     {
         cameraMovement = FindFirstObjectByType<CameraMovement2D>();
@@ -27,6 +29,9 @@ public class Building : MonoBehaviour
     public void Setup(BuildingData data, float rotation)
     {
         this.data = data;
+
+        buildingID = data.name;
+
         model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
@@ -112,5 +117,5 @@ public class Building : MonoBehaviour
         if (cameraMinimap != null)
             cameraMinimap.SetRenderingEnabled(true);
     }
-
+    
 }

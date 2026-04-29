@@ -49,7 +49,7 @@ public static class SaveConverter
         {
             list.Add(new StructureSaveData
             {
-                type = b.name,
+                type = b.GetComponent<Building>().buildingID,
                 position = b.transform.position,
                 level = 1
             });
@@ -68,7 +68,7 @@ public static class SaveConverter
             {
                 type = ant.GetType().Name,
                 position = ant.transform.position,
-                hp = 100f // ideal: getter real
+                hp = ant.GetCurrentHP(),
             });
         }
 
@@ -78,17 +78,50 @@ public static class SaveConverter
     // Placeholder stats/skills
     public static StatsSaveData GetStats()
     {
-        return new StatsSaveData
+        var data = new StatsSaveData
         {
             stats = new List<StatEntry>()
         };
+
+        if (StatManager.Instance == null)
+        {
+            Debug.LogWarning("StatManager not found when saving");
+            return data;
+        }
+
+        foreach (StatType type in System.Enum.GetValues(typeof(StatType)))
+        {
+            data.stats.Add(new StatEntry
+            {
+                type = type,
+                value = StatManager.Instance.GetStat(type)
+            });
+}
+
+        return data;
     }
 
     public static SkillsSaveData GetSkills()
     {
-        return new SkillsSaveData
+        var data = new SkillsSaveData
         {
             unlockedSkills = new List<string>()
         };
+
+        if (SkillManager.Instance == null)
+        {
+            Debug.LogWarning("SkillManager not found when saving");
+            return data;
+        }
+
+        foreach (var skill in SkillManager.Instance.GetAllSkills())
+        {
+            if (SkillManager.Instance.IsSkillUnlocked(skill))
+            {
+                data.unlockedSkills.Add(skill.SkillName);
+            }
+        }
+
+        return data;
     }
 }
