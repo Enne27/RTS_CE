@@ -94,7 +94,6 @@ public class MoundFunction : StructuresPlayer
             }
 
         }
-        else Debug.Log("Not a explorer.");
     }
 
 

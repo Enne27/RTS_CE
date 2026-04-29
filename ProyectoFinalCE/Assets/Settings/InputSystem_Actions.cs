@@ -1251,6 +1251,94 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Gameplay"",
+            ""id"": ""9b4fab04-f34e-4e0f-b3f2-e7435266fc79"",
+            ""actions"": [
+                {
+                    ""name"": ""switchMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""40404235-9bd5-4dd7-b257-f80e8209f494"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""leftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee0ac86f-4bfe-4921-9058-c61cbdc61fe0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""rightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""e119032f-0219-4cf1-9968-65afa68a9c84"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""mousePositionAction"",
+                    ""type"": ""Value"",
+                    ""id"": ""d562eda0-68db-4a6a-8ace-93203dec3591"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""21aeef66-7d12-4a79-b93b-2f2db099e11d"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""switchMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6d2b11f-b626-4c20-bc19-006d582ba47e"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""leftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8819c815-f4ab-4565-8ec5-511e59043301"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""rightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f1b1fba4-0523-4c6f-8f3d-6a36b2e7824f"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""mousePositionAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1346,6 +1434,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_General_RotateCamera = m_General.FindAction("RotateCamera", throwIfNotFound: true);
         m_General_Movement = m_General.FindAction("Movement", throwIfNotFound: true);
         m_General_NextDialogueLine = m_General.FindAction("NextDialogueLine", throwIfNotFound: true);
+        // Gameplay
+        m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
+        m_Gameplay_switchMode = m_Gameplay.FindAction("switchMode", throwIfNotFound: true);
+        m_Gameplay_leftClick = m_Gameplay.FindAction("leftClick", throwIfNotFound: true);
+        m_Gameplay_rightClick = m_Gameplay.FindAction("rightClick", throwIfNotFound: true);
+        m_Gameplay_mousePositionAction = m_Gameplay.FindAction("mousePositionAction", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1353,6 +1447,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_General.enabled, "This will cause a leak and performance issues, InputSystem_Actions.General.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Gameplay.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Gameplay.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1943,6 +2038,135 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="GeneralActions" /> instance referencing this action map.
     /// </summary>
     public GeneralActions @General => new GeneralActions(this);
+
+    // Gameplay
+    private readonly InputActionMap m_Gameplay;
+    private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
+    private readonly InputAction m_Gameplay_switchMode;
+    private readonly InputAction m_Gameplay_leftClick;
+    private readonly InputAction m_Gameplay_rightClick;
+    private readonly InputAction m_Gameplay_mousePositionAction;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Gameplay".
+    /// </summary>
+    public struct GameplayActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public GameplayActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/switchMode".
+        /// </summary>
+        public InputAction @switchMode => m_Wrapper.m_Gameplay_switchMode;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/leftClick".
+        /// </summary>
+        public InputAction @leftClick => m_Wrapper.m_Gameplay_leftClick;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/rightClick".
+        /// </summary>
+        public InputAction @rightClick => m_Wrapper.m_Gameplay_rightClick;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/mousePositionAction".
+        /// </summary>
+        public InputAction @mousePositionAction => m_Wrapper.m_Gameplay_mousePositionAction;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="GameplayActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(GameplayActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="GameplayActions" />
+        public void AddCallbacks(IGameplayActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GameplayActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GameplayActionsCallbackInterfaces.Add(instance);
+            @switchMode.started += instance.OnSwitchMode;
+            @switchMode.performed += instance.OnSwitchMode;
+            @switchMode.canceled += instance.OnSwitchMode;
+            @leftClick.started += instance.OnLeftClick;
+            @leftClick.performed += instance.OnLeftClick;
+            @leftClick.canceled += instance.OnLeftClick;
+            @rightClick.started += instance.OnRightClick;
+            @rightClick.performed += instance.OnRightClick;
+            @rightClick.canceled += instance.OnRightClick;
+            @mousePositionAction.started += instance.OnMousePositionAction;
+            @mousePositionAction.performed += instance.OnMousePositionAction;
+            @mousePositionAction.canceled += instance.OnMousePositionAction;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="GameplayActions" />
+        private void UnregisterCallbacks(IGameplayActions instance)
+        {
+            @switchMode.started -= instance.OnSwitchMode;
+            @switchMode.performed -= instance.OnSwitchMode;
+            @switchMode.canceled -= instance.OnSwitchMode;
+            @leftClick.started -= instance.OnLeftClick;
+            @leftClick.performed -= instance.OnLeftClick;
+            @leftClick.canceled -= instance.OnLeftClick;
+            @rightClick.started -= instance.OnRightClick;
+            @rightClick.performed -= instance.OnRightClick;
+            @rightClick.canceled -= instance.OnRightClick;
+            @mousePositionAction.started -= instance.OnMousePositionAction;
+            @mousePositionAction.performed -= instance.OnMousePositionAction;
+            @mousePositionAction.canceled -= instance.OnMousePositionAction;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />.
+        /// </summary>
+        /// <seealso cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />
+        public void RemoveCallbacks(IGameplayActions instance)
+        {
+            if (m_Wrapper.m_GameplayActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="GameplayActions.AddCallbacks(IGameplayActions)" />
+        /// <seealso cref="GameplayActions.RemoveCallbacks(IGameplayActions)" />
+        /// <seealso cref="GameplayActions.UnregisterCallbacks(IGameplayActions)" />
+        public void SetCallbacks(IGameplayActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GameplayActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GameplayActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="GameplayActions" /> instance referencing this action map.
+    /// </summary>
+    public GameplayActions @Gameplay => new GameplayActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2199,5 +2423,41 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNextDialogueLine(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Gameplay" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="GameplayActions.AddCallbacks(IGameplayActions)" />
+    /// <seealso cref="GameplayActions.RemoveCallbacks(IGameplayActions)" />
+    public interface IGameplayActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "switchMode" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitchMode(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "leftClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "rightClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "mousePositionAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMousePositionAction(InputAction.CallbackContext context);
     }
 }

@@ -107,7 +107,8 @@ public class BroodChamberFunction : StructuresPlayer
                 else
                     GameManager.instance.player.inventory.workerAnts++;
                 if (antType == ANT_TYPES.EXPLORER)
-                    newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
+                    //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
+                    newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
 
                 if (gameHUDView != null)
                     gameHUDView.UpdateAntText(antType, 1);
