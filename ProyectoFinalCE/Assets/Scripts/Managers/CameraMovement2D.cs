@@ -46,6 +46,7 @@ public class CameraMovement2D : MonoBehaviour
     private GameObject targuetFocus;
 
     private bool hadFocusLastFrame = false;
+    private bool cameraCanMove = false;
     #endregion
 
     private void Awake()
@@ -56,11 +57,7 @@ public class CameraMovement2D : MonoBehaviour
 
     private void OnEnable()
     {
-        movement = cameraActions.FindAction("Movement");
-        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
-        cameraActions.Enable();
-
-        targetZoom = virtualCamera.Lens.OrthographicSize;
+        EnableCameraInput();
     }
 
     private void Start()
@@ -73,31 +70,35 @@ public class CameraMovement2D : MonoBehaviour
         bool hasFocusNow = targuetFocus != null;
 
         if (HasCameraInput())
+        if (cameraCanMove) 
         {
-            targuetFocus = null;
-            isFocusing = false;
-        }
-
-        HandleKeyboardMovement();
-        HandleEdgeMovement();
-        HandleDrag();
-
-        ApplyMovement();
-        ApplyZoom();
-        ClampPosition();
-
-        if (isFocusing)
-        {
-            Vector3 direction = focusTarget - transform.position;
-
-            if (direction.magnitude < 0.01f)
+            if (HasCameraInput())
             {
-                transform.position = focusTarget;
+                targuetFocus = null;
                 isFocusing = false;
             }
-            else
+
+            HandleKeyboardMovement();
+            HandleEdgeMovement();
+            HandleDrag();
+
+            ApplyMovement();
+            ApplyZoom();
+            ClampPosition();
+
+            if (isFocusing)
             {
-                targetPosition += direction * focusSpeed * Time.deltaTime;
+                Vector3 direction = focusTarget - transform.position;
+
+                if (direction.magnitude < 0.01f)
+                {
+                    transform.position = focusTarget;
+                    isFocusing = false;
+                }
+                else
+                {
+                    targetPosition += direction * focusSpeed * Time.deltaTime;
+                }
             }
         }
 
@@ -283,5 +284,23 @@ public class CameraMovement2D : MonoBehaviour
     }
     #endregion
 
-    
+    #region Inputs
+    public void EnableCameraInput()
+    {
+        cameraCanMove = true;
+
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
+
+        targetZoom = virtualCamera.Lens.OrthographicSize;
+    }
+
+    public void DisableCameraInput()
+    {
+        cameraCanMove = false;
+
+        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
+    }
+    #endregion
 }

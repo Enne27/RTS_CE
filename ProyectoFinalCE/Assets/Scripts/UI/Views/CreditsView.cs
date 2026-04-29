@@ -22,9 +22,9 @@ public class CreditsView : View
         });
     }
 
-    public void ActivateButtons()
+    public void ActivateButtons(bool activate)
     {
-        restartButton.gameObject.SetActive(true);
-        exitButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(activate);
+        exitButton.gameObject.SetActive(activate);
     }
 }

@@ -11,6 +11,11 @@ public class PauseMenuView : View
     [SerializeField] Button controlsButton;
     [SerializeField] Button saveButton;
     [SerializeField] Button backButton;
+
+    [Header("Cameras")]
+    [SerializeField] CameraMovement cameraMovement;
+    [SerializeField] CameraMovement2D cameraMovementNest;
+
     #endregion
     public override void Initialize()
     {
@@ -24,7 +29,7 @@ public class PauseMenuView : View
         controlsButton.onClick.AddListener(() => 
         {
             //Hide();
-            //ViewManager.Show<>();
+            ViewManager.Show<ControlsView>();
         });
 
         settingsButton.onClick.AddListener(() =>
@@ -50,12 +55,20 @@ public class PauseMenuView : View
     public override void Show()
     {
         base.Show();
-        //Time.timeScale = 0;
+        cameraMovement?.DisableCameraInput();
+
+        if (cameraMovementNest.gameObject.activeInHierarchy)
+            cameraMovementNest?.DisableCameraInput();
+       // Time.timeScale = 0;
     }
 
     public override void Hide()
     {
         base.Hide();
         //Time.timeScale = 1;
+        cameraMovement?.EnableCameraInput();
+
+        if (cameraMovementNest.gameObject.activeInHierarchy)
+            cameraMovementNest?.EnableCameraInput();
     }
 }
