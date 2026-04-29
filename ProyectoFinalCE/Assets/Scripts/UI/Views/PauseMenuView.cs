@@ -13,6 +13,7 @@ public class PauseMenuView : View
 
     [Header("Cameras")]
     [SerializeField] CameraMovement cameraMovement;
+    [SerializeField] CameraMovement2D cameraMovementNest;
 
     #endregion
     public override void Initialize()
@@ -48,6 +49,9 @@ public class PauseMenuView : View
     {
         base.Show();
         cameraMovement?.DisableCameraInput();
+
+        if (cameraMovementNest.gameObject.activeInHierarchy)
+            cameraMovementNest?.DisableCameraInput();
        // Time.timeScale = 0;
     }
 
@@ -56,5 +60,8 @@ public class PauseMenuView : View
         base.Hide();
         //Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
+
+        if (cameraMovementNest.gameObject.activeInHierarchy)
+            cameraMovementNest?.EnableCameraInput();
     }
 }

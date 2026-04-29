@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 152451461394730725}
   - component: {fileID: 6712980488638332563}
   - component: {fileID: 8067997182217549965}
-  - component: {fileID: 8769178818683209455}
+  - component: {fileID: 8028176520709065962}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8769178818683209455
+--- !u!114 &8028176520709065962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ControlsView
   guidComponent: {fileID: 779486344521522986}
   object_cg: {fileID: 1968630484592955754}
-  backButton: {fileID: 8769178818683209455}
+  backButton: {fileID: 8028176520709065962}
   effectTime: 1
   panel: {fileID: 4922221771909228915}
 --- !u!114 &1795045318795304693
@@ -373,14 +373,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1816124347255389927}
-  - {fileID: 152451461394730725}
   - {fileID: 1541496051267427136}
+  - {fileID: 152451461394730725}
   m_Father: {fileID: 5973460983920434912}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -27.7232, y: 0}
-  m_SizeDelta: {x: 371.5747, y: 372.9742}
+  m_AnchoredPosition: {x: -33.6341, y: 0.7259}
+  m_SizeDelta: {x: 359.7528, y: 374.4261}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4929988286098562715
 CanvasRenderer:
@@ -404,7 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5882353}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

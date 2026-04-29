@@ -60,8 +60,8 @@ public class PauseController : MonoBehaviour
     public void TogglePause()
     {
         // Verifica si la vista de pausa está activa
-        isPaused = ViewManager.IsViewActive<PauseMenuView>();
-        Debug.Log(isPaused);
+        isPaused = ViewManager.IsViewActive<PauseMenuView>() || ViewManager.IsViewActive<ControlsView>();
+        //Debug.Log(isPaused);
 
         if (isPaused)
         {

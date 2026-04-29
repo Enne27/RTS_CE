@@ -64,21 +64,12 @@ public class CameraMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(transform);
-
-        lastPosition = transform.position;
-
-        movement = cameraActions.FindAction("Movement");
-        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
-        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
-        cameraActions.Enable();
+        EnableCameraInput();
     }
 
     private void OnDisable()
     {
-        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
-        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
+        DisableCameraInput();
     }
 
     private void Update()
@@ -236,19 +227,18 @@ public class CameraMovement : MonoBehaviour
 
         lastPosition = transform.position;
 
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
     }
 
     public void DisableCameraInput()
     {
         cameraCanMove = false;
 
-        cameraActions.CameraControls.RotateCamera.performed -= RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
     #endregion
     private Vector3 GetCameraRigForward()
