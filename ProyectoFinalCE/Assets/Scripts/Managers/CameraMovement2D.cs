@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 public class CameraMovement2D : MonoBehaviour
 {
     #region Variables
-    private InputSystem_Actions cameraActions;
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap cameraActions;
     private InputAction movement;
 
     [SerializeField] private CinemachineCamera virtualCamera;
@@ -47,15 +48,15 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
+        cameraActions = inputAsset.FindActionMap("General");
         mainCamera = Camera.main;
     }
 
     private void OnEnable()
     {
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
 
         targetZoom = virtualCamera.Lens.OrthographicSize;
     }
@@ -63,12 +64,6 @@ public class CameraMovement2D : MonoBehaviour
     private void Start()
     {
         cameraInitialPosition = virtualCamera.transform.position;
-    }
-
-    private void OnDisable()
-    {
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
     }
 
     private void Update()
@@ -82,8 +77,6 @@ public class CameraMovement2D : MonoBehaviour
         HandleKeyboardMovement();
         HandleEdgeMovement();
         HandleDrag();
-
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape)) {}
 
         ApplyMovement();
         ApplyZoom();
@@ -104,10 +97,7 @@ public class CameraMovement2D : MonoBehaviour
             }
         }
 
-        if (targuetFocus == null)
-        {
-           ViewManager.Show<GameHUDView>();
-        }
+        
     }
 
     #region Input Detection
@@ -283,4 +273,6 @@ public class CameraMovement2D : MonoBehaviour
         targuetFocus = building.gameObject;
     }
     #endregion
+
+    
 }

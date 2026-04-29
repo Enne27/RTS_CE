@@ -26,6 +26,11 @@ public class SettingsView : View
     {
         base.Show();
         UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
+        
+        SettingsManager.instance.LoadSettings();
+        SettingsManager.instance.UpdateResolutionDropdownLabels();
+        SettingsManager.instance.ApplySettingsInternal();
+        SettingsManager.instance.SyncUI();
     }
 
     public override void Hide()
