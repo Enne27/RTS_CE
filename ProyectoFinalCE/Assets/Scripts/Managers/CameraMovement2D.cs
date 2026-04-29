@@ -44,6 +44,8 @@ public class CameraMovement2D : MonoBehaviour
     [SerializeField] private float focusSpeed = 10f;
 
     private GameObject targuetFocus;
+
+    private bool hadFocusLastFrame = false;
     #endregion
 
     private void Awake()
@@ -68,6 +70,8 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Update()
     {
+        bool hasFocusNow = targuetFocus != null;
+
         if (HasCameraInput())
         {
             targuetFocus = null;
@@ -97,7 +101,12 @@ public class CameraMovement2D : MonoBehaviour
             }
         }
 
-        
+        if (hadFocusLastFrame && !hasFocusNow)
+        {
+            ViewManager.Show<GameHUDView>();
+        }
+
+        hadFocusLastFrame = hasFocusNow;
     }
 
     #region Input Detection
