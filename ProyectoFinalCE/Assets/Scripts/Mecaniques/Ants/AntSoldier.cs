@@ -57,10 +57,5 @@ internal class AntSoldier : Ant
         gameObject.SetActive(false);    
     }
 
-    public override void AttackStructure(float strenght)
-    {
-        Structure targetStructure;
-        //targetStructure = new Structure();
-        //targetStructure.
-    }
+ 
 }

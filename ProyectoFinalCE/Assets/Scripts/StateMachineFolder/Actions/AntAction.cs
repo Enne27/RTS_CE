@@ -21,17 +21,5 @@ public class AntScript : ScriptableAction
             Ant ant = this.GetComponent<Ant>();
             ant.Die();
       }
-
-      void MoveTo(Vector3 _objective)
-      {
-            Ant ant = this.GetComponent<Ant>();
-            ant.MoveTo(_objective);
-      }
-        
-      void AttackStructure(float strength)
-      {
-            Ant ant = this.GetComponent<Ant>();
-            ant.AttackStructure(strength);
-      }
     }
 }
