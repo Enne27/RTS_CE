@@ -57,5 +57,6 @@ public class MainMenuView : View
     {
         base.Hide();
         //UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+
     }
 }

@@ -16,15 +16,19 @@ public class SettingsView : View
     {
         backButton.onClick.AddListener(()=> ViewManager.ShowLastView());
 
+        advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
         //advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsControlsView>());
-        advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
     }
 
     public override void Show()
     {
         base.Show();
+        SettingsManager.instance.LoadSettings();
+        SettingsManager.instance.UpdateResolutionDropdownLabels();
+        SettingsManager.instance.ApplySettingsInternal();
+        SettingsManager.instance.SyncUI();
         //UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
     }
 
