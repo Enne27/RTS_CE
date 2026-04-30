@@ -6,7 +6,7 @@ public class AntKamikaze : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private float maxHP;
     private Ant target;
-    int[] breedingCost = new int[] { 7, 18 };
+    //int[] breedingCost = new int[] { 7, 18 };
     private void Awake()
     {
         HP = 11f;

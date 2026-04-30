@@ -41,6 +41,9 @@ public class AntCreation : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.player.ants.Clear();
+        GameManager.instance.playerIA.ants.Clear();
+
         // Creación inicial de hormigas, tanto del jugador como de la IA.
         SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true);
         SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true);

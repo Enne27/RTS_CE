@@ -33,11 +33,16 @@ public class TutorialControl : MonoBehaviour
         tutorialShowed = GameManager.instance.tutorialShown;
         if (tutorialShowed == false)
         {
+            ViewManager.Show<DialogueView>();
             PauseController.instance.pausableMoment = false;
 
             DialogueManager.instance.startLine.AddListener(TutorialController);
             dialogueView.ShowDialogue(TABLE_DIALOGUES, KEY_DIALOGUES_TUTORIAL);
             DialogueManager.instance.endDialogue.AddListener(EndTutorial);
+        }
+        else
+        {
+            ViewManager.Show<GameHUDView>();
         }
     }
 
