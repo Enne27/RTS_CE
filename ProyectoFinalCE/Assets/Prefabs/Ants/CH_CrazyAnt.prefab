@@ -59,5 +59,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 554589838966526822}
   m_SourcePrefab: {fileID: 100100000, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+--- !u!1 &4045489679824311756 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+  m_PrefabInstance: {fileID: 3811486469225375901}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &554589838966526822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4045489679824311756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b66b93cbaf3cbe140b1c229b6da0bd4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AntCrazy
+  breedingCost: 0b0000000c000000
+  flowFieldInxex: 0
+  currentVelocity: {x: 0, y: 0, z: 0}
+  objective: {x: 0, y: 0, z: 0}
