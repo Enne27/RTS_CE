@@ -178,6 +178,7 @@ public class TroopsSelection : MonoBehaviour
         {
             SingleClickSelection();
         }
+        if (selectionArea != null) 
         selectionArea.sizeDelta = Vector2.zero;
         isDragging = false;
     }

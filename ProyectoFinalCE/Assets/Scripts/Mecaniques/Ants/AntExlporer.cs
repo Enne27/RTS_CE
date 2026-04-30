@@ -103,6 +103,7 @@ public class AntExlporer : Ant
             inventory.AddMC(MC);
             food = 0;
             MC = 0;
+            if (asignedResourceZone != null)
             UnitController.MoveTo(this, asignedResourceZone.transform.position);
         });
     }

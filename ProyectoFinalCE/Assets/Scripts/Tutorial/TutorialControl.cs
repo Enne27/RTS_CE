@@ -30,7 +30,8 @@ public class TutorialControl : MonoBehaviour
 
     void Awake()
     {
-        tutorialShowed = GameManager.instance.tutorialShown;
+        //Commented for beta purposes only
+        //tutorialShowed = GameManager.instance.tutorialShown;
         if (tutorialShowed == false)
         {
             ViewManager.Show<DialogueView>();
@@ -98,7 +99,8 @@ public class TutorialControl : MonoBehaviour
         ViewManager.Show<GameHUDView>(false);
         PauseController.instance.pausableMoment = true;
         tutorialShowed = true;
-        GameManager.instance.tutorialShown = tutorialShowed;
+        //Commented for beta purposes only
+        //GameManager.instance.tutorialShown = tutorialShowed;
         cameraMoveScript.EnableCameraInput();
     }
 
