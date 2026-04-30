@@ -4,7 +4,6 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Localization.Tables;
 
 public class DropdownLocalized : MonoBehaviour
 {
@@ -32,7 +31,7 @@ public class DropdownLocalized : MonoBehaviour
         LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 
-    void OnLocaleChanged(UnityEngine.Localization.Locale locale)
+    void OnLocaleChanged(Locale locale)
     {
         StartCoroutine(UpdateDropdown());
     }
