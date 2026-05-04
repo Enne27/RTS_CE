@@ -14,7 +14,7 @@ public class SettingsView : View
     #endregion
     public override void Initialize()
     {
-        backButton.onClick.AddListener(()=> ViewManager.ShowLastView());
+        backButton.onClick.AddListener(()=> ViewManager.ShowLastView(0));
 
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
@@ -40,7 +40,7 @@ public class SettingsView : View
 
     public override void Hide()
     {
-        //base.Hide();
         UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+        base.Hide();
     }
 }
