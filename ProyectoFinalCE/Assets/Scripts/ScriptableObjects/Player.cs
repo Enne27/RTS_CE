@@ -16,6 +16,7 @@ public class Player
     public HIVE_ERAS currentEra;
     public Dictionary<Type, int> structuresCount;
     //public List<Structure> structures;
+    public List<GameObject> structures;
     public List<Ant> ants;
 
     public Player()
@@ -23,7 +24,8 @@ public class Player
         inventory = new Inventory();
         structuresCount = new Dictionary<Type, int>();
         //structures = new List<Structure>();
-        //ants = new List<Ant>();
+        structures = new List<GameObject>();
+        ants = new List<Ant>();
 
         /* TBI
         foreach (var type in TypeCache.GetTypesDerivedFrom<Structure>())

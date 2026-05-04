@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
@@ -5,6 +6,8 @@ using static UnityEngine.GraphicsBuffer;
 
 internal class AntSoldier : Ant
 {
+    //int[] breedingCost = { 9, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 25f;
@@ -14,18 +17,17 @@ internal class AntSoldier : Ant
         reach = 1;
         vision = 1;
         linePriority = 2;
-        breedingCost = new int[] { 9, 12 };
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target) {
         if (target != null)
         {
-            target.TakeDamage(target, strength,acidBased);
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage(this, strength, acidBased);
+            }
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -38,11 +40,22 @@ internal class AntSoldier : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
-        else if(other.GetAcidBased() == false)
+        else if (other.GetAcidBased() == false)
         {
             damageTaken = other.GetStrength() - (armor * other.GetStrength());
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
-        } 
+        }
+        if (HP <= 0) {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
     }
+    public override void Die()
+    {
+        gameObject.SetActive(false);    
+    }
+
+ 
 }

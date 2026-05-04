@@ -22,8 +22,10 @@ public class Inventory
     public Inventory()
     {
         SetEggCapacity(HIVE_ERAS.BROTE);
-        //UpdateFoodCapacity(FOOD_CAPACITY); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
-        //UpdateMC_Capacity(MC_CAPACITY);
+        UpdateFoodCapacity(FOOD_CAPACITY); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
+        UpdateMC_Capacity(MC_CAPACITY);
+        if(GameManager.instance != null)
+            workerAnts = GameManager.instance.startingWorkerAnts;
     }
 
     #region Methods
@@ -56,19 +58,27 @@ public class Inventory
 
     public int AddFood(int foodToAdd)
     {
-        return food += foodToAdd;
+        food += foodToAdd;
+        if(food > foodCapacity) food = foodCapacity;
+        return food;
     }
     public int RemoveFood(int foodToRemove)
     {
-        return food -= foodToRemove;
+        food -= foodToRemove;
+        if (food < 0) food = 0;
+        return food;
     }
     public int AddMC(int mcToAdd)
     {
-        return materials += mcToAdd;
+        materials += mcToAdd;
+        if (materials > materialsCapacity) materials = materialsCapacity;
+        return materials;
     }
     public int RemoveMC(int mcToRemove)
     {
-        return materials -= mcToRemove;
+        materials -= mcToRemove;
+        if (materials < 0) materials = 0;
+        return materials;
     }
 
     public int AddUpgradePoints(int upgradePointsToAdd)

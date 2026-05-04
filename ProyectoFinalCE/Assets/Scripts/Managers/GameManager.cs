@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     [Tooltip("Cantidad inicial de huevas que posee el jugador al inicio.")]
     public int startingEggs = 0;
 
-    [Tooltip("Cantidad inicial de materiales de construcción.")]
+    [Tooltip("Cantidad inicial de materiales de construcciï¿½n.")]
     public int startingMC = 0;
 
     [Tooltip("Cantidad inicial de hormigas obreras.")]
@@ -41,12 +41,22 @@ public class GameManager : MonoBehaviour
     public int antHillsQuantity = 2;
     public int resourcesZoneQuantity = 2;
 
+    // MecÃ¡nicas desbloqueables
+    [Header("Unlockable mechanics")]
+    public bool canUseEggsAsFood;
+    public bool explorersInvisible;
+
+    // Modificadores especiales
+    [Header("Special modifiers")]
+    public float workerBonusPer10;
+    public float recoverMaterialsPercent;
 
     [Header("Player resources")]
     public Player player; // Jugador
     public Player playerIA; // IA
 
-
+    [Header("Flux")]
+    public bool tutorialShown = false;
     #endregion
 
     private void OnEnable()
@@ -65,6 +75,16 @@ public class GameManager : MonoBehaviour
         player.inventory.ResetAllVariables();
         playerIA.inventory.ResetAllVariables();
 
-        // FALTA AÑADIR LAS OTRAS HORMIGAS INICIALES
+        // FALTA Aï¿½ADIR LAS OTRAS HORMIGAS INICIALES
+    }
+
+    /// <summary>
+    /// Desbloquea una mecÃ¡nica global del juego a partir de su identificador.
+    /// Se utiliza cuando una skill activa una funcionalidad especial
+    /// (por ejemplo: usar huevos como comida, invisibilidad de exploradoras, etc.).
+    /// </summary>
+    public void UnlockMechanic(string id)
+    {
+        Debug.Log("Unlocked mechanic: " + id);
     }
 }

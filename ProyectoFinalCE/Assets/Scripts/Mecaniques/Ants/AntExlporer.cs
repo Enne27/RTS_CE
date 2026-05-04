@@ -1,9 +1,26 @@
+using System;
 using UnityEngine;
 
+
+public enum Owner
+{
+    Player,
+    AI
+}
 public class AntExlporer : Ant
 {
-    private int food;
-    private int constructionMaterial;
+    public int food;
+    public int MC;
+    //int[] breedingCost = { 7, 12 };
+    public static event Action<Ant> OnAnyAntDamaged;
+    public Transform targetTransform;   
+    private Vector3 targetPosition;
+    [Obsolete("Use antOwner instead")]
+    public Vector3 antHillPositionOwner;
+    public Owner antOwner;
+    private bool useTransformTarget;
+
+    public GameObject asignedResourceZone;
     private void Awake()
     {
         HP = 15f;
@@ -13,19 +30,15 @@ public class AntExlporer : Ant
         reach = 1;
         vision = 4;
         linePriority = 8;
-        breedingCost = new int[] { 7, 12 };
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -44,23 +57,60 @@ public class AntExlporer : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if(HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
     }
 
     public void Collect()
     {
-        /*
-         Cooldown
-        se termina
-        se añaden recursos
-        se llama Carry()
-         */
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            Vector3 position = new Vector3();
+            food = UnityEngine.Random.Range(5, 11);
+            MC = UnityEngine.Random.Range(1, 5);
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    position = GameManager.instance.player.structures[0].transform.position;
+                    break;
+                case (Owner.AI):
+                    if(GameManager.instance.playerIA.structures[0] != null)
+                        position = GameManager.instance.playerIA.structures[0].transform.position;
+                    break;
+            }
+            UnitController.MoveTo(this, position);
+        });
+    }
+    public void Deposit()
+    {
+
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            Inventory inventory = null;
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    inventory = GameManager.instance.player.inventory;
+                    break;
+                case (Owner.AI):
+                    inventory = GameManager.instance.playerIA.inventory;
+                    break;
+            }
+            inventory.AddFood(food);
+            inventory.AddMC(MC);
+            food = 0;
+            MC = 0;
+            if (asignedResourceZone != null)
+            UnitController.MoveTo(this, asignedResourceZone.transform.position);
+        });
     }
 
-    public void Carry()
+    public override void Die()
     {
-        /*
-         Move objetivo punt
-        Collect()
-         */
+        gameObject.SetActive(false);
     }
 }

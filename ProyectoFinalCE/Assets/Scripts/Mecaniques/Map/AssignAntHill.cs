@@ -1,0 +1,47 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AssignAntHill : MonoBehaviour
+{
+    #region VARIABLES
+    [SerializeField] GameObject[] antHills; 
+    #endregion
+
+    private void OnEnable()
+    {
+        AssignHill();
+    }
+
+    private void AssignHill()
+    {
+        if(antHills != null)
+        {
+            //List<GameObject> antHillsNotOwned = new List<GameObject>(antHills);
+            //int i = Random.Range(0, antHillsNotOwned.Count);
+            ////i = 0;
+
+            //GameManager.instance.player.structures.Add(antHillsNotOwned[i]);
+            //GameManager.instance.player.structuresCount.Add(typeof(BuildingData), 1);
+            //antHillsNotOwned.RemoveAt(i);
+
+            //i = Random.Range(0, antHillsNotOwned.Count);
+            ////i = 1;
+            //GameManager.instance.playerIA.structures.Add(antHillsNotOwned[i]);
+            //GameManager.instance.playerIA.structuresCount.Add(typeof(BuildingData), 1);
+            //antHillsNotOwned.RemoveAt(i);
+
+            GameManager.instance.player.structures.Clear();
+            GameManager.instance.player.structuresCount.Clear();
+            GameManager.instance.playerIA.structures.Clear();
+            GameManager.instance.playerIA.structuresCount.Clear();
+
+            GameManager.instance.player.structures.Add(antHills[0]);
+            GameManager.instance.player.structuresCount.Add(typeof(BuildingData), 1);
+            GameManager.instance.playerIA.structures.Add(antHills[1]);
+            GameManager.instance.playerIA.structuresCount.Add(typeof(BuildingData), 1);
+        }
+
+        /*Debug.Log("Player Hill Position: " + GameManager.instance.player.structures[0].transform.position);
+        Debug.Log("IA Hill Position: " + GameManager.instance.playerIA.structures[0].transform.position); */
+    }
+}

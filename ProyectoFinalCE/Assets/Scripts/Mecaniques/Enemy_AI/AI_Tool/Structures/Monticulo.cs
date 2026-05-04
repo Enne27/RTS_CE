@@ -1,4 +1,4 @@
-using UnityEngine;
+#if UNITY_EDITOR
 public class Monticulo : Structure
 {
     private static readonly int levels = 1;
@@ -26,6 +26,6 @@ public class Monticulo : Structure
         //throw new System.NotImplementedException();
     }
 }
-
+#endif
 
 

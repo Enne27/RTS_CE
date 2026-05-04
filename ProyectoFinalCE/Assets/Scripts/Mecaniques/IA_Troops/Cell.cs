@@ -1,15 +1,18 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class Cell
 {
-    public Vector3 worldPos;
-    public Vector2Int gridIndex;
-    public byte cost;
-    public ushort bestCost;
-    public GridDirection bestDirection;
+    //public Quaternion rotation;///
+    [SerializeField]public Vector3 worldPos;
+    [SerializeField]public Vector2Int gridIndex;
+    [SerializeField]public byte cost;
+    [SerializeField]public ushort bestCost;
+    [SerializeField]public GridDirection bestDirection;
 
-    public Cell(Vector3 _worldPos, Vector2Int _gridIndex)
+    public Cell(Vector3 _worldPos, /*Quaternion _rotation,*/Vector2Int _gridIndex)
     {
+        //rotation = _rotation;///
         worldPos = _worldPos;
         gridIndex = _gridIndex;
         cost = 1;
@@ -24,3 +27,4 @@ public class Cell
         else { cost += (byte)amnt; }
     }
 }
+

@@ -10,6 +10,8 @@ public static class ConstantsAndKeys
     #endregion
 
     #region KEYS_TABLES
+    public const string TABLE_DIALOGUES = "Dialogues";
 
+    public const string KEY_DIALOGUES_TUTORIAL = "Tutorial";
     #endregion
 }

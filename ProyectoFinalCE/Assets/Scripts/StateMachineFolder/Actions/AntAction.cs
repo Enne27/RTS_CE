@@ -1,11 +1,25 @@
+
 using UnityEngine;
 using StateMachine.Runtime;
+using Unity.Cinemachine;
+using System;
+using Unity.VisualScripting;
 
 [CreateAssetMenu(fileName = "AntScript", menuName = "Tools/IA/Actions/AntScript")]
 public class AntScript : ScriptableAction
 {
     public override void Execute(StateMachineManager manager)
-    {
-        // TODO: Implement action logic
+    { 
+      void Attack(Ant target)
+      {
+            Ant ant = this.GetComponent<Ant>();
+            ant.Attack(target);
+      }
+
+      void Die()
+      {
+            Ant ant = this.GetComponent<Ant>();
+            ant.Die();
+      }
     }
 }

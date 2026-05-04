@@ -4,6 +4,32 @@ using UnityEngine.InputSystem;
 
 public class TroopsSelection : MonoBehaviour
 {
+
+    #region Variables
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap general;
+
+
+    public Texture2D defaultCursor;
+    public Texture2D farmCursor;
+    public List<Ant> unitsSelected;
+
+    [SerializeField] private float dragThreshold = 5f;
+    private Vector2 startMousePos;
+    private Vector2 currentMousePos;
+    private bool isDragging;
+    [SerializeField]private bool atackMode = false;
+
+
+    //Input
+    //[SerializeField] private InputActionMap action;
+    //private InputAction leftClick;
+    //private InputAction rightClick;
+    private InputAction mousePositionAction;
+
+    [SerializeField] private RectTransform selectionArea;
+    private bool isLeftMouseDown;
+    #endregion
     #region Singleton
     public static TroopsSelection Instance { get; private set; }
 
@@ -16,39 +42,32 @@ public class TroopsSelection : MonoBehaviour
         }
 
         Instance = this;
+
+        general = inputAsset.FindActionMap("Gameplay");
+
+
     }
     #endregion
 
-    public List<BaseAnt> unitsSelected;
-
-    [SerializeField] private float dragThreshold = 5f;
-    private Vector2 startMousePos;
-    private Vector2 currentMousePos;
-    private bool isDragging;
-
-
-    //Input
-    [SerializeField] private InputActionMap action;
-    private InputAction leftClick;
-    private InputAction rightClick;
-    private InputAction mousePositionAction;
-
-    [SerializeField] private RectTransform selectionArea;
-    private bool isLeftMouseDown;
-
     private void OnEnable()
     {
-        leftClick = action.FindAction("leftClick");
-        leftClick.started += OnLeftClickStarted;
-        leftClick.canceled += OnLeftClickCanceled;
-        leftClick.Enable();
+        general.FindAction("switchMode").performed += (InputAction.CallbackContext ctx) => { atackMode = !atackMode; };
+        general.FindAction("leftClick").performed += OnLeftClickStarted;
+        general.FindAction("leftClick").canceled += OnLeftClickCanceled;
+        general.FindAction("rightClick").performed += OnRightClick;
+        mousePositionAction = general.FindAction("mousePositionAction");
 
-        rightClick = action.FindAction("rightClick");
-        rightClick.performed += OnRightClick;
-        rightClick.Enable();
+        //leftClick = action.FindAction("leftClick");
+        //leftClick.started += OnLeftClickStarted;
+        //leftClick.canceled += OnLeftClickCanceled;
+        //leftClick.Enable();
 
-        mousePositionAction = action.FindAction("mousePositionAction");
-        mousePositionAction.Enable();
+        //rightClick = action.FindAction("rightClick");
+        //rightClick.performed += OnRightClick;
+        //rightClick.Enable();
+
+        //mousePositionAction = action.FindAction("mousePositionAction");
+        //mousePositionAction.Enable();
     }
 
     private void Update()
@@ -73,37 +92,74 @@ public class TroopsSelection : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        Vector2 mousePos = mousePositionAction.ReadValue<Vector2>();
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
+            {
+                Cursor.SetCursor(farmCursor, Vector2.zero, CursorMode.Auto);
+            }
+            else if (hit.transform.gameObject.CompareTag("Terrain"))
+            {
+                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+            }
+            else if (false/*self anthill*/)
+            {
+                //Home cursor
+            }
+            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            {
+                //atack cursor
+            }
+        }
+    }
+
     private void OnRightClick(InputAction.CallbackContext context)
     {
+        if (unitsSelected.Count < 1) return;
         Vector2 mousePos = mousePositionAction.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Vector3 worldMousePos = hit.point;
 
-            int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
 
-            foreach (BaseAnt ant in unitsSelected)
+            if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
             {
-                ant.flowFieldInxex = flowFieldIndex;
-                UnitController.activeAnts.Add(ant);
+                foreach (Ant ant in unitsSelected)
+                {
+                    if(ant is AntExlporer antExlporer){
+                        antExlporer.asignedResourceZone = hit.transform.gameObject;
+                    }
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
             }
-        }
+            else if (hit.transform.gameObject.CompareTag("Terrain"))
+            {
+                foreach (Ant ant in unitsSelected)
+                {
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
+            }
+            else if (false/*self anthill*/)
+            {
+                //Home cursor
+            }
+            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            {
+                //atack cursor
+            }
 
-        //Vector2 mousePos2D = mousePositionAction.ReadValue<Vector2>();
-        //Vector3 mousePos = new Vector3(mousePos2D.x, mousePos2D.y, Camera.main.transform.position.y);
-        //Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(mousePos);
-        //int flowFieldIndex = FlowField_Manager.Instance.InitializeFlowField(worldMousePos);
-        //foreach (BaseAnt ant in unitsSelected)
-        //{
-        //    ant.flowFieldInxex = flowFieldIndex;
-        //    UnitController.activeAnts.Add(ant);
-        //}
+
+
+        }
     }
 
     private void OnLeftClickStarted(InputAction.CallbackContext ctx)
     {
-        //Debug.Log("Started");
         startMousePos = Mouse.current.position.ReadValue();
         isLeftMouseDown = true;
         isDragging = false;
@@ -122,6 +178,7 @@ public class TroopsSelection : MonoBehaviour
         {
             SingleClickSelection();
         }
+        if (selectionArea != null) 
         selectionArea.sizeDelta = Vector2.zero;
         isDragging = false;
     }
@@ -147,12 +204,12 @@ public class TroopsSelection : MonoBehaviour
 
         for (int i = unitsSelected.Count - 1; i >= 0; i--)
         {
-            BaseAnt baseAnt = unitsSelected[i];
-            baseAnt.transform.GetChild(0).gameObject.SetActive(false);
+            Ant baseAnt = unitsSelected[i];
+            //baseAnt.transform.GetChild(0).gameObject.SetActive(false);
             unitsSelected.RemoveAt(i);
         }
 
-        foreach (BaseAnt baseAnt in UnitController.antsInGame)
+        foreach (Ant baseAnt in GameManager.instance.player.ants)
         {
             Vector3 screenPos = Camera.main.WorldToScreenPoint(baseAnt.transform.position);
             if (screenPos.z < 0)
@@ -161,7 +218,7 @@ public class TroopsSelection : MonoBehaviour
             if (selectionRect.Contains(screenPos))
             {
 
-                baseAnt.transform.GetChild(0).gameObject.SetActive(true);
+                //baseAnt.transform.GetChild(0).gameObject.SetActive(true);
                 if (!unitsSelected.Contains(baseAnt))
                     unitsSelected.Add(baseAnt);
             }
@@ -175,18 +232,18 @@ public class TroopsSelection : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            BaseAnt clickedAnt = hit.collider.GetComponent<BaseAnt>();
+            Ant clickedAnt = hit.collider.GetComponent<Ant>();
 
             for (int i = unitsSelected.Count - 1; i >= 0; i--)
             {
-                BaseAnt ant = unitsSelected[i];
-                ant.transform.GetChild(0).gameObject.SetActive(false);
+                Ant ant = unitsSelected[i];
+                //ant.transform.GetChild(0).gameObject.SetActive(false);
                 unitsSelected.RemoveAt(i);
             }
 
             if (clickedAnt != null)
             {
-                clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+                //clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
                 unitsSelected.Add(clickedAnt);
             }
         }

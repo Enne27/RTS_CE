@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using System.IO;
@@ -16,7 +17,6 @@ public class #SCRIPTNAME# : ScriptableAction
         // TODO: Implement action logic
     }
 }";
-
     [MenuItem("Assets/Create/Tools/IA/New Scriptable Action Script", false, 80)]
     public static void CreateScript()
     {
@@ -56,3 +56,4 @@ public class #SCRIPTNAME# : ScriptableAction
         return path;
     }
 }
+#endif

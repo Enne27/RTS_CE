@@ -17,13 +17,19 @@ public class BroodChamberView : View
     [Header("Functionality")]
     [SerializeField] BroodChamberFunction broodChamberFunction;
 
-    [Header("Transforms new ants")]
-    [SerializeField] Transform antsSpawnPoint;
-    [SerializeField] Transform workersSpawnPoint;
+    [Header("Transforms")]
+    Transform antsSpawnPoint;
+    Transform workersSpawnPoint;
     #endregion
 
     public override void Initialize()
     {
+        if (AntCreation.Instance != null)
+        {
+            antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
+            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+        }
+
         if (soldierButton != null)
             soldierButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));
 
@@ -45,6 +51,11 @@ public class BroodChamberView : View
         if (kamikazeButton != null)
             kamikazeButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.KAMIKAZE, antsSpawnPoint));
 
+    }
+
+    private void OnEnable()
+    {
+        Initialize();
     }
 
     private void OnDisable()

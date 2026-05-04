@@ -4,7 +4,7 @@ using UnityEngine;
 public class FlowField
 {
     public Cell[,] grid { get; private set; }
-    public Vector2Int gridSize { get; private set; }
+    public Vector2 gridSize { get; private set; }
     public float cellRadius { get; private set; }
     public Cell destinationCell;
 
@@ -13,7 +13,7 @@ public class FlowField
     Transform origin;
     private float cellDiameter;
 
-    public FlowField(float _cellRadius, Vector2Int _gridSize, Transform _origin)
+    public FlowField(float _cellRadius, Vector2 _gridSize, Transform _origin)
     {
         cellRadius = _cellRadius;
         cellDiameter = cellRadius * 2f;
@@ -23,7 +23,7 @@ public class FlowField
 
     public void CreateGrid()
     {
-        grid = new Cell[gridSize.x, gridSize.y];
+        grid = new Cell[(int)gridSize.x, (int)gridSize.y];
 
         Vector3 gridOrigin =
             origin.position
@@ -109,7 +109,7 @@ public class FlowField
         }
     }
 
-    private List<Cell> GetNeighborCells(Vector2Int nodeIndex, List<GridDirection> directions)
+    private List<Cell> GetNeighborCells(Vector2 nodeIndex, List<GridDirection> directions)
     {
         List<Cell> neighborCells = new List<Cell>();
 
@@ -124,16 +124,16 @@ public class FlowField
         return neighborCells;
     }
 
-    private Cell GetCellAtRelativePos(Vector2Int orignPos, Vector2Int relativePos)
+    private Cell GetCellAtRelativePos(Vector2 orignPos, Vector2 relativePos)
     {
-        Vector2Int finalPos = orignPos + relativePos;
+        Vector2 finalPos = orignPos + relativePos;
 
         if (finalPos.x < 0 || finalPos.x >= gridSize.x || finalPos.y < 0 || finalPos.y >= gridSize.y)
         {
             return null;
         }
 
-        else { return grid[finalPos.x, finalPos.y]; }
+        else { return grid[(int)finalPos.x, (int)finalPos.y]; }
     }
 
     public Cell GetCellFromWorldPos(Vector3 worldPos)
@@ -147,8 +147,8 @@ public class FlowField
         int x = Mathf.FloorToInt(local.x / cellDiameter);
         int y = Mathf.FloorToInt(local.z / cellDiameter);
 
-        x = Mathf.Clamp(x, 0, gridSize.x - 1);
-        y = Mathf.Clamp(y, 0, gridSize.y - 1);
+        x = Mathf.Clamp(x, 0, (int)gridSize.x - 1);
+        y = Mathf.Clamp(y, 0, (int)gridSize.y - 1);
 
         return grid[x, y];
     }

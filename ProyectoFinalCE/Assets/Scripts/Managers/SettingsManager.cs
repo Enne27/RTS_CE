@@ -1,46 +1,73 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using UnityEngine.Localization.Settings;
+﻿using FMOD.Studio;
 using FMODUnity;
-using FMOD.Studio;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
-
-
-public enum QualityLevel { MuyAlta, Alta, Media, Baja }
-public enum WindowMode { Ventana, SinBordes, PantallaCompleta }
-public enum Language { Castellano, Catalan, Ingles }
+public enum QualityLevel { VeryHigh, High, Medium, Low, Custom }
+public enum WindowMode { Window, Borderless, Fullscreen }
+public enum AspectRatio { _16x9, _16x10, _21x9, _32x9 }
+public enum Resolution { HD, PHD, FHD, QHD, UHD }
+public enum UpscalingFilter { Automatic, Bilinear, NearestNeighbor, FidelityFXSuperResolution, SpatialTemporalPostProcessing }
+public enum AntiAliasing { Disabled, _2x, _4x, _8x }
+public enum ShadowQuality { Low, Medium, High }
+public enum ShadowDistance { VeryClose, Close, Far, VeryFar }
+public enum Language { Spanish, Catalan, English }
 
 public class SettingsManager : MonoBehaviour
 {
-    #region VARIABLES
-    public static SettingsManager Instance;
+    public static SettingsManager settingsManager;
 
     [Header("Data")]
     public GameSettings settings;
+    public UniversalRenderPipelineAsset CustomRenderer;
 
-    [Header("UI References General")]
+    [Header("UI General")]
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown windowDropdown;
     public Slider volumeSlider;
     public Toggle muteToggle;
     public TMP_Dropdown languageDropdown;
 
-    [Header("UI References Advanced")]
+    [Header("UI Advanced Graphics")]
+    public TMP_Dropdown aspectRatioDropdown;
+    public TMP_Dropdown screenResolutionDropdown;
+    public TextMeshProUGUI presetSelected;
+    public Slider renderScaleSlider;
+    public TextMeshProUGUI renderScaleLabel;
+    public TMP_Dropdown upscalingFilter;
+    public Toggle highDynamicRangeToggle;
+    public TMP_Dropdown antialiasingDropdown;
+    public TMP_Dropdown shadowQualityDropdown;
+    public TMP_Dropdown shadowDistanceDropdown;
+
+    [Header("UI Audio")]
     public Slider sfxSlider;
     public Slider musicSlider;
 
     private Bus masterBus;
-    #endregion
 
-    private void Awake()
+    [HideInInspector]
+    public bool isLoading = false;
+
+    [Header("LocalizedStrings")]
+    public LocalizedString veryHigh;
+    public LocalizedString high;
+    public LocalizedString medium;
+    public LocalizedString low;
+    public LocalizedString custom;
+
+    public static SettingsManager instance
     {
-        if (Instance == null)
+        get
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
+            if (settingsManager == null)
+                settingsManager = FindFirstObjectByType<SettingsManager>();
+            return settingsManager;
         }
     }
 
@@ -50,77 +77,300 @@ public class SettingsManager : MonoBehaviour
         settings.musicVCA = RuntimeManager.GetVCA("vca:/Music");
         settings.sfxVCA = RuntimeManager.GetVCA("vca:/SFX");
 
+        isLoading = true;
+
         LoadSettings();
-        HookUI();
-        ApplySettings();
+        UpdateResolutionDropdownLabels();
         SyncUI();
+        ApplySettings();
+
+        isLoading = false;
+
+        HookUI();
+        UpdatePresetText();
+
+
     }
 
-    /// <summary>
-    /// Añadir los listeners a los elementos de UI de la configuración general.
-    /// </summary>
     void HookUI()
     {
-        // General
         qualityDropdown.onValueChanged.AddListener((i) => SetQuality((QualityLevel)i));
         windowDropdown.onValueChanged.AddListener((i) => SetWindowMode((WindowMode)i));
         volumeSlider.onValueChanged.AddListener(SetVolume);
         muteToggle.onValueChanged.AddListener(ToggleMute);
         languageDropdown.onValueChanged.AddListener((i) => SetLanguage((Language)i));
 
-        // Advanced
+        // Advanced Graphics
+        aspectRatioDropdown.onValueChanged.AddListener((i) => SetAspectRatio((AspectRatio)i));
+        screenResolutionDropdown.onValueChanged.AddListener((i) => SetResolution((Resolution)i));
+        renderScaleSlider.onValueChanged.AddListener(SetRenderScale);
+        upscalingFilter.onValueChanged.AddListener((i) => SetUpscaling((UpscalingFilter)i));
+        highDynamicRangeToggle.onValueChanged.AddListener(SetHDR);
+        antialiasingDropdown.onValueChanged.AddListener((i) => SetAA((AntiAliasing)i));
+        shadowQualityDropdown.onValueChanged.AddListener((i) => SetShadowQuality((ShadowQuality)i));
+        shadowDistanceDropdown.onValueChanged.AddListener((i) => SetShadowDistance((ShadowDistance)i));
+
         musicSlider.onValueChanged.AddListener(SetMusicVolume);
         sfxSlider.onValueChanged.AddListener(SetSFXVolume);
     }
 
-    /// <summary>
-    /// Actualizar los valores de la interfaz.
-    /// </summary>
-    void SyncUI()
+    public void SyncUI()
     {
-        // General
         qualityDropdown.SetValueWithoutNotify((int)settings.quality);
+        UpdatePresetText();
         windowDropdown.SetValueWithoutNotify((int)settings.windowMode);
         volumeSlider.SetValueWithoutNotify(settings.masterVolume);
         muteToggle.SetIsOnWithoutNotify(settings.isMuted);
         languageDropdown.SetValueWithoutNotify((int)settings.language);
 
-        // Advanced
+        aspectRatioDropdown.SetValueWithoutNotify((int)settings.aspectRatio);
+        screenResolutionDropdown.SetValueWithoutNotify((int)settings.resolution);
+        renderScaleSlider.SetValueWithoutNotify(settings.renderScale);
+        upscalingFilter.SetValueWithoutNotify((int)settings.upscalingFilter);
+        highDynamicRangeToggle.SetIsOnWithoutNotify(settings.highDynamicRange);
+        antialiasingDropdown.SetValueWithoutNotify((int)settings.antiAliasing);
+        shadowQualityDropdown.SetValueWithoutNotify((int)settings.shadowQuality);
+        shadowDistanceDropdown.SetValueWithoutNotify((int)settings.shadowDistance);
+
         musicSlider.SetValueWithoutNotify(settings.musicVolume);
         sfxSlider.SetValueWithoutNotify(settings.sfxVolume);
     }
 
-    #region SCREEN
+    void SetCustomQuality()
+    {
+        if (isLoading) 
+            return;
+        else
+        {
+            SetQuality(QualityLevel.Custom);
+            qualityDropdown.SetValueWithoutNotify((int)QualityLevel.Custom);
+            UpdatePresetText();
+        }
+    }
+
+    #region GRAPHICS
+
     public void SetQuality(QualityLevel level)
     {
         settings.quality = level;
-
-        QualitySettings.SetQualityLevel((int)level);
+        QualitySettings.SetQualityLevel(Mathf.Clamp((int)level, 0, 3));
         PlayerPrefs.SetInt("Quality", (int)level);
+        UpdatePresetText();
+    }
+    void UpdatePresetText()
+    {
+        if (presetSelected == null) return;
+
+        presetSelected.text = settings.quality switch
+        {
+            QualityLevel.VeryHigh => veryHigh.GetLocalizedString(),
+            QualityLevel.High => high.GetLocalizedString(),
+            QualityLevel.Medium => medium.GetLocalizedString(),
+            QualityLevel.Low => low.GetLocalizedString(),
+            QualityLevel.Custom => custom.GetLocalizedString(),
+            _ => "Unknown"
+        };
+    }
+
+    public void SetAspectRatio(AspectRatio ratio)
+    {
+        settings.aspectRatio = ratio;
+        UpdateResolutionDropdownLabels();
+        ApplyResolution();
+        PlayerPrefs.SetInt("AspectRatio", (int)ratio);
+    }
+
+    public void UpdateResolutionDropdownLabels()
+    {
+        float aspect = settings.aspectRatio switch
+        {
+            AspectRatio._16x9 => 16f / 9f,
+            AspectRatio._16x10 => 16f / 10f,
+            AspectRatio._21x9 => 21f / 9f,
+            AspectRatio._32x9 => 32f / 9f,
+            _ => 16f / 9f
+        };
+
+        string GetLabel(int width)
+        {
+            int height = Mathf.RoundToInt(width / aspect);
+            return $"{width}x{height}";
+        }
+
+        var options = new System.Collections.Generic.List<TMP_Dropdown.OptionData>()
+    {
+        new TMP_Dropdown.OptionData(GetLabel(1280)), // HD
+        new TMP_Dropdown.OptionData(GetLabel(1600)), // PHD
+        new TMP_Dropdown.OptionData(GetLabel(1920)), // FHD
+        new TMP_Dropdown.OptionData(GetLabel(2560)), // QHD
+        new TMP_Dropdown.OptionData(GetLabel(3840))  // UHD
+    };
+
+        screenResolutionDropdown.options = options;
+
+        // Mantener selección actual
+        screenResolutionDropdown.SetValueWithoutNotify((int)settings.resolution);
+    }
+
+    public void SetResolution(Resolution res)
+    {
+        settings.resolution = res;
+        ApplyResolution();
+        PlayerPrefs.SetInt("Resolution", (int)res);
+    }
+
+    public void ApplyResolution()
+    {
+        Vector2Int baseResolution = settings.resolution switch
+        {
+            Resolution.HD => new Vector2Int(1280, 720),
+            Resolution.PHD => new Vector2Int(1600, 900),
+            Resolution.FHD => new Vector2Int(1920, 1080),
+            Resolution.QHD => new Vector2Int(2560, 1440),
+            Resolution.UHD => new Vector2Int(3840, 2160),
+            _ => new Vector2Int(1920, 1080)
+        };
+
+        float aspect = settings.aspectRatio switch
+        {
+            AspectRatio._16x9 => 16f / 9f,
+            AspectRatio._16x10 => 16f / 10f,
+            AspectRatio._21x9 => 21f / 9f,
+            AspectRatio._32x9 => 32f / 9f,
+            _ => 16f / 9f
+        };
+
+        int width = baseResolution.x;
+        int height = Mathf.RoundToInt(width / aspect);
+
+        if (settings.windowMode == WindowMode.Window)
+        {
+            Screen.SetResolution(width, height, FullScreenMode.Windowed);
+        }
+        else if (settings.windowMode == WindowMode.Borderless)
+        {
+            Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+        }
+        else if (settings.windowMode == WindowMode.Fullscreen)
+        {
+            Screen.SetResolution(width, height, FullScreenMode.ExclusiveFullScreen);
+        }
+    }
+
+    public void SetRenderScale(float value)
+    {
+        float rounded = Mathf.Round(value * 10f) / 10f;
+
+        settings.renderScale = rounded;
+        CustomRenderer.renderScale = rounded;
+
+        renderScaleSlider.SetValueWithoutNotify(rounded);
+
+        renderScaleLabel.text = rounded.ToString("0.0") + "x";
+        SetCustomQuality();
+        PlayerPrefs.SetFloat("RenderScale", rounded);
+    }
+
+    public void SetUpscaling(UpscalingFilter filter)
+    {
+        settings.upscalingFilter = filter;
+        CustomRenderer.upscalingFilter = filter switch
+        {
+            UpscalingFilter.Automatic => UpscalingFilterSelection.Auto,
+            UpscalingFilter.Bilinear => UpscalingFilterSelection.Linear,
+            UpscalingFilter.NearestNeighbor => UpscalingFilterSelection.Point,
+            UpscalingFilter.FidelityFXSuperResolution => UpscalingFilterSelection.FSR,
+            UpscalingFilter.SpatialTemporalPostProcessing => UpscalingFilterSelection.STP,
+            _ => UpscalingFilterSelection.Auto
+        };
+        SetCustomQuality();
+        PlayerPrefs.SetInt("Upscaling", (int)filter);
+    }
+
+    public void SetHDR(bool enabled)
+    {
+        settings.highDynamicRange = enabled;
+        CustomRenderer.supportsHDR = enabled;
+        SetCustomQuality();
+        PlayerPrefs.SetInt("HDR", enabled ? 1 : 0);
+    }
+
+    public void SetAA(AntiAliasing aa)
+    {
+        settings.antiAliasing = aa;
+
+        CustomRenderer.msaaSampleCount = aa switch
+        {
+            AntiAliasing._8x => 8,
+            AntiAliasing._4x => 4,
+            AntiAliasing._2x => 2,
+            AntiAliasing.Disabled => 1,
+            _ => 1
+        };
+
+        SetCustomQuality();
+        PlayerPrefs.SetInt("AA", (int)aa);
+    }
+
+    public void SetShadowQuality(ShadowQuality quality)
+    {
+        settings.shadowQuality = quality;
+        CustomRenderer.mainLightShadowmapResolution = quality switch
+        {
+            ShadowQuality.High => 2048,
+            ShadowQuality.Medium => 1024,
+            ShadowQuality.Low => 512,
+            _ => 1024
+        };
+
+        CustomRenderer.additionalLightsShadowmapResolution = quality switch
+        {
+            ShadowQuality.High => 1024,
+            ShadowQuality.Medium => 512,
+            ShadowQuality.Low => 256,
+            _ => 512
+        };
+        SetCustomQuality();
+        PlayerPrefs.SetInt("ShadowQuality", (int)quality);
+    }
+
+    public void SetShadowDistance(ShadowDistance dist)
+    {
+        settings.shadowDistance = dist;
+
+        float distance = dist switch
+        {
+            ShadowDistance.VeryFar => 1000f,
+            ShadowDistance.Far => 500f,
+            ShadowDistance.Close => 100f,
+            ShadowDistance.VeryClose => 50f,
+            _ => 100f
+        };
+
+        CustomRenderer.shadowDistance = distance;
+        SetCustomQuality();
+        PlayerPrefs.SetInt("ShadowDistance", (int)dist);
     }
 
     public void SetWindowMode(WindowMode mode)
     {
         settings.windowMode = mode;
 
-        switch (mode)
+        Screen.fullScreenMode = mode switch
         {
-            case WindowMode.Ventana:
-                Screen.fullScreenMode = FullScreenMode.Windowed;
-                break;
-            case WindowMode.SinBordes:
-                Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                break;
-            case WindowMode.PantallaCompleta:
-                Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-                break;
-        }
+            WindowMode.Window => FullScreenMode.Windowed,
+            WindowMode.Borderless => FullScreenMode.FullScreenWindow,
+            WindowMode.Fullscreen => FullScreenMode.ExclusiveFullScreen,
+            _ => FullScreenMode.Windowed
+        };
 
         PlayerPrefs.SetInt("WindowMode", (int)mode);
     }
+
     #endregion
 
     #region AUDIO
+
     public void SetVolume(float volume)
     {
         settings.masterVolume = volume;
@@ -132,7 +382,7 @@ public class SettingsManager : MonoBehaviour
     {
         settings.musicVolume = volume;
         ApplyVolume();
-        PlayerPrefs.SetFloat("MusiVolume", volume);
+        PlayerPrefs.SetFloat("MusicVolume", volume);
     }
 
     public void SetSFXVolume(float volume)
@@ -154,49 +404,35 @@ public class SettingsManager : MonoBehaviour
         float volume = settings.isMuted ? 0f : settings.masterVolume;
         float musicVolume = settings.isMuted ? 0f : settings.musicVolume;
         float sfxVolume = settings.isMuted ? 0f : settings.sfxVolume;
-        
+
         masterBus.setVolume(volume);
         settings.musicVCA.setVolume(musicVolume);
         settings.sfxVCA.setVolume(sfxVolume);
-
     }
+
     #endregion
 
     public void SetLanguage(Language lang)
     {
         settings.language = lang;
 
-        string localeCode = "en";
-
-        switch (lang)
+        string localeCode = lang switch
         {
-            case Language.Castellano:
-                localeCode = "es-ES";
-                break;
-            case Language.Catalan:
-                localeCode = "ca";
-                break;
-            case Language.Ingles:
-                localeCode = "en";
-                break;
-        }
+            Language.Spanish => "es-ES",
+            Language.Catalan => "ca",
+            Language.English => "en",
+            _ => "en"
+        };
 
         var locale = LocalizationSettings.AvailableLocales.GetLocale(localeCode);
-
         if (locale != null)
-        {
             LocalizationSettings.SelectedLocale = locale;
-        }
-        else
-        {
-            Debug.LogWarning("Locale no encontrado: " + localeCode);
-        }
 
         PlayerPrefs.SetInt("Language", (int)lang);
     }
 
+    #region SAVE/LOAD
 
-    #region PLAYER_PREFS
     public void LoadSettings()
     {
         settings.quality = (QualityLevel)PlayerPrefs.GetInt("Quality", 2);
@@ -205,16 +441,96 @@ public class SettingsManager : MonoBehaviour
         settings.isMuted = PlayerPrefs.GetInt("Mute", 0) == 1;
         settings.language = (Language)PlayerPrefs.GetInt("Language", 0);
 
-        //Advanced
+        settings.aspectRatio = (AspectRatio)PlayerPrefs.GetInt("AspectRatio", 0);
+        settings.resolution = (Resolution)PlayerPrefs.GetInt("Resolution", 2);
+        settings.renderScale = PlayerPrefs.GetFloat("RenderScale", 1f);
+        settings.upscalingFilter = (UpscalingFilter)PlayerPrefs.GetInt("Upscaling", 0);
+        settings.highDynamicRange = PlayerPrefs.GetInt("HDR", 0) == 1;
+        settings.antiAliasing = (AntiAliasing)PlayerPrefs.GetInt("AA", 3);
+        settings.shadowQuality = (ShadowQuality)PlayerPrefs.GetInt("ShadowQuality", 1);
+        settings.shadowDistance = (ShadowDistance)PlayerPrefs.GetInt("ShadowDistance", 2);
+
         settings.musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
         settings.sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
     }
 
     public void ApplySettings()
     {
-        SetQuality(settings.quality);
+        
         SetWindowMode(settings.windowMode);
+        ApplyResolution();
+        SetRenderScale(settings.renderScale);
+        SetUpscaling(settings.upscalingFilter);
+        SetHDR(settings.highDynamicRange);
+        SetAA(settings.antiAliasing);
+        SetShadowQuality(settings.shadowQuality);
+        SetShadowDistance(settings.shadowDistance);
+        SetQuality(settings.quality);
         ApplyVolume();
+        SetLanguage(settings.language);
+    }
+
+    public void ApplySettingsInternal()
+    {
+        // NO usan SetCustomQuality
+        SetQuality(settings.quality);
+        // Graphics
+        CustomRenderer.renderScale = settings.renderScale;
+
+        CustomRenderer.upscalingFilter = settings.upscalingFilter switch
+        {
+            UpscalingFilter.Automatic => UpscalingFilterSelection.Auto,
+            UpscalingFilter.Bilinear => UpscalingFilterSelection.Linear,
+            UpscalingFilter.NearestNeighbor => UpscalingFilterSelection.Point,
+            UpscalingFilter.FidelityFXSuperResolution => UpscalingFilterSelection.FSR,
+            UpscalingFilter.SpatialTemporalPostProcessing => UpscalingFilterSelection.STP,
+            _ => UpscalingFilterSelection.Auto
+        };
+
+        CustomRenderer.supportsHDR = settings.highDynamicRange;
+
+        CustomRenderer.msaaSampleCount = settings.antiAliasing switch
+        {
+            AntiAliasing._8x => 8,
+            AntiAliasing._4x => 4,
+            AntiAliasing._2x => 2,
+            AntiAliasing.Disabled => 1,
+            _ => 1
+        };
+
+        CustomRenderer.mainLightShadowmapResolution = settings.shadowQuality switch
+        {
+            ShadowQuality.High => 2048,
+            ShadowQuality.Medium => 1024,
+            ShadowQuality.Low => 512,
+            _ => 1024
+        };
+
+        CustomRenderer.additionalLightsShadowmapResolution = settings.shadowQuality switch
+        {
+            ShadowQuality.High => 1024,
+            ShadowQuality.Medium => 512,
+            ShadowQuality.Low => 256,
+            _ => 512
+        };
+
+        CustomRenderer.shadowDistance = settings.shadowDistance switch
+        {
+            ShadowDistance.VeryFar => 1000f,
+            ShadowDistance.Far => 500f,
+            ShadowDistance.Close => 100f,
+            ShadowDistance.VeryClose => 50f,
+            _ => 100f
+        };
+
+        // Screen
+        SetWindowMode(settings.windowMode);
+        ApplyResolution();
+
+        // Audio
+        ApplyVolume();
+
+        // Language
         SetLanguage(settings.language);
     }
 
@@ -222,5 +538,6 @@ public class SettingsManager : MonoBehaviour
     {
         PlayerPrefs.Save();
     }
+
     #endregion
 }

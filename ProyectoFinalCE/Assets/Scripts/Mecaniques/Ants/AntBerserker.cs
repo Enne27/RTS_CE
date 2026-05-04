@@ -1,7 +1,10 @@
-    using UnityEngine;
+using System;
+using UnityEngine;
 
 public class AntBerserker : Ant
 {
+    //int[] breedingCost = { 15, 30 };
+    public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
         HP = 80f;
@@ -11,19 +14,15 @@ public class AntBerserker : Ant
         reach = 1;
         vision = 1;
         linePriority = 2;
-        breedingCost = new int[] { 15, 30 };
         acidBased = false;
     }
 
-    protected override void Move()
-    {
-
-    }
     public override void Attack(Ant target)
     {
-        if (target != null)
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, strength, acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -42,5 +41,15 @@ public class AntBerserker : Ant
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
         }
+        if (HP <= 0)
+        {
+            HP = 0;
+            Die();
+        }
+        OnAnyAntDamaged?.Invoke(this);
+    }
+    public override void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

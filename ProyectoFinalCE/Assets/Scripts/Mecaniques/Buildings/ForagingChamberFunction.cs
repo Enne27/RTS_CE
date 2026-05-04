@@ -1,0 +1,98 @@
+
+using UnityEngine;
+
+public enum ResourceType
+{
+    food,
+    material
+}
+
+public class ForagingChamberFunction : StructuresPlayer
+{
+    [Header("BuildingParameters")]
+    [SerializeField] private int slots;
+    [SerializeField] private int slotsOccupied;
+
+    [Header("Inventory")]
+    [SerializeField] private int foods;
+    [SerializeField] private int materials;
+
+    [Header("Characteristics by level")]
+    [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
+    int[] costsUpgradeHV_ = { 0, 10, 20, 40, 60 };
+
+    [Tooltip("Costes en materiales de construcción de las mejoras de cada nivel.")]
+    int[] costsUpgradeMC_ = { 0, 15, 25, 30, 45 };
+
+    [Tooltip("Tiempo que tarda el edificio en mejorarse en cada nivel.")]
+    int[] timeUpgrade_ = { 0, 60, 90, 90, 120 };
+
+    int[] slotsUpgrade_ = { 5, 7, 9, 11, 15 };
+
+    [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
+    int[] maxLevelByEra_ = { 1, 2, 4, 5 };
+
+    private void Awake()
+    {
+        slots = slotsUpgrade_[currentLevel - 1];
+    }
+
+    public bool AddResource(ResourceType resource)
+    {
+        if (slotsOccupied >= slots)
+            return false;
+
+        switch (resource)
+        {
+            case ResourceType.food:
+                foods++;
+                break;
+
+            case ResourceType.material:
+                materials++;
+                break;
+        }
+
+        slotsOccupied++;
+
+        return true;
+    }
+
+    public bool RemoveResource(ResourceType resource)
+    {
+        switch (resource)
+        {
+            case ResourceType.food:
+                if (foods <= 0) return false;
+                foods--;
+                break;
+
+            case ResourceType.material:
+                if (materials <= 0) return false;
+                materials--;
+                break;
+        }
+
+        slotsOccupied--;
+
+        return true;
+    }
+
+    public void MoveResourceToStorageBuild(ResourceType resource)
+    {
+
+    }
+
+    public override int[] costsUpgradeHV => costsUpgradeHV_;
+
+    public override int[] costsUpgradeMC => costsUpgradeMC_;
+
+    public override int[] timeUpgrade => timeUpgrade_;
+
+    public override int[] maxLevelByEra => maxLevelByEra_;
+
+    public override void OnConstructionFinished()
+    {
+        return;
+    }
+}
