@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     public Player player; // Jugador
     public Player playerIA; // IA
 
-
+    public bool tutorialShown = false;
     #endregion
 
     private void OnEnable()

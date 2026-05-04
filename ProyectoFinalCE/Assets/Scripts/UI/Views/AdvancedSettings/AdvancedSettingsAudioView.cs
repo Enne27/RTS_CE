@@ -15,8 +15,15 @@ public class AdvancedSettingsAudioView : View
     public override void Initialize()
     {
         backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
+    }
 
-        //SFXslider.onValueChanged.AddListener();
-        //musicSlider.onValueChanged.AddListener();
+    public override void Show()
+    {
+        base.Show();
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
     }
 }

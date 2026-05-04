@@ -24,8 +24,11 @@ public class BroodChamberView : View
 
     public override void Initialize()
     {
-        antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-        workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+        if (AntCreation.Instance != null)
+        {
+            antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
+            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+        }
 
         if (soldierButton != null)
             soldierButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));

@@ -25,14 +25,23 @@ public abstract class Ant : MonoBehaviour
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
 
-    protected virtual void Die() { }
+    public virtual void Die() { }
     #endregion
+    
+    public int flowFieldInxex;
+    public Vector3 currentVelocity;
+    public Vector3 objective;
 
     #region GETTERS
     public float GetCurrentHP()
     {
         return HP;
     }
+    
+    public virtual void Attack(Ant target) { }
+    public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
+
+    public virtual void Die() { }
 
     public float GetStrength()
     {

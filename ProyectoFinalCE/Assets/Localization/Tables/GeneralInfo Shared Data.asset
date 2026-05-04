@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: GeneralInfo Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: GeneralInfo
+  m_TableCollectionNameGuidString: 6467179a6d202984a8b984f8b518cf82
+  m_Entries:
+  - m_Id: 10747625472
+    m_Key: Era.Brote
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60047474688
+    m_Key: Era.Nido
+    m_Metadata:
+      m_Items: []
+  - m_Id: 97452277760
+    m_Key: Era.Colonia
+    m_Metadata:
+      m_Items: []
+  - m_Id: 125390536704
+    m_Key: Era.Imperio
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2594893150181654631
+  references:
+    version: 2
+    RefIds:
+    - rid: 2594893150181654631
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1777313686905

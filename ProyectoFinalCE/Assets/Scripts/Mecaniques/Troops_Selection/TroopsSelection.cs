@@ -4,6 +4,32 @@ using UnityEngine.InputSystem;
 
 public class TroopsSelection : MonoBehaviour
 {
+
+    #region Variables
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap general;
+
+
+    public Texture2D defaultCursor;
+    public Texture2D farmCursor;
+    public List<Ant> unitsSelected;
+
+    [SerializeField] private float dragThreshold = 5f;
+    private Vector2 startMousePos;
+    private Vector2 currentMousePos;
+    private bool isDragging;
+    [SerializeField]private bool atackMode = false;
+
+
+    //Input
+    //[SerializeField] private InputActionMap action;
+    //private InputAction leftClick;
+    //private InputAction rightClick;
+    private InputAction mousePositionAction;
+
+    [SerializeField] private RectTransform selectionArea;
+    private bool isLeftMouseDown;
+    #endregion
     #region Singleton
     public static TroopsSelection Instance { get; private set; }
 
@@ -16,41 +42,32 @@ public class TroopsSelection : MonoBehaviour
         }
 
         Instance = this;
+
+        general = inputAsset.FindActionMap("Gameplay");
+
+
     }
     #endregion
 
-    public Texture2D defaultCursor;
-    public Texture2D farmCursor;
-    public List<Ant> unitsSelected;
-
-    [SerializeField] private float dragThreshold = 5f;
-    private Vector2 startMousePos;
-    private Vector2 currentMousePos;
-    private bool isDragging;
-
-
-    //Input
-    [SerializeField] private InputActionMap action;
-    private InputAction leftClick;
-    private InputAction rightClick;
-    private InputAction mousePositionAction;
-
-    [SerializeField] private RectTransform selectionArea;
-    private bool isLeftMouseDown;
-
     private void OnEnable()
     {
-        leftClick = action.FindAction("leftClick");
-        leftClick.started += OnLeftClickStarted;
-        leftClick.canceled += OnLeftClickCanceled;
-        leftClick.Enable();
+        general.FindAction("switchMode").performed += (InputAction.CallbackContext ctx) => { atackMode = !atackMode; };
+        general.FindAction("leftClick").performed += OnLeftClickStarted;
+        general.FindAction("leftClick").canceled += OnLeftClickCanceled;
+        general.FindAction("rightClick").performed += OnRightClick;
+        mousePositionAction = general.FindAction("mousePositionAction");
 
-        rightClick = action.FindAction("rightClick");
-        rightClick.performed += OnRightClick;
-        rightClick.Enable();
+        //leftClick = action.FindAction("leftClick");
+        //leftClick.started += OnLeftClickStarted;
+        //leftClick.canceled += OnLeftClickCanceled;
+        //leftClick.Enable();
 
-        mousePositionAction = action.FindAction("mousePositionAction");
-        mousePositionAction.Enable();
+        //rightClick = action.FindAction("rightClick");
+        //rightClick.performed += OnRightClick;
+        //rightClick.Enable();
+
+        //mousePositionAction = action.FindAction("mousePositionAction");
+        //mousePositionAction.Enable();
     }
 
     private void Update()
@@ -161,6 +178,7 @@ public class TroopsSelection : MonoBehaviour
         {
             SingleClickSelection();
         }
+        if (selectionArea != null) 
         selectionArea.sizeDelta = Vector2.zero;
         isDragging = false;
     }

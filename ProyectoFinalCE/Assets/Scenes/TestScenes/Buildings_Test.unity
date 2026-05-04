@@ -561,7 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cad253eaf91c90e4dbfb961b3a9c2b09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugCameraController
-  cameraState: 0
+  cameraState: 1
   OutsideCamera: {fileID: 1889550447}
   InsideCamera: {fileID: 1292966425}
 --- !u!1 &391201932
@@ -1864,7 +1864,7 @@ GameObject:
   - component: {fileID: 1170819851}
   - component: {fileID: 1170819852}
   m_Layer: 0
-  m_Name: NestEntranceBuild
+  m_Name: ForagingChamberBuild
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2470,6 +2470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b65b7657f5fd6f448ea0a7d2606a43a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMovement2D
+  inputAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   virtualCamera: {fileID: 1583747208}
   moveSpeed: 10
   zoomStep: 1
@@ -3124,6 +3125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75aa397b3bbfa1f4b9a2d171c70c7d8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraMovement
+  inputAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   maxSpeed: 5
   acceleration: 10
   damping: 15
@@ -3467,7 +3469,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3793221710283316865, guid: 0731eec27c01b754b93100c1d759ddf4, type: 3}
       propertyPath: m_Name
-      value: NestEntrance
+      value: ForagingChamber
       objectReference: {fileID: 0}
     - target: {fileID: 8990491941184085997, guid: 0731eec27c01b754b93100c1d759ddf4, type: 3}
       propertyPath: m_LocalPosition.x

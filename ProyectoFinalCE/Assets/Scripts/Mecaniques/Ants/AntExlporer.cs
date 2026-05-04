@@ -1,6 +1,12 @@
 using System;
 using UnityEngine;
 
+
+public enum Owner
+{
+    Player,
+    AI
+}
 public class AntExlporer : Ant
 {
     public int food;
@@ -9,7 +15,9 @@ public class AntExlporer : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     public Transform targetTransform;   
     private Vector3 targetPosition;
+    [Obsolete("Use antOwner instead")]
     public Vector3 antHillPositionOwner;
+    public Owner antOwner;
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
@@ -23,7 +31,6 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
-        antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     public override void Attack(Ant target)
@@ -62,25 +69,46 @@ public class AntExlporer : Ant
     {
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
+            Vector3 position = new Vector3();
             food = UnityEngine.Random.Range(5, 11);
             MC = UnityEngine.Random.Range(1, 5);
-            UnitController.MoveTo(this, antHillPositionOwner);
-            Debug.Log("Finished Collecting");
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    position = GameManager.instance.player.structures[0].transform.position;
+                    break;
+                case (Owner.AI):
+                    position = GameManager.instance.playerIA.structures[0].transform.position;
+                    break;
+            }
+            UnitController.MoveTo(this, position);
         });
     }
     public void Deposit()
     {
+
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
-            GameManager.instance.player.inventory.AddFood(food);
-            GameManager.instance.player.inventory.AddMC(MC);
+            Inventory inventory = null;
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    inventory = GameManager.instance.player.inventory;
+                    break;
+                case (Owner.AI):
+                    inventory = GameManager.instance.playerIA.inventory;
+                    break;
+            }
+            inventory.AddFood(food);
+            inventory.AddMC(MC);
             food = 0;
             MC = 0;
+            if (asignedResourceZone != null)
             UnitController.MoveTo(this, asignedResourceZone.transform.position);
         });
     }
 
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);
     }
