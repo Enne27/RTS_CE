@@ -24,8 +24,6 @@ public abstract class Ant : MonoBehaviour
     #region COMBAT
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
-
-    public virtual void Die() { }
     #endregion
     
     public int flowFieldInxex;
