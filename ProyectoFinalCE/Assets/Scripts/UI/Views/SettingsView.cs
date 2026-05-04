@@ -14,7 +14,7 @@ public class SettingsView : View
     #endregion
     public override void Initialize()
     {
-        backButton.onClick.AddListener(()=> ViewManager.ShowLastView(0));
+        backButton.onClick.AddListener(()=> ViewManager.ShowLastView());
 
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
