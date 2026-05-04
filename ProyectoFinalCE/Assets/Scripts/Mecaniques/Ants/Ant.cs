@@ -13,11 +13,26 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
+
+    //protected virtual void Move() { }
+    protected bool hasObjective = false;
+
+    public int flowFieldIndex;
+    public Vector3 currentVelocity;
+    public Vector3 objective;
+
+    #region COMBAT
+    public virtual void Attack(Ant target) { }
+    public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
+
+    public virtual void Die() { }
+    #endregion
     
     public int flowFieldInxex;
     public Vector3 currentVelocity;
     public Vector3 objective;
 
+    #region GETTERS
     public float GetCurrentHP()
     {
         return HP;
@@ -43,7 +58,7 @@ public abstract class Ant : MonoBehaviour
         return breedingCost;
     }
     public int GetVision()
-    { 
+    {
         return vision;
     }
 
@@ -51,4 +66,28 @@ public abstract class Ant : MonoBehaviour
     {
         return speed;
     }
+    #endregion
+
+    #region MOVEMENT LOGIC
+    private void FixedUpdate()
+    {
+        if (hasObjective)
+        {
+            Vector3 direction = (objective - transform.position).normalized;
+            Vector3 newPos = transform.position + direction * speed * Time.fixedDeltaTime;
+            transform.position = newPos;
+        }
+    }
+
+    public void MoveTo(Vector3 _objective)
+    {
+        hasObjective = true;
+        objective = _objective;
+    }
+
+    public void StopMove()
+    {
+        hasObjective = false;
+    }
+    #endregion
 }
