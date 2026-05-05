@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Esta clase sigue el patrón Singleton.
 /// Maneja todo el comportamiento de la clase abstracta View.
-/// El sistema de UI funciona mediante Views.
+/// Nuestro sistema de UI se maneja por vistas, ocultando y mostrando pantallas y objetos.
 /// Este script mantiene un seguimiento de cuál es la vista actual, y el historial de listas que hemos seguido hasta llegar a ella.
 /// </summary>
 public class ViewManager : MonoBehaviour
@@ -338,6 +338,27 @@ public class ViewManager : MonoBehaviour
                 instance.viewsHistory.Push(instance.currentView.GetGuid());
             }
             instance.currentView.Hide();
+        }
+        view.Show();
+        instance.currentView = view;
+    }
+
+    /// <summary>
+    /// Muestra la vista pasada como parámetro y oculta la vista actual.
+    /// Si 'remember' es true, se guarda la vista actual en el historial.
+    /// </summary>
+    /// <param name="view">La vista a mostrar.</param>
+    /// <param name="remember">Si se debe recordar la vista actual en el historial.</param>
+    /// <param name="overOtherView">Si se colocará la vista sobre otra sin ocultarla.</param>
+    public static void Show(View view, bool remember = true, bool overOtherView = false)
+    {
+        if (instance.currentView != null)
+        {
+            if (remember)
+                instance.viewsHistory.Push(instance.currentView.GetGuid());
+
+            if(overOtherView == false)
+                instance.currentView.Hide();
         }
         view.Show();
         instance.currentView = view;
