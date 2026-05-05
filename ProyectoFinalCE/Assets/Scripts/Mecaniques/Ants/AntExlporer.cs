@@ -78,7 +78,8 @@ public class AntExlporer : Ant
                     position = GameManager.instance.player.structures[0].transform.position;
                     break;
                 case (Owner.AI):
-                    position = GameManager.instance.playerIA.structures[0].transform.position;
+                    if(GameManager.instance.playerIA.structures[0] != null)
+                        position = GameManager.instance.playerIA.structures[0].transform.position;
                     break;
             }
             UnitController.MoveTo(this, position);

@@ -25,12 +25,17 @@ public class SettingsView : View
     public override void Show()
     {
         base.Show();
+
+        SettingsManager.instance.isLoading = true;
+
         UIEffects.instance.FadeInUIObject(object_cg, fadeDuration);
         
         SettingsManager.instance.LoadSettings();
         SettingsManager.instance.UpdateResolutionDropdownLabels();
         SettingsManager.instance.ApplySettingsInternal();
         SettingsManager.instance.SyncUI();
+
+        SettingsManager.instance.isLoading = false;
     }
 
     public override void Hide()
