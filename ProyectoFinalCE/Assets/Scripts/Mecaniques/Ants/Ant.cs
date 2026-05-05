@@ -18,16 +18,17 @@ public abstract class Ant : MonoBehaviour
     public Vector3 currentVelocity;
     public Vector3 objective;
 
-    public float GetCurrentHP()
-    {
-        return HP;
-    }
     
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
 
     public virtual void Die() { }
 
+    public float GetCurrentHP()
+    {
+        return HP;
+    }
+    
     public float GetStrength()
     {
         return strength;
@@ -51,4 +52,25 @@ public abstract class Ant : MonoBehaviour
     {
         return speed;
     }
+
+    public void setOutline(Color color)
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", color);
+    }
+    public void setDefaultOutline()
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", defaultColor);
+    }
+
+
 }
