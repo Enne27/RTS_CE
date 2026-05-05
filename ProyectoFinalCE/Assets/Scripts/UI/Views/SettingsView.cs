@@ -40,7 +40,7 @@ public class SettingsView : View
 
     public override void Hide()
     {
-        //base.Hide();
         UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+        base.Hide();
     }
 }

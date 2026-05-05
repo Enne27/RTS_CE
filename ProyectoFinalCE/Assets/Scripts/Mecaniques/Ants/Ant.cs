@@ -20,11 +20,15 @@ public abstract class Ant : MonoBehaviour
     public int flowFieldIndex;
     public Vector3 currentVelocity;
     public Vector3 objective;
+    Material material;
+    Color defaultColor;
+
 
     #region COMBAT
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
     #endregion
+
 
     #region GETTERS
     public float GetCurrentHP()
@@ -57,6 +61,27 @@ public abstract class Ant : MonoBehaviour
     {
         return speed;
     }
+
+    public void setOutline(Color color)
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", color);
+    }
+    public void setDefaultOutline()
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", defaultColor);
+    }
+
+
     #endregion
 
     #region MOVEMENT LOGIC
