@@ -17,8 +17,10 @@ public abstract class Ant : MonoBehaviour
     public int flowFieldInxex;
     public Vector3 currentVelocity;
     public Vector3 objective;
+    Material material;
+    Color defaultColor;
 
-    
+
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
 
