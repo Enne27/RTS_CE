@@ -10,10 +10,15 @@ public class AntsSliderSound : MonoBehaviour
     public Slider slider;
     public Image fillImage;
 
-    void Start()
+    void OnEnable()
     {
         slider.onValueChanged.AddListener(UpdateFillValue);
         UpdateFillValue(slider.value); 
+    }
+
+    private void OnDisable()
+    {
+        slider.onValueChanged.RemoveListener(UpdateFillValue);
     }
 
     void UpdateFillValue(float value)

@@ -25,26 +25,30 @@ public class TutorialControl : MonoBehaviour
 
     [Header("Control Tutorial")]
     public int lineNum = 0;
-    private bool tutorialShowed = false;
+    public bool tutorialShowed = false;
     #endregion
 
-    private void Awake()
+    void Awake()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
-        if (tutorialShowed == false)
-            PauseController.instance.pausableMoment = false;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
+        tutorialShowed = GameManager.instance.tutorialShown;
         if (tutorialShowed == false)
         {
             DialogueManager.instance.startLine.AddListener(TutorialController);
             dialogueView.ShowDialogue(TABLE_DIALOGUES, KEY_DIALOGUES_TUTORIAL);
             DialogueManager.instance.endDialogue.AddListener(EndTutorial);
-            cameraMoveScript.DisableCameraInput();
         }
+    }
+
+    private void Start()
+    {
+        if (tutorialShowed == false)
+        {
+            cameraMoveScript?.DisableCameraInput();
+
+            ViewManager.Show<DialogueView>();
+            PauseController.instance.pausableMoment = false;
+        }
+        else ViewManager.Show<GameHUDView>();
     }
 
     void TutorialController()
@@ -93,6 +97,7 @@ public class TutorialControl : MonoBehaviour
         ViewManager.Show<GameHUDView>(false);
         PauseController.instance.pausableMoment = true;
         tutorialShowed = true;
+        GameManager.instance.tutorialShown = tutorialShowed;
         cameraMoveScript.EnableCameraInput();
     }
 

@@ -2,6 +2,7 @@
 using FMODUnity;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -50,7 +51,15 @@ public class SettingsManager : MonoBehaviour
 
     private Bus masterBus;
 
+    [HideInInspector]
     public bool isLoading = false;
+
+    [Header("LocalizedStrings")]
+    public LocalizedString veryHigh;
+    public LocalizedString high;
+    public LocalizedString medium;
+    public LocalizedString low;
+    public LocalizedString custom;
 
     public static SettingsManager instance
     {
@@ -71,6 +80,7 @@ public class SettingsManager : MonoBehaviour
         isLoading = true;
 
         LoadSettings();
+        UpdateResolutionDropdownLabels();
         SyncUI();
         ApplySettings();
 
@@ -153,11 +163,11 @@ public class SettingsManager : MonoBehaviour
 
         presetSelected.text = settings.quality switch
         {
-            QualityLevel.VeryHigh => "Very High",
-            QualityLevel.High => "High",
-            QualityLevel.Medium => "Medium",
-            QualityLevel.Low => "Low",
-            QualityLevel.Custom => "Custom",
+            QualityLevel.VeryHigh => veryHigh.GetLocalizedString(),
+            QualityLevel.High => high.GetLocalizedString(),
+            QualityLevel.Medium => medium.GetLocalizedString(),
+            QualityLevel.Low => low.GetLocalizedString(),
+            QualityLevel.Custom => custom.GetLocalizedString(),
             _ => "Unknown"
         };
     }
@@ -165,8 +175,41 @@ public class SettingsManager : MonoBehaviour
     public void SetAspectRatio(AspectRatio ratio)
     {
         settings.aspectRatio = ratio;
+        UpdateResolutionDropdownLabels();
         ApplyResolution();
         PlayerPrefs.SetInt("AspectRatio", (int)ratio);
+    }
+
+    public void UpdateResolutionDropdownLabels()
+    {
+        float aspect = settings.aspectRatio switch
+        {
+            AspectRatio._16x9 => 16f / 9f,
+            AspectRatio._16x10 => 16f / 10f,
+            AspectRatio._21x9 => 21f / 9f,
+            AspectRatio._32x9 => 32f / 9f,
+            _ => 16f / 9f
+        };
+
+        string GetLabel(int width)
+        {
+            int height = Mathf.RoundToInt(width / aspect);
+            return $"{width}x{height}";
+        }
+
+        var options = new System.Collections.Generic.List<TMP_Dropdown.OptionData>()
+    {
+        new TMP_Dropdown.OptionData(GetLabel(1280)), // HD
+        new TMP_Dropdown.OptionData(GetLabel(1600)), // PHD
+        new TMP_Dropdown.OptionData(GetLabel(1920)), // FHD
+        new TMP_Dropdown.OptionData(GetLabel(2560)), // QHD
+        new TMP_Dropdown.OptionData(GetLabel(3840))  // UHD
+    };
+
+        screenResolutionDropdown.options = options;
+
+        // Mantener selección actual
+        screenResolutionDropdown.SetValueWithoutNotify((int)settings.resolution);
     }
 
     public void SetResolution(Resolution res)
@@ -176,7 +219,7 @@ public class SettingsManager : MonoBehaviour
         PlayerPrefs.SetInt("Resolution", (int)res);
     }
 
-    void ApplyResolution()
+    public void ApplyResolution()
     {
         Vector2Int baseResolution = settings.resolution switch
         {

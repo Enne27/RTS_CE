@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -47,17 +47,17 @@ public class UIEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Internamente hace los fades dependiendo de la intención.
+    /// Internamente hace los fades dependiendo de la intenciï¿½n.
     /// </summary>
     /// <param name="objectCG">Canvas group del objeto a Fade.</param>
     /// <param name="targetAlpha">Alfa deseado para el cg</param>
-    /// <param name="duration">Duración del fade</param>
+    /// <param name="duration">Duraciï¿½n del fade</param>
     /// <param name="onComplete">Evento que sucede al completar el efecto.</param>
     private void FadeUI(CanvasGroup objectCG, float targetAlpha, float duration, System.Action onComplete = null)
     {
         LeanTween.cancel(objectCG.gameObject);
 
-        // Que solo sea interactuable mientras es medio visible. (El número es decisión de diseño.)
+        // Que solo sea interactuable mientras es medio visible. (El nï¿½mero es decisiï¿½n de diseï¿½o.)
         objectCG.interactable = targetAlpha > 0.5f;
         objectCG.blocksRaycasts = targetAlpha > 0.5f;
 
@@ -138,7 +138,7 @@ public class UIEffects : MonoBehaviour
     }
 
     /// <summary>
-    /// Devuelve la escala del objeto a su tamaño original.
+    /// Devuelve la escala del objeto a su tamaï¿½o original.
     /// </summary>
     public void RestartScale(GameObject gameObject, Vector3 originalScale, float duration)
     {

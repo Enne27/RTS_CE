@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 public class CameraMovement : MonoBehaviour
 {
     #region Variables
-    private InputSystem_Actions cameraActions;
+    [SerializeField] InputActionAsset inputAsset;
+    private InputActionMap cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
 
@@ -33,7 +34,7 @@ public class CameraMovement : MonoBehaviour
     private float edgeTolerance = 0.05f;
 
     [SerializeField]
-    [Tooltip("Distancia en el eje Z a la que se aleja la cámara cuando está al máximo de zoom (cerca del suelo)")]
+    [Tooltip("Distancia en el eje Z a la que se aleja la cï¿½mara cuando estï¿½ al mï¿½ximo de zoom (cerca del suelo)")]
     private float maxZoomDistance = 5f;
 
     [SerializeField]
@@ -57,7 +58,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
+        cameraActions = inputAsset.FindActionMap("General");
         cameraTransform = GetComponentInChildren<CinemachineCamera>().transform;
     }
 
@@ -144,7 +145,7 @@ public class CameraMovement : MonoBehaviour
     #region Movement
     private void UpdateVelocity()
     {
-        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity = (transform.position - lastPosition) / Time.fixedDeltaTime;
         horizontalVelocity.y = 0f;
         lastPosition = transform.position;
     }
@@ -154,14 +155,14 @@ public class CameraMovement : MonoBehaviour
         if (targetPosition.sqrMagnitude > 0.1f)
         {
             //create a ramp up or acceleration
-            speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
-            transform.position += targetPosition * speed * Time.deltaTime;
+            speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * acceleration);
+            transform.position += targetPosition * speed * Time.fixedDeltaTime;
         }
         else
         {
             //create smooth slow down
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.fixedDeltaTime * damping);
+            transform.position += horizontalVelocity * Time.fixedDeltaTime;
         }
 
         //reset for next frame
@@ -191,18 +192,18 @@ public class CameraMovement : MonoBehaviour
         // 1 = Estamos en maxHeight (muy alto).
         float zoomPercent = (zoomHeight - minHeight) / (maxHeight - minHeight);
 
-        // 2. Calculamos la posición Z deseada usando ese porcentaje.
-        // Si el porcentaje es 1 (lejos), Z será 0 (justo encima, visión vertical).
-        // Si el porcentaje es 0 (cerca), Z será -maxZoomDistance (alejado, visión horizontal).
+        // 2. Calculamos la posiciï¿½n Z deseada usando ese porcentaje.
+        // Si el porcentaje es 1 (lejos), Z serï¿½ 0 (justo encima, visiï¿½n vertical).
+        // Si el porcentaje es 0 (cerca), Z serï¿½ -maxZoomDistance (alejado, visiï¿½n horizontal).
         float targetZ = Mathf.Lerp(-maxZoomDistance, 0f, zoomPercent);
 
-        // 3. Creamos el target de posición local usando X=0 para mantenerla centrada.
+        // 3. Creamos el target de posiciï¿½n local usando X=0 para mantenerla centrada.
         Vector3 zoomTarget = new Vector3(0f, zoomHeight, targetZ);
 
-        // 4. Suavizamos la transición hacia ese punto local, usando tu variable zoomDampening.
+        // 4. Suavizamos la transiciï¿½n hacia ese punto local, usando tu variable zoomDampening.
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
 
-        // 5. Mirar al CameraRig. Al cambiar la posición en Z e Y, LookAt ajustará el ángulo X automáticamente[cite: 1].
+        // 5. Mirar al CameraRig. Al cambiar la posiciï¿½n en Z e Y, LookAt ajustarï¿½ el ï¿½ngulo X automï¿½ticamente[cite: 1].
         cameraTransform.LookAt(transform);
     }
 
@@ -226,19 +227,18 @@ public class CameraMovement : MonoBehaviour
 
         lastPosition = transform.position;
 
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.RotateCamera.performed += RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.FindAction("Movement");
+        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
+        cameraActions.Enable();
     }
 
     public void DisableCameraInput()
     {
         cameraCanMove = false;
 
-        cameraActions.CameraControls.RotateCamera.performed -= RotateCamera;
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
+        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
     #endregion
     private Vector3 GetCameraRigForward()

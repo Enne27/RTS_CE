@@ -993,118 +993,6 @@
             ]
         },
         {
-            "name": "CameraControls",
-            "id": "a663f492-7b36-4c03-a849-9df95969bfd7",
-            "actions": [
-                {
-                    "name": "Movement",
-                    "type": "Value",
-                    "id": "3e5402e0-8ce6-4584-9b01-0315198bd1d1",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "RotateCamera",
-                    "type": "Value",
-                    "id": "39510289-e2e0-4311-a97b-7a2ed5982636",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "ZoomCamera",
-                    "type": "PassThrough",
-                    "id": "19c7e1c0-d8f0-49b9-8d30-5260240beb79",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "2D Vector",
-                    "id": "d7ec06a5-a4f3-456b-8693-b4c866002739",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "d04aadad-8cea-43f9-b901-526e2d348cb7",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "e5eea33a-691b-47a7-89c6-85e7367ab1db",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "6f89c763-0081-4eb5-9ab7-a60154915bb4",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "1365c18f-9cb6-46b3-a871-9e5dd4b46b3e",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "dc721ad4-b2c3-4533-a7fa-f482bad83618",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e08a9b02-1cb3-4d0b-bfcc-6bf693430826",
-                    "path": "<Mouse>/scroll",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ZoomCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
             "name": "General",
             "id": "b1c0bae9-8990-4c78-bed0-ec1e05bcca65",
             "actions": [
@@ -1116,6 +1004,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ZoomCamera",
+                    "type": "PassThrough",
+                    "id": "b416bb25-24d7-4405-ae45-20c39873535d",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "RotateCamera",
+                    "type": "Value",
+                    "id": "f641f993-7ed8-4576-871c-a98e7f620716",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Movement",
+                    "type": "Value",
+                    "id": "8c8c6e04-d368-40d9-a7d8-a8a64a0044e1",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "NextDialogueLine",
@@ -1152,6 +1067,83 @@
                 },
                 {
                     "name": "",
+                    "id": "ab6ee2d5-daa4-4018-ac90-e031fa2aaaae",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ZoomCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7ed62583-8714-456f-9de3-0a2df90c8776",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RotateCamera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "7802c92b-be81-4c4b-9492-f2574e203b9f",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "ded16161-f377-43a8-a091-0c281ebe47cd",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "bd351cd7-faf6-4615-ba07-3d2c71d02265",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "6e53a905-5ffa-4aed-be38-abbca4bfd54e",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "3ab9fa14-7272-4ac5-a9d1-044ddcf99e69",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
                     "id": "35a3bf95-74fa-4d3d-86b7-9b86968f1c3d",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
@@ -1169,6 +1161,94 @@
                     "processors": "",
                     "groups": "",
                     "action": "NextDialogueLine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Gameplay",
+            "id": "9b4fab04-f34e-4e0f-b3f2-e7435266fc79",
+            "actions": [
+                {
+                    "name": "switchMode",
+                    "type": "Button",
+                    "id": "40404235-9bd5-4dd7-b257-f80e8209f494",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "leftClick",
+                    "type": "Button",
+                    "id": "ee0ac86f-4bfe-4921-9058-c61cbdc61fe0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "rightClick",
+                    "type": "Button",
+                    "id": "e119032f-0219-4cf1-9968-65afa68a9c84",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "mousePositionAction",
+                    "type": "Value",
+                    "id": "d562eda0-68db-4a6a-8ace-93203dec3591",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "21aeef66-7d12-4a79-b93b-2f2db099e11d",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "switchMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e6d2b11f-b626-4c20-bc19-006d582ba47e",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "leftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8819c815-f4ab-4565-8ec5-511e59043301",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "rightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1b1fba4-0523-4c6f-8f3d-6a36b2e7824f",
+                    "path": "<Pointer>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "mousePositionAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

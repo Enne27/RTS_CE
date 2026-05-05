@@ -48,14 +48,14 @@ public class MainMenuView : View
 
     public override void Show()
     {
-        base.Show();
-        //UIEffects.instance.FadeInUIObject(object_cg, fadeDuration, ()=> { base.Show(); });
+        //base.Show();
+        UIEffects.instance.FadeInUIObject(object_cg, fadeDuration, ()=> { base.Show(); });
         //object_cg.alpha = 1f;
     }
 
     public override void Hide()
     {
-        base.Hide();
-        //UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+        //base.Hide();
+        UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
     }
 }

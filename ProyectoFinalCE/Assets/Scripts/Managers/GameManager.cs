@@ -55,7 +55,8 @@ public class GameManager : MonoBehaviour
     public Player player; // Jugador
     public Player playerIA; // IA
 
-
+    [Header("Flux")]
+    public bool tutorialShown = false;
     #endregion
 
     private void OnEnable()
