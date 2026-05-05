@@ -52,10 +52,19 @@ internal class AntSoldier : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
+
+    public void AttackMound()
+    {
+        MoundFunction target;
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= reach)
+        {
+            target.TakeDamage((int)Math.Round(strength));
+        }
+    }
     public override void Die()
     {
         gameObject.SetActive(false);    
-    }
-
- 
+    }   
 }
+ 
