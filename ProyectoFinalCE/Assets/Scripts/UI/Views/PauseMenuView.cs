@@ -57,11 +57,8 @@ public class PauseMenuView : View
     public override void Show()
     {
         base.Show();
+        Time.timeScale = 0;
         cameraMovement?.DisableCameraInput();
-
-        if (cameraMovementNest.gameObject.activeInHierarchy)
-            cameraMovementNest?.DisableCameraInput();
-       Time.timeScale = 0;
     }
 
     public override void Hide()
@@ -70,7 +67,6 @@ public class PauseMenuView : View
         Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
 
-        if (cameraMovementNest.gameObject.activeInHierarchy)
-            cameraMovementNest?.EnableCameraInput();
+
     }
 }

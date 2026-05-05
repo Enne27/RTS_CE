@@ -1,4 +1,5 @@
 using Unity.Cinemachine;
+using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -40,12 +41,14 @@ public class CameraMovement2D : MonoBehaviour
     private bool isFocusing = false;
 
     [SerializeField] private float focusSpeed = 10f;
+
+    private GameObject targuetFocus;
     #endregion
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
         mainCamera = Camera.main;
+        cameraActions = new();
     }
 
     private void OnEnable()
@@ -70,6 +73,12 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Update()
     {
+        if (HasCameraInput())
+        {
+            targuetFocus = null;
+            isFocusing = false;
+        }
+
         HandleKeyboardMovement();
         HandleEdgeMovement();
         HandleDrag();
@@ -89,10 +98,46 @@ public class CameraMovement2D : MonoBehaviour
             }
             else
             {
-                targetPosition += direction * focusSpeed * Time.fixedDeltaTime;
+                targetPosition += direction * focusSpeed * Time.deltaTime;
             }
         }
+
+        if (targuetFocus == null && Time.timeScale == 1)
+        {
+            ViewManager.Show<GameHUDView>();
+        }
     }
+
+    #region Input Detection
+    private bool HasCameraInput()
+    {
+        // Teclado
+        if (movement.ReadValue<Vector2>() != Vector2.zero)
+            return true;
+
+        // Movimiento por bordes
+        if (useEdgeMovement)
+        {
+            Vector2 mouse = Mouse.current.position.ReadValue();
+
+            if (mouse.x < edgeTolerance * Screen.width ||
+                mouse.x > (1f - edgeTolerance) * Screen.width ||
+                mouse.y < edgeTolerance * Screen.height ||
+                mouse.y > (1f - edgeTolerance) * Screen.height)
+                return true;
+        }
+
+        // Drag (bot�n derecho)
+        if (Mouse.current.rightButton.isPressed)
+            return true;
+
+        // Zoom (scroll)
+        if (Mathf.Abs(Mouse.current.scroll.ReadValue().y) > 0.1f)
+            return true;
+
+        return false;
+    }
+    #endregion
 
     #region Movement
     private void HandleKeyboardMovement()
@@ -100,7 +145,7 @@ public class CameraMovement2D : MonoBehaviour
         Vector2 input = movement.ReadValue<Vector2>();
         Vector3 dir = new Vector3(input.x, input.y, 0);
 
-        targetPosition += dir * moveSpeed * Time.fixedDeltaTime;
+        targetPosition += dir * moveSpeed * Time.deltaTime;
     }
 
     private void HandleEdgeMovement()
@@ -125,10 +170,9 @@ public class CameraMovement2D : MonoBehaviour
 
     private void HandleDrag()
     {
+        if (Time.timeScale == 0) return;
         if (!Mouse.current.rightButton.isPressed)
             return;
-
-        if (Time.timeScale == 0) return;
 
         Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorld.z = 0;
@@ -147,15 +191,15 @@ public class CameraMovement2D : MonoBehaviour
     private void ApplyMovement()
     {
         if (Time.timeScale == 0) return;
-
         transform.position += targetPosition;
         targetPosition = Vector3.zero;
     }
     #endregion
 
-    #region Zoom (tipo Unity editor)
+    #region Zoom
     private void ZoomCamera(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         float scroll = -ctx.ReadValue<Vector2>().y;
 
         if (Mathf.Abs(scroll) < 0.01f) return;
@@ -168,20 +212,20 @@ public class CameraMovement2D : MonoBehaviour
         float newZoom = Mathf.Lerp(
             virtualCamera.Lens.OrthographicSize,
             targetZoom,
-            Time.fixedDeltaTime * zoomDampening
+            Time.deltaTime * zoomDampening
         );
 
         virtualCamera.Lens.OrthographicSize = newZoom;
 
         Vector3 mouseWorldAfter = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
-        // Esto hace el zoom hacia el cursor (clave estilo Unity)
         Vector3 offset = mouseWorldBefore - mouseWorldAfter;
         transform.position += offset;
     }
 
     private void ApplyZoom()
     {
+        if (Time.timeScale == 0) return;
         float current = virtualCamera.Lens.OrthographicSize;
 
         float newZoom = Mathf.Lerp(
@@ -238,15 +282,7 @@ public class CameraMovement2D : MonoBehaviour
 
         targetZoom = minZoom;
         isFocusing = true;
+        targuetFocus = building.gameObject;
     }
     #endregion
-
-    public void EnableCameraInput()
-    {
-        cameraActions.Enable();
-    }
-    public void DisableCameraInput()
-    {
-        cameraActions.Disable();
-    }
 }
