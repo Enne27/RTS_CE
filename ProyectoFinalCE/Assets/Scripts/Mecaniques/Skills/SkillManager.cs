@@ -6,12 +6,7 @@ using System.Collections.Generic;
 public class SkillManager : MonoBehaviour
 {
     #region Singleton
-    public static SkillManager Instance;
-    private void Awake()
-    {
-        Instance = this;
-        Debug.Log("SkillManager READY");
-    }
+    public static SkillManager Instance { get; private set; }
     #endregion
 
     #region Variables
@@ -22,25 +17,43 @@ public class SkillManager : MonoBehaviour
 
     #region Events
     public static event Action<SkillData> OnSkillUnlocked;
+    public event Action OnSkillsChanged;
     #endregion
 
-    private void Start()
+    private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         playerSkills = new Skills();
         playerSkills.Initialize(allSkills);
+        Debug.Log("SkillManager READY");
     }
 
     #region Methods
 
     public bool IsSkillUnlocked(SkillData skill)
     {
-        return playerSkills.IsUnlocked(skill);
+        return playerSkills != null && playerSkills.IsUnlocked(skill);
     }
+
+    /// <summary>
+    /// Recoger todas las skills
+    /// </summary>
+    public List<SkillData> GetAllSkills()
+    {
+        return allSkills;
+    }
+
     /// <summary>
     /// Revisa si una skill se puede desbloquear
     /// </summary>
     public bool CanUnlock(SkillData skill)
     {
+        if (playerSkills == null) return false;
         if (playerSkills.IsUnlocked(skill))
             return false;
 
@@ -58,6 +71,12 @@ public class SkillManager : MonoBehaviour
     /// </summary>
     public void UnlockSkill(SkillData skill)
     {
+        if (skill == null)
+        {
+            Debug.LogWarning("Skill is NULL");
+            return;
+        }
+
         if (!CanUnlock(skill))
         {
             Debug.Log("Cannot unlock skill: " + skill.SkillName);
@@ -66,12 +85,25 @@ public class SkillManager : MonoBehaviour
         playerSkills.UnlockSkill(skill);
         ApplyEffects(skill);
         OnSkillUnlocked?.Invoke(skill);
+        OnSkillsChanged?.Invoke();
         Debug.Log("Unlocked skill: " + skill.SkillName);
     }
 
+    public void ForceUnlockSkill(SkillData skill)
+    {
+        if (skill == null || playerSkills == null) return;
+        if (!playerSkills.IsUnlocked(skill))
+        {
+            playerSkills.UnlockSkill(skill);
+            OnSkillsChanged?.Invoke();
+        }
+    }
+
+    #endregion
     /// <summary>
     /// Aplica tots els afectas de la skill
     /// </summary>
+    #region Effects
     private void ApplyEffects(SkillData skill)
     {
         foreach (var effect in skill.Effects)
@@ -110,7 +142,7 @@ public class SkillManager : MonoBehaviour
                 break;
 
             case "WorkerBonusPer10":
-                GameManager.instance.workerBonusPer10 += value; 
+                GameManager.instance.workerBonusPer10 += value;
                 break;
 
             case "RecoverMaterials":

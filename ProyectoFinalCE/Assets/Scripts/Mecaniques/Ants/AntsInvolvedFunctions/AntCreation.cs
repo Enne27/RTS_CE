@@ -41,6 +41,9 @@ public class AntCreation : MonoBehaviour
 
     private void Start()
     {
+        GameManager.instance.player.ants.Clear();
+        GameManager.instance.playerIA.ants.Clear();
+
         // Creación inicial de hormigas, tanto del jugador como de la IA.
         SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true);
         SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true);
@@ -120,7 +123,8 @@ public class AntCreation : MonoBehaviour
                     else
                         GameManager.instance.player.inventory.workerAnts++;
                     if (antType == ANT_TYPES.EXPLORER)
-                        newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
+                        //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
+                        newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
                 }
                 else {
                     if (antType != ANT_TYPES.WORKER)
@@ -128,7 +132,8 @@ public class AntCreation : MonoBehaviour
                     else
                         GameManager.instance.playerIA.inventory.workerAnts++;
                     if (antType == ANT_TYPES.EXPLORER)
-                        newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.playerIA.structures[0].transform.position;
+                        //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.playerIA.structures[0].transform.position;
+                        newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
                 }
             }
         }

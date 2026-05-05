@@ -5,12 +5,12 @@ public class Cell
 {
     //public Quaternion rotation;///
     [SerializeField]public Vector3 worldPos;
-    [SerializeField]public Vector2 gridIndex;
+    [SerializeField]public Vector2Int gridIndex;
     [SerializeField]public byte cost;
     [SerializeField]public ushort bestCost;
     [SerializeField]public GridDirection bestDirection;
 
-    public Cell(Vector3 _worldPos, /*Quaternion _rotation,*/Vector2 _gridIndex)
+    public Cell(Vector3 _worldPos, /*Quaternion _rotation,*/Vector2Int _gridIndex)
     {
         //rotation = _rotation;///
         worldPos = _worldPos;

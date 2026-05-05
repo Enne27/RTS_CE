@@ -82,7 +82,21 @@ public class MoundFunction : StructuresPlayer
         takeDamageDebugButton = false;
     }
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        AntExlporer antExlporer = other.gameObject.GetComponent<AntExlporer>();
+        if (antExlporer != null)
+        {
+            antExlporer.Deposit();
+            if (hudView != null) {
+                hudView.UpdateMCText();
+                hudView.UpdateFoodText();
+            }
+
+        }
+    }
+
+
 
     public void TakeDamage(int damage)
     {

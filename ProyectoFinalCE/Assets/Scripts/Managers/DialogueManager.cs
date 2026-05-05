@@ -137,7 +137,7 @@ public class DialogueManager : MonoBehaviour
                 else
                 {
                     showingLineBool = true;
-                    yield return new WaitForSeconds(tipingTime);
+                    yield return new WaitForSecondsRealtime(tipingTime);
                     tmProDialogue.text += ch;
                 }
             }

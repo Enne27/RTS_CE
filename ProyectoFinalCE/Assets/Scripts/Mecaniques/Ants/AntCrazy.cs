@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AntCrazy : Ant
 {
-    int[] breedingCost = new int[] { 11, 12 };
+    //int[] breedingCost = new int[] { 11, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
@@ -49,7 +49,7 @@ public class AntCrazy : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);
     }
