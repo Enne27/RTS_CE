@@ -40,6 +40,7 @@ public class Building : MonoBehaviour
     private void Update()
     {
         if (Mouse.current == null) return;
+        if (Time.timeScale == 0) return;
 
         Vector2 mousePos = Mouse.current.position.ReadValue();
 

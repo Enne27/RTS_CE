@@ -2,6 +2,7 @@
 using FMODUnity;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -52,6 +53,13 @@ public class SettingsManager : MonoBehaviour
 
     [HideInInspector]
     public bool isLoading = false;
+
+    [Header("LocalizedStrings")]
+    public LocalizedString veryHigh;
+    public LocalizedString high;
+    public LocalizedString medium;
+    public LocalizedString low;
+    public LocalizedString custom;
 
     public static SettingsManager instance
     {
@@ -155,11 +163,11 @@ public class SettingsManager : MonoBehaviour
 
         presetSelected.text = settings.quality switch
         {
-            QualityLevel.VeryHigh => "Very High",
-            QualityLevel.High => "High",
-            QualityLevel.Medium => "Medium",
-            QualityLevel.Low => "Low",
-            QualityLevel.Custom => "Custom",
+            QualityLevel.VeryHigh => veryHigh.GetLocalizedString(),
+            QualityLevel.High => high.GetLocalizedString(),
+            QualityLevel.Medium => medium.GetLocalizedString(),
+            QualityLevel.Low => low.GetLocalizedString(),
+            QualityLevel.Custom => custom.GetLocalizedString(),
             _ => "Unknown"
         };
     }
