@@ -1,5 +1,6 @@
 using FMODUnity;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Localization.Components;
@@ -15,8 +16,13 @@ public class ConstructionMenuView : View
     }
 
     #region VARIABLES
+    [Header("Info view")]
     [SerializeField] private List<ConstructionButton> constructionsButtons;
     [SerializeField] GameObject buildingInfo;
+    [SerializeField] TextMeshProUGUI buildingName;
+    [SerializeField] TextMeshProUGUI buildingDescText;
+    [SerializeField] TextMeshProUGUI costText;
+    [SerializeField] TextMeshProUGUI levelText;
 
     [Header("LocalizedStrings")]
     [SerializeField] private LocalizeStringEvent chamberDescription;
@@ -47,12 +53,15 @@ public class ConstructionMenuView : View
 
     private void InitializeButtons()
     {
-        foreach (var mb in constructionsButtons)
+        if(constructionsButtons.Count > 0)
         {
-            if (mb.buttonComponent != null)
+            foreach (var mb in constructionsButtons)
             {
-                originalScale = mb.buttonComponent.transform.localScale;
-                SetupButtonEvents(mb);
+                if (mb.buttonComponent != null)
+                {
+                    originalScale = mb.buttonComponent.transform.localScale;
+                    SetupButtonEvents(mb);
+                }
             }
         }
     }
@@ -91,7 +100,7 @@ public class ConstructionMenuView : View
             .setEase(easeType);
 
         // Mostrar panel de información
-        //UpdateInfoPanel(data.buildingData);
+        UpdateInfoPanel(data.buildingData);
         buildingInfo.SetActive(true);
     }
 
@@ -105,10 +114,11 @@ public class ConstructionMenuView : View
         buildingInfo.SetActive(false);
     }
 
-    /*private void UpdateInfoPanel(Minigame data)
-    {
-        nameLocalizedText.StringReference = data.minigameName;
-        descriptionLocalizedText.StringReference = data.minigameDescription;
-        cost. = data.minigameControls;
-    }*/
+   private void UpdateInfoPanel(BuildingData data)
+   {
+        chamberName.StringReference = data.buildName;
+        chamberDescription.StringReference = data.buildDescription;
+        costText.text = data.costMC.ToString() + ", " + data.costHV.ToString();
+        levelText.text = "lvl 1";
+   }
 }
