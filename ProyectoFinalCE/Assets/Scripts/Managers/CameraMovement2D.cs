@@ -1,5 +1,4 @@
 using Unity.Cinemachine;
-using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -7,8 +6,7 @@ using UnityEngine.UIElements;
 public class CameraMovement2D : MonoBehaviour
 {
     #region Variables
-    [SerializeField] InputActionAsset inputAsset;
-    private InputActionMap cameraActions;
+    private InputSystem_Actions cameraActions;
     private InputAction movement;
 
     [SerializeField] private CinemachineCamera virtualCamera;
@@ -42,22 +40,21 @@ public class CameraMovement2D : MonoBehaviour
     private bool isFocusing = false;
 
     [SerializeField] private float focusSpeed = 10f;
-
-    private GameObject targuetFocus;
-
-    private bool hadFocusLastFrame = false;
-    private bool cameraCanMove = false;
     #endregion
 
     private void Awake()
     {
-        cameraActions = inputAsset.FindActionMap("General");
+        cameraActions = new InputSystem_Actions();
         mainCamera = Camera.main;
     }
 
     private void OnEnable()
     {
-        EnableCameraInput();
+        movement = cameraActions.General.Movement;
+        cameraActions.General.ZoomCamera.performed += ZoomCamera;
+        cameraActions.General.Enable();
+
+        targetZoom = virtualCamera.Lens.OrthographicSize;
     }
 
     private void Start()
@@ -65,81 +62,37 @@ public class CameraMovement2D : MonoBehaviour
         cameraInitialPosition = virtualCamera.transform.position;
     }
 
+    private void OnDisable()
+    {
+        cameraActions.General.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.General.Disable();
+    }
+
     private void Update()
     {
-        bool hasFocusNow = targuetFocus != null;
+        HandleKeyboardMovement();
+        HandleEdgeMovement();
+        HandleDrag();
 
-        if (HasCameraInput())
-        if (cameraCanMove) 
+        ApplyMovement();
+        ApplyZoom();
+        ClampPosition();
+
+        if (isFocusing)
         {
-            if (HasCameraInput())
+            Vector3 direction = focusTarget - transform.position;
+
+            if (direction.magnitude < 0.01f)
             {
-                targuetFocus = null;
+                transform.position = focusTarget;
                 isFocusing = false;
             }
-
-            HandleKeyboardMovement();
-            HandleEdgeMovement();
-            HandleDrag();
-
-            ApplyMovement();
-            ApplyZoom();
-            ClampPosition();
-
-            if (isFocusing)
+            else
             {
-                Vector3 direction = focusTarget - transform.position;
-
-                if (direction.magnitude < 0.01f)
-                {
-                    transform.position = focusTarget;
-                    isFocusing = false;
-                }
-                else
-                {
-                    targetPosition += direction * focusSpeed * Time.deltaTime;
-                }
+                targetPosition += direction * focusSpeed * Time.fixedDeltaTime;
             }
         }
-
-        if (hadFocusLastFrame && !hasFocusNow)
-        {
-            ViewManager.Show<GameHUDView>();
-        }
-
-        hadFocusLastFrame = hasFocusNow;
     }
-
-    #region Input Detection
-    private bool HasCameraInput()
-    {
-        // Teclado
-        if (movement.ReadValue<Vector2>() != Vector2.zero)
-            return true;
-
-        // Movimiento por bordes
-        if (useEdgeMovement)
-        {
-            Vector2 mouse = Mouse.current.position.ReadValue();
-
-            if (mouse.x < edgeTolerance * Screen.width ||
-                mouse.x > (1f - edgeTolerance) * Screen.width ||
-                mouse.y < edgeTolerance * Screen.height ||
-                mouse.y > (1f - edgeTolerance) * Screen.height)
-                return true;
-        }
-
-        // Drag (bot�n derecho)
-        if (Mouse.current.rightButton.isPressed)
-            return true;
-
-        // Zoom (scroll)
-        if (Mathf.Abs(Mouse.current.scroll.ReadValue().y) > 0.1f)
-            return true;
-
-        return false;
-    }
-    #endregion
 
     #region Movement
     private void HandleKeyboardMovement()
@@ -147,7 +100,7 @@ public class CameraMovement2D : MonoBehaviour
         Vector2 input = movement.ReadValue<Vector2>();
         Vector3 dir = new Vector3(input.x, input.y, 0);
 
-        targetPosition += dir * moveSpeed * Time.deltaTime;
+        targetPosition += dir * moveSpeed * Time.fixedDeltaTime;
     }
 
     private void HandleEdgeMovement()
@@ -175,6 +128,8 @@ public class CameraMovement2D : MonoBehaviour
         if (!Mouse.current.rightButton.isPressed)
             return;
 
+        if (Time.timeScale == 0) return;
+
         Vector3 mouseWorld = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorld.z = 0;
 
@@ -191,12 +146,14 @@ public class CameraMovement2D : MonoBehaviour
 
     private void ApplyMovement()
     {
+        if (Time.timeScale == 0) return;
+
         transform.position += targetPosition;
         targetPosition = Vector3.zero;
     }
     #endregion
 
-    #region Zoom
+    #region Zoom (tipo Unity editor)
     private void ZoomCamera(InputAction.CallbackContext ctx)
     {
         float scroll = -ctx.ReadValue<Vector2>().y;
@@ -211,13 +168,14 @@ public class CameraMovement2D : MonoBehaviour
         float newZoom = Mathf.Lerp(
             virtualCamera.Lens.OrthographicSize,
             targetZoom,
-            Time.deltaTime * zoomDampening
+            Time.fixedDeltaTime * zoomDampening
         );
 
         virtualCamera.Lens.OrthographicSize = newZoom;
 
         Vector3 mouseWorldAfter = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
+        // Esto hace el zoom hacia el cursor (clave estilo Unity)
         Vector3 offset = mouseWorldBefore - mouseWorldAfter;
         transform.position += offset;
     }
@@ -280,27 +238,15 @@ public class CameraMovement2D : MonoBehaviour
 
         targetZoom = minZoom;
         isFocusing = true;
-        targuetFocus = building.gameObject;
     }
     #endregion
 
-    #region Inputs
     public void EnableCameraInput()
     {
-        cameraCanMove = true;
-
-        movement = cameraActions.FindAction("Movement");
-        cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
         cameraActions.Enable();
-
-        targetZoom = virtualCamera.Lens.OrthographicSize;
     }
-
     public void DisableCameraInput()
     {
-        cameraCanMove = false;
-
-        cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
+        cameraActions.Disable();
     }
-    #endregion
 }

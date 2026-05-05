@@ -61,13 +61,13 @@ public class PauseMenuView : View
 
         if (cameraMovementNest.gameObject.activeInHierarchy)
             cameraMovementNest?.DisableCameraInput();
-       // Time.timeScale = 0;
+       Time.timeScale = 0;
     }
 
     public override void Hide()
     {
         base.Hide();
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
 
         if (cameraMovementNest.gameObject.activeInHierarchy)

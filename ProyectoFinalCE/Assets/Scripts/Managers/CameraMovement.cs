@@ -145,7 +145,7 @@ public class CameraMovement : MonoBehaviour
     #region Movement
     private void UpdateVelocity()
     {
-        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity = (transform.position - lastPosition) / Time.fixedDeltaTime;
         horizontalVelocity.y = 0f;
         lastPosition = transform.position;
     }
@@ -155,14 +155,14 @@ public class CameraMovement : MonoBehaviour
         if (targetPosition.sqrMagnitude > 0.1f)
         {
             //create a ramp up or acceleration
-            speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
-            transform.position += targetPosition * speed * Time.deltaTime;
+            speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * acceleration);
+            transform.position += targetPosition * speed * Time.fixedDeltaTime;
         }
         else
         {
             //create smooth slow down
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.fixedDeltaTime * damping);
+            transform.position += horizontalVelocity * Time.fixedDeltaTime;
         }
 
         //reset for next frame
