@@ -37,7 +37,13 @@ public class DialogueView : View
     public override void Hide()
     {
         base.Hide();
-
+        Time.timeScale = 1;
         DialogueManager.instance.endDialogue.RemoveListener(()=> indicatorNextLines.SetActive(false));
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        Time.timeScale = 0;
     }
 }

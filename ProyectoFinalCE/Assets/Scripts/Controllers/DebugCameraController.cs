@@ -41,11 +41,13 @@ public class CameraController : MonoBehaviour
         {
             case CameraState.Inside:
                 //OutsideCamera.SetActive(true);
+                OutsideCamera.GetComponent<CameraMovement>().EnableCameraInput();
                 InsideCamera.SetActive(false);
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Outside:
                 InsideCamera.SetActive(true);
+                OutsideCamera.GetComponent<CameraMovement>().DisableCameraInput();
                 //OutsideCamera.SetActive(false);
                 cameraState = CameraState.Inside;
                 break;
