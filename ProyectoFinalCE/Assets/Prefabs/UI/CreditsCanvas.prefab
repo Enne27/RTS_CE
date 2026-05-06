@@ -445,7 +445,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Game Director  \r\nLead Programmer             \r\nLead Artist <br>\r\nAI<br><br>\r\nCharacter
-    Artist<br><br><br>\r\nEnvironment Artist<br><br>\r\nSound Designer<br>\r\nTroop
+    Artist<br><br><br><br>\r\nEnvironment Artist<br><br>\r\nSound Designer<br>\r\nTroop
     Control<br><br>\r\nUI Desing<br><br>\r\nGame Mechanics<br><br><br>\r\nNavigation<br>\r\nProps<br><br><br><br><br>\r\nSFX<br><br><br>\r\nVFX<br>\r\nSecretary<br>\r\nMediator<br>\r\nController<br>\r\nConcept
     Art<br>"
   m_isRightToLeft: 0
@@ -580,7 +580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4382288486090605865
 RectTransform:
   m_ObjectHideFlags: 0
@@ -726,7 +726,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!224 &4845915086349690587
 RectTransform:
@@ -1021,9 +1021,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CreditScroll
   scrollSpeed: 20
-  multiplyFastSpeed: 2
-  yDistance: 1630
+  multiplyFastSpeed: 10
   view: {fileID: 646633675381931994}
+  yDistance: 1630
+  hideDelay: 2
 --- !u!1 &8595295976901283150
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,8 +1212,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Naiara Samos\r\nGuillem Dehon\r\nJuan Roldan<br>\r\nAnuk Guerra\r\nGuillem
-    Dehon<br>\r\nDavid Petersen\r\nJuan Roldan\r\nIv\xE1n Vela<br>\r\nSergio Feijoo\r\nMarc
-    Vendrell<br>\r\nDani Acosta<br>\r\nAnuk Guerra\r\nJan Sard\xE0<br>\r\nF\xE9lix
+    Dehon<br>\r\nAlex Hern\xE1ndez\r\nDavid Petersen\r\nJuan Roldan\r\nIv\xE1n Vela<br>\r\nSergio
+    Feijoo\r\nMarc Vendrell<br>\r\nDani Acosta<br>\r\nAnuk Guerra\r\nJan Sard\xE0<br>\r\nF\xE9lix
     Balbin\r\nNaiara Samos<br>\r\nDani Acosta\r\nJan Sard\xE0\r\nYago J\xF3dar<br>\r\nGuillem
     Dehon<br>\r\nSergio Feijoo\r\nAlex Hern\xE1ndez\r\nDavid Petersen\r\nIv\xE1n
     Vela\r\nMarc Vendrell<br>\r\nDani Acosta\r\nDavid Petersen\r\nNaiara Samos<br>\r\nYago
