@@ -132,6 +132,13 @@ public class BroodChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
-        
+        GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
+        GameManager.instance.player.inventory.RemoveMC(broodBuildingScriptable.costMC);
+
+        if (gameHUDView != null)
+        {
+            gameHUDView.UpdateMCText();
+            gameHUDView.UpdateEggsText();
+        }
     }
 }

@@ -55,10 +55,15 @@ public class BroodChamberView : View
 
     private void OnEnable()
     {
-        Initialize();
+        //Initialize();
+        if (antsSpawnPoint == null || workersSpawnPoint == null)
+        {
+            antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
+            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+        }
     }
 
-    private void OnDisable()
+    /*private void OnDisable()
     {
         soldierButton.onClick.RemoveAllListeners();
         berserkerButton.onClick.RemoveAllListeners();
@@ -67,5 +72,7 @@ public class BroodChamberView : View
         acidButton.onClick.RemoveAllListeners();
         crazyutton.onClick.RemoveAllListeners();
         kamikazeButton.onClick.RemoveAllListeners();
-    }
+    }*/
+
+
 }
