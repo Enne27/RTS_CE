@@ -10,35 +10,28 @@ public class CameraMovement : MonoBehaviour
     private InputAction movement;
     private Transform cameraTransform;
 
-    [SerializeField]
-    private float maxSpeed = 5f;
+    [SerializeField] private float maxSpeed = 5f;
     private float speed;
-    [SerializeField]
-    private float acceleration = 10f;
-    [SerializeField]
-    private float damping = 15f;
-    [SerializeField]
-    private float stepSize = 6f;
-    [SerializeField]
-    private float zoomDampening = 7.5f;
-    [SerializeField]
-    private float minHeight = 3f;
-    [SerializeField]
-    private float maxHeight = 30f;
+    [SerializeField] private float acceleration = 10f;
+    [SerializeField] private float damping = 15f;
+    [SerializeField] private float stepSize = 6f;
+    [SerializeField] private float zoomDampening = 7.5f;
+    [SerializeField] private float minHeight = 3f;
+    [SerializeField] private float maxHeight = 30f;
 
-    [SerializeField]
-    private float maxRotationSpeed = 1f;
+    [SerializeField] private float maxRotationSpeed = 1f;
 
-    [SerializeField]
-    [Range(0f, 0.1f)]
-    private float edgeTolerance = 0.05f;
+    [SerializeField] [Range(0f, 0.1f)] private float edgeTolerance = 0.05f;
 
     [SerializeField]
     [Tooltip("Distancia en el eje Z a la que se aleja la c�mara cuando est� al m�ximo de zoom (cerca del suelo)")]
-    private float maxZoomDistance = 5f;
+    private float maxZoomDistance = 5f; 
 
-    [SerializeField]
-    private float zoomMultiplier = 0.5f;
+    [SerializeField] private float zoomMultiplier = 0.5f;
+
+    [Header("Bounds")]
+    [SerializeField] private Vector2 minBounds = new Vector2(-400, -400);
+    [SerializeField] private Vector2 maxBounds = new Vector2(400, 400);
 
     //value set in various functions 
     //used to update the position of the camera base object.
@@ -85,6 +78,7 @@ public class CameraMovement : MonoBehaviour
             UpdateVelocity();
             UpdateBasePosition();
             UpdateCameraPosition();
+            ClampPosition();
         }
     }
 
@@ -214,6 +208,18 @@ public class CameraMovement : MonoBehaviour
 
         float inputValue = obj.ReadValue<Vector2>().x;
         transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
+    }
+    #endregion
+
+    #region Bounds
+    private void ClampPosition()
+    {
+        Vector3 pos = transform.position;
+
+        pos.x = Mathf.Clamp(pos.x, minBounds.x, maxBounds.x);
+        pos.z = Mathf.Clamp(pos.z, minBounds.y, maxBounds.y);
+
+        transform.position = pos;
     }
     #endregion
 
