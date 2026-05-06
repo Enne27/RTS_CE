@@ -87,26 +87,22 @@ public class AntExlporer : Ant
     }
     public void Deposit()
     {
-
-        TimeManager.Instance.OneShotTimer(3f, () => 
+        Inventory inventory = null;
+        switch (antOwner)
         {
-            Inventory inventory = null;
-            switch (antOwner)
-            {
-                case (Owner.Player):
-                    inventory = GameManager.instance.player.inventory;
-                    break;
-                case (Owner.AI):
-                    inventory = GameManager.instance.playerIA.inventory;
-                    break;
-            }
-            inventory.AddFood(food);
-            inventory.AddMC(MC);
-            food = 0;
-            MC = 0;
-            if (asignedResourceZone != null)
-            UnitController.MoveTo(this, asignedResourceZone.transform.position);
-        });
+            case (Owner.Player):
+                inventory = GameManager.instance.player.inventory;
+                break;
+            case (Owner.AI):
+                inventory = GameManager.instance.playerIA.inventory;
+                break;
+        }
+        inventory.AddFood(food);
+        inventory.AddMC(MC);
+        food = 0;
+        MC = 0;
+        if (asignedResourceZone != null)
+        UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
 
     public override void Die()

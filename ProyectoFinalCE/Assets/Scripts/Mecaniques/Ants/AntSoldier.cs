@@ -56,6 +56,7 @@ internal class AntSoldier : Ant
     public void AttackMound()
     {
         MoundFunction target;
+        target = GetComponent<MoundFunction>();
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
