@@ -129,7 +129,10 @@ MonoBehaviour:
   settingsButton: {fileID: 6323338004027204888}
   startButton: {fileID: 5356218109500539165}
   controlsButton: {fileID: 283943226208244981}
+  saveButton: {fileID: 0}
   backButton: {fileID: 5252042605340773144}
+  cameraMovement: {fileID: 0}
+  cameraMovementNest: {fileID: 0}
 --- !u!225 &4595669633468910916
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -441,6 +444,7 @@ GameObject:
   - component: {fileID: 6292637717925884753}
   - component: {fileID: 1217967242458394030}
   - component: {fileID: 5356218109500539165}
+  - component: {fileID: 5762836265133172724}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -550,6 +554,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5762836265133172724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2769586995947885083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4bec604d603aa4bb1e4db4ccf2ae80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScaleOnHover
+  scaleFactor: 1.1
+  duration: 0.2
+  onHoverEmitter: {fileID: 0}
 --- !u!1 &4421284860936909887
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,6 +581,7 @@ GameObject:
   - component: {fileID: 6596623298607164338}
   - component: {fileID: 3055976948137309568}
   - component: {fileID: 6323338004027204888}
+  - component: {fileID: 1693954384078037067}
   m_Layer: 5
   m_Name: SettingsButton
   m_TagString: Untagged
@@ -671,6 +691,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1693954384078037067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4421284860936909887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4bec604d603aa4bb1e4db4ccf2ae80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScaleOnHover
+  scaleFactor: 1.1
+  duration: 0.2
+  onHoverEmitter: {fileID: 0}
 --- !u!1 &5789138510419292219
 GameObject:
   m_ObjectHideFlags: 0
@@ -936,6 +971,7 @@ GameObject:
   - component: {fileID: 3460365208695443519}
   - component: {fileID: 6568154812529415139}
   - component: {fileID: 283943226208244981}
+  - component: {fileID: 1416368871846226879}
   m_Layer: 5
   m_Name: ControlsButton
   m_TagString: Untagged
@@ -1045,6 +1081,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1416368871846226879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6462039798506814553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b4bec604d603aa4bb1e4db4ccf2ae80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScaleOnHover
+  scaleFactor: 1.1
+  duration: 0.2
+  onHoverEmitter: {fileID: 0}
 --- !u!1 &7374979662359471123
 GameObject:
   m_ObjectHideFlags: 0

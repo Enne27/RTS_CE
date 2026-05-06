@@ -1,6 +1,12 @@
 using System;
 using UnityEngine;
 
+
+public enum Owner
+{
+    Player,
+    AI
+}
 public class AntExlporer : Ant
 {
     public int food;
@@ -9,8 +15,12 @@ public class AntExlporer : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     public Transform targetTransform;   
     private Vector3 targetPosition;
+    [Obsolete("Use antOwner instead")]
     public Vector3 antHillPositionOwner;
-    private bool useTransformTarget;   
+    public Owner antOwner;
+    private bool useTransformTarget;
+
+    public GameObject asignedResourceZone;
     private void Awake()
     {
         HP = 15f;
@@ -21,7 +31,6 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
-        //antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
     }
 
     public override void Attack(Ant target)
@@ -56,23 +65,51 @@ public class AntExlporer : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void Collect(Vector3 target)
+    public void Collect()
+    {
+        TimeManager.Instance.OneShotTimer(3f, () => 
+        {
+            Vector3 position = new Vector3();
+            food = UnityEngine.Random.Range(5, 11);
+            MC = UnityEngine.Random.Range(1, 5);
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    position = GameManager.instance.player.structures[0].transform.position;
+                    break;
+                case (Owner.AI):
+                    if(GameManager.instance.playerIA.structures[0] != null)
+                        position = GameManager.instance.playerIA.structures[0].transform.position;
+                    break;
+            }
+            UnitController.MoveTo(this, position);
+        });
+    }
+    public void Deposit()
     {
 
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
-            food = UnityEngine.Random.Range(5, 11);
-            MC = UnityEngine.Random.Range(1, 5);
-            //Move to anthill instruction
+            Inventory inventory = null;
+            switch (antOwner)
+            {
+                case (Owner.Player):
+                    inventory = GameManager.instance.player.inventory;
+                    break;
+                case (Owner.AI):
+                    inventory = GameManager.instance.playerIA.inventory;
+                    break;
+            }
+            inventory.AddFood(food);
+            inventory.AddMC(MC);
+            food = 0;
+            MC = 0;
+            if (asignedResourceZone != null)
+            UnitController.MoveTo(this, asignedResourceZone.transform.position);
         });
-        //TimeManager.Instance.Register(3f,()=>Collect(target));
-        //food = UnityEngine.Random.Range(5, 11);
-        //MC = UnityEngine.Random.Range(1,5);
-        //TimeManager.Instance.Unregister(3f, () => Collect(target));
-        //Carry();
     }
 
-    protected override void Die()
+    public override void Die()
     {
         gameObject.SetActive(false);
     }

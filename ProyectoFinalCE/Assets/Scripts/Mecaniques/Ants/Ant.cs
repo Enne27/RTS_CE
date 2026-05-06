@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 public abstract class Ant : MonoBehaviour 
 {
     public static event Action<Ant> OnAnyAntDamaged;
@@ -12,14 +13,33 @@ public abstract class Ant : MonoBehaviour
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
-    
+
     //protected virtual void Move() { }
+    protected bool hasObjective = false;
+
+    public int flowFieldIndex;
+    public Vector3 currentVelocity;
+    public Vector3 objective;
+    Material material;
+    Color defaultColor;
+
+
+    #region COMBAT
     public virtual void Attack(Ant target) { }
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
-    //protected virtual void SpawnAnt() { }
 
-    protected virtual void Die() { }
+    public virtual void Die() { }
+    #endregion
+    
+    public int flowFieldInxex;
 
+
+    #region GETTERS
+    public float GetCurrentHP()
+    {
+        return HP;
+    }
+    
     public float GetStrength()
     {
         return strength;
@@ -35,23 +55,44 @@ public abstract class Ant : MonoBehaviour
         return breedingCost;
     }
     public int GetVision()
-    { 
+    {
         return vision;
     }
 
-    private bool hasObjective = false;
-    private Vector3 objective;
+    public float GetSpeed()
+    {
+        return speed;
+    }
 
+    public void setOutline(Color color)
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", color);
+    }
+    public void setDefaultOutline()
+    {
+        if (material == null)
+        {
+            material = GetComponent<Renderer>().material;
+            defaultColor = material.GetColor("_Outline_Color");
+        }
+        material.SetColor("_Outline_Color", defaultColor);
+    }
+
+
+    #endregion
+
+    #region MOVEMENT LOGIC
     private void FixedUpdate()
     {
         if (hasObjective)
         {
             Vector3 direction = (objective - transform.position).normalized;
-
             Vector3 newPos = transform.position + direction * speed * Time.fixedDeltaTime;
-
-            //newPos.y = Terrain.activeTerrain.SampleHeight(newPos);
-
             transform.position = newPos;
         }
     }
@@ -66,4 +107,5 @@ public abstract class Ant : MonoBehaviour
     {
         hasObjective = false;
     }
+    #endregion
 }

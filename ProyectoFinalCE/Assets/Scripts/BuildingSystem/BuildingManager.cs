@@ -6,6 +6,16 @@ using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
 {
+    #region SINGLETON
+    public static BuildingManager Instance;
+    private void Awake()
+    {
+        keyboard = Keyboard.current;
+        mouse = Mouse.current;
+        Instance = this;
+    }
+    #endregion
+    
     public const float CELL_SIZE = 1f;
     [Header("Chambers Data")]
     [SerializeField] private BuildingData queenChamberData;
@@ -30,12 +40,6 @@ public class BuildingManager : MonoBehaviour
     public int queenChambersCount;
     public int broodChambersCount;
     public int storageChambersCount;
-
-    private void Awake()
-    {
-        keyboard = Keyboard.current;
-        mouse = Mouse.current;
-    }
 
     private void Update()
     {

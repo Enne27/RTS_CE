@@ -59,5 +59,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3791235186278736876}
   m_SourcePrefab: {fileID: 100100000, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+--- !u!1 &4247203208126291310 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+  m_PrefabInstance: {fileID: 3904745127268671551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3791235186278736876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247203208126291310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa2a0b74b276d4440bca96126c529be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AntAcidSpewer
+  breedingCost: 0a00000012000000
+  flowFieldInxex: 0
+  currentVelocity: {x: 0, y: 0, z: 0}
+  objective: {x: 0, y: 0, z: 0}

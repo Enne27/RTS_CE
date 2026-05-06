@@ -47,15 +47,15 @@ public class CameraMovement2D : MonoBehaviour
 
     private void Awake()
     {
-        cameraActions = new InputSystem_Actions();
         mainCamera = Camera.main;
+        cameraActions = new();
     }
 
     private void OnEnable()
     {
-        movement = cameraActions.CameraControls.Movement;
-        cameraActions.CameraControls.ZoomCamera.performed += ZoomCamera;
-        cameraActions.CameraControls.Enable();
+        movement = cameraActions.General.Movement;
+        cameraActions.General.ZoomCamera.performed += ZoomCamera;
+        cameraActions.General.Enable();
 
         targetZoom = virtualCamera.Lens.OrthographicSize;
     }
@@ -67,8 +67,8 @@ public class CameraMovement2D : MonoBehaviour
 
     private void OnDisable()
     {
-        cameraActions.CameraControls.ZoomCamera.performed -= ZoomCamera;
-        cameraActions.CameraControls.Disable();
+        cameraActions.General.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.General.Disable();
     }
 
     private void Update()
@@ -102,7 +102,7 @@ public class CameraMovement2D : MonoBehaviour
             }
         }
 
-        if (targuetFocus == null)
+        if (targuetFocus == null && Time.timeScale == 1)
         {
             ViewManager.Show<GameHUDView>();
         }
@@ -127,7 +127,7 @@ public class CameraMovement2D : MonoBehaviour
                 return true;
         }
 
-        // Drag (botón derecho)
+        // Drag (botï¿½n derecho)
         if (Mouse.current.rightButton.isPressed)
             return true;
 
@@ -170,6 +170,7 @@ public class CameraMovement2D : MonoBehaviour
 
     private void HandleDrag()
     {
+        if (Time.timeScale == 0) return;
         if (!Mouse.current.rightButton.isPressed)
             return;
 
@@ -189,6 +190,7 @@ public class CameraMovement2D : MonoBehaviour
 
     private void ApplyMovement()
     {
+        if (Time.timeScale == 0) return;
         transform.position += targetPosition;
         targetPosition = Vector3.zero;
     }
@@ -197,6 +199,7 @@ public class CameraMovement2D : MonoBehaviour
     #region Zoom
     private void ZoomCamera(InputAction.CallbackContext ctx)
     {
+        if (Time.timeScale == 0) return;
         float scroll = -ctx.ReadValue<Vector2>().y;
 
         if (Mathf.Abs(scroll) < 0.01f) return;
@@ -222,6 +225,7 @@ public class CameraMovement2D : MonoBehaviour
 
     private void ApplyZoom()
     {
+        if (Time.timeScale == 0) return;
         float current = virtualCamera.Lens.OrthographicSize;
 
         float newZoom = Mathf.Lerp(
