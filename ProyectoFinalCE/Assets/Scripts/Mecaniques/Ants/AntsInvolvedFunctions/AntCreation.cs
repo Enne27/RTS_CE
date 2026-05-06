@@ -41,22 +41,30 @@ public class AntCreation : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.player.ants.Clear();
-        GameManager.instance.playerIA.ants.Clear();
-
-        // Creación inicial de hormigas, tanto del jugador como de la IA.
-        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true);
-        SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true);
-
-        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false);
+        if (!loadedFromSave)
+        {
+            GameManager.instance.player.ants.Clear();
+            GameManager.instance.playerIA.ants.Clear();
+            // Creaciï¿½n inicial de hormigas, tanto del jugador como de la IA.
+            SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true);
+            SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true);
+            SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false);
+        }
     }
     #endregion
 
+    private bool loadedFromSave = false;
+
+    public void MarkLoaded()
+    {
+        loadedFromSave = true;
+    }
+
     /// <summary>
-    /// Creación de hormigas del jugador mediante el uso de recursos y actualización de la interfaz.
+    /// Creaciï¿½n de hormigas del jugador mediante el uso de recursos y actualizaciï¿½n de la interfaz.
     /// </summary>
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
-    /// <param name="position">Transform de la posición donde instanciar.</param>
+    /// <param name="position">Transform de la posiciï¿½n donde instanciar.</param>
     public void PlayerAntCreation(ANT_TYPES antType, Transform position)
     {
         //Debug.Log(antType);
@@ -76,8 +84,8 @@ public class AntCreation : MonoBehaviour
             }
 
 
-            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
+            // FALTARï¿½A Aï¿½ADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
+            // FALTARï¿½A Aï¿½ADIR EL TIEMPO DE CONSTRUCCIï¿½N DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
             if (CanSpawnAnt(foodCosts, hvCosts))
             {
                 SystemAntCreation(1, antType, position, true);
@@ -98,12 +106,12 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Método para generar hormigas sin involucrar la interfaz.
-    /// Añade al inventario del jugador o de la IA las hormigas creadas.
+    /// Mï¿½todo para generar hormigas sin involucrar la interfaz.
+    /// Aï¿½ade al inventario del jugador o de la IA las hormigas creadas.
     /// </summary>
     /// <param name="quantity">Cantidad de hormigas a instanciar.</param>
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
-    /// <param name="position">Posición donde instanciar.</param>
+    /// <param name="position">Posiciï¿½n donde instanciar.</param>
     /// <param name="isPlayer">Es el jugador = true -> IA = false</param>
     private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
     {
@@ -140,7 +148,7 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Instancia la hormiga en la posición indicada.
+    /// Instancia la hormiga en la posiciï¿½n indicada.
     /// </summary>
     /// <returns>GameObject instanciado.</returns>
     private GameObject AntInstantiation()
@@ -149,7 +157,7 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Posibilidad de instanciación de hormigas según los parámetros necesarios.
+    /// Posibilidad de instanciaciï¿½n de hormigas segï¿½n los parï¿½metros necesarios.
     /// </summary>
     /// <param name="foodCosts">Comida necesaria para crearla.</param>
     /// <param name="hvCosts">Huevas necesarias para crearla.</param>
@@ -161,7 +169,7 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Cambiamos el tipo de hormiga a instanciar por el parámetro.
+    /// Cambiamos el tipo de hormiga a instanciar por el parï¿½metro.
     /// </summary>
     /// <param name="antType">Siguiente tipo de hormiga a instanciar.</param>
     private void ChangeAntTypeToInstantiate(ANT_TYPES antType)

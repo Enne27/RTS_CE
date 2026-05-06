@@ -34,9 +34,17 @@ public static class SaveSystem
         string json = File.ReadAllText(Path);
         SaveGameData data = JsonUtility.FromJson<SaveGameData>(json);
 
+        if (data == null)
+        {
+            Debug.LogError("Failed to parse save file");
+            return;
+        }
+
         SaveApplier.ApplyPlayer(data.player);
         SaveApplier.ApplyStats(data.stats);
         SaveApplier.ApplySkills(data.skills);
+
+        Object.FindFirstObjectByType<AntCreation>()?.MarkLoaded();
 
         Debug.Log("Game Loaded");
     }

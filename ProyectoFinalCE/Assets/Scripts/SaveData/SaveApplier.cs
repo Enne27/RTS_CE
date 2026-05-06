@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class SaveApplier
@@ -18,6 +19,7 @@ public static class SaveApplier
         );
 
         ApplyInventory(player.inventory, data.inventory);
+        ApplyAnts(player, data.ants);
     }
 
     public static void ApplyInventory(Inventory inv, InventorySaveData data)
@@ -31,6 +33,40 @@ public static class SaveApplier
         inv.eggCapacity = data.eggCapacity;
         inv.foodCapacity = data.foodCapacity;
         inv.materialsCapacity = data.materialsCapacity;
+    }
+
+    public static void ApplyAnts(Player player, List<AntSaveData> antsData)
+    {
+        if (GameManager.instance.player == null)
+        {
+            Debug.LogError("Player not ready when loading ants");
+            return;
+        }
+        // Eliminar hormigas actuales
+        foreach (var ant in player.ants)
+        {
+            if (ant != null)
+                GameObject.Destroy(ant.gameObject);
+        }
+
+        player.ants.Clear();
+
+        // Crear desde save
+        foreach (var antData in antsData)
+        {
+            Ant ant = GameFactory.CreateAnt(antData.type, antData.position);
+
+            if (ant == null)
+            {
+                Debug.LogWarning("Failed to create ant: " + antData.type);
+                continue;
+            }
+
+            // Aplicar HP
+            ant.SetHP(antData.hp);
+
+            player.ants.Add(ant);
+        }
     }
 
     public static void ApplyStats(StatsSaveData data)

@@ -29,7 +29,12 @@ public abstract class Ant : MonoBehaviour
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
     #endregion
 
-
+    //Para el guardado al cargar:
+    public void SetHP(float value)
+    {
+        HP = value;
+    }
+    
     #region GETTERS
     public float GetCurrentHP()
     {
@@ -80,8 +85,6 @@ public abstract class Ant : MonoBehaviour
         }
         material.SetColor("_Outline_Color", defaultColor);
     }
-
-
     #endregion
 
     #region MOVEMENT LOGIC
