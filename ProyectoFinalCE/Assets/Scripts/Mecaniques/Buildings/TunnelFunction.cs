@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum PathType
@@ -26,13 +27,19 @@ public enum PathType
     Cross
 }
 
+[System.Serializable]
+public class Tunnel
+{
+    public List<Tunnel> TunnelConnections;
+}
+
 public class TunnelFunction : MonoBehaviour
 {
+    public Tunnel tunnel;
     public float detectionDistance = 1.1f;
     public LayerMask tunnelLayer;
-
     public PathType pathType;
-
+    public bool isBuilding;
     private bool up, down, left, right;
 
     private void OnDrawGizmos()

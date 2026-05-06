@@ -163,7 +163,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3793221710283316865}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -212,7 +212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5188700480099544435}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.9, y: 1.9, z: 1.9}
   m_ConstrainProportionsScale: 1
@@ -240,9 +240,9 @@ MeshRenderer:
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
+  m_RayTracingMode: 0
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -446,6 +446,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingShapeUnit (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.5
@@ -489,8 +493,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3056920698912689873}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+--- !u!1 &5533721734778088992 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+  m_PrefabInstance: {fileID: 708676265800487183}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3056920698912689873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5533721734778088992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  detectionDistance: 1.1
+  tunnelLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  pathType: 0
+  isBuilding: 1
 --- !u!4 &7106557961347240164 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
@@ -508,6 +538,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingShapeUnit (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -551,8 +585,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8164684654293142993}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+--- !u!1 &5299652653905699791 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+  m_PrefabInstance: {fileID: 905828071167679712}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8164684654293142993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5299652653905699791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  detectionDistance: 1.1
+  tunnelLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  pathType: 0
+  isBuilding: 1
 --- !u!4 &7482744299547565323 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
@@ -570,6 +630,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingShapeUnit (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.5
@@ -613,13 +677,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5622244497896472135}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!4 &1784605960677081012 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
   m_PrefabInstance: {fileID: 8326619377640799839}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3931673138557763952 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+  m_PrefabInstance: {fileID: 8326619377640799839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5622244497896472135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3931673138557763952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  detectionDistance: 1.1
+  tunnelLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  pathType: 0
+  isBuilding: 1
 --- !u!1001 &9116083507789851663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -632,6 +722,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingShapeUnit
       objectReference: {fileID: 0}
+    - target: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -675,10 +769,36 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1816996937230179390}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!4 &1569781795883724260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
   m_PrefabInstance: {fileID: 9116083507789851663}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4295543925090538272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+  m_PrefabInstance: {fileID: 9116083507789851663}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1816996937230179390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4295543925090538272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  detectionDistance: 1.1
+  tunnelLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  pathType: 0
+  isBuilding: 1
