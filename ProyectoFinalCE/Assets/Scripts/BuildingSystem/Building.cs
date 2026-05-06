@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private BuildingData data;
-
+    [SerializeField] public BuildingData data;
+    
     [SerializeField] private BuildingModel model;
 
     private bool isHovered = false;
@@ -35,6 +36,7 @@ public class Building : MonoBehaviour
         model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
+        
     }
 
     private void Update()

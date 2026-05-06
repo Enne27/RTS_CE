@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -35,11 +35,13 @@ public class BuildingManager : MonoBehaviour
 
     [Header("Builds")]
     public List<Building> constructionsBuilt;
+    public List<TunnelPath> pathsBuilt;
 
     [Header("Build Counts")]
     public int queenChambersCount;
     public int broodChambersCount;
     public int storageChambersCount;
+    public int pathsCount;
 
     private void Update()
     {
@@ -118,6 +120,7 @@ public class BuildingManager : MonoBehaviour
             }
         }
     }
+
     public void CancelPreview()
     {
         if (preview != null)
@@ -138,19 +141,90 @@ public class BuildingManager : MonoBehaviour
             case BuildingType.QueenChamber:
                 building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
                 queenChambersCount++;
+                constructionsBuilt.Add(building);
                 break;
             case BuildingType.BroodChamber:
                 building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
                 broodChambersCount++;
+                constructionsBuilt.Add(building);
                 break;
             case BuildingType.StorageChamber:
                 building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
                 storageChambersCount++;
+                constructionsBuilt.Add(building);
+                break;
+            case BuildingType.Tunnel:
+
+                TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
+
+                tunnel.DetectTunnels();
+
+                HashSet<int> neighborPathIDs = new();
+
+                foreach (TunnelFunction connection in tunnel.TunnelConnections)
+                {
+                    if (connection.pathID != 0)
+                        neighborPathIDs.Add(connection.pathID);
+                }
+
+ 
+                if (neighborPathIDs.Count == 0)
+                {
+                    pathsCount++;
+                    tunnel.pathID = pathsCount;
+
+                    TunnelPath newPath = new(pathsCount, tunnel);
+                    pathsBuilt.Add(newPath);
+
+                    return;
+                }
+
+                if (neighborPathIDs.Count == 1)
+                {
+                    int id = neighborPathIDs.First();
+
+                    tunnel.pathID = id;
+
+                    TunnelPath path = pathsBuilt.Find(p => p.pathID == id);
+
+                    if (!path.TunnelPieces.Contains(tunnel))
+                        path.TunnelPieces.Add(tunnel);
+
+                    return;
+                }
+
+
+                int mainID = neighborPathIDs.First();
+                TunnelPath mainPath = pathsBuilt.Find(p => p.pathID == mainID);
+
+                // Añadir el nuevo túnel al principal
+                tunnel.pathID = mainID;
+                mainPath.TunnelPieces.Add(tunnel);
+
+                // Fusionar los demás
+                foreach (int otherID in neighborPathIDs)
+                {
+                    if (otherID == mainID) continue;
+
+                    TunnelPath otherPath = pathsBuilt.Find(p => p.pathID == otherID);
+
+                    foreach (TunnelFunction piece in otherPath.TunnelPieces)
+                    {
+                        piece.pathID = mainID;
+
+                        if (!mainPath.TunnelPieces.Contains(piece))
+                            mainPath.TunnelPieces.Add(piece);
+                    }
+
+                    pathsBuilt.Remove(otherPath);
+                    pathsCount--;
+                }
+                
                 break;
             default:
                 break;
         }
-        constructionsBuilt.Add(building);
+        
         Destroy(preview.gameObject);
         preview = null;
     }
