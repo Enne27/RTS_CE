@@ -21,7 +21,9 @@ public class ConstructionMenuView : View
     [SerializeField] GameObject buildingInfo;
     [SerializeField] TextMeshProUGUI buildingName;
     [SerializeField] TextMeshProUGUI buildingDescText;
+    [SerializeField] Sprite huevasImage;
     [SerializeField] TextMeshProUGUI costText;
+    [SerializeField] Sprite materialesImage;
     [SerializeField] TextMeshProUGUI levelText;
 
     [Header("LocalizedStrings")]
