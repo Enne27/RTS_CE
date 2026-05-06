@@ -59,7 +59,8 @@ Shader "Custom/RTSFogOfWar"
                 // Si ambos son 0 -> finalAlpha es 1 (Negro total).
                 float finalAlpha = 1.0 - max(isVisible, isExplored * (1.0 - _ExploredAlpha));
                 
-                return fixed4(_FogColor.rgb, finalAlpha * _FogColor.a);
+                // return fixed4(_FogColor.rgb, finalAlpha * _FogColor.a);
+                return fixed4(isVisible, isExplored, 0.0, 1.0);
             }
             ENDCG
         }

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: fog_mat
-  m_Shader: {fileID: 4800000, guid: 97f20d7bfaf8dc444a3b20827ad72377, type: 3}
+  m_Name: FogMat
+  m_Shader: {fileID: -6465566751694194690, guid: 070b5dbf2173ed64db790bf376162f3a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,20 +23,25 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _FogTex:
+    - _Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _PrevFogTex:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _ExploredAlpha: 0.5
-    - _Radius: 0.1
-    m_Colors:
-    - _FogColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RevealPos: {r: 0.5, g: 0.5, b: 0, a: 0}
+    - _Size: 100
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

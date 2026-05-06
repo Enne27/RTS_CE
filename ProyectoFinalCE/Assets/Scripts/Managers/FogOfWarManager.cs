@@ -17,7 +17,7 @@ public class FogOfWarManager : MonoBehaviour
 
     [Header("Materiales")]
     [Tooltip("El material que tiene el Shader de la Niebla")]
-    public Material fogMaterial;
+    public Material fogMaterial2;
 
     private Texture2D fogTexture;
     private Color32[] pixels;
@@ -51,6 +51,7 @@ public class FogOfWarManager : MonoBehaviour
         mapOriginOffset = mapSize / 2f;
 
         fogTexture = new Texture2D(textureRes, textureRes, TextureFormat.RGBA32, false);
+        fogMaterial2.SetTexture("_Texture2D", fogTexture);
         // Desactivar el wrap para evitar que la niebla se repita en los bordes
         fogTexture.wrapMode = TextureWrapMode.Clamp;
         // Filtro bilineal para que el Shader mezcle los colores suavemente
@@ -66,12 +67,6 @@ public class FogOfWarManager : MonoBehaviour
 
         fogTexture.SetPixels32(pixels);
         fogTexture.Apply();
-
-        // Enviar la textura generada al Material de la niebla
-        if (fogMaterial != null)
-        {
-            fogMaterial.SetTexture("_FogTex", fogTexture);
-        }
     }
 
 
@@ -155,7 +150,7 @@ public class FogOfWarManager : MonoBehaviour
                     {
                         int index = y * textureRes + x;
                         pixels[index].r = 255; // Visible ahora
-                        pixels[index].g = 255; // Explorado permanente
+                        pixels[index].g = 128; // Explorado permanente
                     }
                 }
             }
