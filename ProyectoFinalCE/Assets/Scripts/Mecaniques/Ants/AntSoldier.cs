@@ -56,11 +56,20 @@ internal class AntSoldier : Ant
     public void AttackMound()
     {
         MoundFunction target;
-        target = GetComponent<MoundFunction>();
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= reach)
+        if (gameObject.CompareTag("AI_AntHill"))
         {
-            target.TakeDamage((int)Math.Round(strength));
+            target = GetComponent<MoundFunction>();
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage((int)Math.Round(strength));
+            }
+        }
+
+        else
+        {
+            Debug.Log("Este objeto no es el hormiguero enemigo");
+            return;
         }
     }
     public override void Die()
