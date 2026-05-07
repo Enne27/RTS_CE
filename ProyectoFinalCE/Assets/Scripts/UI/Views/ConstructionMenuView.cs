@@ -21,9 +21,7 @@ public class ConstructionMenuView : View
     [SerializeField] GameObject buildingInfo;
     [SerializeField] TextMeshProUGUI buildingName;
     [SerializeField] TextMeshProUGUI buildingDescText;
-    [SerializeField] Sprite huevasImage;
     [SerializeField] TextMeshProUGUI costText;
-    [SerializeField] Sprite materialesImage;
     [SerializeField] TextMeshProUGUI levelText;
 
     [Header("LocalizedStrings")]
@@ -120,7 +118,10 @@ public class ConstructionMenuView : View
    {
         chamberName.StringReference = data.buildName;
         chamberDescription.StringReference = data.buildDescription;
-        costText.text = data.costMC.ToString() + ", " + data.costHV.ToString();
+        //costText.text = data.costMC.ToString() + ", " + data.costHV.ToString();
+        costText.text = $"<sprite name=\"huevas\"> {data.costHV}<space=50><sprite name=\"materiales\"> {data.costMC}";
+    //    $"<sprite name=\"huevas\"> {data.costHV}<space=20>" +
+    //$"<sprite name=\"materiales\"> {data.costMC}";
         levelText.text = "lvl 1";
    }
 }
