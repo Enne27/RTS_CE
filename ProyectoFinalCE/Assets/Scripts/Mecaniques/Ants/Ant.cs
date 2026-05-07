@@ -1,15 +1,16 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 public abstract class Ant : MonoBehaviour 
 {
     public static event Action<Ant> OnAnyAntDamaged;
-    protected float HP; 
-    protected float armor;
-    protected float speed; 
-    protected float strength; 
-    protected int reach; 
-    protected int vision; 
+    public float HP; 
+    public float armor;
+    public float speed; 
+    public float strength; 
+    public int reach; 
+    public int vision; 
     protected int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
@@ -50,5 +51,10 @@ public abstract class Ant : MonoBehaviour
     public float GetSpeed()
     {
         return speed;
+    }
+
+    public float GetArmor()
+    {
+        return armor;
     }
 }
