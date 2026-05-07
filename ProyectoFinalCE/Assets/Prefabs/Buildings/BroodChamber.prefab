@@ -522,6 +522,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2594356727669473365}
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5544337993522881897}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!1 &4752044420620730086 stripped
 GameObject:
@@ -540,12 +543,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  pathID: 0
+  TunnelConnections: []
   detectionDistance: 1.1
   tunnelLayer:
     serializedVersion: 2
     m_Bits: 256
-  pathType: 0
   isBuilding: 1
+  tileConnectedToEntrance: 0
+  pathType: 0
+  isolatedMesh: {fileID: 0}
+  endMesh: {fileID: 0}
+  straightMesh: {fileID: 0}
+  cornerMesh: {fileID: 0}
+  T_CornerMesh: {fileID: 0}
+  cross: {fileID: 0}
+--- !u!65 &5544337993522881897
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4752044420620730086}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &8045273297012932642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
@@ -614,6 +647,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7816585932110026544}
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 949938212978897691}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!1 &4787052057496182764 stripped
 GameObject:
@@ -632,12 +668,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  pathID: 0
+  TunnelConnections: []
   detectionDistance: 1.1
   tunnelLayer:
     serializedVersion: 2
     m_Bits: 256
-  pathType: 0
   isBuilding: 1
+  tileConnectedToEntrance: 0
+  pathType: 0
+  isolatedMesh: {fileID: 0}
+  endMesh: {fileID: 0}
+  straightMesh: {fileID: 0}
+  cornerMesh: {fileID: 0}
+  T_CornerMesh: {fileID: 0}
+  cross: {fileID: 0}
+--- !u!65 &949938212978897691
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4787052057496182764}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &7798875776249569576 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7731037474655977963, guid: df3b95761d498394cb020f15db138b0c, type: 3}
@@ -706,6 +772,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6416754080049836300}
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2006792513070391178}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!4 &5475529500756691196 stripped
 Transform:
@@ -729,12 +798,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  pathID: 0
+  TunnelConnections: []
   detectionDistance: 1.1
   tunnelLayer:
     serializedVersion: 2
     m_Bits: 256
-  pathType: 0
   isBuilding: 1
+  tileConnectedToEntrance: 0
+  pathType: 0
+  isolatedMesh: {fileID: 0}
+  endMesh: {fileID: 0}
+  straightMesh: {fileID: 0}
+  cornerMesh: {fileID: 0}
+  T_CornerMesh: {fileID: 0}
+  cross: {fileID: 0}
+--- !u!65 &2006792513070391178
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7325341579816449592}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2691427806537024584
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -798,6 +897,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6285188234376657983}
+    - targetCorrespondingSourceObject: {fileID: 4980422456994414383, guid: df3b95761d498394cb020f15db138b0c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4206772585204705230}
   m_SourcePrefab: {fileID: 100100000, guid: df3b95761d498394cb020f15db138b0c, type: 3}
 --- !u!4 &5626111714964915619 stripped
 Transform:
@@ -821,9 +923,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d259a7a95349c4bb9b8114799c4639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TunnelFunction
+  pathID: 0
+  TunnelConnections: []
   detectionDistance: 1.1
   tunnelLayer:
     serializedVersion: 2
     m_Bits: 256
-  pathType: 0
   isBuilding: 1
+  tileConnectedToEntrance: 0
+  pathType: 0
+  isolatedMesh: {fileID: 0}
+  endMesh: {fileID: 0}
+  straightMesh: {fileID: 0}
+  cornerMesh: {fileID: 0}
+  T_CornerMesh: {fileID: 0}
+  cross: {fileID: 0}
+--- !u!65 &4206772585204705230
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6937756205644790631}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

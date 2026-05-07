@@ -4,26 +4,32 @@ using UnityEngine;
 
 public enum PathType
 {
+    //mesh1
     Isolated,
 
+    //mesh2
     End_Up,
     End_Down,
     End_Left,
     End_Right,
 
+    //mesh3
     Straight_Horizontal,
     Straight_Vertical,
 
+    //mesh4
     Corner_UpRight,
     Corner_UpLeft,
     Corner_DownRight,
     Corner_DownLeft,
 
+    //mesh5
     T_Up,
     T_Down,
     T_Left,
     T_Right,
 
+    //mesh6
     Cross
 }
 
@@ -44,19 +50,44 @@ public class TunnelPath
 
 public class TunnelFunction : MonoBehaviour
 {
+    [Header("Path Information")]
     public int pathID;
     public List<TunnelFunction> TunnelConnections;
     public float detectionDistance = 1.1f;
     public LayerMask tunnelLayer;
-    public PathType pathType;
     public bool isBuilding;
-    private bool up, down, left, right;
     public bool tileConnectedToEntrance;
+    public PathType pathType;
+
+    [Header("TunnelMeshes")]
+    [SerializeField] private Mesh isolatedMesh;
+    [SerializeField] private Mesh endMesh;
+    [SerializeField] private Mesh straightMesh;
+    [SerializeField] private Mesh cornerMesh;
+    [SerializeField] private Mesh T_CornerMesh;
+    [SerializeField] private Mesh crossMesh;
+
+    [Header("TunnelMaterials")]
+    [SerializeField] private Material isolatedMaterial;
+    [SerializeField] private Material endMaterial;
+    [SerializeField] private Material straightMaterial;
+    [SerializeField] private Material cornerMaterial;
+    [SerializeField] private Material T_CornerMaterial;
+    [SerializeField] private Material crossMaterial;
+
+    private bool up, down, left, right;
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+
+    private void Start()
+    {
+        meshFilter = GetComponentInChildren<MeshFilter>();
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+    }
 
     private void OnDrawGizmos()
     {
         DetectNeighbors();
-        DeterminePathType();
 
         bool connected = tileConnectedToEntrance;
 
@@ -103,50 +134,124 @@ public class TunnelFunction : MonoBehaviour
         if (count == 0)
         {
             pathType = PathType.Isolated;
+            meshFilter.mesh = isolatedMesh;
         }
         else if (count == 1)
         {
-            if (up) pathType = PathType.End_Up;
-            else if (down) pathType = PathType.End_Down;
-            else if (left) pathType = PathType.End_Left;
-            else pathType = PathType.End_Right;
+            meshFilter.mesh = endMesh;
+            if (up)
+            {
+                pathType = PathType.End_Up;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else if (down)
+            {
+                pathType = PathType.End_Down;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+            else if (left)
+            {
+                pathType = PathType.End_Left;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            else 
+            {
+                pathType = PathType.End_Right;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+            } 
+
         }
         else if (count == 2)
         {
             if (up && down)
+            {
                 pathType = PathType.Straight_Vertical;
+                meshFilter.mesh = straightMesh;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
 
             else if (left && right)
+            {
                 pathType = PathType.Straight_Horizontal;
+                meshFilter.mesh = straightMesh;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
 
             else if (up && right)
+            {
                 pathType = PathType.Corner_UpRight;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+                meshFilter.mesh = cornerMesh;
+            }
 
             else if (up && left)
+            {
                 pathType = PathType.Corner_UpLeft;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                meshFilter.mesh = cornerMesh;
+            }
 
             else if (down && right)
+            {
                 pathType = PathType.Corner_DownRight;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+                meshFilter.mesh = cornerMesh;
+            }
 
             else
+            {
                 pathType = PathType.Corner_DownLeft;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+                meshFilter.mesh = cornerMesh;
+
+            }
         }
         else if (count == 3)
         {
-            if (!down) pathType = PathType.T_Up;
-            else if (!up) pathType = PathType.T_Down;
-            else if (!left) pathType = PathType.T_Right;
-            else pathType = PathType.T_Left;
+            meshFilter.mesh = T_CornerMesh;
+
+            if (!down) 
+            { 
+                pathType = PathType.T_Up;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+                Debug.Log("arriba");
+
+            }
+            else if (!up)
+            {
+                pathType = PathType.T_Down;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+                Debug.Log("abajo");
+
+            }
+            else if (!left)
+            {
+                pathType = PathType.T_Right;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+                Debug.Log("derecha");
+            }
+            else
+            {
+                pathType = PathType.T_Left;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                Debug.Log("izquierda");
+            } 
         }
         else
         {
             pathType = PathType.Cross;
+            meshFilter.mesh = crossMesh;
         }
     }
 
     
     private void Update()
     {
+        DetectNeighbors();
+        if(meshFilter != null && meshRenderer != null)
+        {
+            DeterminePathType();
+        }
         RefreshTunnelState();
     }
     
@@ -231,5 +336,67 @@ public class TunnelFunction : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void ApplyCurrentPathMaterial()
+    {
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        Debug.Log("Lo intento?");
+        switch (pathType)
+        {
+            case PathType.Isolated:
+                meshRenderer.material = isolatedMaterial;
+                break;
+
+            case PathType.End_Up:
+                meshRenderer.material = endMaterial;
+                break;
+            case PathType.End_Down:
+                meshRenderer.material = endMaterial;
+                break;
+            case PathType.End_Left:
+                meshRenderer.material = endMaterial;
+                break;
+            case PathType.End_Right:
+                meshRenderer.material = endMaterial;
+                break;
+
+            case PathType.Straight_Horizontal:
+                meshRenderer.material = straightMaterial;
+                break;
+            case PathType.Straight_Vertical:
+                meshRenderer.material = straightMaterial;
+                break;
+
+            case PathType.Corner_UpRight:
+                meshRenderer.material = cornerMaterial;
+                break;
+            case PathType.Corner_UpLeft:
+                meshRenderer.material = cornerMaterial;
+                break;
+            case PathType.Corner_DownRight:
+                meshRenderer.material = cornerMaterial;
+                break;
+            case PathType.Corner_DownLeft:
+                meshRenderer.material = cornerMaterial;
+                break;
+
+            case PathType.T_Up:
+                meshRenderer.material = T_CornerMaterial;
+                break;
+            case PathType.T_Down:
+                meshRenderer.material = T_CornerMaterial;
+                break;
+            case PathType.T_Left:
+                meshRenderer.material = T_CornerMaterial; 
+                break;
+            case PathType.T_Right:
+                meshRenderer.material = T_CornerMaterial;
+                break;
+
+            case PathType.Cross:
+                meshRenderer.material = crossMaterial;
+                break;
+        }
     }
 }

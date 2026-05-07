@@ -1,5 +1,6 @@
-
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ResourceType
 {
@@ -16,6 +17,10 @@ public class ForagingChamberFunction : StructuresPlayer
     [Header("Inventory")]
     [SerializeField] private int foods;
     [SerializeField] private int materials;
+
+    [Header("UI References")]
+    [SerializeField] Slider capacitySlider; 
+    [SerializeField] TextMeshProUGUI capacityText; 
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -35,6 +40,7 @@ public class ForagingChamberFunction : StructuresPlayer
     private void Awake()
     {
         slots = slotsUpgrade_[currentLevel - 1];
+        UpdateUI();
     }
 
     public bool AddResource(ResourceType resource)
@@ -54,7 +60,7 @@ public class ForagingChamberFunction : StructuresPlayer
         }
 
         slotsOccupied++;
-
+        UpdateUI();
         return true;
     }
 
@@ -74,7 +80,7 @@ public class ForagingChamberFunction : StructuresPlayer
         }
 
         slotsOccupied--;
-
+        UpdateUI();
         return true;
     }
 
@@ -95,4 +101,11 @@ public class ForagingChamberFunction : StructuresPlayer
     {
         return;
     }
+
+    public void UpdateUI()
+    {
+        capacitySlider.value = slotsOccupied * slots / 100;
+        capacityText.text = $"{slotsOccupied}\n-\n{slots}";
+    }
+
 }

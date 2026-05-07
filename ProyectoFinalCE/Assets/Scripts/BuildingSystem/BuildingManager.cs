@@ -156,7 +156,6 @@ public class BuildingManager : MonoBehaviour
             case BuildingType.Tunnel:
 
                 TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
-
                 tunnel.DetectTunnels();
 
                 HashSet<int> neighborPathIDs = new();
@@ -219,6 +218,8 @@ public class BuildingManager : MonoBehaviour
                     pathsBuilt.Remove(otherPath);
                     pathsCount--;
                 }
+
+                
                 
                 break;
             default:
@@ -227,6 +228,8 @@ public class BuildingManager : MonoBehaviour
         
         Destroy(preview.gameObject);
         preview = null;
+
+
     }
 
     private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
