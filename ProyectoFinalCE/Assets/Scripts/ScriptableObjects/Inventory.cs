@@ -24,8 +24,8 @@ public class Inventory
         SetEggCapacity(HIVE_ERAS.BROTE);
         UpdateFoodCapacity(FOOD_CAPACITY); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
         UpdateMC_Capacity(MC_CAPACITY);
-        if(GameManager.instance != null)
-            workerAnts = GameManager.instance.startingWorkerAnts;
+        /*if(GameManager.instance != null)
+            workerAnts = GameManager.instance.startingWorkerAnts;*/
     }
 
     #region Methods

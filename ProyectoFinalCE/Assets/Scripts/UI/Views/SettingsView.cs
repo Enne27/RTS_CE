@@ -25,6 +25,7 @@ public class SettingsView : View
     public override void Show()
     {
         base.Show();
+        Time.timeScale = 0;
 
         SettingsManager.instance.isLoading = true;
 
@@ -40,7 +41,8 @@ public class SettingsView : View
 
     public override void Hide()
     {
+        Time.timeScale = 1;
         UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
-        base.Hide();
+       // base.Hide();
     }
 }

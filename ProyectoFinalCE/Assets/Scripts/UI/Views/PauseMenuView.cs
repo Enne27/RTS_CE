@@ -29,12 +29,14 @@ public class PauseMenuView : View
         controlsButton.onClick.AddListener(() => 
         {
             //Hide();
+            Debug.Log("controls");
             ViewManager.Show<ControlsView>();
         });
 
         settingsButton.onClick.AddListener(() =>
         {
             //Hide();
+            Debug.Log("settings");
             ViewManager.Show<SettingsView>();
         });
 
@@ -66,7 +68,5 @@ public class PauseMenuView : View
         base.Hide();
         Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
-
-
     }
 }

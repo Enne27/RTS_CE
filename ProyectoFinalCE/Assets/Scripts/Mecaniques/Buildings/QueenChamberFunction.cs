@@ -54,6 +54,15 @@ public class QueenChamberFunction : StructuresPlayer
     public override void OnConstructionFinished()
     {
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
+
+        GameManager.instance.player.inventory.RemoveEggs(queenBuildingScriptable.costHV);
+        GameManager.instance.player.inventory.RemoveMC(queenBuildingScriptable.costMC);
+
+        if (hudView != null)
+        {
+            hudView.UpdateMCText();
+            hudView.UpdateEggsText();
+        }
     }
 
     #endregion
