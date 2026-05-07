@@ -38,6 +38,7 @@ public class AntCreation : MonoBehaviour
 
         antToInstantiate = workerAnt;
     }
+    #endregion
 
     private void Start()
     {
@@ -45,12 +46,11 @@ public class AntCreation : MonoBehaviour
         GameManager.instance.playerIA.ants.Clear();
 
         // Creación inicial de hormigas, tanto del jugador como de la IA.
-        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true);
-        SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true);
+        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
+        SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
 
-        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false);
+        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
-    #endregion
 
     /// <summary>
     /// Creación de hormigas del jugador mediante el uso de recursos y actualización de la interfaz.
@@ -80,15 +80,18 @@ public class AntCreation : MonoBehaviour
             // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
             if (CanSpawnAnt(foodCosts, hvCosts))
             {
-                SystemAntCreation(1, antType, position, true);
+                SystemAntCreation(1, antType, position, true, true);
 
-                if (gameHUDView != null)
-                    gameHUDView.UpdateAntText(antType, 1);
-                else
-                {
+
+                if (gameHUDView == null)
                     gameHUDView = FindFirstObjectByType<GameHUDView>();
-                    gameHUDView.UpdateAntText(antType, 1);
-                }
+
+                gameHUDView.UpdateAntText(antType, 1);
+
+                GameManager.instance.player.inventory.RemoveFood(foodCosts);
+                gameHUDView.UpdateFoodText();
+                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+                gameHUDView.UpdateEggsText();
             }
             else
             {
@@ -105,7 +108,7 @@ public class AntCreation : MonoBehaviour
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
     /// <param name="position">Posición donde instanciar.</param>
     /// <param name="isPlayer">Es el jugador = true -> IA = false</param>
-    private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
+    private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer, bool addsQuantity)
     {
         if (position != null)
         {
@@ -120,8 +123,9 @@ public class AntCreation : MonoBehaviour
                 {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                    else
+                    else if(addsQuantity) 
                         GameManager.instance.player.inventory.workerAnts++;
+                    
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
@@ -129,8 +133,8 @@ public class AntCreation : MonoBehaviour
                 else {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.playerIA.ants.Add(newAnt.GetComponent<Ant>());
-                    else
-                        GameManager.instance.playerIA.inventory.workerAnts++;
+                    else if (addsQuantity) GameManager.instance.playerIA.inventory.workerAnts++;
+                    
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.playerIA.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
