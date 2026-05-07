@@ -6,7 +6,7 @@ public abstract class Ant : MonoBehaviour
     public static event Action<Ant> OnAnyAntDamaged;
     protected float HP; 
     protected float armor;
-    protected float speed; 
+    protected float speed;
     protected float strength; 
     protected int reach; 
     protected int vision; 

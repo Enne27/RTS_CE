@@ -4,23 +4,19 @@ public enum SkillType
     Generic,
     Strength,
     Speed,
-    Breeding,
-    Construction
+    Breeding
 }
 
 // Tipus d'estadístiques que es poden modificar
 public enum StatType
 {
     Damage,
-    MoveSpeed,
-    AttackSpeed,
-    ReproductionRate,
-    BuildSpeed,
-    CostReduction,
-    ResourceGain,
-    CarryCapacity,
-    WorkerEfficiency,
-    EggProduction,
-    Special,
-    CombatSpeed
+    HP,
+    Armor,
+    Strength,
+    Vision,
+    AcidBased,
+    Reach,
+    Speed,
+    SpecialAbility
 }
