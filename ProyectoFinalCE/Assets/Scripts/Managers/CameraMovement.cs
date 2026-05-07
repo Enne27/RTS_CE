@@ -181,15 +181,6 @@ public class CameraMovement : MonoBehaviour
 
         cameraTransform.localPosition = cameraInitialLocalPos + zoomOffset;
     }
-
-    private void RotateCamera(InputAction.CallbackContext obj)
-    {
-        if (!Mouse.current.middleButton.isPressed)
-            return;
-
-        float inputValue = obj.ReadValue<Vector2>().x;
-        transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
-    }
     #endregion
 
     #region Bounds
@@ -215,7 +206,6 @@ public class CameraMovement : MonoBehaviour
         currentZoom = 0f;
 
         movement = cameraActions.FindAction("Movement");
-        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
         cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
         cameraActions.Enable();
     }
@@ -224,7 +214,6 @@ public class CameraMovement : MonoBehaviour
     {
         cameraCanMove = false;
 
-        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
         cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
     #endregion
