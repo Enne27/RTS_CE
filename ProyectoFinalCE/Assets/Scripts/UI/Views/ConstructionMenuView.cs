@@ -23,6 +23,7 @@ public class ConstructionMenuView : View
     [SerializeField] TextMeshProUGUI buildingDescText;
     [SerializeField] TextMeshProUGUI costText;
     [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] Image buildingPreviewImage;
 
     [Header("LocalizedStrings")]
     [SerializeField] private LocalizeStringEvent chamberDescription;
@@ -119,9 +120,8 @@ public class ConstructionMenuView : View
         chamberName.StringReference = data.buildName;
         chamberDescription.StringReference = data.buildDescription;
         //costText.text = data.costMC.ToString() + ", " + data.costHV.ToString();
-        costText.text = $"<sprite name=\"huevas\"> {data.costHV}<space=50><sprite name=\"materiales\"> {data.costMC}";
-    //    $"<sprite name=\"huevas\"> {data.costHV}<space=20>" +
-    //$"<sprite name=\"materiales\"> {data.costMC}";
+        costText.text = $"<sprite name=\"huevas\"> {data.costHV}<space=100><sprite name=\"materiales\"> {data.costMC}";
         levelText.text = "lvl 1";
-   }
+        buildingPreviewImage.sprite = data.previewSprite;
+    }
 }
