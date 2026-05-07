@@ -1,12 +1,12 @@
-using FMODUnity;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Localization.Components;
+using UnityEngine.Localization;
 using UnityEngine.UI;
-using static ConstructionMenuView;
 using static PlayerConstants;
+using static ConstantsAndKeys;
+using Unity.VisualScripting;
 
 public class BroodChamberView : View
 {
@@ -14,7 +14,6 @@ public class BroodChamberView : View
     public class AntButton
     {
         public Button buttonComponent;
-        //public GameObject antInfo;
         public Ant antScript;
         public string antName;
     }
@@ -24,9 +23,10 @@ public class BroodChamberView : View
     [SerializeField] private List<AntButton> antsButton;
     [SerializeField] GameObject antInfo;
     [SerializeField] TextMeshProUGUI antNameText;
-    [SerializeField] TextMeshProUGUI costText;
     [SerializeField] TextMeshProUGUI statsValuesText;
+    [SerializeField] TextMeshProUGUI statsText;
 
+    private LocalizedString antNameLocalized;
 
     [Header("Buttons")]
     [SerializeField] Button soldierButton;
@@ -115,6 +115,7 @@ public class BroodChamberView : View
         enterEntry.callback.AddListener((e) => OnButtonHoverStart(data));
         trigger.triggers.Add(enterEntry);
 
+
         // Evento Hover Exit
         EventTrigger.Entry exitEntry = new EventTrigger.Entry
         {
@@ -126,8 +127,18 @@ public class BroodChamberView : View
 
     private void OnButtonHoverStart(AntButton data)
     {
-        // Mostrar panel de información
-        //UpdateInfoPanel(data.buildingData);
+
+        if (data.antName.Contains("worker"))
+        {
+            antNameLocalized = new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = data.antName };
+            UpdateWorkerPanel(data.antName);
+        }
+        else
+        {
+            antNameLocalized = new LocalizedString { TableReference = TABLE_HUD, TableEntryReference = data.antName };
+            UpdateInfoPanel(data.antScript, antNameLocalized.GetLocalizedString());
+        }
+
         antInfo.SetActive(true);
     }
 
@@ -136,11 +147,24 @@ public class BroodChamberView : View
         antInfo.SetActive(false);
     }
 
-    private void UpdateInfoPanel(BuildingData data)
+    private void UpdateInfoPanel(Ant data, string antName)
     {
-        /*chamberName.StringReference = data.buildName;
-        chamberDescription.StringReference = data.buildDescription;
-        costText.text = data.costMC.ToString() + ", " + data.costHV.ToString();*/
+        antNameText.text = antName;
+        statsText.gameObject.SetActive(true);
+        statsValuesText.text = data.breedingCost[0].ToString() + " " + data.breedingCost[1].ToString() 
+            + "\n" 
+            + "\n" 
+            + "\n" 
+            + "\n" 
+            + "\n" 
+            + "\n";
+    }
+
+    private void UpdateWorkerPanel(string antName)
+    {
+        antNameText.text = antName;
+        statsText.gameObject.SetActive(false);
+        statsValuesText.text = "";
     }
 
     /*private void OnDisable()
