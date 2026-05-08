@@ -74,23 +74,70 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void HandlePreview(BuildingData data ,Vector3 mouseWorldPosition)
+    private void HandlePreview(BuildingData data, Vector3 mouseWorldPosition)
     {
         preview.transform.position = mouseWorldPosition;
+
         List<Vector3> buildPosition = preview.model.GetAllBuilddingPositions();
         bool canBuild = grid.CanBuild(buildPosition);
 
         if (canBuild)
         {
             preview.transform.position = GetSnappedCenterPosition(buildPosition);
-            if((GameManager.instance.player.inventory.materials >= data.costMC) && (GameManager.instance.player.inventory.eggs >= data.costHV))
+
+            Inventory inventory = GameManager.instance.player.inventory;
+            ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
+
+            // Recursos totales (storage + foraging)
+            int totalMaterials = inventory.materials + inventory.materialsInForaging;
+
+            bool hasResources = totalMaterials >= data.costMC;
+
+            if (hasResources)
             {
                 preview.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
 
                 if (mouse.leftButton.wasPressedThisFrame)
                 {
+                    // =========================
+                    // MATERIALES
+                    // =========================
+
+                    int materialsNeeded = data.costMC;
+
+                    // Primero gastar foraging
+                    if (inventory.materialsInForaging >= materialsNeeded)
+                    {
+                        inventory.materialsInForaging -= materialsNeeded;
+
+                        // Actualizar chamber visual
+                        foragingChamber.RemoveResource(ResourceType.material, materialsNeeded);
+                    }
+                    else
+                    {
+                        int fromForaging = inventory.materialsInForaging;
+
+                        // Vaciar foraging
+                        inventory.materialsInForaging = 0;
+
+                        // Actualizar chamber visual
+                        if (fromForaging > 0)
+                        {
+                            foragingChamber.RemoveResource(ResourceType.material, fromForaging);
+                        }
+
+                        // Lo restante desde storage
+                        materialsNeeded -= fromForaging;
+
+                        inventory.materials -= materialsNeeded;
+                    }
+
+                    
+                    foragingChamber.UpdateUI();
+
                     PlaceBuilding(buildPosition);
                 }
+
                 if (mouse.middleButton.wasPressedThisFrame)
                 {
                     CancelPreview();
@@ -107,7 +154,6 @@ public class BuildingManager : MonoBehaviour
                     return;
                 }
             }
-            
         }
         else
         {

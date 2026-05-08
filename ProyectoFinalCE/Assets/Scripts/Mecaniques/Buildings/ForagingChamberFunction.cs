@@ -87,22 +87,39 @@ public class ForagingChamberFunction : StructuresPlayer
         return amountToAdd == quantity;
     }
 
-    public bool RemoveResource(ResourceType resource)
+    public bool RemoveResource(ResourceType resource, int quantity)
     {
+        // Cantidad inválida
+        if (quantity <= 0)
+            return false;
+
         switch (resource)
         {
             case ResourceType.food:
-                if (foods <= 0) return false;
-                foods--;
+
+                // No hay suficiente comida
+                if (foods < quantity)
+                    return false;
+
+                foods -= quantity;
                 break;
 
             case ResourceType.material:
-                if (materials <= 0) return false;
-                materials--;
+
+                // No hay suficientes materiales
+                if (materials < quantity)
+                    return false;
+
+                materials -= quantity;
                 break;
+
+            default:
+                return false;
         }
 
-        slotsOccupied--;
+        // Evitar negativos
+        slotsOccupied = Mathf.Max(0, slotsOccupied - quantity);
+
         UpdateUI();
         return true;
     }
