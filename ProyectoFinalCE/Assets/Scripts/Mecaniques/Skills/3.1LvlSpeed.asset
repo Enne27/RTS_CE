@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: 1LvlStrength
+  m_Name: 3.1LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Boost de For\xE7a"
-  description: "Dona un petit boost en la for\xE7a de les formigues"
-  skillType: 1
-  cost: 2
-  prerequisites: []
+  skillName: Aumento de vision
+  description: Augmento de vision a las hormigas.
+  skillType: 2
+  cost: 5
+  prerequisites:
+  - {fileID: 11400000, guid: d931ffff75df20d45b70205e80f46f96, type: 2}
+  - {fileID: 11400000, guid: 471eab8e42e9c6b4f837fbe53bf38765, type: 2}
   effects:
   - effectType: 0
-    statType: 3
-    value: 5
-    specialID: Lvl1Strength
+    statType: 4
+    value: 15
+    specialID: 3.1LvlSpeed

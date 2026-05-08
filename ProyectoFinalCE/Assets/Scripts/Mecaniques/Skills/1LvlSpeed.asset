@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: BoostV
+  m_Name: 1LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: Boost de Velocitat
-  description: Dona un petit boost en el moviment de les formigues
+  description: Dona un petit boost en la velocitat de les formigues.
   skillType: 2
   cost: 2
   prerequisites: []
@@ -21,8 +21,4 @@ MonoBehaviour:
   - effectType: 0
     statType: 7
     value: 5
-    specialID: BoostV1
-  - effectType: 0
-    statType: 3
-    value: -5
-    specialID: BoostV2
+    specialID: 1LvlSpeed

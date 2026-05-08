@@ -10,15 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: 1LvlStrength
+  m_Name: 1LvlGeneric
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Boost de For\xE7a"
-  description: "Dona un petit boost en la for\xE7a de les formigues"
-  skillType: 1
+  skillName: Boost de estats
+  description: "Da un peque\xF1o boost generico"
+  skillType: 0
   cost: 2
   prerequisites: []
   effects:
   - effectType: 0
+    statType: 7
+    value: 3
+    specialID: 1LvlGeneric1
+  - effectType: 0
+    statType: 2
+    value: 3
+    specialID: 1LvlGeneric2
+  - effectType: 0
     statType: 3
-    value: 5
-    specialID: Lvl1Strength
+    value: 3
+    specialID: 1LvlGeneric3
+  - effectType: 0
+    statType: 5
+    value: 3
+    specialID: 1LvlGeneric4

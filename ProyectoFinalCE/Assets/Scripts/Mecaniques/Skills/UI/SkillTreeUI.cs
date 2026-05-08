@@ -23,6 +23,11 @@ public class SkillTreeUI : MonoBehaviour
         UpdateStats();
     }
 
+    void Update()
+    {
+        UpdateStats();
+    }
+
     void UpdateStats()
     {
         statsText.text =

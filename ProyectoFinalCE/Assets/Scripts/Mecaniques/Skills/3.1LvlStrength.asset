@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: 1LvlStrength
+  m_Name: 3.1LvlStrength
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Boost de For\xE7a"
-  description: "Dona un petit boost en la for\xE7a de les formigues"
+  skillName: "Aumento de protecci\xF3n acida"
+  description: Da acid based a las hormigas.
   skillType: 1
-  cost: 2
-  prerequisites: []
+  cost: 5
+  prerequisites:
+  - {fileID: 11400000, guid: 03f8b962dd3baa34480bdd709125da8d, type: 2}
+  - {fileID: 11400000, guid: 299e7bfd20daf0040a6e2e76e9865371, type: 2}
   effects:
   - effectType: 0
-    statType: 3
-    value: 5
-    specialID: Lvl1Strength
+    statType: 5
+    value: 15
+    specialID: 3.1LvlStrength

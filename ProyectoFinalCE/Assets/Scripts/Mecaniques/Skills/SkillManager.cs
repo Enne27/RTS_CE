@@ -133,10 +133,6 @@ public class SkillManager : MonoBehaviour
     {
         switch (id)
         {
-            case "EggsAsFood":
-                GameManager.instance.canUseEggsAsFood = true;
-                break;
-
             case "InvisibleExplorers":
                 GameManager.instance.explorersInvisible = true;
                 break;
@@ -144,11 +140,7 @@ public class SkillManager : MonoBehaviour
             case "WorkerBonusPer10":
                 GameManager.instance.workerBonusPer10 += value;
                 break;
-
-            case "RecoverMaterials":
-                GameManager.instance.recoverMaterialsPercent += value;
-                break;
         }
-    }
+    }   
     #endregion
 }
