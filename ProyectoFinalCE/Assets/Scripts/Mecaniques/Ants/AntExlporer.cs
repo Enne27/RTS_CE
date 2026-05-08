@@ -70,8 +70,8 @@ public class AntExlporer : Ant
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
             Vector3 position = new Vector3();
-            food = UnityEngine.Random.Range(1, 4);
-            MC = UnityEngine.Random.Range(1, 3);
+            food = UnityEngine.Random.Range(1, 3);
+            MC = UnityEngine.Random.Range(1, 2);
             switch (antOwner)
             {
                 case (Owner.Player):
@@ -96,15 +96,21 @@ public class AntExlporer : Ant
             {
                 case (Owner.Player):
                     inventory = GameManager.instance.player.inventory;
+                    if (foragingChamber.AddResource(ResourceType.food, food))
+                        inventory.AddFoodInForaging(food);
+                    else
+                        inventory.foodInForaging = foragingChamber.foods;
+                    if (foragingChamber.AddResource(ResourceType.material, MC))
+                        inventory.AddMCInForaging(MC);
+                    else
+                        inventory.materialsInForaging = foragingChamber.materials;
                     break;
                 case (Owner.AI):
                     inventory = GameManager.instance.playerIA.inventory;
+                    inventory.AddFood(food);
+                    inventory.AddMC(MC);
                     break;
             }
-            inventory.AddFood(food);
-            foragingChamber.AddResource(ResourceType.food, food);
-            inventory.AddMC(MC);
-            foragingChamber.AddResource(ResourceType.material, MC);
             food = 0;
             MC = 0;
             if (asignedResourceZone != null)

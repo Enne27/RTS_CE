@@ -21,12 +21,13 @@ public class ForagingChamberFunction : StructuresPlayer
     [SerializeField] private int slotsOccupied;
 
     [Header("Inventory")]
-    [SerializeField] private int foods;
-    [SerializeField] private int materials;
+    [SerializeField] public int foods;
+    [SerializeField] public int materials;
 
     [Header("UI References")]
     [SerializeField] Slider capacitySlider; 
-    [SerializeField] TextMeshProUGUI capacityText; 
+    [SerializeField] TextMeshProUGUI capacityText;
+    [SerializeField] TextMeshProUGUI fullAlertText;
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -128,6 +129,11 @@ public class ForagingChamberFunction : StructuresPlayer
     {
         capacitySlider.value = ((float)slotsOccupied / slots) * 100;
         capacityText.text = $"{slotsOccupied}\n-\n{slots}";
-    }
 
+        if(slotsOccupied == slots)
+            fullAlertText.enabled = true;
+        else
+            fullAlertText.enabled = false;
+
+    }
 }
