@@ -84,6 +84,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95e6eb0be93f164f8cefdf276c1c555, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntExlporer
+  HP: 15
+  armor: 0.4
+  speed: 16
+  strength: 1
+  reach: 1
+  vision: 4
+  linePriority: 8
   breedingCost: 070000000c000000
   flowFieldInxex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
@@ -91,7 +98,8 @@ MonoBehaviour:
   food: 0
   MC: 0
   targetTransform: {fileID: 0}
-  antHillPosition: {x: 0, y: 0, z: 0}
+  antHillPositionOwner: {x: 0, y: 0, z: 0}
+  antOwner: 0
   asignedResourceZone: {fileID: 0}
 --- !u!136 &4214963978842064535
 CapsuleCollider:
