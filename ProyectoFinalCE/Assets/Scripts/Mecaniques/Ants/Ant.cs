@@ -11,7 +11,7 @@ public abstract class Ant : MonoBehaviour
     public float strength; 
     public int reach; 
     public int vision; 
-    protected int linePriority; 
+    public int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
     

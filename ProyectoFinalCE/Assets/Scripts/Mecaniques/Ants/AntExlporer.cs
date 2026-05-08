@@ -23,14 +23,14 @@ public class AntExlporer : Ant
     public GameObject asignedResourceZone;
     private void Awake()
     {
-        HP = 15f;
-        armor = 0.40f;
-        speed = 16f;
-        strength = 1f;
-        reach = 1;
-        vision = 4;
-        linePriority = 8;
-        acidBased = false;
+        //HP = 15f;
+        //armor = 0.40f;
+        //speed = 16f;
+        //strength = 1f;
+        //reach = 1;
+        //vision = 4;
+        //linePriority = 8;
+        //acidBased = false;
     }
 
     public override void Attack(Ant target)

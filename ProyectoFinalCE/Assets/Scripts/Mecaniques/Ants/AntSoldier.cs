@@ -10,14 +10,14 @@ internal class AntSoldier : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 25f;
-        armor = 0.50f;
-        speed = 12f;
-        strength = 3f;
-        reach = 1;
-        vision = 1;
-        linePriority = 2;
-        acidBased = false;
+        //HP = 25f;
+        //armor = 0.50f;
+        //speed = 12f;
+        //strength = 3f;
+        //reach = 1;
+        //vision = 1;
+        //linePriority = 2;
+        //acidBased = false;
     }
 
     public override void Attack(Ant target) {
