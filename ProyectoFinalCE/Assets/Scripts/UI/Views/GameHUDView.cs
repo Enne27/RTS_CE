@@ -16,7 +16,7 @@ public class GameHUDView : View
 
 
     [Header("Buttons")]
-    [SerializeField] Button constructionButton;
+    [SerializeField] public Button constructionButton;
     private bool constructionMenuActived = false;
     [SerializeField] Button generalInfoButton;
 
@@ -79,8 +79,8 @@ public class GameHUDView : View
           constructionButton.onClick.AddListener(()=> {
               if(constructionMenuActived == false)
               {
-                constructionMenuActived = true;
-                ViewManager.Show<ConstructionMenuView>();
+                  ViewManager.Show<ConstructionMenuView>();
+                  constructionMenuActived = true;
               }
               else 
               { 
