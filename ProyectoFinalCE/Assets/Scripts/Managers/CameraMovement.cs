@@ -122,7 +122,7 @@ public class CameraMovement : MonoBehaviour
 
     private void DragCamera()
     {
-        if (!Mouse.current.rightButton.isPressed)
+        if (!Mouse.current.middleButton.isPressed)
             return;
 
         //create plane to raycast to
@@ -131,7 +131,7 @@ public class CameraMovement : MonoBehaviour
 
         if (plane.Raycast(ray, out float distance))
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.middleButton.wasPressedThisFrame)
                 startDrag = ray.GetPoint(distance);
             else
                 targetPosition += startDrag - ray.GetPoint(distance);
