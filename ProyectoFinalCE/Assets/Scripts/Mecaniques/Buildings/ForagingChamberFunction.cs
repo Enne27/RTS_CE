@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public enum ResourceType
@@ -10,6 +11,11 @@ public enum ResourceType
 
 public class ForagingChamberFunction : StructuresPlayer
 {
+
+    #region SINGLETON
+    public static ForagingChamberFunction Instance;
+    #endregion
+
     [Header("BuildingParameters")]
     [SerializeField] private int slots;
     [SerializeField] private int slotsOccupied;
@@ -32,36 +38,52 @@ public class ForagingChamberFunction : StructuresPlayer
     [Tooltip("Tiempo que tarda el edificio en mejorarse en cada nivel.")]
     int[] timeUpgrade_ = { 0, 60, 90, 90, 120 };
 
-    int[] slotsUpgrade_ = { 5, 7, 9, 11, 15 };
+    int[] slotsUpgrade_ = { 50, 60, 70, 80, 90 };
 
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     int[] maxLevelByEra_ = { 1, 2, 4, 5 };
 
     private void Awake()
     {
+        Instance = this;
+    }
+    private void Start()
+    {
         slots = slotsUpgrade_[currentLevel - 1];
         UpdateUI();
     }
 
-    public bool AddResource(ResourceType resource)
+    public bool AddResource(ResourceType resource, int quantity)
     {
-        if (slotsOccupied >= slots)
+        if (quantity <= 0)
             return false;
+
+        int availableSlots = slots - slotsOccupied;
+
+        if (availableSlots <= 0)
+            return false;
+
+        int amountToAdd = Mathf.Min(quantity, availableSlots);
 
         switch (resource)
         {
             case ResourceType.food:
-                foods++;
+                foods += amountToAdd;
                 break;
 
             case ResourceType.material:
-                materials++;
+                materials += amountToAdd;
                 break;
+
+            default:
+                return false;
         }
 
-        slotsOccupied++;
+        slotsOccupied += amountToAdd;
+
         UpdateUI();
-        return true;
+
+        return amountToAdd == quantity;
     }
 
     public bool RemoveResource(ResourceType resource)
@@ -104,7 +126,7 @@ public class ForagingChamberFunction : StructuresPlayer
 
     public void UpdateUI()
     {
-        capacitySlider.value = slotsOccupied * slots / 100;
+        capacitySlider.value = ((float)slotsOccupied / slots) * 100;
         capacityText.text = $"{slotsOccupied}\n-\n{slots}";
     }
 
