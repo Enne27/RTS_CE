@@ -157,9 +157,6 @@ public class TroopsSelection : MonoBehaviour
                     UnitController.MoveTo(ant, worldMousePos);
                 }
             }
-
-
-
         }
     }
 

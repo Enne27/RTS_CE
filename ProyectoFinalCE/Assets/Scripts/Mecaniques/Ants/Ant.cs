@@ -29,6 +29,8 @@ public abstract class Ant : MonoBehaviour
 
     public virtual void Die() { }
 
+    public virtual void AttackMound() { }
+
     public float GetStrength()
     {
         return strength;

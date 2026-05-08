@@ -53,10 +53,10 @@ internal class AntSoldier : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void AttackMound()
+    public override void AttackMound()
     {
         MoundFunction target;
-        if (gameObject.CompareTag("AI_AntHill"))
+        if (gameObject.CompareTag("AI_AntHill")||gameObject.CompareTag("Player_AntHill"))
         {
             target = GetComponent<MoundFunction>();
             float distance = Vector3.Distance(transform.position, target.transform.position);
@@ -68,7 +68,7 @@ internal class AntSoldier : Ant
 
         else
         {
-            Debug.Log("Este objeto no es el hormiguero enemigo");
+            Debug.Log("Este objeto no es el hormiguero");
             return;
         }
     }
