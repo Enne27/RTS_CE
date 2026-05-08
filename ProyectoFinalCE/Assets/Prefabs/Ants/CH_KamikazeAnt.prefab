@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.83589315
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalRotation.x
@@ -30,11 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.54889226
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -55,6 +55,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_Name
       value: CH_KamikazeAnt
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -89,6 +93,7 @@ MonoBehaviour:
   vision: 1
   linePriority: 3
   breedingCost: 0700000012000000
-  flowFieldInxex: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
+  flowFieldInxex: 0

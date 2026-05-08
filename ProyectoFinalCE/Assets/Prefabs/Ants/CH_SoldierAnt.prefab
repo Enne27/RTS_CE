@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8083697
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_LocalRotation.x
@@ -30,11 +30,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.5886752
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -55,6 +55,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
       propertyPath: m_Name
       value: CH_SoldierAnt
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ff9373f37ac313046a2807cb1499de66, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -89,6 +93,7 @@ MonoBehaviour:
   vision: 1
   linePriority: 2
   breedingCost: 090000000c000000
-  flowFieldInxex: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
+  flowFieldInxex: 0
