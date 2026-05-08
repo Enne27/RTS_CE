@@ -131,7 +131,7 @@ public class BroodChamberView : View
         if (data.antName.Contains("worker"))
         {
             antNameLocalized = new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = data.antName };
-            UpdateWorkerPanel(data.antName);
+            UpdateWorkerPanel(antNameLocalized.GetLocalizedString());
         }
         else
         {
