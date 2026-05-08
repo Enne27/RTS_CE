@@ -118,7 +118,7 @@ public class BuildingManager : MonoBehaviour
             }
         }
     }
-    private void CancelPreview()
+    public void CancelPreview()
     {
         if (preview != null)
         {

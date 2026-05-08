@@ -1015,15 +1015,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "RotateCamera",
-                    "type": "Value",
-                    "id": "f641f993-7ed8-4576-871c-a98e7f620716",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Movement",
                     "type": "Value",
                     "id": "8c8c6e04-d368-40d9-a7d8-a8a64a0044e1",
@@ -1073,17 +1064,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ZoomCamera",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7ed62583-8714-456f-9de3-0a2df90c8776",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RotateCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1157,6 +1137,17 @@
                     "name": "",
                     "id": "34b76e29-a641-45d0-b460-05cc401149c0",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextDialogueLine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52aced22-17b5-4bef-8981-e8eb922b3873",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

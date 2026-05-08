@@ -101,6 +101,7 @@ public class Building : MonoBehaviour
                 break;
             case BuildingType.Entrance:
                 CameraController.instance.ChangeCameraMode(CameraState.Outside);
+                BuildingManager.Instance.CancelPreview();
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
