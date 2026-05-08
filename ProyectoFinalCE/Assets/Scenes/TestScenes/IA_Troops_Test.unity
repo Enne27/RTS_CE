@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393199e566580264cbe8fad9e94baa9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScriptedAI
+  zonaRecursos: {fileID: 0}
 --- !u!4 &35113690
 Transform:
   m_ObjectHideFlags: 0
@@ -809,7 +810,7 @@ GameObject:
   - component: {fileID: 50507243}
   m_Layer: 7
   m_Name: AI_AntHill
-  m_TagString: Untagged
+  m_TagString: AI_AntHill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2314,6 +2315,54 @@ MonoBehaviour:
   sfxSlider: {fileID: 2014193024}
   musicSlider: {fileID: 2014193023}
   isLoading: 0
+  veryHigh:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  high:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  medium:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  low:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  custom:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!225 &637353855
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2742,6 +2791,7 @@ MonoBehaviour:
     currentEra: 0
     structures: []
     ants: []
+  tutorialShown: 0
 --- !u!4 &728709491
 Transform:
   m_ObjectHideFlags: 0
@@ -3160,13 +3210,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlowField_Manager
   gridSize: {x: 0, y: 0}
   cellRadius: 0.5
-  bounds:
-    Min: {x: -215, y: -222}
-    Max: {x: 209, y: 98}
-  terrain: {fileID: 0}
-  cellsSize: 1
-  flowFields: []
-  flowFields_Pool: []
 --- !u!1 &1239485935
 GameObject:
   m_ObjectHideFlags: 0
@@ -3314,13 +3357,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlowField_Test
   gridSize: {x: 50, y: 50}
   cellRadius: 1
-  bounds:
-    Min: {x: 0, y: 0}
-    Max: {x: 0, y: 0}
-  terrain: {fileID: 0}
-  cellsSize: 1
-  flowFields: []
-  flowFields_Pool: []
 --- !u!64 &1252034716
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5106,6 +5142,7 @@ MonoBehaviour:
   model: {fileID: 60643873}
   descriptionTextBlock: {fileID: 60643871}
   cameraMinimap: {fileID: 2121128043}
+  buildingID: 
 --- !u!4 &1846059245
 Transform:
   m_ObjectHideFlags: 0
@@ -5658,67 +5695,67 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[0]'
-      value: 106
+      value: 113
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[1]'
-      value: 254
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[2]'
-      value: 110
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[3]'
-      value: 88
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[4]'
-      value: 230
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[5]'
-      value: 175
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[6]'
-      value: 159
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[7]'
-      value: 68
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[8]'
-      value: 142
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[9]'
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
-      propertyPath: 'serializedGuid.Array.data[10]'
       value: 146
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[2]'
+      value: 139
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[3]'
+      value: 191
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[4]'
+      value: 208
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[5]'
+      value: 146
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[6]'
+      value: 106
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[7]'
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[8]'
+      value: 136
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[9]'
+      value: 193
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
+      propertyPath: 'serializedGuid.Array.data[10]'
+      value: 156
+      objectReference: {fileID: 0}
+    - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[11]'
-      value: 0
+      value: 142
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[12]'
-      value: 225
+      value: 221
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[13]'
-      value: 175
+      value: 91
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[14]'
-      value: 61
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 7341015555904600820, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: 'serializedGuid.Array.data[15]'
-      value: 59
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7431994857550639876, guid: 0160cc9d36f8f6b4689a548bccfa6d89, type: 3}
       propertyPath: m_hasFontAssetChanged
@@ -5820,6 +5857,7 @@ MonoBehaviour:
   model: {fileID: 79542468}
   descriptionTextBlock: {fileID: 0}
   cameraMinimap: {fileID: 2121128043}
+  buildingID: 
 --- !u!1001 &2047880967
 PrefabInstance:
   m_ObjectHideFlags: 0
