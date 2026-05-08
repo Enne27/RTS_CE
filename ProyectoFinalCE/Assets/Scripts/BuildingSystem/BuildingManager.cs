@@ -18,20 +18,21 @@ public class BuildingManager : MonoBehaviour
     
     public const float CELL_SIZE = 1f;
     [Header("Chambers Data")]
-    [SerializeField] private BuildingData queenChamberData;
-    [SerializeField] private BuildingData broodChamberData;
-    [SerializeField] private BuildingData storageChamberData;
-    [SerializeField] private BuildingData tunnelChamberData;
+    [SerializeField] public BuildingData queenChamberData;
+    [SerializeField] public BuildingData broodChamberData;
+    [SerializeField] public BuildingData storageChamberData;
+    [SerializeField] public BuildingData tunnelChamberData;
 
     [Header("Building References")]
     [SerializeField] private BuildingPreview previewPrefab;
     [SerializeField] private Building buildingPrefab;
     [SerializeField] private BuildingGrid grid;
 
-    private BuildingPreview preview;
+    [HideInInspector] public BuildingPreview preview;
 
     private Keyboard keyboard;
     private Mouse mouse;
+    [HideInInspector] public Vector3 mousePos;
 
     [Header("Builds")]
     public List<Building> constructionsBuilt;
@@ -45,8 +46,7 @@ public class BuildingManager : MonoBehaviour
 
     private void Update()
     {
-
-        Vector3 mousePos = GetMouseWorldPosition();
+        mousePos = GetMouseWorldPosition();
         //Debug.Log(GetMouseWorldPosition());
 
         if (preview != null)
@@ -248,7 +248,7 @@ public class BuildingManager : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mouseScreen);
     }
 
-    private BuildingPreview CreatePreview(BuildingData data, Vector3 position)
+    public BuildingPreview CreatePreview(BuildingData data, Vector3 position)
     {
         BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         buildingPreview.Setup(data);

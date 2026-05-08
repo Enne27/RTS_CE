@@ -23,14 +23,14 @@ public class AntExlporer : Ant
     public GameObject asignedResourceZone;
     private void Awake()
     {
-        HP = 15f;
-        armor = 0.40f;
-        speed = 16f;
-        strength = 1f;
-        reach = 1;
-        vision = 4;
-        linePriority = 8;
-        acidBased = false;
+        //HP = 15f;
+        //armor = 0.40f;
+        //speed = 16f;
+        //strength = 1f;
+        //reach = 1;
+        //vision = 4;
+        //linePriority = 8;
+        //acidBased = false;
     }
 
     public override void Attack(Ant target)
@@ -87,26 +87,22 @@ public class AntExlporer : Ant
     }
     public void Deposit()
     {
-
-        TimeManager.Instance.OneShotTimer(3f, () => 
+        Inventory inventory = null;
+        switch (antOwner)
         {
-            Inventory inventory = null;
-            switch (antOwner)
-            {
-                case (Owner.Player):
-                    inventory = GameManager.instance.player.inventory;
-                    break;
-                case (Owner.AI):
-                    inventory = GameManager.instance.playerIA.inventory;
-                    break;
-            }
-            inventory.AddFood(food);
-            inventory.AddMC(MC);
-            food = 0;
-            MC = 0;
-            if (asignedResourceZone != null)
-            UnitController.MoveTo(this, asignedResourceZone.transform.position);
-        });
+            case (Owner.Player):
+                inventory = GameManager.instance.player.inventory;
+                break;
+            case (Owner.AI):
+                inventory = GameManager.instance.playerIA.inventory;
+                break;
+        }
+        inventory.AddFood(food);
+        inventory.AddMC(MC);
+        food = 0;
+        MC = 0;
+        if (asignedResourceZone != null)
+        UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
 
     public override void Die()

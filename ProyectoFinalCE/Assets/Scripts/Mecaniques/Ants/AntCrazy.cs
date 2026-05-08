@@ -8,14 +8,14 @@ public class AntCrazy : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 17f;
-        armor = 0.35f;
-        speed = 17f;
-        strength = 2f;
-        reach = 1;
-        vision = 1;
-        linePriority = 6;
-        acidBased = false;
+        //hp = 17f;
+        //armor = 0.35f;
+        //speed = 17f;
+        //strength = 2f;
+        //reach = 1;
+        //vision = 1;
+        //linepriority = 6;
+        //acidbased = false;
     }
 
     public override void Attack(Ant target)

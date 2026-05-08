@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class ConstructionMenuView : View
     {
         public Button buttonComponent;
         public BuildingData buildingData;
+        public Vector3 originalScale;
     }
 
     #region VARIABLES
@@ -40,16 +42,52 @@ public class ConstructionMenuView : View
     [SerializeField] private float scaleDuration = 0.3f;
     [SerializeField] private LeanTweenType easeType = LeanTweenType.easeOutBack;
 
-    private Vector3 originalScale;
-
     [Header("Sound")]
     [Tooltip("Event Emitter del sonido para onHover un botón.")] 
     [SerializeField] StudioEventEmitter onHoverEmitter;
+
+    private BuildingManager buildingMa;
     #endregion
 
     public override void Initialize()
     {
+        buildingMa = BuildingManager.Instance;
+
         InitializeButtons();
+        queenChamberButton.onClick.AddListener(() =>
+        {
+            buildingMa.CancelPreview();
+
+            if(buildingMa.queenChambersCount < buildingMa.queenChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
+                buildingMa.preview = buildingMa.CreatePreview(buildingMa.queenChamberData, buildingMa.mousePos);
+        });
+
+        broodChamberButton.onClick.AddListener(() =>
+        {
+            buildingMa.CancelPreview();
+
+            if (buildingMa.broodChambersCount < buildingMa.broodChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
+            {
+                buildingMa.preview = buildingMa.CreatePreview(buildingMa.broodChamberData, buildingMa.mousePos);
+            }
+        });
+
+        storageChamberButton.onClick.AddListener(() =>
+        {
+            buildingMa.CancelPreview();
+
+            if (buildingMa.storageChambersCount < buildingMa.storageChamberData.maxQuantityByEra[(int)GameManager.instance.player.currentEra])
+            {
+                buildingMa.preview = buildingMa.CreatePreview(buildingMa.storageChamberData, buildingMa.mousePos);
+            }
+        });
+
+        tunnelButton.onClick.AddListener(() =>
+        {
+            buildingMa.CancelPreview();
+
+            buildingMa.preview = buildingMa.CreatePreview(buildingMa.tunnelChamberData, buildingMa.mousePos);
+        });     
     }
 
     private void InitializeButtons()
@@ -60,7 +98,7 @@ public class ConstructionMenuView : View
             {
                 if (mb.buttonComponent != null)
                 {
-                    originalScale = mb.buttonComponent.transform.localScale;
+                    mb.originalScale = mb.buttonComponent.transform.localScale;
                     SetupButtonEvents(mb);
                 }
             }
@@ -71,6 +109,8 @@ public class ConstructionMenuView : View
     {
         EventTrigger trigger = data.buttonComponent.GetComponent<EventTrigger>() ??
                               data.buttonComponent.gameObject.AddComponent<EventTrigger>();
+
+        trigger.triggers.Clear();
 
         // Evento Hover Enter
         EventTrigger.Entry enterEntry = new EventTrigger.Entry
@@ -85,33 +125,33 @@ public class ConstructionMenuView : View
         {
             eventID = EventTriggerType.PointerExit
         };
-        exitEntry.callback.AddListener((e) => OnButtonHoverEnd(data.buttonComponent));
+        exitEntry.callback.AddListener((e) => OnButtonHoverEnd(data));
         trigger.triggers.Add(exitEntry);
-
-        // Evento Click
-        //data.buttonComponent.onClick.AddListener(() =>);
     }
 
     private void OnButtonHoverStart(ConstructionButton data)
     {
-        SFXManager.PlaySFX(onHoverEmitter);
+        if (onHoverEmitter != null) SFXManager.PlaySFX(onHoverEmitter);
+
         // Animación con LeanTween
         LeanTween.cancel(data.buttonComponent.gameObject);
-        LeanTween.scale(data.buttonComponent.gameObject, originalScale * hoverScale, scaleDuration)
-            .setEase(easeType);
+        LeanTween.scale(data.buttonComponent.gameObject, data.originalScale * hoverScale, scaleDuration)
+            .setEase(easeType)
+            .setIgnoreTimeScale(true);
 
         // Mostrar panel de información
         UpdateInfoPanel(data.buildingData);
         buildingInfo.SetActive(true);
     }
 
-    private void OnButtonHoverEnd(Button button)
+    private void OnButtonHoverEnd(ConstructionButton data)
     {
         SFXManager.StopSFX(onHoverEmitter);
         // Animación de regreso con LeanTween
-        LeanTween.cancel(button.gameObject);
-        LeanTween.scale(button.gameObject, originalScale, scaleDuration)
-            .setEase(LeanTweenType.easeInOutQuad);
+        LeanTween.cancel(data.buttonComponent.gameObject);
+        LeanTween.scale(data.buttonComponent.gameObject, data.originalScale, scaleDuration)
+            .setEase(LeanTweenType.easeInOutQuad)
+            .setIgnoreTimeScale(true);
         buildingInfo.SetActive(false);
     }
 
@@ -123,5 +163,18 @@ public class ConstructionMenuView : View
         costText.text = $"<sprite name=\"huevas\"> {data.costHV}<space=100><sprite name=\"materiales\"> {data.costMC}";
         levelText.text = "lvl 1";
         buildingPreviewImage.sprite = data.previewSprite;
+   }
+
+    public override void Hide()
+    {
+        base.Hide();
+        Time.timeScale = 1;
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        Time.timeScale = 0;
+        ViewManager.GetView<GameHUDView>().Show();
     }
 }
