@@ -11,6 +11,8 @@ public static class ConstantsAndKeys
 
     #region KEYS_TABLES
     public const string TABLE_DIALOGUES = "Dialogues";
+    public const string TABLE_ANTS = "Ants";
+    public const string TABLE_HUD = "GameHUD";
 
     public const string KEY_DIALOGUES_TUTORIAL = "Tutorial";
     #endregion

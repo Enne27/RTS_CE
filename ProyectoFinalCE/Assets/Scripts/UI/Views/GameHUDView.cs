@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static PlayerConstants;
@@ -16,6 +17,7 @@ public class GameHUDView : View
 
     [Header("Buttons")]
     [SerializeField] Button constructionButton;
+    private bool constructionMenuActived = false;
     [SerializeField] Button generalInfoButton;
 
     [Header("ANTS")]
@@ -72,8 +74,21 @@ public class GameHUDView : View
 
         currentEraText.text = GameManager.instance.player.currentEra.ToString();
 
-        //if(constructionButton != null)
-        //  constructionButton.onClick.AddListener();
+        if(constructionButton != null)
+        {
+          constructionButton.onClick.AddListener(()=> {
+              if(constructionMenuActived == false)
+              {
+                constructionMenuActived = true;
+                ViewManager.Show<ConstructionMenuView>();
+              }
+              else 
+              { 
+                  constructionMenuActived = false;
+                  ViewManager.ShowLastView(); 
+              }
+          });
+        }
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);

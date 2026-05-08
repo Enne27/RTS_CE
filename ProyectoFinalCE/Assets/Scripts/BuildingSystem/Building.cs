@@ -3,17 +3,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using System.Collections;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
+using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private BuildingData data;
-
+    [SerializeField] public BuildingData data;
+    
     [SerializeField] private BuildingModel model;
 
     private bool isHovered = false;
 
     private CameraMovement2D cameraMovement;
-    public TextMeshProUGUI descriptionTextBlock;
+    [SerializeField] public Image backgroundImage;
+    [SerializeField] public TextMeshProUGUI descriptionTextBlock;
     [SerializeField] public CameraProjection cameraMinimap;
 
     private float lastClickTime;
@@ -35,6 +38,7 @@ public class Building : MonoBehaviour
         model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
+        
     }
 
     private void Update()
@@ -59,6 +63,8 @@ public class Building : MonoBehaviour
             model.ChangeModelOutlineColor(Color.yellow);
             if(descriptionTextBlock != null)
                 descriptionTextBlock.text = data.buildDescription.GetLocalizedString();
+            if(backgroundImage != null) 
+                backgroundImage.enabled = true;
         }
         else if (!hitThis && isHovered)
         {
@@ -66,6 +72,8 @@ public class Building : MonoBehaviour
             model.ChangeModelOutlineColor(Color.black);
             if (descriptionTextBlock != null)
                 descriptionTextBlock.text = string.Empty;
+            if (backgroundImage != null)
+                backgroundImage.enabled = false;
         }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
