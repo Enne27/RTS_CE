@@ -93,11 +93,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: antlantis_ui_3_0
+      name: colonia
       rect:
         serializedVersion: 2
         x: 85
@@ -119,7 +132,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_1
+      name: imperio
       rect:
         serializedVersion: 2
         x: 591
@@ -141,7 +154,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_2
+      name: reina
       rect:
         serializedVersion: 2
         x: 981
@@ -163,7 +176,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_3
+      name: cria
       rect:
         serializedVersion: 2
         x: 1367
@@ -185,7 +198,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_4
+      name: hormiguero
       rect:
         serializedVersion: 2
         x: 1698
@@ -207,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_5
+      name: almacen
       rect:
         serializedVersion: 2
         x: 125
@@ -229,7 +242,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_6
+      name: forrajeo
       rect:
         serializedVersion: 2
         x: 519
@@ -251,7 +264,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_7
+      name: vigilancia
       rect:
         serializedVersion: 2
         x: 910
@@ -273,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_8
+      name: brote
       rect:
         serializedVersion: 2
         x: 1349
@@ -295,7 +308,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_9
+      name: pfp1
       rect:
         serializedVersion: 2
         x: 76
@@ -317,7 +330,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_10
+      name: pfp2
       rect:
         serializedVersion: 2
         x: 446
@@ -339,7 +352,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_11
+      name: pfp3
       rect:
         serializedVersion: 2
         x: 810
@@ -361,7 +374,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_12
+      name: nid
       rect:
         serializedVersion: 2
         x: 1244
@@ -383,7 +396,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_13
+      name: vida_enemigo_vacia
       rect:
         serializedVersion: 2
         x: 108
@@ -405,7 +418,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_14
+      name: vida_vacia
       rect:
         serializedVersion: 2
         x: 760
@@ -427,7 +440,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_15
+      name: vida_enemigo_llena
       rect:
         serializedVersion: 2
         x: 81
@@ -449,7 +462,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: antlantis_ui_3_16
+      name: vida_llena
       rect:
         serializedVersion: 2
         x: 761
@@ -486,23 +499,23 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      antlantis_ui_3_0: 1459901101
-      antlantis_ui_3_1: 147159024
-      antlantis_ui_3_10: 539372580
-      antlantis_ui_3_11: -1286632696
-      antlantis_ui_3_12: 1665966383
-      antlantis_ui_3_13: -735692980
-      antlantis_ui_3_14: -1949821638
-      antlantis_ui_3_15: 631259990
-      antlantis_ui_3_16: -402609773
-      antlantis_ui_3_2: 1421098476
-      antlantis_ui_3_3: 1008897695
-      antlantis_ui_3_4: -269207943
-      antlantis_ui_3_5: -1586590240
-      antlantis_ui_3_6: -1562626994
-      antlantis_ui_3_7: -1984420964
-      antlantis_ui_3_8: -138546119
-      antlantis_ui_3_9: -1636637417
+      almacen: -1586590240
+      brote: -138546119
+      colonia: 1459901101
+      cria: 1008897695
+      forrajeo: -1562626994
+      hormiguero: -269207943
+      imperio: 147159024
+      nid: 1665966383
+      pfp1: -1636637417
+      pfp2: 539372580
+      pfp3: -1286632696
+      reina: 1421098476
+      vida_enemigo_llena: 631259990
+      vida_enemigo_vacia: -735692980
+      vida_llena: -402609773
+      vida_vacia: -1949821638
+      vigilancia: -1984420964
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -39,4 +39,8 @@ public class BuildingData : ScriptableObject
 
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     [field: SerializeField]public int[] maxLevelByEra = new int[4];
+
+    [Header("UI")]
+    [Tooltip("Sprite segun cámara")]
+    [field: SerializeField] public Sprite previewSprite { get; private set; }
 }
