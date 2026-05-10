@@ -105,6 +105,7 @@ public class MoundFunction : StructuresPlayer
         if((moundHealthPoints - damage) > 0)
         {
             moundHealthPoints -= damage;
+            Debug.Log(moundHealthPoints);
         }
         else
         {
