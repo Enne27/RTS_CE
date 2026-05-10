@@ -15,5 +15,6 @@ public static class ConstantsAndKeys
     public const string TABLE_HUD = "GameHUD";
 
     public const string KEY_DIALOGUES_TUTORIAL = "Tutorial";
+    public const string KEY_WORKER_DESCRIPTION = "Worker.Description";
     #endregion
 }

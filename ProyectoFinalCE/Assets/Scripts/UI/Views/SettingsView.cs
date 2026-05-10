@@ -18,7 +18,7 @@ public class SettingsView : View
 
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
-        //advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsControlsView>());
+        advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<RebindUIView>());
         advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
     }
 

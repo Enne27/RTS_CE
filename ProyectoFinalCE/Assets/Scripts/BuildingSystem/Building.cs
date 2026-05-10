@@ -118,8 +118,7 @@ public class Building : MonoBehaviour
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
-                CameraController.instance.ChangeCameraMode(CameraState.Inside);
-                hud.constructionButton.gameObject.SetActive(true);
+                CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.constructionButton.gameObject.SetActive(true));
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:
