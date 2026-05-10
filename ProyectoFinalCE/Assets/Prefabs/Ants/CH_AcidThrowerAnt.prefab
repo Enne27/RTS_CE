@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.6493917
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.0000000063051857
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.5117226
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
-      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
-      propertyPath: m_LocalRotation.y
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9713319
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      propertyPath: m_LocalRotation.x
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.23772739
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
       propertyPath: m_LocalRotation.z
@@ -55,6 +55,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
       propertyPath: m_Name
       value: CH_AcidThrowerAnt
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -89,6 +93,7 @@ MonoBehaviour:
   vision: 1
   linePriority: 10
   breedingCost: 0a00000012000000
-  flowFieldInxex: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
+  flowFieldInxex: 0
