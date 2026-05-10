@@ -51,7 +51,6 @@ public class PauseController : MonoBehaviour
             if (pausableMoment)
                 TogglePause();
         }
-
     }
 
     /// <summary>
@@ -65,7 +64,6 @@ public class PauseController : MonoBehaviour
 
         if (isPaused)
         {
-            Debug.Log("NOOO");
             ViewManager.Hide<PauseMenuView>();
             ViewManager.Hide<ControlsView>();
             ViewManager.Show<GameHUDView>();
@@ -77,6 +75,5 @@ public class PauseController : MonoBehaviour
             ViewManager.Show<PauseMenuView>();
             onPause?.Invoke();
         }
-
     }
 }
