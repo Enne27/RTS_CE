@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Video;
 
 
 public enum CameraState
@@ -36,17 +37,21 @@ public class CameraController : MonoBehaviour
     [SerializeField] private GameObject OutsideCamera;
     [SerializeField] private GameObject InsideCamera;
 
+    [Header("Video Player References")]
+    [SerializeField] private VideoPlayer entranceVideoPlayer;
     public void ChangeCameraMode()
     {
         switch (cameraState)
         {
             case CameraState.Inside:
                 //OutsideCamera.SetActive(true);
+                entranceVideoPlayer.Play();
                 OutsideCamera.GetComponent<CameraMovement>().EnableCameraInput();
                 InsideCamera.SetActive(false);
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Outside:
+                entranceVideoPlayer.Play();
                 InsideCamera.SetActive(true);
                 OutsideCamera.GetComponent<CameraMovement>().DisableCameraInput();
                 //OutsideCamera.SetActive(false);
@@ -62,11 +67,13 @@ public class CameraController : MonoBehaviour
             case CameraState.Outside:
                 //OutsideCamera.SetActive(true);
                 InsideCamera.SetActive(false);
+                entranceVideoPlayer.Play();
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Inside:
                 InsideCamera.SetActive(true);
                 //OutsideCamera.SetActive(false);
+                entranceVideoPlayer.Play();
                 cameraState = CameraState.Inside;
                 break;
         }
