@@ -42,7 +42,8 @@ public class Building : MonoBehaviour
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
         backgroundImage = GetComponentInChildren<Image>();
-        backgroundImage.enabled=false;
+        if (backgroundImage != null)
+            backgroundImage.enabled=false;
 
 
     }

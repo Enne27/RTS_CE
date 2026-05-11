@@ -67,14 +67,6 @@ public class TunnelFunction : MonoBehaviour
     [SerializeField] private Mesh T_CornerMesh;
     [SerializeField] private Mesh crossMesh;
 
-    [Header("TunnelMaterials")]
-    [SerializeField] private Material isolatedMaterial;
-    [SerializeField] private Material endMaterial;
-    [SerializeField] private Material straightMaterial;
-    [SerializeField] private Material cornerMaterial;
-    [SerializeField] private Material T_CornerMaterial;
-    [SerializeField] private Material crossMaterial;
-
     private bool up, down, left, right;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
@@ -334,69 +326,6 @@ public class TunnelFunction : MonoBehaviour
                     queue.Enqueue(neighbor);
             }
         }
-
         return false;
-    }
-
-    public void ApplyCurrentPathMaterial()
-    {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        Debug.Log("Lo intento?");
-        switch (pathType)
-        {
-            case PathType.Isolated:
-                meshRenderer.material = isolatedMaterial;
-                break;
-
-            case PathType.End_Up:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Down:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Left:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Right:
-                meshRenderer.material = endMaterial;
-                break;
-
-            case PathType.Straight_Horizontal:
-                meshRenderer.material = straightMaterial;
-                break;
-            case PathType.Straight_Vertical:
-                meshRenderer.material = straightMaterial;
-                break;
-
-            case PathType.Corner_UpRight:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_UpLeft:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_DownRight:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_DownLeft:
-                meshRenderer.material = cornerMaterial;
-                break;
-
-            case PathType.T_Up:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-            case PathType.T_Down:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-            case PathType.T_Left:
-                meshRenderer.material = T_CornerMaterial; 
-                break;
-            case PathType.T_Right:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-
-            case PathType.Cross:
-                meshRenderer.material = crossMaterial;
-                break;
-        }
     }
 }
