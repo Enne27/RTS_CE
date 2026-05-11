@@ -12,26 +12,21 @@ public class FogOfWarManager : MonoBehaviour
     #region Variables
     public static FogOfWarManager Instance { get; private set; }
 
-    [Header("Configuraci�n del Mapa")]
-    [Tooltip("Tama�o del mapa en unidades de Unity (ej. 100x100)")]
+    [Header("Configuración del Mapa")]
+    [Tooltip("Tamaño del mapa en unidades de Unity (ej. 100x100)")]
     public float mapSize = 100f;
-    [Tooltip("Resoluci�n de la textura (A mayor resoluci�n, bordes m�s suaves pero m�s coste de CPU)")]
+    [Tooltip("Resolución de la textura (A mayor resolución, bordes más suaves pero más coste de CPU)")]
     public int textureRes = 256;
-    //[Tooltip("Frecuencia de actualizaci�n en segundos (0.1s = 10 FPS)")]
+    //[Tooltip("Frecuencia de actualización en segundos (0.1s = 10 FPS)")]
     //public float updateInterval = 0.1f;
 
     [Header("Materiales")]
     [Tooltip("El material que tiene el Shader de la Niebla")]
     public Material fogMaterial;
 
-    [SerializeField]private RenderTexture fogTexture;
+    [SerializeField] private RenderTexture fogTexture;
     private Color32[] pixels;
-    //This can be player.ants
-    [SerializeField]
-    public List<FogRevealer> activeRevealers;
-    
-    private float mapSize;
-    private int textureRes;
+    private List<FogRevealer> activeRevealers = new List<FogRevealer>();
 
     public ComputeShader cs;
 
@@ -41,7 +36,15 @@ public class FogOfWarManager : MonoBehaviour
 
     private void Awake()
     {
-        
+        // Inicializar el Singleton
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
+        InitializeFogTexture();
     }
 
     private void OnDestroy()
@@ -71,23 +74,35 @@ public class FogOfWarManager : MonoBehaviour
 
     public void RegisterRevealer(FogRevealer revealer)
     {
-        activeRevealers.Add(revealer);
+        if (!activeRevealers.Contains(revealer))
+            activeRevealers.Add(revealer);
     }
 
     public void UnregisterRevealer(FogRevealer revealer)
     {
-        activeRevealers.Remove(revealer);
+        if (activeRevealers.Contains(revealer))
+            activeRevealers.Remove(revealer);
     }
 
-    /* TBI
-    public Color GetVisibilityAtPosition(Vector3 worldPos)
+    /// <summary>
+    /// Permite a las entidades preguntar el estado de visibilidad en su posición.
+    /// Retorna un Color32 donde R=Visible actual, G=Explorado.
+    /// </summary>
+    public Color32 GetVisibilityAtPosition(Vector3 worldPos)
     {
+        Vector2Int texCoords = WorldToFogCoords(worldPos);
 
+        // Evitar errores si la entidad sale de los límites del mapa
+        if (texCoords.x < 0 || texCoords.x >= textureRes || texCoords.y < 0 || texCoords.y >= textureRes)
+            return new Color32(0, 0, 0, 255); // Considerar negro fuera del mapa
+
+        int index = texCoords.y * textureRes + texCoords.x;
+        return pixels[index];
     }
 
     private ComputeBuffer revealerBuffer;
 
-    public Vector2Int WorldToFogCoords(Vector3 worldPos)
+    private void UpdateFogLogic()
     {
         if (activeRevealers.Count == 0)
             return;
@@ -132,9 +147,9 @@ public class FogOfWarManager : MonoBehaviour
 
     private Vector2Int WorldToFogCoords(Vector3 worldPos)
     {
-        // Mapear posici�n del mundo (ejes X y Z) a coordenadas de textura 2D (0 a textureRes)
+        // Mapear posición del mundo (ejes X y Z) a coordenadas de textura 2D (0 a textureRes)
         float mappedX = (worldPos.x + mapOriginOffset) / mapSize;
-        float mappedY = (worldPos.z + mapOriginOffset) / mapSize; // Usamos Z porque el mapa est� en el plano XZ
+        float mappedY = (worldPos.z + mapOriginOffset) / mapSize; // Usamos Z porque el mapa está en el plano XZ
 
         int texX = Mathf.RoundToInt(mappedX * textureRes);
         int texY = Mathf.RoundToInt(mappedY * textureRes);
