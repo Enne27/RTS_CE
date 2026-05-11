@@ -40,8 +40,6 @@ public class CameraMovement : MonoBehaviour
     //used to update the position of the camera base object.
     private Vector3 targetPosition;
 
-    private float zoomHeight;
-
     //used to track and maintain velocity w/o a rigidbody
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
@@ -157,7 +155,8 @@ public class CameraMovement : MonoBehaviour
         else
         {
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.fixedDeltaTime * damping);
-            transform.position += horizontalVelocity * Time.fixedDeltaTime;
+            //Hotfix
+            //transform.position += horizontalVelocity * Time.fixedDeltaTime;
         }
 
         targetPosition = Vector3.zero;
@@ -188,10 +187,10 @@ public class CameraMovement : MonoBehaviour
     {
         Vector3 pos = transform.position;
 
-        pos.x = Mathf.Clamp(pos.x, minBounds.x, maxBounds.x);
-        pos.z = Mathf.Clamp(pos.z, minBounds.y, maxBounds.y);
+            pos.x = Mathf.Clamp(pos.x, minBounds.x, maxBounds.x);
+            pos.z = Mathf.Clamp(pos.z, minBounds.y, maxBounds.y);
 
-        transform.position = pos;
+            transform.position = pos;
     }
     #endregion
 
