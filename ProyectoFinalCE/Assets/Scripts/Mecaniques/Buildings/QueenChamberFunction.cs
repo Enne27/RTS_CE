@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class QueenChamberFunction : StructuresPlayer
@@ -41,6 +42,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     [Header("Visual player")]
     GameHUDView hudView;
+
     #endregion
 
 
