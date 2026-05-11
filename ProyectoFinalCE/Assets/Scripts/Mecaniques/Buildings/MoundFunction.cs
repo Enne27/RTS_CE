@@ -104,7 +104,7 @@ public class MoundFunction : StructuresPlayer
         if((moundHealthPoints - damage) > 0)
         {
             moundHealthPoints -= damage;
-            Debug.Log(moundHealthPoints);
+            Debug.Log("La vida del hormiguero: " + moundHealthPoints);
         }
         else
         {

@@ -113,7 +113,27 @@ public class AntExlporer : Ant
         if (asignedResourceZone != null)
         UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
-    
+
+    public override void AttackMound()
+    {
+        MoundFunction target;
+        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill") ||/*Owner == Owner.AI &&*/ gameObject.CompareTag("Player_AntHill"))
+        {
+            target = GetComponent<MoundFunction>();
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage((int)Math.Round(strength));
+            }
+        }
+
+        else
+        {
+            Debug.Log("Este objeto no es el hormiguero");
+            return;
+        }
+    }
+
     public override void Die()
     {
         gameObject.SetActive(false);

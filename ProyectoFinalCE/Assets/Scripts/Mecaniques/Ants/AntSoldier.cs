@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using static UnityEngine.GraphicsBuffer;
@@ -56,7 +57,7 @@ internal class AntSoldier : Ant
     public override void AttackMound()
     {
         MoundFunction target;
-        if (gameObject.CompareTag("AI_AntHill")||gameObject.CompareTag("Player_AntHill"))
+        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ gameObject.CompareTag("Player_AntHill"))
         {
             target = GetComponent<MoundFunction>();
             float distance = Vector3.Distance(transform.position, target.transform.position);
