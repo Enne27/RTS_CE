@@ -41,7 +41,10 @@ public class Building : MonoBehaviour
         model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
-        
+        backgroundImage = GetComponentInChildren<Image>();
+        backgroundImage.enabled=false;
+
+
     }
 
     private void Update()
