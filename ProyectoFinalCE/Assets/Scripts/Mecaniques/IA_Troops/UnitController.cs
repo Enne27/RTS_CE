@@ -8,6 +8,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] private Terrain terrain;
     [SerializeField] private GameObject flagPrefab;
     static private GameObject staticFlagPrefab;
+    static private GameObject currentFlag;
 
 
     private void Awake()
@@ -56,15 +57,20 @@ public class UnitController : MonoBehaviour
     {
         ant.objective = objective;
         activeAnts.Add(ant);
-        spawnFlag();
+        spawnFlag(objective);
     }
 
-    private static void spawnFlag()
+    private static void spawnFlag(Vector3 objective)
     {
-        Instantiate(
-           staticFlagPrefab,
-           objective,
-           Quaternion.identity
-       );
+        if (currentFlag != null)
+        {
+            Destroy(currentFlag);
+        }
+
+        currentFlag = Instantiate(
+            staticFlagPrefab,
+            objective,
+            Quaternion.identity
+        );
     }
 } 

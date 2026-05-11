@@ -72,6 +72,7 @@ public class AntExlporer : Ant
             Vector3 position = new Vector3();
             food = UnityEngine.Random.Range(5, 11);
             MC = UnityEngine.Random.Range(1, 5);
+            Debug.Log("Structures count: " + GameManager.instance.player.structures.Count);
             switch (antOwner)
             {
                 case (Owner.Player):
