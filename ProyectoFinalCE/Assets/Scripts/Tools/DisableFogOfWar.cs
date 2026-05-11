@@ -17,7 +17,6 @@ public static class DisableFogOfWar
         }
         if (state == PlayModeStateChange.ExitingPlayMode)
         {
-            int a;
             Debug.Log("Refresh");
         }
     }
