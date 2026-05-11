@@ -88,36 +88,32 @@ public class AntExlporer : Ant
     public void Deposit()
     {
         Inventory inventory = null;
+        ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
         switch (antOwner)
         {
-            Inventory inventory = null;
-            ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
-            switch (antOwner)
-            {
-                case (Owner.Player):
-                    inventory = GameManager.instance.player.inventory;
-                    if (foragingChamber.AddResource(ResourceType.food, food))
-                        inventory.AddFoodInForaging(food);
-                    else
-                        inventory.foodInForaging = foragingChamber.foods;
-                    if (foragingChamber.AddResource(ResourceType.material, MC))
-                        inventory.AddMCInForaging(MC);
-                    else
-                        inventory.materialsInForaging = foragingChamber.materials;
-                    break;
-                case (Owner.AI):
-                    inventory = GameManager.instance.playerIA.inventory;
-                    inventory.AddFood(food);
-                    inventory.AddMC(MC);
-                    break;
-            }
-            food = 0;
-            MC = 0;
-            if (asignedResourceZone != null)
-            UnitController.MoveTo(this, asignedResourceZone.transform.position);
-        });
+            case (Owner.Player):
+                inventory = GameManager.instance.player.inventory;
+                if (foragingChamber.AddResource(ResourceType.food, food))
+                    inventory.AddFoodInForaging(food);
+                else
+                    inventory.foodInForaging = foragingChamber.foods;
+                if (foragingChamber.AddResource(ResourceType.material, MC))
+                    inventory.AddMCInForaging(MC);
+                else
+                    inventory.materialsInForaging = foragingChamber.materials;
+                break;
+            case (Owner.AI):
+                inventory = GameManager.instance.playerIA.inventory;
+                inventory.AddFood(food);
+                inventory.AddMC(MC);
+                break;
+        }
+        food = 0;
+        MC = 0;
+        if (asignedResourceZone != null)
+        UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
-
+    
     public override void Die()
     {
         gameObject.SetActive(false);
