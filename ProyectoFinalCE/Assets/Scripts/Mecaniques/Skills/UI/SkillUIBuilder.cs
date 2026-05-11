@@ -51,14 +51,14 @@ public class SkillUIBuilder : MonoBehaviour
 
             if (i > 11)
             {
-                rt.anchoredPosition = new Vector2(480, (-i * spacing) + (spacing * 12) - 125);
+                rt.anchoredPosition = new Vector2(580, (-i * spacing) + (spacing * 12) - 125);
             }
             else if (i > 5)
             {
-                rt.anchoredPosition = new Vector2(320, ((-i * spacing) + (spacing * 6))/1.7f - 125/2);
+                rt.anchoredPosition = new Vector2(390, ((-i * spacing) + (spacing * 6))/1.7f - 125/2);
             }
             else if (i > 2){
-                rt.anchoredPosition = new Vector2(160, (-i * spacing) + (spacing * 3) - 125);
+                rt.anchoredPosition = new Vector2(200, (-i * spacing) + (spacing * 3) - 125);
             }
             else  
             {
