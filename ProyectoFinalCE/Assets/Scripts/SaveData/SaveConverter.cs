@@ -64,11 +64,14 @@ public static class SaveConverter
 
         foreach (var ant in player.ants)
         {
+            if (ant == null)
+                continue;
+
             list.Add(new AntSaveData
             {
-                type = ant.GetType().Name,
+                type = ant.antType,
                 position = ant.transform.position,
-                hp = ant.GetCurrentHP(),
+                hp = ant.GetCurrentHP()
             });
         }
 

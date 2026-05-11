@@ -39,7 +39,7 @@ public class GameModesView : View
     {
         // Cambiar escena
         ScenesManager.Instance.ChangeScene(SINGLE_PLAYER_GAME_SCENE_NAME, false);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(1f);
         SaveSystem.LoadGame();
     }
 
