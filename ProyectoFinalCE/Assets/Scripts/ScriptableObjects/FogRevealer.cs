@@ -8,6 +8,15 @@ public class FogRevealer : MonoBehaviour
 
     // Usamos OnEnable y OnDisable en lugar de Start y OnDestroy.
     // Esto es vital si usas "Object Pooling" o si las unidades entran/salen de transportes.
+    private void Start()
+    {
+        if (FogOfWarManager.Instance != null)
+        {
+            FogOfWarManager.Instance.RegisterRevealer(this);
+        }
+    }
+
+
     private void OnEnable()
     {
         // Al activarse el objeto, se registra en el Manager

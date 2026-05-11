@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+struct RevealerData
+{
+    public Vector2 position;
+    public float radius;
+}
 
 public class FogOfWarManager : MonoBehaviour
 {
@@ -12,16 +17,18 @@ public class FogOfWarManager : MonoBehaviour
     public float mapSize = 100f;
     [Tooltip("Resolución de la textura (A mayor resolución, bordes más suaves pero más coste de CPU)")]
     public int textureRes = 256;
-    [Tooltip("Frecuencia de actualización en segundos (0.1s = 10 FPS)")]
-    public float updateInterval = 0.1f;
+    //[Tooltip("Frecuencia de actualización en segundos (0.1s = 10 FPS)")]
+    //public float updateInterval = 0.1f;
 
     [Header("Materiales")]
     [Tooltip("El material que tiene el Shader de la Niebla")]
-    public Material fogMaterial2;
+    public Material fogMaterial;
 
-    private Texture2D fogTexture;
+    [SerializeField]private RenderTexture fogTexture;
     private Color32[] pixels;
     private List<FogRevealer> activeRevealers = new List<FogRevealer>();
+
+    public ComputeShader cs;
 
     // Almacenamos el offset para centrar el mapa (asumiendo que el centro del mundo es 0,0,0)
     private float mapOriginOffset;
@@ -40,33 +47,28 @@ public class FogOfWarManager : MonoBehaviour
         InitializeFogTexture();
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        StartCoroutine(UpdateFogRoutine());
+        revealerBuffer?.Release();
     }
 
+    private void Update()
+    {
+        UpdateFogLogic();
+    }
     private void InitializeFogTexture()
     {
-        // Calcular el offset. Si mapSize es 100, el origen (0 en textura) será -50 en el mundo.
         mapOriginOffset = mapSize / 2f;
 
-        fogTexture = new Texture2D(textureRes, textureRes, TextureFormat.RGBA32, false);
-        fogMaterial2.SetTexture("_Texture2D", fogTexture);
-        // Desactivar el wrap para evitar que la niebla se repita en los bordes
+        fogTexture = new RenderTexture(textureRes, textureRes, 0, RenderTextureFormat.ARGB32);
+        fogTexture.enableRandomWrite = true;
         fogTexture.wrapMode = TextureWrapMode.Clamp;
-        // Filtro bilineal para que el Shader mezcle los colores suavemente
-        fogTexture.filterMode = FilterMode.Bilinear;
+        fogTexture.filterMode = FilterMode.Trilinear;
+        fogTexture.anisoLevel = 4;
+        fogTexture.Create();
 
-        pixels = new Color32[textureRes * textureRes];
-
-        // Inicializar todo el mapa en negro (No explorado)
-        for (int i = 0; i < pixels.Length; i++)
-        {
-            pixels[i] = new Color32(0, 0, 0, 255);
-        }
-
-        fogTexture.SetPixels32(pixels);
-        fogTexture.Apply();
+        fogMaterial.SetTexture("_Texture2D", fogTexture);
+        //fogMaterial.SetFloat("_Size", mapSize);
     }
 
 
@@ -98,67 +100,47 @@ public class FogOfWarManager : MonoBehaviour
         return pixels[index];
     }
 
-    // --- LÓGICA PRINCIPAL ---
-
-    private IEnumerator UpdateFogRoutine()
-    {
-        WaitForSeconds waitTime = new WaitForSeconds(updateInterval);
-
-        while (true)
-        {
-            UpdateFogLogic();
-            yield return waitTime;
-        }
-    }
+    private ComputeBuffer revealerBuffer;
 
     private void UpdateFogLogic()
     {
-        // 1. LIMPIAR VISIBILIDAD ACTUAL (Solo el canal Rojo)
-        for (int i = 0; i < pixels.Length; i++)
+        if (activeRevealers.Count == 0)
+            return;
+
+        RevealerData[] data = new RevealerData[activeRevealers.Count];
+
+        for (int i = 0; i < activeRevealers.Count; i++)
         {
-            pixels[i].r = 0; // Apagamos la visión en tiempo real
-            // Nota: No tocamos el canal Verde (g) porque es el historial permanente.
-        }
+            Vector2Int coords = WorldToFogCoords(activeRevealers[i].transform.position);
 
-        // 2. CALCULAR VISIÓN DE CADA REVELADOR
-        foreach (var revealer in activeRevealers)
-        {
-            Vector2Int center = WorldToFogCoords(revealer.transform.position);
-
-            // Convertir el radio del mundo (unidades) a radio de textura (píxeles)
-            int radiusInPixels = Mathf.RoundToInt((revealer.visionRadius / mapSize) * textureRes);
-            int radiusSqr = radiusInPixels * radiusInPixels; // Usamos distancia al cuadrado por rendimiento
-
-            // Limitar la caja delimitadora (Bounding Box) a los bordes de la textura
-            int minX = Mathf.Max(0, center.x - radiusInPixels);
-            int maxX = Mathf.Min(textureRes - 1, center.x + radiusInPixels);
-            int minY = Mathf.Max(0, center.y - radiusInPixels);
-            int maxY = Mathf.Min(textureRes - 1, center.y + radiusInPixels);
-
-            // Bucle solo sobre la caja delimitadora de la unidad (Optimización)
-            for (int y = minY; y <= maxY; y++)
+            data[i] = new RevealerData
             {
-                for (int x = minX; x <= maxX; x++)
-                {
-                    // Calcular distancia al cuadrado desde el centro
-                    int dx = x - center.x;
-                    int dy = y - center.y;
-                    int distSqr = (dx * dx) + (dy * dy);
-
-                    // Si está dentro del círculo de visión
-                    if (distSqr <= radiusSqr)
-                    {
-                        int index = y * textureRes + x;
-                        pixels[index].r = 255; // Visible ahora
-                        pixels[index].g = 128; // Explorado permanente
-                    }
-                }
-            }
+                position = new Vector2(coords.x, coords.y),
+                radius = (activeRevealers[i].visionRadius / mapSize) * textureRes
+            };
         }
 
-        // 3. APLICAR CAMBIOS A LA GPU
-        fogTexture.SetPixels32(pixels);
-        fogTexture.Apply();
+        revealerBuffer?.Release();
+
+        revealerBuffer = new ComputeBuffer(
+            data.Length,
+            sizeof(float) * 3
+        );
+
+        revealerBuffer.SetData(data);
+
+        int kernel = cs.FindKernel("CSMain");
+
+        cs.SetTexture(kernel, "Result", fogTexture);
+
+        cs.SetInt("_TextureSize", textureRes);
+        cs.SetInt("_RevealerCount", data.Length);
+
+        cs.SetBuffer(kernel, "_Revealers", revealerBuffer);
+
+        int groups = Mathf.CeilToInt(textureRes / 8.0f);
+
+        cs.Dispatch(kernel, groups, groups, 1);
     }
 
     // --- UTILIDADES ---
