@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -41,18 +42,20 @@ public class CameraController : MonoBehaviour
         {
             case CameraState.Inside:
                 //OutsideCamera.SetActive(true);
+                OutsideCamera.GetComponent<CameraMovement>().EnableCameraInput();
                 InsideCamera.SetActive(false);
                 cameraState = CameraState.Outside;
                 break;
             case CameraState.Outside:
                 InsideCamera.SetActive(true);
+                OutsideCamera.GetComponent<CameraMovement>().DisableCameraInput();
                 //OutsideCamera.SetActive(false);
                 cameraState = CameraState.Inside;
                 break;
         }
     }
 
-    public void ChangeCameraMode(CameraState changeCameraState)
+    public void ChangeCameraMode(CameraState changeCameraState, System.Action onComplete = null)
     {
         switch (changeCameraState)
         {
@@ -67,5 +70,24 @@ public class CameraController : MonoBehaviour
                 cameraState = CameraState.Inside;
                 break;
         }
+        
+        StartCoroutine(WaitBlend(onComplete));
+    }
+
+    private IEnumerator WaitBlend(System.Action onComplete)
+    {
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        // Espera a que el brain procese el cambio de cámara
+        yield return null;
+
+        // Espera mientras haya blend activo
+        while (brain.IsBlending)
+            yield return null;
+
+        // Espera 1 frame extra para asegurar posición final
+        yield return null;
+
+        onComplete?.Invoke();
     }
 }

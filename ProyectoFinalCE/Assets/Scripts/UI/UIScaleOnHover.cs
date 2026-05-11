@@ -17,7 +17,7 @@ public class UIScaleOnHover : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     [Header("Sound")]
     [Tooltip("Event Emitter del sonido para onHover un botón.")] 
-    [SerializeField]StudioEventEmitter onHoverEmitter;
+    [SerializeField] StudioEventEmitter onHoverEmitter;
 
     private void Awake()
     {

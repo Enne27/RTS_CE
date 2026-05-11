@@ -18,7 +18,9 @@ public class TroopsSelection : MonoBehaviour
     private Vector2 startMousePos;
     private Vector2 currentMousePos;
     private bool isDragging;
-    [SerializeField]private bool atackMode = false;
+    private bool atackMode = false;
+
+    [SerializeField] Color selection_outline_color;
 
 
     //Input
@@ -207,7 +209,7 @@ public class TroopsSelection : MonoBehaviour
         for (int i = unitsSelected.Count - 1; i >= 0; i--)
         {
             Ant baseAnt = unitsSelected[i];
-            //baseAnt.transform.GetChild(0).gameObject.SetActive(false);
+            baseAnt.setDefaultOutline();
             unitsSelected.RemoveAt(i);
         }
 
@@ -219,8 +221,7 @@ public class TroopsSelection : MonoBehaviour
 
             if (selectionRect.Contains(screenPos))
             {
-
-                //baseAnt.transform.GetChild(0).gameObject.SetActive(true);
+                baseAnt.setOutline(selection_outline_color);
                 if (!unitsSelected.Contains(baseAnt))
                     unitsSelected.Add(baseAnt);
             }
@@ -239,13 +240,13 @@ public class TroopsSelection : MonoBehaviour
             for (int i = unitsSelected.Count - 1; i >= 0; i--)
             {
                 Ant ant = unitsSelected[i];
-                //ant.transform.GetChild(0).gameObject.SetActive(false);
+                ant.setDefaultOutline();
                 unitsSelected.RemoveAt(i);
             }
 
             if (clickedAnt != null)
             {
-                //clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+                clickedAnt.setOutline(selection_outline_color);
                 unitsSelected.Add(clickedAnt);
             }
         }

@@ -60,22 +60,27 @@ public class CreditScroll : MonoBehaviour
     }
 
     private void HideButtons() 
-    { 
+    {
+        if (view == null) return;
+
         TimeManager.Instance.OneShotTimer(hideDelay, ()=>
         {
             buttonsShown = false;
             hideTimerRunning = false;
             view.ActivateButtons(false);
-         });
+        });
+
     }
     private void ShowButtons()
     {
-        if (!buttonsShown && (!showTimerRunning || !hideTimerRunning))
+        if (!buttonsShown && (!showTimerRunning || !hideTimerRunning) && view != null)
         {
             showTimerRunning = true;
 
             TimeManager.Instance.OneShotTimer(hideDelay, () => 
             {
+                if (view == null) return;
+
                 buttonsShown = true;
                 hideTimerRunning = true;
                 showTimerRunning = false;

@@ -36,16 +36,33 @@ public class UnitController : MonoBehaviour
                     // Stronger when closer
                     separation += away / dist;
                 }
-                separation *= separationStrength;
 
             }
+            separation *= separationStrength;
+
+            //float avoidDistance = 10f;
+            //float avoidStrength = 15f;
+
+            //Vector3 avoidance = Vector3.zero;
+
+            //int obstacleMask = LayerMask.GetMask("Obstacle");
+            //RaycastHit hit;
+            //if (Physics.Raycast(ant.transform.position, ant.transform.forward, out hit, avoidDistance, obstacleMask))
+            //{
+            //    Debug.Log(hit.transform.gameObject);
+            //    Vector3 reflect = Vector3.Reflect(ant.transform.forward, hit.normal);
+
+            //    avoidance = reflect.normalized * avoidStrength;
+            //}
 
             Vector3 direction = (ant.objective - ant.transform.position).normalized;
-            Vector3 finalDir = (direction + separation).normalized;
+            Vector3 finalDir = (direction + separation/* + avoidance*/).normalized;
             Vector3 newPos = ant.transform.position + finalDir * ant.GetSpeed() * Time.fixedDeltaTime;
             newPos.y = terrain.SampleHeight(newPos) + terrain.transform.position.y;
-            ant.transform.LookAt(direction);
+            ant.transform.LookAt(ant.transform.position + finalDir);
             ant.transform.position = newPos;
+
+
 
             //Agregar simulacion de flocking con hormigas cercanas.
             //Agregar comparacion de objetivos entre las hormigas cercanas.

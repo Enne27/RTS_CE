@@ -18,13 +18,14 @@ public class SettingsView : View
 
         advancedAudioButton.onClick.AddListener(() => ViewManager.Show<AdvancedSettingsAudioView>());
 
-        //advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsControlsView>());
+        advancedControlsButton.onClick.AddListener(()=> ViewManager.Show<RebindUIView>());
         advancedQualityButton.onClick.AddListener(()=> ViewManager.Show<AdvancedSettingsQualityView>());
     }
 
     public override void Show()
     {
         base.Show();
+        Time.timeScale = 0;
 
         SettingsManager.instance.isLoading = true;
 
@@ -40,7 +41,8 @@ public class SettingsView : View
 
     public override void Hide()
     {
-        //base.Hide();
+        Time.timeScale = 1;
         UIEffects.instance.FadeOutUIObject(object_cg, fadeDuration, () => { base.Hide(); });
+       // base.Hide();
     }
 }

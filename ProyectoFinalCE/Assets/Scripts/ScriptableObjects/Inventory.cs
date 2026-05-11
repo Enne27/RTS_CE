@@ -8,6 +8,10 @@ public class Inventory
     public int eggs;
     public int food;
     public int materials;
+
+    public int foodInForaging;
+    public int materialsInForaging;
+
     [Tooltip("Maximum egg capacity for each era")]
     public int eggCapacity;
     [Tooltip("Maximum Food capacity")]
@@ -24,8 +28,8 @@ public class Inventory
         SetEggCapacity(HIVE_ERAS.BROTE);
         UpdateFoodCapacity(FOOD_CAPACITY); // En era brote solo hay una cámara de almacenamiento y esta tiene un límite de 100 de capacidad.
         UpdateMC_Capacity(MC_CAPACITY);
-        if(GameManager.instance != null)
-            workerAnts = GameManager.instance.startingWorkerAnts;
+        /*if(GameManager.instance != null)
+            workerAnts = GameManager.instance.startingWorkerAnts;*/
     }
 
     #region Methods
@@ -68,6 +72,19 @@ public class Inventory
         if (food < 0) food = 0;
         return food;
     }
+    public int AddFoodInForaging(int foodToAdd)
+    {
+        foodInForaging += foodToAdd;
+        if (foodInForaging > foodCapacity) foodInForaging = foodCapacity;
+        return foodInForaging;
+    }
+    public int RemoveFoodInForaging(int foodToRemove)
+    {
+        foodInForaging -= foodToRemove;
+        if (foodInForaging < 0) foodInForaging = 0;
+        return foodInForaging;
+    }
+
     public int AddMC(int mcToAdd)
     {
         materials += mcToAdd;
@@ -79,6 +96,18 @@ public class Inventory
         materials -= mcToRemove;
         if (materials < 0) materials = 0;
         return materials;
+    }
+    public int AddMCInForaging(int mcToAdd)
+    {
+        materialsInForaging += mcToAdd;
+        if (materialsInForaging > materialsCapacity) materialsInForaging = materialsCapacity;
+        return materialsInForaging;
+    }
+    public int RemoveMCInForaging(int mcToRemove)
+    {
+        materialsInForaging -= mcToRemove;
+        if (materialsInForaging < 0) materialsInForaging = 0;
+        return materialsInForaging;
     }
 
     public int AddUpgradePoints(int upgradePointsToAdd)
