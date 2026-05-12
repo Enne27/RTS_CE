@@ -2,6 +2,8 @@ using UnityEditor;
 public partial class SceneLoader
 {
 #if UNITY_EDITOR
+        [MenuItem("Scenes/SampleScene")]
+        public static void LoadSampleScene() { OpenScene("Assets/scenes/SampleScene.unity"); }
         [MenuItem("Scenes/FinalScenes/CreativeModeGameScene")]
         public static void LoadCreativeModeGameScene() { OpenScene("Assets/scenes/FinalScenes/CreativeModeGameScene.unity"); }
         [MenuItem("Scenes/FinalScenes/CreditsScene")]
@@ -20,8 +22,8 @@ public partial class SceneLoader
         public static void LoadEnemy_IA_Test() { OpenScene("Assets/scenes/TestScenes/Enemy_IA_Test.unity"); }
         [MenuItem("Scenes/TestScenes/General_Mecanics_Test")]
         public static void LoadGeneral_Mecanics_Test() { OpenScene("Assets/scenes/TestScenes/General_Mecanics_Test.unity"); }
-        [MenuItem("Scenes/TestScenes/IA_Troops_Test")]
-        public static void LoadIA_Troops_Test() { OpenScene("Assets/scenes/TestScenes/IA_Troops_Test.unity"); }
+        [MenuItem("Scenes/TestScenes/IA_Troop_Testing")]
+        public static void LoadIA_Troop_Testing() { OpenScene("Assets/scenes/TestScenes/IA_Troop_Testing.unity"); }
         [MenuItem("Scenes/TestScenes/Map_Test")]
         public static void LoadMap_Test() { OpenScene("Assets/scenes/TestScenes/Map_Test.unity"); }
         [MenuItem("Scenes/TestScenes/Settings_Scenes")]
@@ -38,8 +40,8 @@ public partial class SceneLoader
         public static void LoadWar_Test() { OpenScene("Assets/scenes/TestScenes/War_Test.unity"); }
         [MenuItem("Scenes/TestScenes/ZonaRecursos_Test")]
         public static void LoadZonaRecursos_Test() { OpenScene("Assets/scenes/TestScenes/ZonaRecursos_Test.unity"); }
-        [MenuItem("Scenes/TestScenes/Art/David Reyes")]
-        public static void LoadDavidReyes() { OpenScene("Assets/scenes/TestScenes/Art/David Reyes.unity"); }
+        [MenuItem("Scenes/TestScenes/Art/DavidReyes")]
+        public static void LoadDavidReyes() { OpenScene("Assets/scenes/TestScenes/Art/DavidReyes.unity"); }
         [MenuItem("Scenes/TestScenes/Art/PropsMap")]
         public static void LoadPropsMap() { OpenScene("Assets/scenes/TestScenes/Art/PropsMap.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/BuildingsChambers_Test")]
@@ -50,6 +52,8 @@ public partial class SceneLoader
         public static void LoadQualityConfigTestView() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/QualityConfigTestView.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEMTEST")]
         public static void LoadSingleplayerGameSceneGUILLEMTEST() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEMTEST.unity"); }
+        [MenuItem("Scenes/TestScenes/PersonalTestScenes/Anuk Temp/Fog")]
+        public static void LoadFog() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/Anuk Temp/Fog.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/Anuk Temp/SingleplayerGameSceneTemp")]
         public static void LoadSingleplayerGameSceneTemp() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/Anuk Temp/SingleplayerGameSceneTemp.unity"); }
 #endif
