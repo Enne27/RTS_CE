@@ -181,24 +181,44 @@ public class BuildingManager : MonoBehaviour
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
-        
+
+        VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
-                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
-                queenChambersCount++;
-                constructionsBuilt.Add(building);
+                if (TimeManager.Instance)
+                {
+                    TimeManager.Instance.OneShotTimer(building.data.constructionTime,
+                        () => building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished()
+                    );
+                    queenChambersCount++;
+                    constructionsBuilt.Add(building);
+                }
                 break;
+
             case BuildingType.BroodChamber:
-                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
+                if (TimeManager.Instance)
+                {
+                    TimeManager.Instance.OneShotTimer(building.data.constructionTime,
+                        () => building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished()
+                    );
+                }
                 broodChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
+
             case BuildingType.StorageChamber:
-                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
+                if (TimeManager.Instance)
+                {
+                    TimeManager.Instance.OneShotTimer(building.data.constructionTime,
+                        () => building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished()
+                    );
+                }
                 storageChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
+
             case BuildingType.Tunnel:
 
                 TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
@@ -274,8 +294,6 @@ public class BuildingManager : MonoBehaviour
         
         Destroy(preview.gameObject);
         preview = null;
-
-
     }
 
     private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
