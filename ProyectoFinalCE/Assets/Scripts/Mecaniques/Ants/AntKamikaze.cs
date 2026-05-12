@@ -9,15 +9,15 @@ public class AntKamikaze : Ant
     //int[] breedingCost = new int[] { 7, 18 };
     private void Awake()
     {
-        HP = 11f;
-        armor = 0.3f;
-        speed = 13f;
-        strength = 2f;
-        reach = 1;
-        vision = 1;
-        linePriority = 2;
-        acidBased = false;
-        maxHP = HP;
+        //HP = 11f;
+        //armor = 0.3f;
+        //speed = 13f;
+        //strength = 2f;
+        //reach = 1;
+        //vision = 1;
+        //linePriority = 2;
+        //acidBased = false;
+        //maxHP = HP;
     }
 
     public void Update()

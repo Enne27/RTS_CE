@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
   m_Name: event:/SFX/Lose
   m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
@@ -55,6 +56,36 @@ MonoBehaviour:
   MaxDistance: 20
   Length: 992
 --- !u!114 &-7028868149900433453
+=======
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
+  EditorBanks:
+  - {fileID: 3366873555263581982}
+  - {fileID: 3633299139380811838}
+  EditorEvents:
+  - {fileID: 1050287332260932354}
+  - {fileID: 7391235706263231894}
+  - {fileID: 6792710345477394073}
+  - {fileID: 2105998761828834784}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: 3633299139380811838}
+  StringsBanks:
+  - {fileID: 3366873555263581982}
+  cacheVersion: 131858
+  cacheTime: 639141268041421385
+  SerializableEventsDict:
+  - key: event:/Music/WarMusic
+    index: 0
+  - key: event:/Music/BackgroundGameMusic
+    index: 1
+  - key: event:/Music/BackgroundMenuMusic
+    index: 2
+  - key: event:/SFX/UIClick
+    index: 3
+--- !u!114 &1050287332260932354
+>>>>>>> Programació-Jan2.0
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,7 +112,105 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 150000
+<<<<<<< HEAD
 --- !u!114 &-6879941315943750773
+=======
+--- !u!114 &2105998761828834784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UIClick
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/UIClick
+  Guid:
+    Data1: 1919009535
+    Data2: 1198004945
+    Data3: 1792893627
+    Data4: 194533610
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 168
+--- !u!114 &3366873555263581982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 639125593475254237
+  FileSizes:
+  - Name: Desktop
+    Value: 1078
+  Exists: 1
+--- !u!114 &3633299139380811838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
+  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 639141268041421385
+  FileSizes:
+  - Name: Desktop
+    Value: 46364352
+  Exists: 1
+--- !u!114 &6792710345477394073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/BackgroundMenuMusic
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/Music/BackgroundMenuMusic
+  Guid:
+    Data1: -354518780
+    Data2: 1226633083
+    Data3: -1615264861
+    Data4: -1350616598
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 160000
+--- !u!114 &7391235706263231894
+>>>>>>> Programació-Jan2.0
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

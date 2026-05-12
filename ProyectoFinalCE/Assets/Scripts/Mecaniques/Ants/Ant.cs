@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using static PlayerConstants;
 
@@ -9,18 +10,17 @@ public abstract class Ant : MonoBehaviour
 
     [Header("Save Data")]
     public ANT_TYPES antType;
-
-    protected float HP;
-    protected float armor;
-    protected float speed;
-    protected float strength;
-    protected int reach;
-    protected int vision;
-    protected int linePriority;
-
+    public float HP; 
+    public float armor;
+    public float speed; 
+    public float strength; 
+    public int reach; 
+    public int vision; 
+    public int linePriority; 
     public int[] breedingCost = new int[2];
 
     protected bool acidBased;
+    public Owner antOwner;
 
     protected bool hasObjective = false;
 
@@ -30,6 +30,8 @@ public abstract class Ant : MonoBehaviour
 
     Material material;
     Color defaultColor;
+
+    protected bool hasObjective = false;
 
     #region COMBAT
     public virtual void Attack(Ant target) { }
@@ -56,9 +58,20 @@ public abstract class Ant : MonoBehaviour
 
     public virtual void Die() { }
 
+
+    public virtual void Die() { }
+
+    public virtual void AttackMound(GameObject mound) { }
+    #endregion
+
+    #region GETTERS
     public float GetStrength()
     {
         return strength;
+    }
+    public float GetCurrentHP()
+    {
+        return HP;
     }
 
     public bool GetAcidBased()
@@ -72,7 +85,7 @@ public abstract class Ant : MonoBehaviour
     }
 
     public int GetVision()
-    {
+    { 
         return vision;
     }
 
@@ -81,10 +94,13 @@ public abstract class Ant : MonoBehaviour
         return speed;
     }
 
+    public float GetArmor()
+    {
+        return armor;
+    }
     #endregion
 
-    #region OUTLINE
-
+    #region OUTLINE 
     public void setOutline(Color color)
     {
         if (material == null)
@@ -143,4 +159,5 @@ public abstract class Ant : MonoBehaviour
     }
 
     #endregion
+
 }
