@@ -1,7 +1,8 @@
+using StateMachine.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AntTunnelWander : MonoBehaviour
+public class AntWorkerBehaviour : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 2f;
@@ -18,11 +19,17 @@ public class AntTunnelWander : MonoBehaviour
     [SerializeField] private TunnelFunction currentTunnel;
     [SerializeField] private TunnelFunction targetTunnel;
 
-    private TunnelFunction previousTunnel;
+    public StateMachineComponent stateMachineManager;
+    public TunnelFunction previousTunnel;
+    public Animator animationController;
+    
+    public bool isMoving;
 
     private void Start()
     {
+        stateMachineManager = GetComponent<StateMachineComponent>();
         currentTunnel = FindCurrentTunnel();
+        animationController = GetComponent<Animator>();
     }
 
     private void Update()
@@ -32,6 +39,9 @@ public class AntTunnelWander : MonoBehaviour
             currentTunnel = FindCurrentTunnel();
             return;
         }
+
+        isMoving = targetTunnel != null;
+        animationController.SetBool("IsMoving", isMoving);
 
         // Escoger siguiente túnel
         if (targetTunnel == null)

@@ -55,8 +55,9 @@ public class QueenChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
+        Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
-
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
         GameManager.instance.player.inventory.RemoveEggs(queenBuildingScriptable.costHV);
         GameManager.instance.player.inventory.RemoveMC(queenBuildingScriptable.costMC);
 

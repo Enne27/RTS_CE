@@ -44,6 +44,12 @@ public class BuildingManager : MonoBehaviour
     public int storageChambersCount;
     public int pathsCount;
 
+    [Header("BuildingMaterial")]
+    [SerializeField] Material ConstructionMaterial;
+
+    [SerializeField] public Material QueenChamberMaterial;
+    [SerializeField] public Material BroodChamberMaterial;
+    [SerializeField] public Material StorageChamberMaterial;
     private void Update()
     {
         mousePos = GetMouseWorldPosition();
@@ -182,11 +188,13 @@ public class BuildingManager : MonoBehaviour
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
 
-        VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+        building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
 
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
+
                 if (TimeManager.Instance)
                 {
                     TimeManager.Instance.OneShotTimer(building.data.constructionTime,
@@ -198,6 +206,7 @@ public class BuildingManager : MonoBehaviour
                 break;
 
             case BuildingType.BroodChamber:
+
                 if (TimeManager.Instance)
                 {
                     TimeManager.Instance.OneShotTimer(building.data.constructionTime,
@@ -209,6 +218,8 @@ public class BuildingManager : MonoBehaviour
                 break;
 
             case BuildingType.StorageChamber:
+                //building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+
                 if (TimeManager.Instance)
                 {
                     TimeManager.Instance.OneShotTimer(building.data.constructionTime,
