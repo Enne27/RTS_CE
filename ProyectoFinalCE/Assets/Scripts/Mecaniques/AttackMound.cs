@@ -7,9 +7,9 @@ public class AttackMound : MonoBehaviour
         Ant ant = other.gameObject.GetComponent<Ant>();
         if (ant != null)
         {
-            Debug.Log("I am attacking the mound");
-            ant.AttackMound();
+            //Debug.Log("I am attacking the mound");
+            ant.AttackMound(gameObject);
         }
-        else Debug.Log("Not an Ant.");
+        //else Debug.Log("Not an Ant.");
     }
 }

@@ -54,10 +54,10 @@ internal class AntSoldier : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public override void AttackMound()
+    public override void AttackMound(GameObject mound)
     {
         MoundFunction target;
-        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ gameObject.CompareTag("Player_AntHill"))
+        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ mound.CompareTag("Player_AntHill"))
         {
             target = GetComponent<MoundFunction>();
             float distance = Vector3.Distance(transform.position, target.transform.position);

@@ -114,25 +114,19 @@ public class AntExlporer : Ant
         UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
 
-    public override void AttackMound()
+    public override void AttackMound(GameObject mound)
     {
         MoundFunction target;
-        Debug.Log("HE'S REACHING");
         //La trucada del AttackMound no pasa el if
-        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill") /*||Owner == Owner.AI && gameObject.CompareTag("Player_AntHill")*/)
+        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill") /*||Owner == Owner.AI && gameObject.CompareTag("Player_AntHill")*/)
         {
-            target = GetComponent<MoundFunction>();
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
-                Debug.Log("HE'S REACHING2");
-                target.TakeDamage((int)Math.Round(strength));
-            }
+            target = mound.GetComponent<MoundFunction>();
+            Debug.Log("HE'S REACHING2");
+            target.TakeDamage((int)Math.Round(strength));
         }
 
         else
-        {
-            Debug.Log("Este objeto no es el hormiguero");
+        {   
             return;
         }
     }
