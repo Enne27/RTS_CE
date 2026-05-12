@@ -3,7 +3,6 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Video;
 
-
 public enum CameraState
 {
     Outside,
@@ -13,6 +12,7 @@ public enum CameraState
 public class CameraController : MonoBehaviour
 {
     static CameraController cameraController;
+
     public static CameraController instance
     {
         get
@@ -29,7 +29,6 @@ public class CameraController : MonoBehaviour
         return cameraController;
     }
 
-
     [Header("Camera Control")]
     [SerializeField] private CameraState cameraState;
 
@@ -39,62 +38,162 @@ public class CameraController : MonoBehaviour
 
     [Header("Video Player References")]
     [SerializeField] private VideoPlayer entranceVideoPlayer;
+
+    [Header("Fade Settings")]
+    [SerializeField] private float fadeDuration = 2f;
+
+    private Coroutine transitionCoroutine;
+
     public void ChangeCameraMode()
     {
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
+
+        transitionCoroutine = StartCoroutine(ChangeCameraRoutine());
+    }
+
+    private IEnumerator ChangeCameraRoutine()
+    {
+        // ---------- FADE IN ----------
+        entranceVideoPlayer.targetCameraAlpha = 0f;
+        entranceVideoPlayer.Play();
+
+        float time = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+
+            entranceVideoPlayer.targetCameraAlpha =
+                Mathf.Lerp(0f, 1f, time / fadeDuration);
+
+            yield return null;
+        }
+
+        entranceVideoPlayer.targetCameraAlpha = 1f;
+
+        // ---------- CAMBIO DE CÁMARA ----------
         switch (cameraState)
         {
             case CameraState.Inside:
-                //OutsideCamera.SetActive(true);
-                entranceVideoPlayer.Play();
+
                 OutsideCamera.GetComponent<CameraMovement>().EnableCameraInput();
+
                 InsideCamera.SetActive(false);
+
                 cameraState = CameraState.Outside;
                 break;
+
             case CameraState.Outside:
-                entranceVideoPlayer.Play();
+
                 InsideCamera.SetActive(true);
+
                 OutsideCamera.GetComponent<CameraMovement>().DisableCameraInput();
-                //OutsideCamera.SetActive(false);
+
                 cameraState = CameraState.Inside;
                 break;
         }
+
+        // Espera a que termine el blend de Cinemachine
+        yield return StartCoroutine(WaitBlend());
+
+        // ---------- ESPERA A QUE TERMINE EL VIDEO ----------
+        while (entranceVideoPlayer.isPlaying)
+            yield return null;
+
+        // ---------- FADE OUT ----------
+        time = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+
+            entranceVideoPlayer.targetCameraAlpha =
+                Mathf.Lerp(1f, 0f, time / fadeDuration);
+
+            yield return null;
+        }
+
+        entranceVideoPlayer.targetCameraAlpha = 0f;
     }
 
     public void ChangeCameraMode(CameraState changeCameraState, System.Action onComplete = null)
     {
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
+
+        transitionCoroutine = StartCoroutine(ChangeCameraRoutine(changeCameraState, onComplete));
+    }
+
+    private IEnumerator ChangeCameraRoutine(CameraState changeCameraState, System.Action onComplete)
+    {
+        // ---------- FADE IN ----------
+        entranceVideoPlayer.targetCameraAlpha = 0f;
+        entranceVideoPlayer.Play();
+
+        float time = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+
+            entranceVideoPlayer.targetCameraAlpha =
+                Mathf.Lerp(0f, 1f, time / fadeDuration);
+
+            yield return null;
+        }
+
+        entranceVideoPlayer.targetCameraAlpha = 1f;
+
+        // ---------- CAMBIO DE CÁMARA ----------
         switch (changeCameraState)
         {
             case CameraState.Outside:
-                //OutsideCamera.SetActive(true);
+
                 InsideCamera.SetActive(false);
-                entranceVideoPlayer.Play();
                 cameraState = CameraState.Outside;
                 break;
+
             case CameraState.Inside:
+
                 InsideCamera.SetActive(true);
-                //OutsideCamera.SetActive(false);
-                entranceVideoPlayer.Play();
                 cameraState = CameraState.Inside;
                 break;
         }
-        
-        StartCoroutine(WaitBlend(onComplete));
+
+        yield return StartCoroutine(WaitBlend());
+
+        onComplete?.Invoke();
+
+        // ---------- ESPERA A QUE TERMINE EL VIDEO ----------
+        while (entranceVideoPlayer.isPlaying)
+            yield return null;
+
+        // ---------- FADE OUT ----------
+        time = 0f;
+
+        while (time < fadeDuration)
+        {
+            time += Time.deltaTime;
+
+            entranceVideoPlayer.targetCameraAlpha =
+                Mathf.Lerp(1f, 0f, time / fadeDuration);
+
+            yield return null;
+        }
+
+        entranceVideoPlayer.targetCameraAlpha = 0f;
     }
 
-    private IEnumerator WaitBlend(System.Action onComplete)
+    private IEnumerator WaitBlend()
     {
         var brain = Camera.main.GetComponent<CinemachineBrain>();
 
-        // Espera a que el brain procese el cambio de cámara
         yield return null;
 
-        // Espera mientras haya blend activo
         while (brain.IsBlending)
             yield return null;
 
-        // Espera 1 frame extra para asegurar posición final
         yield return null;
-
-        onComplete?.Invoke();
     }
 }

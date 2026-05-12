@@ -10,27 +10,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.08315618
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.15820882
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.063933924
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -79,5 +79,82 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3772483917427983320}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3268974171594115520}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9015931129940565662}
   m_SourcePrefab: {fileID: 100100000, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
+--- !u!1 &2159986740608463629 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
+  m_PrefabInstance: {fileID: 1240945858569588316}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3772483917427983320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2159986740608463629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b79fd179bca6ada4b98b66091327b0aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: StateMachine.Runtime::StateMachine.Runtime.StateMachineComponent
+  controller: {fileID: 2841676755933307327, guid: ec8b2b0d991310e4287d1110321ef8a4, type: 3}
+  debugLog: 0
+  AutomaticStart: 1
+  execution: 0
+  isStopped: 0
+--- !u!136 &3268974171594115520
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2159986740608463629}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.50000006
+  m_Height: 0.35271195
+  m_Direction: 1
+  m_Center: {x: 0.008699253, y: 0.17703791, z: -0.097063005}
+--- !u!114 &9015931129940565662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2159986740608463629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed279cc0e7d95e4ca91d7088adc99d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AntTunnelWander
+  moveSpeed: 1
+  reachDistance: 1
+  rotationSpeed: 8
+  tunnelSearchRadius: 1
+  tunnelLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  waitTimeRange: {x: 0.5, y: 2.5}
+  decisionChancePerSecond: 40.32
+  currentTunnel: {fileID: 0}
+  targetTunnel: {fileID: 0}
