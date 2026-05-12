@@ -48,18 +48,9 @@ public abstract class Ant : MonoBehaviour
 
     #endregion
 
-    #region GETTERS
-
-    public float GetCurrentHP()
-    {
-        return HP;
-    }
-
-
     public virtual void Die() { }
 
     public virtual void AttackMound(GameObject mound) { }
-    #endregion
 
     #region GETTERS
     public float GetStrength()
