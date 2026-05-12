@@ -56,7 +56,7 @@ public class MoundFunction : StructuresPlayer
     [SerializeField] Slider sliderHPBar;
     [SerializeField] TextMeshProUGUI textHPLabel;
 
-    [HideInInspector] public Owner owner;
+    [HideInInspector] public Owner ownerAntAttacker;
     #endregion
 
     #region METHODS_STRUCTURES
@@ -126,7 +126,7 @@ public class MoundFunction : StructuresPlayer
         // Empezar contador para poder regenerar
         TimeManager.Instance.Register(1, AllowToRegenerate);
         UpdateUI();
-        owner = antOwner;
+        ownerAntAttacker = antOwner;
     }
 
     public void AllowToRegenerate()
@@ -174,15 +174,16 @@ public class MoundFunction : StructuresPlayer
     void MoundDestruction()
     {
         isDead = true;
-        //ViewManager.Show<EndGameView>();
+        ViewManager.Show<EndGameView>();
+        EndGameView endGameView = ViewManager.GetView<EndGameView>();
 
-        if(owner == Owner.Player)
+        if(ownerAntAttacker == Owner.Player)
         {
-
+            endGameView.PlayerWin(true);
         }
         else
         {
-
+            endGameView.PlayerWin(false);
         }
 
         //Debug.Log("AUAUAU me muero deberia morirme porfavor poned el codigo para que me muera quiero morir ahora matadme no requiero vivir terminad con mi sufrimiento AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

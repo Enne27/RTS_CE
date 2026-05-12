@@ -17,7 +17,7 @@ public class AntExlporer : Ant
     private Vector3 targetPosition;
     [Obsolete("Use antOwner instead")]
     public Vector3 antHillPositionOwner;
-    public Owner antOwner;
+    //public Owner antOwner;
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
