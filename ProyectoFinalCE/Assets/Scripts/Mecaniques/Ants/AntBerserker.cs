@@ -7,14 +7,14 @@ public class AntBerserker : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 80f;
+        /*HP = 80f;
         armor = 0.7f;
         speed = 7f;
         strength = 4f;
         reach = 1;
         vision = 1;
         linePriority = 2;
-        acidBased = false;
+        acidBased = false;*/
     }
 
     public override void Attack(Ant target)

@@ -55,6 +55,8 @@ public class MoundFunction : StructuresPlayer
     [Header("UI References")]
     [SerializeField] Slider sliderHPBar;
     [SerializeField] TextMeshProUGUI textHPLabel;
+
+    [HideInInspector] public Owner ownerAntAttacker;
     #endregion
 
     #region METHODS_STRUCTURES
@@ -77,9 +79,9 @@ public class MoundFunction : StructuresPlayer
     {
         if(isDead) return;
 
-        if (takeDamageDebugButton) TakeDamage(debugDamage);
+        //if (takeDamageDebugButton) TakeDamage(debugDamage,owner);
         
-        takeDamageDebugButton = false;
+        //takeDamageDebugButton = false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,19 +94,19 @@ public class MoundFunction : StructuresPlayer
                 hudView.UpdateMCText();
                 hudView.UpdateFoodText();
             }
-
         }
     }
 
 
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Owner antOwner)
     {
         if (isDead) return;
 
         if((moundHealthPoints - damage) > 0)
         {
             moundHealthPoints -= damage;
+            Debug.Log("La vida del hormiguero: " + moundHealthPoints);
         }
         else
         {
@@ -124,6 +126,7 @@ public class MoundFunction : StructuresPlayer
         // Empezar contador para poder regenerar
         TimeManager.Instance.Register(1, AllowToRegenerate);
         UpdateUI();
+        ownerAntAttacker = antOwner;
     }
 
     public void AllowToRegenerate()
@@ -171,7 +174,19 @@ public class MoundFunction : StructuresPlayer
     void MoundDestruction()
     {
         isDead = true;
-        Debug.Log("AUAUAU me muero deberia morirme porfavor poned el codigo para que me muera quiero morir ahora matadme no requiero vivir terminad con mi sufrimiento AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        ViewManager.Show<EndGameView>();
+        EndGameView endGameView = ViewManager.GetView<EndGameView>();
+
+        if(ownerAntAttacker == Owner.Player)
+        {
+            endGameView.PlayerWin(true);
+        }
+        else
+        {
+            endGameView.PlayerWin(false);
+        }
+
+        //Debug.Log("AUAUAU me muero deberia morirme porfavor poned el codigo para que me muera quiero morir ahora matadme no requiero vivir terminad con mi sufrimiento AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     }
 
     void UpdateUI()

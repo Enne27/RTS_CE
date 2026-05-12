@@ -150,13 +150,15 @@ public class TroopsSelection : MonoBehaviour
             {
                 //Home cursor
             }
-            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            else if (hit.transform.gameObject.CompareTag("AI_AntHill"))
             {
                 //atack cursor
+
+                foreach (Ant ant in unitsSelected)
+                {
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
             }
-
-
-
         }
     }
 

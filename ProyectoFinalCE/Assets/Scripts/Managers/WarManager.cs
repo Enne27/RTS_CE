@@ -62,8 +62,6 @@ public class WarManager : MonoBehaviour
     {
         if (state == newState) return;
     
-        TimeManager.Instance.Unregister(120f, Tense);
-        TimeManager.Instance.Unregister(120f, War);
 
         state = newState;
 
@@ -73,11 +71,11 @@ public class WarManager : MonoBehaviour
                 Neutral();
                 break;
             case WarState.Tense:
-                TimeManager.Instance.Register(120f, Tense);
+                TimeManager.Instance.OneShotTimer(120f, Tense);
                 break;
 
             case WarState.War:
-                TimeManager.Instance.Register(120f, War);
+                TimeManager.Instance.OneShotTimer(120f, War);
                 break;
         }
     }
@@ -106,7 +104,6 @@ public class WarManager : MonoBehaviour
         if (toNeutral == true)
         {
             state = WarState.Neutral;
-            TimeManager.Instance.Unregister(120f,Tense);
         }
     }
 
@@ -118,11 +115,10 @@ public class WarManager : MonoBehaviour
             toTense = false;
             antWasDamaged = false;
             return;
-        }
+        } 
         if (toTense == true)
         {
             state = WarState.Tense;
-            TimeManager.Instance.Unregister(120f, War);
         }
     }
 }
