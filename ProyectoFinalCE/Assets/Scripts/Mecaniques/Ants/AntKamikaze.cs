@@ -69,6 +69,6 @@ public class AntKamikaze : Ant
 
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

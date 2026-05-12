@@ -8,4 +8,5 @@ public class AntSaveData
     public ANT_TYPES type;
     public Vector3 position;
     public float hp;
+    public Owner owner;
 }

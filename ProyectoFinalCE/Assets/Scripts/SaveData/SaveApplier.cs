@@ -19,7 +19,31 @@ public static class SaveApplier
         );
 
         ApplyInventory(player.inventory, data.inventory);
+
+        ApplyStructures(player, data.structures);
+
         ApplyAnts(player, data.ants);
+    }
+
+    public static void ApplyStructures(Player player, List<StructureSaveData> structuresData)
+    {
+        foreach (GameObject obj in player.structures)
+        {
+            if (obj != null)
+                GameObject.Destroy(obj);
+        }
+
+        player.structures.Clear();
+
+        foreach (StructureSaveData data in structuresData)
+        {
+            Building building = GameFactory.CreateBuilding(data.type, data.position);
+
+            if (building == null)
+                continue;
+
+            player.structures.Add(building.gameObject);
+        }
     }
 
     public static void ApplyInventory(Inventory inv, InventorySaveData data)
@@ -36,13 +60,6 @@ public static class SaveApplier
 
     public static void ApplyAnts(Player player, List<AntSaveData> antsData)
     {
-        if (player == null)
-        {
-            Debug.LogError("Player not ready when loading ants");
-            return;
-        }
-
-        // Destruir hormigas actuales
         foreach (var ant in player.ants)
         {
             if (ant != null)
@@ -56,12 +73,10 @@ public static class SaveApplier
             Ant ant = GameFactory.CreateAnt(antData.type, antData.position);
 
             if (ant == null)
-            {
-                Debug.LogWarning($"Failed to create ant: {antData.type}");
                 continue;
-            }
 
             ant.SetHP(antData.hp);
+            ant.antOwner = antData.owner;
 
             player.ants.Add(ant);
         }

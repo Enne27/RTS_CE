@@ -19,9 +19,52 @@ public static class SaveConverter
                 player.playerColor.a
             },
 
-            inventory = ToSaveData(player.inventory),
-            structures = GetStructures(),
-            ants = GetAnts(player)
+            inventory = ToSaveInventory(player.inventory),
+
+            ants = ToAntSaveData(player.ants),
+
+            structures = ToStructureSaveData(player.structures)
+        };
+    }
+
+    public static List<StructureSaveData> ToStructureSaveData(List<GameObject> structures)
+    {
+        List<StructureSaveData> data = new();
+
+        foreach (GameObject obj in structures)
+        {
+            if (obj == null)
+                continue;
+
+            Building building = obj.GetComponent<Building>();
+
+            if (building == null)
+                continue;
+
+            data.Add(new StructureSaveData
+            {
+                type = building.data.name,
+                position = building.transform.position,
+                level = 1
+            });
+        }
+
+        return data;
+    }
+    
+    public static InventorySaveData ToSaveInventory(Inventory inventory)
+    {
+        return new InventorySaveData
+        {
+            eggs = inventory.eggs,
+            food = inventory.food,
+            materials = inventory.materials,
+            upgradePoints = inventory.upgradePoints,
+            workerAnts = inventory.workerAnts,
+
+            eggCapacity = inventory.eggCapacity,
+            foodCapacity = inventory.foodCapacity,
+            materialsCapacity = inventory.materialsCapacity
         };
     }
 
@@ -56,6 +99,29 @@ public static class SaveConverter
         }
 
         return list;
+    }
+    public static List<AntSaveData> ToAntSaveData(List<Ant> ants)
+    {
+        List<AntSaveData> data = new();
+
+        foreach (Ant ant in ants)
+        {
+            if (ant == null)
+                continue;
+
+            if (!ant.gameObject.activeSelf)
+                continue;
+
+            data.Add(new AntSaveData
+            {
+                type = ant.antType,
+                position = ant.transform.position,
+                hp = ant.GetCurrentHP(),
+                owner = ant.antOwner
+            });
+        }
+
+        return data;
     }
 
     private static List<AntSaveData> GetAnts(Player player)

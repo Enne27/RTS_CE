@@ -39,6 +39,6 @@ public class AntAcidSpewer : Ant
     }
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
