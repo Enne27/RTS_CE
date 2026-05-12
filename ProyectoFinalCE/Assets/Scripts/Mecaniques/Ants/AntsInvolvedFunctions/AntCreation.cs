@@ -26,6 +26,9 @@ public class AntCreation : MonoBehaviour
     [SerializeField] GameObject acidAnt;
     [SerializeField] GameObject crazyAnt;
     [SerializeField] GameObject kamikazeAnt;
+
+
+    private BroodChamberFunction broodChamberFunction;
     #endregion
 
     #region Singleton
@@ -50,6 +53,8 @@ public class AntCreation : MonoBehaviour
         SystemAntCreation(GameManager.instance.startingWorkerAnts, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
 
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
+                
+        broodChamberFunction = FindFirstObjectByType<BroodChamberFunction>();
     }
 
     /// <summary>
@@ -57,7 +62,7 @@ public class AntCreation : MonoBehaviour
     /// </summary>
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
     /// <param name="position">Transform de la posición donde instanciar.</param>
-    public void PlayerAntCreation(ANT_TYPES antType, Transform position)
+    public void PlayerAntCreation(ANT_TYPES antType, Transform position, float time)
     {
         //Debug.Log(antType);
         if (position != null)
@@ -77,11 +82,20 @@ public class AntCreation : MonoBehaviour
 
 
             // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
             if (CanSpawnAnt(foodCosts, hvCosts))
             {
-                SystemAntCreation(1, antType, position, true, true);
+                if (TimeManager.Instance)
+                {
+                    TimeManager.Instance.OneShotTimer(time, () =>
+                    {
+                        SystemAntCreation(1, antType, position, true, true);
+                        if (broodChamberFunction)
+                            broodChamberFunction.currentBreedingQuantity--;
+                    });
+                }
 
+                if(broodChamberFunction) 
+                    broodChamberFunction.currentBreedingQuantity++;
 
                 if (gameHUDView == null)
                     gameHUDView = FindFirstObjectByType<GameHUDView>();

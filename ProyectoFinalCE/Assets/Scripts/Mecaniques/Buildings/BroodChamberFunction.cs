@@ -48,6 +48,9 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     public GameHUDView gameHUDView;
+
+    [Header("Limits")]
+    [HideInInspector] public int currentBreedingQuantity = 0;
     #endregion
 
     private void Awake()
@@ -57,8 +60,8 @@ public class BroodChamberFunction : StructuresPlayer
 
     public void CreateAnt(ANT_TYPES antType, Transform position)
     {
-        if(AntCreation.Instance != null)
-            AntCreation.Instance.PlayerAntCreation(antType, position);
+        if(AntCreation.Instance != null && currentBreedingQuantity < broodingCapacity[currentLevel])
+            AntCreation.Instance.PlayerAntCreation(antType, position, timeGeneratingAnt);
        /* //Debug.Log(antType);
         GameObject antInstantiate = workerAnt;
 
