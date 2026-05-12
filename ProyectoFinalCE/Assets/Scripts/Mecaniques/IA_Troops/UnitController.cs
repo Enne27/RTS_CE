@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,11 +6,15 @@ public class UnitController : MonoBehaviour
 {
     static private HashSet<Ant> activeAnts;
     [SerializeField] private Terrain terrain;
+    [SerializeField] private GameObject flagPrefab;
+    static private GameObject staticFlagPrefab;
+    static private GameObject currentFlag;
 
 
     private void Awake()
     {
         activeAnts = new HashSet<Ant>();
+        staticFlagPrefab = flagPrefab;
     }
 
     private void FixedUpdate()
@@ -69,5 +74,20 @@ public class UnitController : MonoBehaviour
     {
         ant.objective = objective;
         activeAnts.Add(ant);
+        spawnFlag(objective);
+    }
+
+    private static void spawnFlag(Vector3 objective)
+    {
+        if (currentFlag != null)
+        {
+            Destroy(currentFlag);
+        }
+
+        currentFlag = Instantiate(
+            staticFlagPrefab,
+            objective,
+            Quaternion.identity
+        );
     }
 } 

@@ -17,7 +17,7 @@ public class AntExlporer : Ant
     private Vector3 targetPosition;
     [Obsolete("Use antOwner instead")]
     public Vector3 antHillPositionOwner;
-    public Owner antOwner;
+    //public Owner antOwner;
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
@@ -113,7 +113,23 @@ public class AntExlporer : Ant
         if (asignedResourceZone != null)
         UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
-    
+
+    public override void AttackMound(GameObject mound)
+    {
+        MoundFunction target;
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") ||antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        {
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+        }
+
+        else
+        {   
+            return;
+        }
+    }
+
     public override void Die()
     {
         gameObject.SetActive(false);

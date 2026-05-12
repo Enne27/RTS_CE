@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 using static UnityEngine.GraphicsBuffer;
@@ -8,6 +9,7 @@ internal class AntSoldier : Ant
 {
     //int[] breedingCost = { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
+    //public Owner antOwner;
     private void Awake()
     {
         //HP = 25f;
@@ -53,22 +55,22 @@ internal class AntSoldier : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public void AttackMound()
+    public override void AttackMound(GameObject mound)
     {
         MoundFunction target;
-        if (gameObject.CompareTag("AI_AntHill"))
+        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ mound.CompareTag("Player_AntHill"))
         {
             target = GetComponent<MoundFunction>();
             float distance = Vector3.Distance(transform.position, target.transform.position);
             if (distance <= reach)
             {
-                target.TakeDamage((int)Math.Round(strength));
+                target.TakeDamage((int)Math.Round(strength), antOwner);
             }
         }
 
         else
         {
-            Debug.Log("Este objeto no es el hormiguero enemigo");
+            Debug.Log("Este objeto no es el hormiguero");
             return;
         }
     }
