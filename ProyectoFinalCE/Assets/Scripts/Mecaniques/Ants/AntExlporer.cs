@@ -117,12 +117,15 @@ public class AntExlporer : Ant
     public override void AttackMound()
     {
         MoundFunction target;
-        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill") ||/*Owner == Owner.AI &&*/ gameObject.CompareTag("Player_AntHill"))
+        Debug.Log("HE'S REACHING");
+        //La trucada del AttackMound no pasa el if
+        if (/*Owner == Owner.Player &&*/ gameObject.CompareTag("AI_AntHill") /*||Owner == Owner.AI && gameObject.CompareTag("Player_AntHill")*/)
         {
             target = GetComponent<MoundFunction>();
             float distance = Vector3.Distance(transform.position, target.transform.position);
             if (distance <= reach)
             {
+                Debug.Log("HE'S REACHING2");
                 target.TakeDamage((int)Math.Round(strength));
             }
         }
