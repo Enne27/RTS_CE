@@ -29,7 +29,6 @@ public static class SaveApplier
         inv.materials = data.materials;
         inv.upgradePoints = data.upgradePoints;
         inv.workerAnts = data.workerAnts;
-
         inv.eggCapacity = data.eggCapacity;
         inv.foodCapacity = data.foodCapacity;
         inv.materialsCapacity = data.materialsCapacity;
