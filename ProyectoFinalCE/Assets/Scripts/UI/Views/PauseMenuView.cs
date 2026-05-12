@@ -66,7 +66,5 @@ public class PauseMenuView : View
         base.Hide();
         Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
-
-
     }
 }

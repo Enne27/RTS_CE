@@ -1,25 +1,31 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private BuildingData data;
-
+    #region VARIABLES
+    [SerializeField] public BuildingData data;
+    
     [SerializeField] private BuildingModel model;
 
     private bool isHovered = false;
 
+    [Header("Cameras")]
     private CameraMovement2D cameraMovement;
-    public TextMeshProUGUI descriptionTextBlock;
     [SerializeField] public CameraProjection cameraMinimap;
+
+    [Header("Preview desc")]
+    [SerializeField] public Image backgroundImage;
+    [SerializeField] public TextMeshProUGUI descriptionTextBlock;
 
     private float lastClickTime;
     private const float doubleClickThreshold = 0.3f;
 
     public string buildingID;
+    #endregion
 
     private void Awake()
     {
@@ -35,6 +41,10 @@ public class Building : MonoBehaviour
         model = Instantiate(data.buildModel, transform.position, Quaternion.identity, transform);
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
+        backgroundImage = GetComponentInChildren<Image>();
+        backgroundImage.enabled=false;
+
+
     }
 
     private void Update()
@@ -58,7 +68,9 @@ public class Building : MonoBehaviour
             isHovered = true;
             model.ChangeModelOutlineColor(Color.yellow);
             if(descriptionTextBlock != null)
-                descriptionTextBlock.text = data.buildDescription.GetLocalizedString();
+                descriptionTextBlock.text = data.buildName.GetLocalizedString() + "\n" + data.buildDescription.GetLocalizedString();
+            if(backgroundImage != null) 
+                backgroundImage.enabled = true;
         }
         else if (!hitThis && isHovered)
         {
@@ -66,6 +78,8 @@ public class Building : MonoBehaviour
             model.ChangeModelOutlineColor(Color.black);
             if (descriptionTextBlock != null)
                 descriptionTextBlock.text = string.Empty;
+            if (backgroundImage != null)
+                backgroundImage.enabled = false;
         }
 
         if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -85,6 +99,7 @@ public class Building : MonoBehaviour
     {
         Debug.Log("Double click en building");
 
+        GameHUDView hud = ViewManager.GetView<GameHUDView>();
 
         switch (data.buildingType)
         {
@@ -101,10 +116,12 @@ public class Building : MonoBehaviour
                 break;
             case BuildingType.Entrance:
                 CameraController.instance.ChangeCameraMode(CameraState.Outside);
+                hud.constructionButton.gameObject.SetActive(false);
+                BuildingManager.Instance.CancelPreview();
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
-                CameraController.instance.ChangeCameraMode(CameraState.Inside);
+                CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.constructionButton.gameObject.SetActive(true));
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:

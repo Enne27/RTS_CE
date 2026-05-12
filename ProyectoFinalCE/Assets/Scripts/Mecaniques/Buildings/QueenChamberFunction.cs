@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class QueenChamberFunction : StructuresPlayer
@@ -41,6 +42,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     [Header("Visual player")]
     GameHUDView hudView;
+
     #endregion
 
 
@@ -54,6 +56,15 @@ public class QueenChamberFunction : StructuresPlayer
     public override void OnConstructionFinished()
     {
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
+
+        GameManager.instance.player.inventory.RemoveEggs(queenBuildingScriptable.costHV);
+        GameManager.instance.player.inventory.RemoveMC(queenBuildingScriptable.costMC);
+
+        if (hudView != null)
+        {
+            hudView.UpdateMCText();
+            hudView.UpdateEggsText();
+        }
     }
 
     #endregion

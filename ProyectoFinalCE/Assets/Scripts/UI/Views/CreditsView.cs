@@ -24,6 +24,8 @@ public class CreditsView : View
 
     public void ActivateButtons(bool activate)
     {
+        if(restartButton == null || exitButton == null) return;
+
         restartButton.gameObject.SetActive(activate);
         exitButton.gameObject.SetActive(activate);
     }

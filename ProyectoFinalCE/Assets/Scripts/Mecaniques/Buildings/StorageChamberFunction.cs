@@ -49,6 +49,15 @@ public class StorageChamberFunction : StructuresPlayer
     {
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
         UpdateCapacityLimits();
+
+        GameManager.instance.player.inventory.RemoveEggs(storageBuildingScriptable.costHV);
+        GameManager.instance.player.inventory.RemoveMC(storageBuildingScriptable.costMC);
+
+        if (hudView != null)
+        {
+            hudView.UpdateMCText();
+            hudView.UpdateEggsText();
+        }
     }
     public override void OnUpgradeFinished()
     {

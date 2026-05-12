@@ -21,6 +21,12 @@ public class BuildingData : ScriptableObject
     [field: SerializeField] public LocalizedString buildDescription {  get; set; }
     [field: SerializeField] public BuildingModel buildModel { get; private set; }
 
+
+    [Header("UI")]
+    [Tooltip("Sprite segun cámara")]
+    [field: SerializeField] public Sprite previewSprite { get; private set; }
+
+
     [Tooltip("Tiempo en segundos que tarda en construirse.")]
     [field: SerializeField] public float constructionTime;
 
@@ -39,4 +45,5 @@ public class BuildingData : ScriptableObject
 
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     [field: SerializeField]public int[] maxLevelByEra = new int[4];
+
 }
