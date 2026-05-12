@@ -110,6 +110,8 @@ public class AntCreation : MonoBehaviour
             positionInstantiate = position;
 
             GameObject newAnt = AntInstantiation();
+            Ant antComponent = newAnt.GetComponent<Ant>();
+            antComponent.antType = antType;
 
             if (isPlayer)
             {
