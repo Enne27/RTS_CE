@@ -83,6 +83,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3791235186278736876}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8757491142668438620}
   m_SourcePrefab: {fileID: 100100000, guid: d0e6a6bd602eb344fb6dd6c61e6f804f, type: 3}
 --- !u!1 &4247203208126291310 stripped
 GameObject:
@@ -109,7 +112,30 @@ MonoBehaviour:
   vision: 1
   linePriority: 10
   breedingCost: 0a00000012000000
-  flowFieldIndex: 0
+  antOwner: 0
+  flowFieldInxex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
-  flowFieldInxex: 0
+--- !u!136 &-8757491142668438620
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247203208126291310}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5256946
+  m_Height: 0.435039
+  m_Direction: 1
+  m_Center: {x: -0.014518962, y: 0.20717554, z: -0.10190408}
