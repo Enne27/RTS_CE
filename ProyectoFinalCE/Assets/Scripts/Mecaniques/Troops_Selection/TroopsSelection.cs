@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +13,7 @@ public class TroopsSelection : MonoBehaviour
 
     public Texture2D defaultCursor;
     public Texture2D farmCursor;
+    public Texture2D attackCursor;
     public List<Ant> unitsSelected;
 
     [SerializeField] private float dragThreshold = 5f;
@@ -112,9 +114,9 @@ public class TroopsSelection : MonoBehaviour
             {
                 //Home cursor
             }
-            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            else if (hit.transform.gameObject.CompareTag("EnemyAnt"))
             {
-                //atack cursor
+                Cursor.SetCursor(attackCursor, Vector2.zero, CursorMode.Auto);
             }
         }
     }
@@ -157,6 +159,16 @@ public class TroopsSelection : MonoBehaviour
                 foreach (Ant ant in unitsSelected)
                 {
                     UnitController.MoveTo(ant, worldMousePos);
+                }
+            }
+            else if (hit.transform.gameObject.CompareTag("EnemyAnt"))
+            {
+                foreach (Ant ant in unitsSelected)
+                {
+                    Ant target = hit.transform.GetComponent<Ant>();
+                    Vector3 direction = (target.transform.position - transform.position).normalized;
+                    UnitController.MoveTo(ant, direction);
+                    ant.IsRange(target);
                 }
             }
         }

@@ -31,6 +31,8 @@ public abstract class Ant : MonoBehaviour
     public virtual void Die() { }
 
     public virtual void AttackMound(GameObject mound) { }
+
+    public virtual void IsRange(Ant target) { }
     #endregion
 
     #region GETTERS

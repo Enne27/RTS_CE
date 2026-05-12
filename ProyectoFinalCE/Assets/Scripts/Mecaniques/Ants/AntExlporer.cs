@@ -30,15 +30,30 @@ public class AntExlporer : Ant
         //vision = 4;
         //linePriority = 8;
         //acidBased = false;
+
+        //if (antOwner == Owner.Player)
+        //{
+        //    gameObject.tag = "PlayerAnt";
+        //}
+        //else if (antOwner == Owner.AI) 
+        //{
+        //    gameObject.tag = "EnemyAnt";
+        //}
     }
 
-    public override void Attack(Ant target)
+    public override void IsRange(Ant target) 
     {
+        Debug.Log("Comprobando el rango");
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
-            target.TakeDamage(this, strength, acidBased);
+            Debug.Log("Estoy en el rango");
+            Attack(target);
         }
+    }
+    public override void Attack(Ant target)
+    {
+        target.TakeDamage(this, strength, acidBased);
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
     {
@@ -62,6 +77,7 @@ public class AntExlporer : Ant
             Die();
         }
         OnAnyAntDamaged?.Invoke(this);
+        Debug.Log("Ouch! me quedan " + GetCurrentHP() + " puntos de vida");
     }
 
     public void Collect()
@@ -82,7 +98,15 @@ public class AntExlporer : Ant
                     break;
             }
             UnitController.MoveTo(this, position);
-        });
+        }); 
+        if (antOwner == Owner.Player)
+        {
+            gameObject.tag = "PlayerAnt";
+        }
+        else if (antOwner == Owner.AI)
+        {
+            gameObject.tag = "EnemyAnt";
+        }
     }
     public void Deposit()
     {
