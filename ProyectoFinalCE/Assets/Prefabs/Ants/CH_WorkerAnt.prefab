@@ -88,7 +88,7 @@ PrefabInstance:
       addedObject: {fileID: 3268974171594115520}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9015931129940565662}
+      addedObject: {fileID: 9040412123917030353}
   m_SourcePrefab: {fileID: 100100000, guid: 7e7b8db4fa219e74a9d26e73cdaa81ca, type: 3}
 --- !u!1 &2159986740608463629 stripped
 GameObject:
@@ -135,7 +135,7 @@ CapsuleCollider:
   m_Height: 0.35271195
   m_Direction: 1
   m_Center: {x: 0.008699253, y: 0.17703791, z: -0.097063005}
---- !u!114 &9015931129940565662
+--- !u!114 &9040412123917030353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,13 +148,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntTunnelWander
   moveSpeed: 1
-  reachDistance: 1
+  reachDistance: 0.05
   rotationSpeed: 8
-  tunnelSearchRadius: 1
+  tunnelSearchRadius: 0.5
   tunnelLayer:
     serializedVersion: 2
     m_Bits: 256
-  waitTimeRange: {x: 0.5, y: 2.5}
-  decisionChancePerSecond: 40.32
   currentTunnel: {fileID: 0}
   targetTunnel: {fileID: 0}

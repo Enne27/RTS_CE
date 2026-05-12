@@ -14,18 +14,11 @@ public class AntTunnelWander : MonoBehaviour
     [SerializeField] private float tunnelSearchRadius = 0.25f;
     [SerializeField] private LayerMask tunnelLayer;
 
-    [Header("Behaviour")]
-    [SerializeField] private Vector2 waitTimeRange = new Vector2(0.5f, 2.5f);
-    [SerializeField] private float decisionChancePerSecond = 1f;
-
     [Header("Debug")]
     [SerializeField] private TunnelFunction currentTunnel;
     [SerializeField] private TunnelFunction targetTunnel;
 
     private TunnelFunction previousTunnel;
-
-    private float waitTimer;
-    private bool isWaiting;
 
     private void Start()
     {
@@ -40,43 +33,13 @@ public class AntTunnelWander : MonoBehaviour
             return;
         }
 
-        // =========================
-        // ESTADO: ESPERANDO
-        // =========================
-        if (isWaiting)
-        {
-            waitTimer -= Time.deltaTime;
-
-            if (waitTimer <= 0f)
-            {
-                isWaiting = false;
-                targetTunnel = null;
-            }
-
-            return;
-        }
-
-        // =========================
-        // DECISIÓN DE MOVIMIENTO
-        // =========================
+        // Escoger siguiente túnel
         if (targetTunnel == null)
         {
-            float roll = Random.value;
-
-            if (roll < decisionChancePerSecond * Time.deltaTime)
-            {
-                ChooseNextTunnel();
-            }
-            else
-            {
-                StartWaiting();
-                return;
-            }
+            ChooseNextTunnel();
         }
 
-        // =========================
-        // MOVIMIENTO
-        // =========================
+        // Moverse
         if (targetTunnel != null)
         {
             MoveToTunnel();
@@ -88,20 +51,38 @@ public class AntTunnelWander : MonoBehaviour
         Vector3 currentPos = transform.position;
         Vector3 targetPos = targetTunnel.transform.position;
 
+        // Mantener Z fijo
+        targetPos.z = currentPos.z;
+
+        // Movimiento
+        transform.position = Vector3.MoveTowards(
+            currentPos,
+            targetPos,
+            moveSpeed * Time.deltaTime
+        );
+
+        // Dirección de movimiento
         Vector2 dir = (targetPos - currentPos).normalized;
 
-        // SOLO ROTAR SI SE ESTÁ MOVIENDO DE VERDAD
-        bool isMoving = Vector2.Distance(currentPos, targetPos) > reachDistance;
+        // =========================
+        // ROTACIÓN ORGÁNICA
+        // =========================
 
-        if (isMoving && dir != Vector2.zero)
+        if (dir != Vector2.zero)
         {
+            // Ángulo real de movimiento
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
+            // CORRECCIÓN BASE DEL MODELO (ajusta SOLO aquí una vez)
             Quaternion baseRotation = Quaternion.Euler(0, 90f, -90f);
+
+            // Rotación hacia dirección en Z
             Quaternion lookRotation = Quaternion.Euler(0, 0, angle);
 
+            // Combinamos base + dirección
             Quaternion targetRotation = lookRotation * baseRotation;
 
+            // Suavizado
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
@@ -109,9 +90,7 @@ public class AntTunnelWander : MonoBehaviour
             );
         }
 
-        // =========================
-        // LLEGADA AL TÚNEL
-        // =========================
+        // Llegó al túnel
         if (Vector2.Distance(transform.position, targetPos) <= reachDistance)
         {
             previousTunnel = currentTunnel;
@@ -129,25 +108,24 @@ public class AntTunnelWander : MonoBehaviour
 
         List<TunnelFunction> possibleTunnels = new();
 
+        // Evitar volver atrás instantáneamente
         foreach (TunnelFunction tunnel in connections)
         {
             if (tunnel != previousTunnel)
+            {
                 possibleTunnels.Add(tunnel);
+            }
         }
 
+        // Si no hay opciones -> usar cualquiera
         if (possibleTunnels.Count == 0)
+        {
             possibleTunnels = connections;
+        }
 
         int randomIndex = Random.Range(0, possibleTunnels.Count);
 
         targetTunnel = possibleTunnels[randomIndex];
-    }
-
-    private void StartWaiting()
-    {
-        isWaiting = true;
-        waitTimer = Random.Range(waitTimeRange.x, waitTimeRange.y);
-        targetTunnel = null;
     }
 
     private TunnelFunction FindCurrentTunnel()
