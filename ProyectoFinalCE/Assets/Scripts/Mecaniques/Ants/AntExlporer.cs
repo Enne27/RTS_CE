@@ -118,11 +118,10 @@ public class AntExlporer : Ant
     {
         MoundFunction target;
         //La trucada del AttackMound no pasa el if
-        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill") /*||Owner == Owner.AI && gameObject.CompareTag("Player_AntHill")*/)
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") ||antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
         {
             target = mound.GetComponent<MoundFunction>();
-            Debug.Log("HE'S REACHING2");
-            target.TakeDamage((int)Math.Round(strength));
+            target.TakeDamage((int)Math.Round(strength), antOwner);
         }
 
         else

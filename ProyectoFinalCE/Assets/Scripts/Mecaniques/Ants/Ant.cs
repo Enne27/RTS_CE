@@ -14,7 +14,8 @@ public abstract class Ant : MonoBehaviour
     public int linePriority; 
     public int[] breedingCost = new int[2];
     protected bool acidBased;
-    
+    public Owner antOwner;
+
     public int flowFieldInxex;
     public Vector3 currentVelocity;
     public Vector3 objective;
