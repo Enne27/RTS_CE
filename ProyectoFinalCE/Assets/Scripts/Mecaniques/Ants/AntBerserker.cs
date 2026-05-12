@@ -48,6 +48,39 @@ public class AntBerserker : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
+
+    public override void AttackMound(GameObject mound)
+    {
+        MoundFunction target;
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        {
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+        }
+
+        else
+        {
+            return;
+        }
+    }
+
+    public override void AttackMound(GameObject mound)
+    {
+        MoundFunction target;
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        {
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+        }
+
+        else
+        {
+            return;
+        }
+    }
+
     public override void Die()
     {
         gameObject.SetActive(false);

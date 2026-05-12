@@ -9,7 +9,6 @@ internal class AntSoldier : Ant
 {
     //int[] breedingCost = { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
-    public Owner antOwner;
     private void Awake()
     {
         //HP = 25f;
