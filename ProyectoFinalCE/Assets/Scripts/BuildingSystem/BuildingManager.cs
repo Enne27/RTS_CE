@@ -179,7 +179,7 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
-        GameManager.instance.player.structures.Add(building);
+        GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
 

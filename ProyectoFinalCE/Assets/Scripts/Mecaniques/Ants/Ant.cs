@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using static PlayerConstants;
 
 public abstract class Ant : MonoBehaviour
@@ -11,13 +9,13 @@ public abstract class Ant : MonoBehaviour
     [Header("Save Data")]
     public ANT_TYPES antType;
 
-    public float HP; 
+    public float HP;
     public float armor;
-    public float speed; 
-    public float strength; 
-    public int reach; 
-    public int vision; 
-    public int linePriority; 
+    public float speed;
+    public float strength;
+    public int reach;
+    public int vision;
+    public int linePriority;
     public int[] breedingCost = new int[2];
 
     protected bool acidBased;
@@ -29,18 +27,23 @@ public abstract class Ant : MonoBehaviour
     public Vector3 currentVelocity;
     public Vector3 objective;
 
-    Material material;
-    Color defaultColor;
+    private Material material;
+    private Color defaultColor;
 
     #region COMBAT
+
     public virtual void Attack(Ant target) { }
 
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
+
+    public virtual void AttackMound(GameObject mound) { }
+
+    public virtual void Die() { }
+
     #endregion
 
-    #region SAVE / LOAD
+    #region SAVE LOAD
 
-    // Para el sistema de guardado
     public void SetHP(float value)
     {
         HP = value;
@@ -48,15 +51,13 @@ public abstract class Ant : MonoBehaviour
 
     #endregion
 
-    public virtual void Die() { }
-
-    public virtual void AttackMound(GameObject mound) { }
-
     #region GETTERS
+
     public float GetStrength()
     {
         return strength;
     }
+
     public float GetCurrentHP()
     {
         return HP;
@@ -73,7 +74,7 @@ public abstract class Ant : MonoBehaviour
     }
 
     public int GetVision()
-    { 
+    {
         return vision;
     }
 
@@ -86,20 +87,27 @@ public abstract class Ant : MonoBehaviour
     {
         return armor;
     }
+
     #endregion
 
-    #region OUTLINE 
+    #region OUTLINE
+
     public void setOutline(Color color)
     {
         if (material == null)
         {
-            material = GetComponent<Renderer>().material;
+            Renderer renderer = GetComponent<Renderer>();
 
-            if (material.HasProperty("_Outline_Color"))
-                defaultColor = material.GetColor("_Outline_Color");
+            if (renderer != null)
+            {
+                material = renderer.material;
+
+                if (material.HasProperty("_Outline_Color"))
+                    defaultColor = material.GetColor("_Outline_Color");
+            }
         }
 
-        if (material.HasProperty("_Outline_Color"))
+        if (material != null && material.HasProperty("_Outline_Color"))
             material.SetColor("_Outline_Color", color);
     }
 
@@ -107,19 +115,24 @@ public abstract class Ant : MonoBehaviour
     {
         if (material == null)
         {
-            material = GetComponent<Renderer>().material;
+            Renderer renderer = GetComponent<Renderer>();
 
-            if (material.HasProperty("_Outline_Color"))
-                defaultColor = material.GetColor("_Outline_Color");
+            if (renderer != null)
+            {
+                material = renderer.material;
+
+                if (material.HasProperty("_Outline_Color"))
+                    defaultColor = material.GetColor("_Outline_Color");
+            }
         }
 
-        if (material.HasProperty("_Outline_Color"))
+        if (material != null && material.HasProperty("_Outline_Color"))
             material.SetColor("_Outline_Color", defaultColor);
     }
 
     #endregion
 
-    #region MOVEMENT LOGIC
+    #region MOVEMENT
 
     private void FixedUpdate()
     {

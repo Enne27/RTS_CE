@@ -57,10 +57,10 @@ public class AntCreation : MonoBehaviour
         GameManager.instance.playerIA.ants.Clear();
 
         // Creaci�n inicial de hormigas, tanto del jugador como de la IA.
-        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
-        SystemAntCreation(GameManager.instance.startingWorkerAnts, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
+        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
+        SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
 
-        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
+        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
 
     public void PlayerAntCreation(ANT_TYPES antType, Transform position)
@@ -109,30 +109,20 @@ public class AntCreation : MonoBehaviour
 
             positionInstantiate = position;
 
-            GameObject newAnt = AntInstantiation();
-            Ant antComponent = newAnt.GetComponent<Ant>();
-            antComponent.antType = antType;
+            Ant antScript = antToInstantiate.GetComponent<Ant>();
 
-            if (isPlayer)
+            int foodCosts = 0;
+            int hvCosts = 0;
+
+            if (antScript != null)
             {
-                if (antType != ANT_TYPES.WORKER)
-                    GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                else
-                    GameManager.instance.player.inventory.workerAnts++;
-
-                if (antType == ANT_TYPES.EXPLORER)
-                    newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
                 foodCosts = antScript.GetBreedingCost()[0];
                 hvCosts = antScript.GetBreedingCost()[1];
             }
 
-
-            // FALTAR�A A�ADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTAR�A A�ADIR EL TIEMPO DE CONSTRUCCI�N DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
             if (CanSpawnAnt(foodCosts, hvCosts))
             {
-                SystemAntCreation(1, antType, position, true, true);
-
+                SystemAntCreation(1, antType, position, isPlayer, true);
 
                 if (gameHUDView == null)
                     gameHUDView = FindFirstObjectByType<GameHUDView>();
@@ -141,18 +131,9 @@ public class AntCreation : MonoBehaviour
 
                 GameManager.instance.player.inventory.RemoveFood(foodCosts);
                 gameHUDView.UpdateFoodText();
+
                 GameManager.instance.player.inventory.RemoveEggs(hvCosts);
                 gameHUDView.UpdateEggsText();
-            }
-            else
-            {
-                if (antType != ANT_TYPES.WORKER)
-                    GameManager.instance.playerIA.ants.Add(newAnt.GetComponent<Ant>());
-                else
-                    GameManager.instance.playerIA.inventory.workerAnts++;
-
-                if (antType == ANT_TYPES.EXPLORER)
-                    newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
             }
         }
     }
