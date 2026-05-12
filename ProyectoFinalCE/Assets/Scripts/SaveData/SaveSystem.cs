@@ -31,7 +31,11 @@ public static class SaveSystem
             return;
         }
 
+        // MARCAR ANTES DE TODO
+        AntCreation.MarkLoaded();
+
         string json = File.ReadAllText(Path);
+
         SaveGameData data = JsonUtility.FromJson<SaveGameData>(json);
 
         if (data == null)
@@ -43,8 +47,6 @@ public static class SaveSystem
         SaveApplier.ApplyPlayer(data.player);
         SaveApplier.ApplyStats(data.stats);
         SaveApplier.ApplySkills(data.skills);
-
-        Object.FindFirstObjectByType<AntCreation>()?.MarkLoaded();
 
         Debug.Log("Game Loaded");
     }
