@@ -79,6 +79,9 @@ public class UnitController : MonoBehaviour
 
     private static void spawnFlag(Vector3 objective)
     {
+        if (staticFlagPrefab == null)
+            return;
+
         if (currentFlag != null)
         {
             Destroy(currentFlag);

@@ -50,10 +50,10 @@ public class PauseMenuView : View
         {
             //Hide();
             //ViewManager.ShowLastView(1, false);
-            PauseController.instance.TogglePause();
+            if (PauseController.instance != null)
+                PauseController.instance.TogglePause();
         });
     }
-
     public override void Show()
     {
         base.Show();

@@ -41,11 +41,15 @@ public static class SaveConverter
             if (building == null)
                 continue;
 
+            StructuresPlayer structuresPlayer = obj.GetComponent<StructuresPlayer>();
+
             data.Add(new StructureSaveData
             {
                 type = building.data.name,
                 position = building.transform.position,
-                level = 1
+                level = structuresPlayer != null ? structuresPlayer.currentLevel : 1,
+                state = structuresPlayer != null ? structuresPlayer.currentStructureState.ToString() : "Idle",
+                rotation = building.GetComponentInChildren<BuildingModel>() != null ? building.GetComponentInChildren<BuildingModel>().Rotation : 0f
             });
         }
 
@@ -68,38 +72,6 @@ public static class SaveConverter
         };
     }
 
-    public static InventorySaveData ToSaveData(Inventory inv)
-    {
-        return new InventorySaveData
-        {
-            eggs = inv.eggs,
-            food = inv.food,
-            materials = inv.materials,
-            upgradePoints = inv.upgradePoints,
-            workerAnts = inv.workerAnts,
-
-            eggCapacity = inv.eggCapacity,
-            foodCapacity = inv.foodCapacity,
-            materialsCapacity = inv.materialsCapacity
-        };
-    }
-
-    private static List<StructureSaveData> GetStructures()
-    {
-        List<StructureSaveData> list = new();
-
-        foreach (var b in BuildingManager.Instance.constructionsBuilt)
-        {
-            list.Add(new StructureSaveData
-            {
-                type = b.GetComponent<Building>().buildingID,
-                position = b.transform.position,
-                level = 1
-            });
-        }
-
-        return list;
-    }
     public static List<AntSaveData> ToAntSaveData(List<Ant> ants)
     {
         List<AntSaveData> data = new();
@@ -112,39 +84,29 @@ public static class SaveConverter
             if (!ant.gameObject.activeSelf)
                 continue;
 
+            AntExlporer explorerAnt = ant as AntExlporer;
             data.Add(new AntSaveData
             {
                 type = ant.antType,
                 position = ant.transform.position,
                 hp = ant.GetCurrentHP(),
-                owner = ant.antOwner
+                owner = ant.antOwner,
+                armor = ant.GetArmor(),
+                speed = ant.GetSpeed(),
+                strength = ant.GetStrength(),
+                reach = ant.GetReach(),
+                vision = ant.GetVision(),
+                linePriority = ant.GetLinePriority(),
+                breedingCost = ant.GetBreedingCost(),
+                acidBased = ant.GetAcidBased(),
+                food = explorerAnt != null ? explorerAnt.GetFood() : 0,
+                MC = explorerAnt != null ? explorerAnt.GetMC() : 0
             });
         }
 
         return data;
     }
 
-    private static List<AntSaveData> GetAnts(Player player)
-    {
-        List<AntSaveData> list = new();
-
-        foreach (var ant in player.ants)
-        {
-            if (ant == null)
-                continue;
-
-            list.Add(new AntSaveData
-            {
-                type = ant.antType,
-                position = ant.transform.position,
-                hp = ant.GetCurrentHP()
-            });
-        }
-
-        return list;
-    }
-
-    // Placeholder stats/skills
     public static StatsSaveData GetStats()
     {
         var data = new StatsSaveData
@@ -165,7 +127,7 @@ public static class SaveConverter
                 type = type,
                 value = StatManager.Instance.GetStat(type)
             });
-}
+        }
 
         return data;
     }

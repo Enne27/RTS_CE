@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 3.2LvlStrength
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Aumento de protecci\xF3n"
-  description: Da mas defensa a las hormigas.
+  skillName: Aumento de batalla
+  description: Da defensa y fuerza a las hormigas.
   skillType: 1
   cost: 5
   prerequisites:
@@ -21,6 +21,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 299e7bfd20daf0040a6e2e76e9865371, type: 2}
   effects:
   - effectType: 0
+    statType: 3
+    value: 7
+    specialID: 3.2LvlStrength1
+  - effectType: 0
     statType: 2
-    value: 15
-    specialID: 3.2LvlStrength
+    value: 7
+    specialID: 3.2LvlStrength2

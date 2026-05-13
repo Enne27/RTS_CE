@@ -7,13 +7,13 @@ public static class GameFactory
     {
         string prefabName = type switch
         {
-            ANT_TYPES.EXPLORER => "ExplorerAnt",
-            ANT_TYPES.WORKER => "WorkerAnt",
-            ANT_TYPES.SOLDIER => "SoldierAnt",
-            ANT_TYPES.BERSERKER => "BerserkerAnt",
-            ANT_TYPES.ACID => "AcidAnt",
-            ANT_TYPES.CRAZY => "CrazyAnt",
-            ANT_TYPES.KAMIKAZE => "KamikazeAnt",
+            ANT_TYPES.EXPLORER => "CH_ScoutAnt",
+            ANT_TYPES.WORKER => "CH_WorkerAnt",
+            ANT_TYPES.SOLDIER => "CH_SoldierAnt",
+            ANT_TYPES.BERSERKER => "CH_BerserkerAnt",
+            ANT_TYPES.ACID => "CH_AcidThrowerAnt",
+            ANT_TYPES.CRAZY => "CH_CrazyAnt",
+            ANT_TYPES.KAMIKAZE => "CH_KamikazeAnt",
             _ => null
         };
 
@@ -40,7 +40,7 @@ public static class GameFactory
         return ant;
     }
 
-    public static Building CreateBuilding(string type, Vector3 pos)
+    public static Building CreateBuilding(string type, Vector3 pos, float rotation = 0f)
     {
         GameObject prefab = Resources.Load<GameObject>("Buildings/" + type);
 
@@ -50,7 +50,14 @@ public static class GameFactory
             return null;
         }
 
-        return Object.Instantiate(prefab, pos, Quaternion.identity)
+        Building building = Object.Instantiate(prefab, pos, Quaternion.identity)
             .GetComponent<Building>();
+        
+        if (building != null)
+        {
+            building.Setup(building.data, rotation);
+        }
+
+        return building;
     }
 }

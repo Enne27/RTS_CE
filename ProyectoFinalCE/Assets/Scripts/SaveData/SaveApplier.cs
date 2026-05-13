@@ -37,10 +37,24 @@ public static class SaveApplier
 
         foreach (StructureSaveData data in structuresData)
         {
-            Building building = GameFactory.CreateBuilding(data.type, data.position);
+            Building building = GameFactory.CreateBuilding(data.type, data.position, data.rotation);
 
             if (building == null)
                 continue;
+
+            StructuresPlayer structuresPlayer = building.GetComponent<StructuresPlayer>();
+            if (structuresPlayer != null)
+            {
+                structuresPlayer.currentLevel = data.level;
+                if (System.Enum.TryParse(data.state, out StructuresPlayer.StructureState state))
+                {
+                    structuresPlayer.currentStructureState = state;
+                }
+                else
+                {
+                    structuresPlayer.currentStructureState = StructuresPlayer.StructureState.Idle;
+                }
+            }
 
             player.structures.Add(building.gameObject);
         }
@@ -77,6 +91,21 @@ public static class SaveApplier
 
             ant.SetHP(antData.hp);
             ant.antOwner = antData.owner;
+            ant.SetArmor(antData.armor);
+            ant.SetSpeed(antData.speed);
+            ant.SetStrength(antData.strength);
+            ant.SetReach(antData.reach);
+            ant.SetVision(antData.vision);
+            ant.SetLinePriority(antData.linePriority);
+            ant.SetBreedingCost(antData.breedingCost);
+            ant.SetAcidBased(antData.acidBased);
+
+            AntExlporer explorerAnt = ant as AntExlporer;
+            if (explorerAnt != null)
+            {
+                explorerAnt.SetFood(antData.food);
+                explorerAnt.SetMC(antData.MC);
+            }
 
             player.ants.Add(ant);
         }

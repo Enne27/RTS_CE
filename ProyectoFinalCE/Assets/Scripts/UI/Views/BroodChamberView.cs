@@ -68,8 +68,11 @@ public class BroodChamberView : View
         //Initialize();
         if (antsSpawnPoint == null || workersSpawnPoint == null)
         {
-            antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+            if (AntCreation.Instance != null)
+            {
+                antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
+                workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+            }
         }
     }
     private void Update()
@@ -139,7 +142,7 @@ public class BroodChamberView : View
     /// <summary>
     /// Prepara los listeners de los botones para los diferentes eventos.
     /// </summary>
-    /// <param name="data">Clase serializable que contiene toda la información necesaria.</param>
+    /// <param name="data">Clase serializable que contiene toda la informaciï¿½n necesaria.</param>
     private void SetupButtonEvents(AntButton data)
     {
         EventTrigger trigger = data.buttonComponent.GetComponent<EventTrigger>() ??
@@ -166,8 +169,8 @@ public class BroodChamberView : View
     }
 
     /// <summary>
-    /// Evento que sucede al hacer hover del botón.
-    /// Actualiza la información a mostrar en la preview.
+    /// Evento que sucede al hacer hover del botï¿½n.
+    /// Actualiza la informaciï¿½n a mostrar en la preview.
     /// </summary>
     /// <param name="data"></param>
     private void OnButtonHoverStart(AntButton data)
@@ -199,7 +202,7 @@ public class BroodChamberView : View
     }
 
     /// <summary>
-    /// Actualización de la información para todas las hormigas excepto worker.
+    /// Actualizaciï¿½n de la informaciï¿½n para todas las hormigas excepto worker.
     /// </summary>
     /// <param name="data">Script de la hormiga.</param>
     /// <param name="antName">Key de la tabla correspondiente a la hormiga</param>
@@ -222,7 +225,7 @@ public class BroodChamberView : View
     }
 
     /// <summary>
-    /// Actualización de información para la hormiga trabajadora.
+    /// Actualizaciï¿½n de informaciï¿½n para la hormiga trabajadora.
     /// </summary>
     /// <param name="antName">Key de la tabla para el nombre de la hormiga.</param>
     private void UpdateWorkerPanel(string antName)

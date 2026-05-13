@@ -31,7 +31,7 @@ public static class SaveSystem
             return;
         }
 
-        // MARCAR ANTES DE TODO
+        // Marcar antes de cargar para evitar creación inicial de hormigas
         AntCreation.MarkLoaded();
 
         string json = File.ReadAllText(Path);

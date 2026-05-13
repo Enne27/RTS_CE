@@ -35,7 +35,6 @@ public class SkillTreeUI : MonoBehaviour
             $"Speed: {StatManager.Instance.GetStat(StatType.Speed)}\n" +
             $"HP: {StatManager.Instance.GetStat(StatType.HP)}\n" +
             $"Armor: {StatManager.Instance.GetStat(StatType.Armor)}\n" +
-            $"AcidBased: {StatManager.Instance.GetStat(StatType.AcidBased)}\n" +
             $"Vision: {StatManager.Instance.GetStat(StatType.Vision)}\n" +
             $"Reach: {StatManager.Instance.GetStat(StatType.Reach)}\n" +
             $"Strength: {StatManager.Instance.GetStat(StatType.Strength)}";

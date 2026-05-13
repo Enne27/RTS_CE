@@ -18,6 +18,13 @@ public abstract class Ant : MonoBehaviour
     public int linePriority;
     public int[] breedingCost = new int[2];
 
+    private float baseHP;
+    private float baseArmor;
+    private float baseSpeed;
+    private float baseStrength;
+    private int baseReach;
+    private int baseVision;
+
     protected bool acidBased;
     public Owner antOwner;
 
@@ -47,6 +54,46 @@ public abstract class Ant : MonoBehaviour
     public void SetHP(float value)
     {
         HP = value;
+    }
+
+    public void SetArmor(float value)
+    {
+        armor = value;
+    }
+
+    public void SetSpeed(float value)
+    {
+        speed = value;
+    }
+
+    public void SetStrength(float value)
+    {
+        strength = value;
+    }
+
+    public void SetReach(int value)
+    {
+        reach = value;
+    }
+
+    public void SetVision(int value)
+    {
+        vision = value;
+    }
+
+    public void SetLinePriority(int value)
+    {
+        linePriority = value;
+    }
+
+    public void SetBreedingCost(int[] value)
+    {
+        breedingCost = value;
+    }
+
+    public void SetAcidBased(bool value)
+    {
+        acidBased = value;
     }
 
     #endregion
@@ -86,6 +133,61 @@ public abstract class Ant : MonoBehaviour
     public float GetArmor()
     {
         return armor;
+    }
+
+    public int GetReach()
+    {
+        return reach;
+    }
+
+    public int GetLinePriority()
+    {
+        return linePriority;
+    }
+
+    public float GetEffectiveDamage()
+    {
+        float baseDamage = strength;
+        
+        if (SkillManager.Instance != null)
+        {
+            float damageBonus = SkillManager.Instance.GetTotalDamageBonus();
+            return baseDamage * (1f + damageBonus);
+        }
+        
+        return baseDamage;
+    }
+
+    private void Start()
+    {
+        CacheBaseStats();
+        ApplySkillModifiers();
+    }
+
+    public void CacheBaseStats()
+    {
+        baseHP = HP;
+        baseArmor = armor;
+        baseSpeed = speed;
+        baseStrength = strength;
+        baseReach = reach;
+        baseVision = vision;
+    }
+
+    public void ResetToBaseStats()
+    {
+        HP = baseHP;
+        armor = baseArmor;
+        speed = baseSpeed;
+        strength = baseStrength;
+        reach = baseReach;
+        vision = baseVision;
+    }
+
+    public void ApplySkillModifiers()
+    {
+        if (SkillManager.Instance != null)
+            SkillManager.Instance.ApplyModifiersToAnt(this);
     }
 
     #endregion

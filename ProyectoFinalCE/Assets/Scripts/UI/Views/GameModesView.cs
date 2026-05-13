@@ -15,7 +15,6 @@ public class GameModesView : View
 
     public override void Initialize()
     {
-
         singlePlayerButton.onClick.AddListener(() =>
         {
             ScenesManager.Instance.ChangeScene(SINGLE_PLAYER_GAME_SCENE_NAME, false);
@@ -41,7 +40,10 @@ public class GameModesView : View
     {
         // Cambiar escena
         ScenesManager.Instance.ChangeScene(SINGLE_PLAYER_GAME_SCENE_NAME, false);
-        yield return new WaitForSeconds(1f);
+        
+        yield return new WaitForSeconds(0.5f);
+        
+        // La llamada a AntCreation.MarkLoaded() se hace dentro de SaveSystem.LoadGame()
         SaveSystem.LoadGame();
     }
 

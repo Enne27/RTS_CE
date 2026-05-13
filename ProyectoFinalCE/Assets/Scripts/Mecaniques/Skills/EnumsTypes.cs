@@ -15,7 +15,6 @@ public enum StatType
     Armor,
     Strength,
     Vision,
-    AcidBased,
     Reach,
     Speed,
     SpecialAbility

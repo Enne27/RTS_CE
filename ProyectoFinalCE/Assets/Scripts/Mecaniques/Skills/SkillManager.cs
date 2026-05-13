@@ -13,6 +13,11 @@ public class SkillManager : MonoBehaviour
     [Header("Skills Database")]
     [SerializeField] private List<SkillData> allSkills;
     private Skills playerSkills;
+
+    private readonly Dictionary<StatType, float> flatStatModifiers = new();
+    private readonly Dictionary<StatType, float> percentageStatModifiers = new();
+    
+    private float specialDamageBonus = 0f;
     #endregion
 
     #region Events
@@ -95,6 +100,7 @@ public class SkillManager : MonoBehaviour
         if (!playerSkills.IsUnlocked(skill))
         {
             playerSkills.UnlockSkill(skill);
+            ApplyEffects(skill);
             OnSkillsChanged?.Invoke();
         }
     }
@@ -111,7 +117,8 @@ public class SkillManager : MonoBehaviour
             switch (effect.effectType)
             {
                 case EffectType.StatModifier:
-                    StatManager.Instance.ModifyStat(effect.statType, effect.value);
+                    AccumulateFlatModifier(effect);
+                    ApplyModifiersToAllAnts();
                     break;
 
                 case EffectType.UnlockMechanic:
@@ -119,13 +126,106 @@ public class SkillManager : MonoBehaviour
                     break;
 
                 case EffectType.PercentageModifier:
-                    StatManager.Instance.ModifyStat(effect.statType, effect.value);
+                    AccumulatePercentageModifier(effect);
+                    ApplyModifiersToAllAnts();
                     break;
 
                 case EffectType.Special:
                     ApplySpecialEffect(effect.specialID, effect.value);
                     break;
             }
+        }
+    }
+
+    public void ApplyModifiersToAnt(Ant ant)
+    {
+        if (ant == null)
+            return;
+
+        ant.ResetToBaseStats();
+        ApplyFlatModifiersToAnt(ant);
+        ApplyPercentageModifiersToAnt(ant);
+    }
+
+    private void ApplyModifiersToAllAnts()
+    {
+        foreach (Ant ant in FindObjectsOfType<Ant>())
+        {
+            ApplyModifiersToAnt(ant);
+        }
+    }
+
+    private void ApplyFlatModifiersToAnt(Ant ant)
+    {
+        foreach (var modifier in flatStatModifiers)
+        {
+            ApplyStatModifier(ant, modifier.Key, modifier.Value, false);
+        }
+    }
+
+    private void ApplyPercentageModifiersToAnt(Ant ant)
+    {
+        foreach (var modifier in percentageStatModifiers)
+        {
+            ApplyStatModifier(ant, modifier.Key, modifier.Value, true);
+        }
+    }
+
+    private void AccumulateFlatModifier(SkillEffect effect)
+    {
+        if (!flatStatModifiers.ContainsKey(effect.statType))
+            flatStatModifiers[effect.statType] = 0f;
+
+        flatStatModifiers[effect.statType] += effect.value;
+        StatManager.Instance?.ModifyStat(effect.statType, effect.value);
+    }
+
+    private void AccumulatePercentageModifier(SkillEffect effect)
+    {
+        float normalizedValue = NormalizePercentageValue(effect.value);
+
+        if (!percentageStatModifiers.ContainsKey(effect.statType))
+            percentageStatModifiers[effect.statType] = 0f;
+
+        percentageStatModifiers[effect.statType] += normalizedValue;
+        StatManager.Instance?.ModifyStat(effect.statType, normalizedValue);
+    }
+
+    private float NormalizePercentageValue(float value)
+    {
+        return Mathf.Abs(value) > 1f ? value / 100f : value;
+    }
+
+    private void ApplyStatModifier(Ant ant, StatType statType, float value, bool isPercentage)
+    {
+        if (ant == null)
+            return;
+
+        float modifier = isPercentage ? 1f + value : value;
+
+        switch (statType)
+        {
+            case StatType.Damage:
+            case StatType.Strength:
+                ant.strength = isPercentage ? ant.strength * modifier : ant.strength + modifier;
+                break;
+            case StatType.HP:
+                ant.HP = isPercentage ? ant.HP * modifier : ant.HP + modifier;
+                break;
+            case StatType.Armor:
+                ant.armor = isPercentage ? ant.armor * modifier : ant.armor + modifier;
+                break;
+            case StatType.Speed:
+                ant.speed = isPercentage ? ant.speed * modifier : ant.speed + modifier;
+                break;
+            case StatType.Vision:
+                ant.vision = isPercentage ? Mathf.RoundToInt(ant.vision * modifier) : ant.vision + Mathf.RoundToInt(modifier);
+                break;
+            case StatType.Reach:
+                ant.reach = isPercentage ? Mathf.RoundToInt(ant.reach * modifier) : ant.reach + Mathf.RoundToInt(modifier);
+                break;
+            case StatType.SpecialAbility:
+                break;
         }
     }
 
@@ -140,7 +240,38 @@ public class SkillManager : MonoBehaviour
             case "WorkerBonusPer10":
                 GameManager.instance.workerBonusPer10 += value;
                 break;
+
+            case "+50% Damage":
+            case "DamageBonus50":
+                specialDamageBonus += 0.5f;
+                ApplyModifiersToAllAnts();
+                break;
         }
-    }   
+    }
+
+    /// <summary>
+    /// Obtiene el bonificador de daño especial actual
+    /// </summary>
+    public float GetSpecialDamageBonus()
+    {
+        return specialDamageBonus;
+    }
+
+    /// <summary>
+    /// Obtiene el bonificador de daño por cantidad de hormigas (cada 10 hormigas = bonus)
+    /// </summary>
+    public float GetDamageByAntQuantity()
+    {
+        int totalAnts = GameManager.instance.player.ants.Count;
+        return (totalAnts / 10) * GameManager.instance.workerBonusPer10;
+    }
+
+    /// <summary>
+    /// Obtiene el bonificador total de daño (especial + por cantidad)
+    /// </summary>
+    public float GetTotalDamageBonus()
+    {
+        return specialDamageBonus + GetDamageByAntQuantity();
+    }
     #endregion
 }

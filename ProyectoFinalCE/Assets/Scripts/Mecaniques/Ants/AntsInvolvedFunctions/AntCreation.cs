@@ -187,7 +187,13 @@ public class AntCreation : MonoBehaviour
     /// <returns>GameObject instanciado.</returns>
     private GameObject AntInstantiation()
     {
-        return Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
+        GameObject newAnt = Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
+
+        Ant antScript = newAnt.GetComponent<Ant>();
+        if (antScript != null)
+            SkillManager.Instance?.ApplyModifiersToAnt(antScript);
+
+        return newAnt;
     }
 
     private bool CanSpawnAnt(int foodCosts, int hvCosts)
