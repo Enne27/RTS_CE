@@ -38,6 +38,8 @@ public class CameraController : MonoBehaviour
 
     [Header("Video Player References")]
     [SerializeField] private VideoPlayer entranceVideoPlayer;
+    [SerializeField] private VideoClip enterVideo;
+    [SerializeField] private VideoClip exitVideo;
 
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 2f;
@@ -54,6 +56,15 @@ public class CameraController : MonoBehaviour
 
     private IEnumerator ChangeCameraRoutine()
     {
+        switch (cameraState)
+        {
+            case CameraState.Outside:
+                entranceVideoPlayer.clip = enterVideo;
+                break;
+            case CameraState.Inside:
+                entranceVideoPlayer.clip = exitVideo;
+                break;
+        }
         // ---------- FADE IN ----------
         entranceVideoPlayer.targetCameraAlpha = 0f;
         entranceVideoPlayer.Play();
@@ -127,6 +138,16 @@ public class CameraController : MonoBehaviour
 
     private IEnumerator ChangeCameraRoutine(CameraState changeCameraState, System.Action onComplete)
     {
+        switch (cameraState)
+        {
+            case CameraState.Outside:
+                entranceVideoPlayer.clip = enterVideo;
+                break;
+            case CameraState.Inside:
+                entranceVideoPlayer.clip = exitVideo;
+                break;
+        }
+
         // ---------- FADE IN ----------
         entranceVideoPlayer.targetCameraAlpha = 0f;
         entranceVideoPlayer.Play();

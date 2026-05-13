@@ -27,7 +27,7 @@ public class Player
         //structures = new List<Structure>();
         structures = new List<GameObject>();
         ants = new List<Ant>();
-
+        workers = new List<AntWorkerBehaviour>();
         /* TBI
         foreach (var type in TypeCache.GetTypesDerivedFrom<Structure>())
         {

@@ -1,12 +1,15 @@
 using StateMachine.Runtime;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AntWorkerBehaviour : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 0.75f;
     [SerializeField] private float reachDistance = 0.05f;
+    [SerializeField] private float fastMoveSpeed = 2f;
+    private float oldMoveSpeed;
 
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 8f;
@@ -22,7 +25,7 @@ public class AntWorkerBehaviour : MonoBehaviour
     [Header("Work")]
     [SerializeField] private Building currentBuilding;
 
-    private StateMachineComponent stateMachineManager;
+    public StateMachineComponent stateMachineManager;
     private Animator animationController;
 
     private TunnelFunction previousTunnel;
@@ -32,10 +35,14 @@ public class AntWorkerBehaviour : MonoBehaviour
     private List<TunnelFunction> currentPath = new();
     private int currentPathIndex = 0;
 
+    private bool hasStartedConstruction;
+    private TunnelFunction targetBuildingTunnel;
+
     private void Start()
     {
         stateMachineManager = GetComponent<StateMachineComponent>();
         animationController = GetComponent<Animator>();
+        oldMoveSpeed = moveSpeed;
     }
 
     private void Update()
@@ -87,7 +94,7 @@ public class AntWorkerBehaviour : MonoBehaviour
             return;
         }
 
-        TunnelFunction targetWorkTunnel = currentBuilding.gameObject.GetComponentInChildren<TunnelFunction>();
+        TunnelFunction targetWorkTunnel = GetBestConstructionTunnel();
 
         if (targetWorkTunnel == null)
             return;
@@ -100,7 +107,11 @@ public class AntWorkerBehaviour : MonoBehaviour
         {
             targetTunnel = null;
 
-            // quedarse quieta aquí
+            // mirar hacia la construcción
+            LookAtTunnel(targetBuildingTunnel);
+
+            ArriveAtWork();
+
             return;
         }
 
@@ -111,13 +122,101 @@ public class AntWorkerBehaviour : MonoBehaviour
         }
     }
 
+    private void ArriveAtWork()
+    {
+        if (hasStartedConstruction)
+            return;
+
+        hasStartedConstruction = true;
+        animationController.SetBool("IsWorking", true);
+        VFXManager.Instance.PlayConstructionParticles(currentBuilding.transform.position, currentBuilding.data.constructionTime);
+        StructuresPlayer chamber;
+        TimeManager.Instance.OneShotTimer(
+            currentBuilding.data.constructionTime,
+            () =>
+            {
+                 chamber =
+                    currentBuilding.
+                    GetComponentInChildren<StructuresPlayer>();
+                    
+
+                if (chamber != null)
+                {
+                    chamber.currentStructureState = StructureState.OnConstruction;    
+                    chamber.OnConstructionFinished();
+                }
+
+                HasFinishedWork();
+                animationController.SetBool("IsWorking", false);
+
+                currentBuilding = null;
+                hasStartedConstruction = false;
+                SeeIfAnyBuildIsWaiting();
+            });
+    }
+
+    private TunnelFunction GetBestConstructionTunnel()
+    {
+        TunnelFunction[] buildingTunnels =
+            currentBuilding.GetComponentsInChildren<TunnelFunction>();
+
+        foreach (TunnelFunction tunnel in buildingTunnels)
+        {
+            if (tunnel == null)
+                continue;
+
+            if (tunnel.isConstructingHerePosible &&
+                tunnel.constructionAccessTunnel != null)
+            {
+                // guardamos el túnel del edificio
+                targetBuildingTunnel = tunnel;
+
+                // devolvemos el túnel exterior
+                return tunnel.constructionAccessTunnel;
+            }
+        }
+
+        return null;
+    }
+    private void LookAtTunnel(TunnelFunction tunnel)
+    {
+        if (tunnel == null)
+            return;
+
+        Vector3 dir =
+            (tunnel.transform.position - transform.position).normalized;
+
+        if (dir == Vector3.zero)
+            return;
+
+        float angle =
+            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        Quaternion baseRotation =
+            Quaternion.Euler(0, 90f, -90f);
+
+        Quaternion lookRotation =
+            Quaternion.Euler(0, 0, angle);
+
+        transform.rotation =
+            lookRotation * baseRotation;
+    }
+
+
     public void CallToBuild(Building buildToWork)
     {
         currentBuilding = buildToWork;
 
+        stateMachineManager.GetStateContext().workFinished = false;
         stateMachineManager.GetStateContext().hasWork = true;
     }
 
+    public void HasFinishedWork()
+    {
+        stateMachineManager.GetStateContext().hasWork = false;
+        stateMachineManager.GetStateContext().workFinished = true;
+        
+    }
     // =========================
     // PATHFINDING
     // =========================
@@ -250,6 +349,16 @@ public class AntWorkerBehaviour : MonoBehaviour
         }
 
         return closest;
+    }
+
+    private void SeeIfAnyBuildIsWaiting()
+    {
+        if (BuildingManager.Instance.waitingToBeBuilt.Count < 1)
+            return;
+
+        Building build = BuildingManager.Instance.waitingToBeBuilt[0];
+        CallToBuild(build);
+        BuildingManager.Instance.waitingToBeBuilt.Remove(build);
     }
 
     // =========================
