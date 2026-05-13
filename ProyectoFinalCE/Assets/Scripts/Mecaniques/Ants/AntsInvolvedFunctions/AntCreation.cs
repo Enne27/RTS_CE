@@ -26,9 +26,6 @@ public class AntCreation : MonoBehaviour
     [SerializeField] GameObject acidAnt;
     [SerializeField] GameObject crazyAnt;
     [SerializeField] GameObject kamikazeAnt;
-
-
-    private BroodChamberFunction broodChamberFunction;
     #endregion
 
     #region Singleton

@@ -48,15 +48,21 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     public GameHUDView gameHUDView;
+    private BroodChamberView broodView;
 
     [Header("Limits")]
-    [HideInInspector] public int currentBreedingQuantity = 0;
+    /*[HideInInspector] */public int currentBreedingQuantity = 0;
     #endregion
 
     private void Awake()
     {
         gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
+        broodView = ViewManager.GetView<BroodChamberView>();
+    }
 
+    private void OnEnable()
+    {
+        currentBreedingQuantity = 0;
     }
     private void OnDestroy()
     {
@@ -115,6 +121,9 @@ public class BroodChamberFunction : StructuresPlayer
 
         currentBreedingQuantity++;
 
+        if (broodView == null)
+            broodView = FindFirstObjectByType<BroodChamberView>();
+
         PlayerAntCreation(antType, position, timeGeneratingAnt, foodCosts, hvCosts);
     }
 
@@ -138,7 +147,7 @@ public class BroodChamberFunction : StructuresPlayer
             currentBreedingQuantity--;
         });
 
-        VFXManager.Instance?.PlayBroodingChamberParticles(transform.position, time);
+        VFXManager.Instance?.PlayBroodingChamberParticles(/*GetTransformToSpawnTimer(antType)*/gameObject.transform.position, time);
 
         gameHUDView?.UpdateAntText(antType, 1);
 
@@ -148,5 +157,42 @@ public class BroodChamberFunction : StructuresPlayer
         gameHUDView?.UpdateFoodText();
         gameHUDView?.UpdateEggsText();
 
+    }
+
+    private Vector3 GetTransformToSpawnTimer(ANT_TYPES antType)
+    {
+        Vector3 transform = new Vector3(0, 0, 0);
+        switch (antType)
+        {
+            case ANT_TYPES.ACID:
+                transform = broodView.acidButton.transform.position;
+                break;
+
+            case ANT_TYPES.BERSERKER:
+                transform = broodView.berserkerButton.transform.position;
+                break;
+
+            case ANT_TYPES.EXPLORER:
+                transform = broodView.explorerButton.transform.position;
+                break;
+
+            case ANT_TYPES.SOLDIER:
+                transform = broodView.soldierButton.transform.position;
+                break;
+
+            case ANT_TYPES.CRAZY:
+                transform = broodView.crazyButton.transform.position;
+                break;
+
+            case ANT_TYPES.KAMIKAZE:
+                transform = broodView.kamikazeButton.transform.position;
+                break;
+
+            case ANT_TYPES.WORKER:
+                transform = broodView.workerButton.transform.position;
+                break;
+        }
+
+        return transform;
     }
 }

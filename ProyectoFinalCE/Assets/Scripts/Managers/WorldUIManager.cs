@@ -34,7 +34,7 @@ public class WorldUIManager : MonoBehaviour
     {
         var timer = GetTimer();
 
-        timer.transform.position = position;
+        timer.transform.position = new Vector3(position.x, position.y, 5);
         timer.StartTimer(duration);
     }
 }

@@ -46,13 +46,13 @@ public class BroodChamberView : View
 
 
     [Header("Buttons")]
-    [SerializeField] Button soldierButton;
-    [SerializeField] Button berserkerButton;
-    [SerializeField] Button workerButton;
-    [SerializeField] Button explorerButton;
-    [SerializeField] Button acidButton;
-    [SerializeField] Button crazyutton;
-    [SerializeField] Button kamikazeButton;
+    [SerializeField] public Button soldierButton;
+    [SerializeField] public Button berserkerButton;
+    [SerializeField] public Button workerButton;
+    [SerializeField] public Button explorerButton;
+    [SerializeField] public Button acidButton;
+    [SerializeField] public Button crazyButton;
+    [SerializeField] public Button kamikazeButton;
 
     [Header("Functionality")]
     [SerializeField] BroodChamberFunction broodChamberFunction;
@@ -104,8 +104,8 @@ public class BroodChamberView : View
         if (acidButton != null)
             acidButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.ACID, antsSpawnPoint));
 
-        if (crazyutton != null)
-            crazyutton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.CRAZY, antsSpawnPoint));
+        if (crazyButton != null)
+            crazyButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.CRAZY, antsSpawnPoint));
 
         if (kamikazeButton != null)
             kamikazeButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.KAMIKAZE, antsSpawnPoint));
@@ -264,7 +264,7 @@ public class BroodChamberView : View
         workerButton.onClick.RemoveAllListeners();
         explorerButton.onClick.RemoveAllListeners();
         acidButton.onClick.RemoveAllListeners();
-        crazyutton.onClick.RemoveAllListeners();
+        crazyButton.onClick.RemoveAllListeners();
         kamikazeButton.onClick.RemoveAllListeners();
     }
 
