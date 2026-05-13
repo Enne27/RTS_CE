@@ -63,37 +63,7 @@ public class BroodChamberFunction : StructuresPlayer
         currentBreedingQuantity = 0;
     }
 
-    public void CreateAnt(ANT_TYPES antType, Transform position)
-    {
-        if (AntCreation.Instance == null || position == null)
-            return;
-
-        int limit = broodingCapacity[currentLevel - 1];
-            //currentBreedingQuantity--;
-
-        Debug.Log(currentBreedingQuantity + "   " + limit);
-        // LÍMITE REAL (antes de reservar)
-        if (currentBreedingQuantity >= limit)
-        {
-            Debug.Log("Límite");
-            return;
-        }
-        else
-        {
-            //currentBreedingQuantity--;
-            currentBreedingQuantity++;
-
-            AntCreation.Instance.PlayerAntCreation(antType, position, timeGeneratingAnt);
-        }
-
-        // RESERVA SLOT (IMPORTANTE: aquí es el único sitio)
-    }
-
-    /*private bool SpawnAnt(int foodCosts, int hvCosts)
-    {
-        return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
-    }
-    */
+    #region BUILDING_METHODS
     public override void OnConstructionFinished()
     {
         GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
@@ -104,6 +74,79 @@ public class BroodChamberFunction : StructuresPlayer
             gameHUDView.UpdateMCText();
             gameHUDView.UpdateEggsText();
         }
+
+        currentStructureState = StructureState.Idle;
     }
 
+    #endregion
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="antType"></param>
+    /// <param name="position"></param>
+    public void CreateAnt(ANT_TYPES antType, Transform position)
+    {
+        if (AntCreation.Instance == null || position == null)
+            return;
+
+        int limit = broodingCapacity[currentLevel - 1];
+
+        if (currentBreedingQuantity >= limit)
+        {
+            Debug.Log("Límite");
+            return;
+        }
+
+        // Obtener costes ANTES de reservar slot
+        AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+
+        Ant antScript = AntCreation.Instance.antToInstantiate.GetComponent<Ant>();
+
+        int foodCosts = antScript.GetBreedingCost()[0];
+        int hvCosts = antScript.GetBreedingCost()[1];
+
+        if (!AntCreation.Instance.CanSpawnAnt(foodCosts, hvCosts))
+        {
+            Debug.Log("Insuficient hv or food");
+            return;
+        }
+
+        currentBreedingQuantity++;
+
+        PlayerAntCreation(antType, position, timeGeneratingAnt, foodCosts, hvCosts);
+    }
+
+
+    /// <summary>
+    /// Creación de hormigas del jugador mediante el uso de recursos y actualización de la interfaz.
+    /// </summary>
+    /// <param name="antType">Tipo de hormiga a instanciar.</param>
+    /// <param name="position">Transform de la posición donde instanciar.</param>
+    public void PlayerAntCreation(ANT_TYPES antType, Transform position, float time, int foodCosts, int hvCosts)
+    {
+        if (position == null) return;
+
+        AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+
+        AntCreation.Instance.positionInstantiate = position;
+
+        TimeManager.Instance?.OneShotTimer(time, () =>
+        {
+            AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
+            currentBreedingQuantity--;
+        });
+
+        VFXManager.Instance?.PlayBroodingChamberParticles(transform.position, time);
+
+        gameHUDView?.UpdateAntText(antType, 1);
+
+        GameManager.instance.player.inventory.RemoveFood(foodCosts);
+        GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+
+        gameHUDView?.UpdateFoodText();
+        gameHUDView?.UpdateEggsText();
+
+    }
 }
