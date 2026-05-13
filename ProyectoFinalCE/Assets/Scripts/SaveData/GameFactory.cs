@@ -23,7 +23,7 @@ public static class GameFactory
             return null;
         }
 
-        GameObject prefab = Resources.Load<GameObject>("Ants/" + prefabName);
+        GameObject prefab = Resources.Load<GameObject>("../Prefabs/Ants/" + prefabName);
 
         if (prefab == null)
         {
@@ -42,7 +42,7 @@ public static class GameFactory
 
     public static Building CreateBuilding(string type, Vector3 pos, float rotation = 0f)
     {
-        GameObject prefab = Resources.Load<GameObject>("Buildings/" + type);
+        GameObject prefab = Resources.Load<GameObject>("../Prefabs/Buildings /" + type);
 
         if (prefab == null)
         {

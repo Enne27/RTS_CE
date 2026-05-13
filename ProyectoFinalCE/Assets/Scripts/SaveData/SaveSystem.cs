@@ -23,6 +23,19 @@ public static class SaveSystem
     #endregion
 
     #region LOAD
+
+    public static bool CanLoadGame()
+    {
+        if (!File.Exists(Path))
+        {
+            Debug.LogWarning("No save file found");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     public static void LoadGame()
     {
         if (!File.Exists(Path))

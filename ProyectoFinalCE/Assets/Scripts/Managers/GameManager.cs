@@ -59,10 +59,30 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        player = new Player();
-        player.inventory.AddEggs(startingEggs);
-        player.inventory.AddFood(startingFood);
-        player.inventory.AddMC(startingMC);
+        // Comprobar si existe una partida guardada
+        if (SaveSystem.CanLoadGame())
+        {
+            // Asegurar que los objetos Player existen antes de cargar
+            player = new Player();
+            playerIA = new Player();
+
+            // Cargar la partida (rellena player, stats, skills)
+            SaveSystem.LoadGame();
+        }
+        else
+        {
+            // Crear nuevos jugadores con valores iniciales
+            player = new Player();
+            playerIA = new Player();
+
+            player.inventory.AddEggs(startingEggs);
+            player.inventory.AddFood(startingFood);
+            player.inventory.AddMC(startingMC);
+            // Nota: Las hormigas iniciales se crearán en AntCreation (si no viene de carga)
+        }
+
+        // Asegurar que el objeto persista (ya se hizo en Awake, pero por claridad)
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>
@@ -73,13 +93,11 @@ public class GameManager : MonoBehaviour
         player.inventory.ResetAllVariables();
         playerIA.inventory.ResetAllVariables();
 
-        // FALTA A�ADIR LAS OTRAS HORMIGAS INICIALES
+        // FALTA AÑADIR LAS OTRAS HORMIGAS INICIALES
     }
 
     /// <summary>
     /// Desbloquea una mecánica global del juego a partir de su identificador.
-    /// Se utiliza cuando una skill activa una funcionalidad especial
-    /// (por ejemplo: usar huevos como comida, invisibilidad de exploradoras, etc.).
     /// </summary>
     public void UnlockMechanic(string id)
     {
