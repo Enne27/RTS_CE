@@ -111,7 +111,9 @@ public class Building : MonoBehaviour
                 cameraMovement.ZoomOnBuilding(transform);
                 /*ViewManager.Show<BroodChamberView>();
                 ViewManager.GetView<GameHUDView>().Show();*/
-                GetComponentInChildren<BroodChamberView>(true).gameObject.SetActive(true);
+                BroodChamberFunction brood = GetComponentInChildren<BroodChamberFunction>();
+                if(brood.currentStructureState == StructuresPlayer.StructureState.Idle)
+                    brood.broodView.gameObject.SetActive(true);
                 break;
             case BuildingType.StorageChamber:
                 cameraMovement.ZoomOnBuilding(transform);

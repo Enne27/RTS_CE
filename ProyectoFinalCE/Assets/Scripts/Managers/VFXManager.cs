@@ -34,7 +34,7 @@ public class VFXManager : MonoBehaviour
 
     #endregion
 
-    #region REFERENCES
+    #region VARIABLES
 
     [Header("Particles System")]
     [SerializeField] private ParticleSystem constructingParticles;
@@ -175,7 +175,12 @@ public class VFXManager : MonoBehaviour
         Transform hammer = GetHammer(ps);
 
         if (hammer != null)
+        {
             hammer.gameObject.SetActive(true);
+            hammer.localPosition = Vector3.zero;
+            hammer.localRotation = Quaternion.Euler(0, 90, 0);
+            hammer.localScale = Vector3.one * 3f;
+        }
 
         
         if (TimeManager.Instance)
@@ -193,7 +198,7 @@ public class VFXManager : MonoBehaviour
                 if (hammer != null)
                     hammer.gameObject.SetActive(false);
 
-                if (SFXManager.instance)
+                if (SFXManager.instance != null)
                     SFXManager.PlaySFX(creationEmitter);
 
             });
@@ -202,7 +207,7 @@ public class VFXManager : MonoBehaviour
 
     public void PlayBroodingChamberParticles(Vector3 position, float duration)
     {
-        WorldUIManager.Instance.ShowTimer(position, duration);
+        WorldUIManager.Instance.ShowTimerAnts(position, duration);
 
         
         if (TimeManager.Instance)
@@ -210,7 +215,7 @@ public class VFXManager : MonoBehaviour
             TimeManager.Instance.OneShotTimer(duration, () =>
             {
 
-                if (SFXManager.instance)
+                if (SFXManager.instance != null)
                     SFXManager.PlaySFX(creationEmitter);
 
             });

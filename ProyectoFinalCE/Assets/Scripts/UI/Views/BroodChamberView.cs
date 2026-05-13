@@ -10,15 +10,6 @@ using Unity.VisualScripting;
 
 public class BroodChamberView : View
 {
-    [System.Serializable]
-    public class AntButton
-    {
-        public Button buttonComponent;
-        public Ant antScript;
-        public GameObject previewModel;
-        public string antName;
-    }
-
     #region VARIABLES
     [Header("Info view")]
     [SerializeField] private List<AntButton> antsButton;
@@ -29,8 +20,9 @@ public class BroodChamberView : View
 
     [Header("Preview System")]
     [SerializeField] RawImage antImage;
-    [SerializeField] private Transform previewSpawnPoint;
-    [SerializeField] private RenderTexture previewTexture;
+    private Transform previewSpawnPoint;
+    private RenderTexture previewTexture;
+    [SerializeField] private ReferencesAntPreview referencesPreviewObject;
 
     private GameObject currentPreview;
 
@@ -65,12 +57,17 @@ public class BroodChamberView : View
 
     private void OnEnable()
     {
+        if (referencesPreviewObject == null)
+            referencesPreviewObject = FindFirstObjectByType<ReferencesAntPreview>();
+
         InitializeView();
+
         if ((antsSpawnPoint == null || workersSpawnPoint == null) && AntCreation.Instance != null)
         {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
             workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
         }
+
     }
     private void Update()
     {
@@ -118,19 +115,27 @@ public class BroodChamberView : View
 
         InitializeButtons();
 
-        if (antImage != null && previewTexture != null)
-            antImage.texture = previewTexture;
+        if (antImage != null && referencesPreviewObject != null)
+        {
+            previewTexture = referencesPreviewObject.previewTexture;
+            previewSpawnPoint = referencesPreviewObject.gameObject.transform;
+            antImage.texture = referencesPreviewObject.previewTexture;
+        }
+
     }
 
     private void InitializeButtons()
     {
         if (antsButton.Count > 0)
         {
+            int i = 0;
             foreach (var mb in antsButton)
             {
                 if (mb.buttonComponent != null)
                 {
+                    mb.previewModel = referencesPreviewObject.antsButton[i].previewModel;
                     SetupButtonEvents(mb);
+                    i++;
                 }
             }
         }
