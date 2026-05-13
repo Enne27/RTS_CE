@@ -50,8 +50,8 @@ public partial class SceneLoader
         public static void LoadFogOfWar() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/FogOfWar.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/QualityConfigTestView")]
         public static void LoadQualityConfigTestView() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/QualityConfigTestView.unity"); }
-        [MenuItem("Scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEMTEST")]
-        public static void LoadSingleplayerGameSceneGUILLEMTEST() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEMTEST.unity"); }
+        [MenuItem("Scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEM")]
+        public static void LoadSingleplayerGameSceneGUILLEM() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/SingleplayerGameSceneGUILLEM.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/Anuk Temp/Fog")]
         public static void LoadFog() { OpenScene("Assets/scenes/TestScenes/PersonalTestScenes/Anuk Temp/Fog.unity"); }
         [MenuItem("Scenes/TestScenes/PersonalTestScenes/Anuk Temp/SingleplayerGameSceneTemp")]

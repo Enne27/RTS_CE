@@ -29,7 +29,7 @@ public class BroodChamberFunction : StructuresPlayer
     int[] timeUpgrade_ = { 30, 60, 60, 70, 90, 120 };
 
     [Tooltip("Cantidad de hormigas que puede generar por nivel.")]
-    int[] broodingCapacity = { 1, 2, 3, 4, 5, 6 };
+    [HideInInspector] public int[] broodingCapacity = { 1, 2, 3, 4, 5, 6 };
 
     [Tooltip("Tiempo que tarda en crear una hormiga base.")]
     int timeGeneratingAnt = 60;
@@ -48,93 +48,28 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     public GameHUDView gameHUDView;
+    private BroodChamberView broodView;
+
+    [Header("Limits")]
+    /*[HideInInspector] */public int currentBreedingQuantity = 0;
     #endregion
 
     private void Awake()
     {
         gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
+        broodView = ViewManager.GetView<BroodChamberView>();
     }
 
-    public void CreateAnt(ANT_TYPES antType, Transform position)
+    private void OnEnable()
     {
-        if(AntCreation.Instance != null)
-            AntCreation.Instance.PlayerAntCreation(antType, position);
-       /* //Debug.Log(antType);
-        GameObject antInstantiate = workerAnt;
-
-        if (position != null)
-        {
-            switch (antType)
-            {
-                case ANT_TYPES.ACID:
-                    antInstantiate = acidAnt;
-                    break;
-                case ANT_TYPES.BERSERKER:
-                    antInstantiate = berserkerAnt;
-                    break;
-                case ANT_TYPES.EXPLORER:
-                    antInstantiate = explorerAnt;
-                    break;
-                case ANT_TYPES.SOLDIER:
-                    antInstantiate = soldierAnt;
-                    break;
-                case ANT_TYPES.CRAZY: 
-                    antInstantiate = crazyAnt;
-                    break;
-                case ANT_TYPES.KAMIKAZE:
-                    antInstantiate = kamikazeAnt;
-                    break;
-                case ANT_TYPES.WORKER:
-                    antInstantiate = workerAnt;
-                    break;
-            }
-
-            Ant antScript = antInstantiate.GetComponent<Ant>();
-            int foodCosts = 0;
-            int hvCosts = 0;
-            if (antScript != null)
-            {
-                foodCosts = antScript.GetBreedingCost()[0];
-                hvCosts = antScript.GetBreedingCost()[1];
-            }
-
-            
-            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
-            if(SpawnAnt(foodCosts, hvCosts))
-            {
-                GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
-                if(antType != ANT_TYPES.WORKER)
-                    GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                else
-                    GameManager.instance.player.inventory.workerAnts++;
-                if (antType == ANT_TYPES.EXPLORER)
-                    //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
-                    newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
-
-                // Actualización HUD
-                if (gameHUDView == null)
-                    gameHUDView = FindFirstObjectByType<GameHUDView>();
-
-                gameHUDView.UpdateAntText(antType, 1);
-
-                GameManager.instance.player.inventory.RemoveFood(foodCosts);
-                gameHUDView.UpdateFoodText();
-                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
-                gameHUDView.UpdateEggsText();
-            }
-            else
-            {
-                Debug.Log("Insuficient hv or food");
-            }
-        }*/
+        currentBreedingQuantity = 0;
     }
-
-    /*private bool SpawnAnt(int foodCosts, int hvCosts)
+    private void OnDestroy()
     {
-        return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
+        currentBreedingQuantity = 0;
     }
-    */
+
+    #region BUILDING_METHODS
     public override void OnConstructionFinished()
     {
         GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
@@ -145,5 +80,119 @@ public class BroodChamberFunction : StructuresPlayer
             gameHUDView.UpdateMCText();
             gameHUDView.UpdateEggsText();
         }
+
+        currentStructureState = StructureState.Idle;
+    }
+
+    #endregion
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="antType"></param>
+    /// <param name="position"></param>
+    public void CreateAnt(ANT_TYPES antType, Transform position)
+    {
+        if (AntCreation.Instance == null || position == null)
+            return;
+
+        int limit = broodingCapacity[currentLevel - 1];
+
+        if (currentBreedingQuantity >= limit)
+        {
+            Debug.Log("Límite");
+            return;
+        }
+
+        // Obtener costes ANTES de reservar slot
+        AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+
+        Ant antScript = AntCreation.Instance.antToInstantiate.GetComponent<Ant>();
+
+        int foodCosts = antScript.GetBreedingCost()[0];
+        int hvCosts = antScript.GetBreedingCost()[1];
+
+        if (!AntCreation.Instance.CanSpawnAnt(foodCosts, hvCosts))
+        {
+            Debug.Log("Insuficient hv or food");
+            return;
+        }
+
+        currentBreedingQuantity++;
+
+        if (broodView == null)
+            broodView = FindFirstObjectByType<BroodChamberView>();
+
+        PlayerAntCreation(antType, position, timeGeneratingAnt, foodCosts, hvCosts);
+    }
+
+
+    /// <summary>
+    /// Creación de hormigas del jugador mediante el uso de recursos y actualización de la interfaz.
+    /// </summary>
+    /// <param name="antType">Tipo de hormiga a instanciar.</param>
+    /// <param name="position">Transform de la posición donde instanciar.</param>
+    public void PlayerAntCreation(ANT_TYPES antType, Transform position, float time, int foodCosts, int hvCosts)
+    {
+        if (position == null) return;
+
+        AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+
+        AntCreation.Instance.positionInstantiate = position;
+
+        TimeManager.Instance?.OneShotTimer(time, () =>
+        {
+            AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
+            currentBreedingQuantity--;
+        });
+
+        VFXManager.Instance?.PlayBroodingChamberParticles(/*GetTransformToSpawnTimer(antType)*/gameObject.transform.position, time);
+
+        gameHUDView?.UpdateAntText(antType, 1);
+
+        GameManager.instance.player.inventory.RemoveFood(foodCosts);
+        GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+
+        gameHUDView?.UpdateFoodText();
+        gameHUDView?.UpdateEggsText();
+
+    }
+
+    private Vector3 GetTransformToSpawnTimer(ANT_TYPES antType)
+    {
+        Vector3 transform = new Vector3(0, 0, 0);
+        switch (antType)
+        {
+            case ANT_TYPES.ACID:
+                transform = broodView.acidButton.transform.position;
+                break;
+
+            case ANT_TYPES.BERSERKER:
+                transform = broodView.berserkerButton.transform.position;
+                break;
+
+            case ANT_TYPES.EXPLORER:
+                transform = broodView.explorerButton.transform.position;
+                break;
+
+            case ANT_TYPES.SOLDIER:
+                transform = broodView.soldierButton.transform.position;
+                break;
+
+            case ANT_TYPES.CRAZY:
+                transform = broodView.crazyButton.transform.position;
+                break;
+
+            case ANT_TYPES.KAMIKAZE:
+                transform = broodView.kamikazeButton.transform.position;
+                break;
+
+            case ANT_TYPES.WORKER:
+                transform = broodView.workerButton.transform.position;
+                break;
+        }
+
+        return transform;
     }
 }

@@ -66,6 +66,8 @@ public class QueenChamberFunction : StructuresPlayer
             hudView.UpdateMCText();
             hudView.UpdateEggsText();
         }
+
+        currentStructureState = StructureState.Idle;
     }
 
     #endregion
