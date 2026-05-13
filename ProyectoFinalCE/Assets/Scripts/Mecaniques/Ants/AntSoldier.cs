@@ -10,14 +10,14 @@ internal class AntSoldier : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 25f;
-        armor = 0.50f;
-        speed = 12f;
-        strength = 3f;
-        reach = 1;
-        vision = 1;
-        linePriority = 2;
-        acidBased = false;
+        //HP = 25f;
+        //armor = 0.50f;
+        //speed = 12f;
+        //strength = 3f;
+        //reach = 1;
+        //vision = 1;
+        //linePriority = 2;
+        //acidBased = false;
     }
 
     public override void Attack(Ant target) {
@@ -52,10 +52,29 @@ internal class AntSoldier : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
+
+    public void AttackMound()
+    {
+        MoundFunction target;
+        if (gameObject.CompareTag("AI_AntHill"))
+        {
+            target = GetComponent<MoundFunction>();
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage((int)Math.Round(strength));
+            }
+        }
+
+        else
+        {
+            Debug.Log("Este objeto no es el hormiguero enemigo");
+            return;
+        }
+    }
     public override void Die()
     {
         gameObject.SetActive(false);    
-    }
-
- 
+    }   
 }
+ 

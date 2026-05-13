@@ -57,7 +57,9 @@ public class BroodChamberFunction : StructuresPlayer
 
     public void CreateAnt(ANT_TYPES antType, Transform position)
     {
-        //Debug.Log(antType);
+        if(AntCreation.Instance != null)
+            AntCreation.Instance.PlayerAntCreation(antType, position);
+       /* //Debug.Log(antType);
         GameObject antInstantiate = workerAnt;
 
         if (position != null)
@@ -110,28 +112,38 @@ public class BroodChamberFunction : StructuresPlayer
                     //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
                     newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
 
-                if (gameHUDView != null)
-                    gameHUDView.UpdateAntText(antType, 1);
-                else
-                {
+                // Actualización HUD
+                if (gameHUDView == null)
                     gameHUDView = FindFirstObjectByType<GameHUDView>();
-                    gameHUDView.UpdateAntText(antType, 1);
-                }
+
+                gameHUDView.UpdateAntText(antType, 1);
+
+                GameManager.instance.player.inventory.RemoveFood(foodCosts);
+                gameHUDView.UpdateFoodText();
+                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+                gameHUDView.UpdateEggsText();
             }
             else
             {
                 Debug.Log("Insuficient hv or food");
             }
-        }
+        }*/
     }
 
-    private bool SpawnAnt(int foodCosts, int hvCosts)
+    /*private bool SpawnAnt(int foodCosts, int hvCosts)
     {
         return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
     }
-
+    */
     public override void OnConstructionFinished()
     {
-        
+        GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
+        GameManager.instance.player.inventory.RemoveMC(broodBuildingScriptable.costMC);
+
+        if (gameHUDView != null)
+        {
+            gameHUDView.UpdateMCText();
+            gameHUDView.UpdateEggsText();
+        }
     }
 }

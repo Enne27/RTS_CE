@@ -10,41 +10,35 @@ public class CameraMovement : MonoBehaviour
     private InputAction movement;
     private Transform cameraTransform;
 
-    [SerializeField]
-    private float maxSpeed = 5f;
+    [SerializeField] private float maxSpeed = 5f;
     private float speed;
-    [SerializeField]
-    private float acceleration = 10f;
-    [SerializeField]
-    private float damping = 15f;
-    [SerializeField]
-    private float stepSize = 6f;
-    [SerializeField]
-    private float zoomDampening = 7.5f;
-    [SerializeField]
-    private float minHeight = 3f;
-    [SerializeField]
-    private float maxHeight = 30f;
+    [SerializeField] private float acceleration = 10f;
+    [SerializeField] private float damping = 15f;
 
-    [SerializeField]
-    private float maxRotationSpeed = 1f;
+    [Header("Zoom Settings")]
+    [SerializeField] private float stepSize = 2f;
+    [SerializeField] private float zoomDampening = 7.5f;
+    [SerializeField] private float minZoom = 0f;      // Punto más cercano (hacia adelante)
+    [SerializeField] private float maxZoom = 40f;     // Punto más lejano (hacia atrás)
+    [SerializeField] private float zoomSpeed = 2f;
 
-    [SerializeField]
-    [Range(0f, 0.1f)]
-    private float edgeTolerance = 0.05f;
+    private float targetZoom;                     // El valor de desplazamiento objetivo
+    private float currentZoom;                    // El valor de desplazamiento suavizado actual
+    private Vector3 cameraInitialLocalPos;        // Posición base de la cámara en el Rig
 
-    [SerializeField]
-    [Tooltip("Distancia en el eje Z a la que se aleja la cï¿½mara cuando estï¿½ al mï¿½ximo de zoom (cerca del suelo)")]
-    private float maxZoomDistance = 5f;
 
-    [SerializeField]
-    private float zoomMultiplier = 0.5f;
+    [SerializeField] private float maxRotationSpeed = 1f;
+
+
+    [SerializeField] [Range(0f, 0.1f)] private float edgeTolerance = 0.05f;
+
+    [Header("Bounds")]
+    [SerializeField] private Vector2 minBounds = new Vector2(-400, -400);
+    [SerializeField] private Vector2 maxBounds = new Vector2(400, 400);
 
     //value set in various functions 
     //used to update the position of the camera base object.
     private Vector3 targetPosition;
-
-    private float zoomHeight;
 
     //used to track and maintain velocity w/o a rigidbody
     private Vector3 horizontalVelocity;
@@ -85,6 +79,7 @@ public class CameraMovement : MonoBehaviour
             UpdateVelocity();
             UpdateBasePosition();
             UpdateCameraPosition();
+            ClampPosition();
         }
     }
 
@@ -125,7 +120,7 @@ public class CameraMovement : MonoBehaviour
 
     private void DragCamera()
     {
-        if (!Mouse.current.rightButton.isPressed)
+        if (!Mouse.current.middleButton.isPressed)
             return;
 
         //create plane to raycast to
@@ -134,7 +129,7 @@ public class CameraMovement : MonoBehaviour
 
         if (plane.Raycast(ray, out float distance))
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.middleButton.wasPressedThisFrame)
                 startDrag = ray.GetPoint(distance);
             else
                 targetPosition += startDrag - ray.GetPoint(distance);
@@ -145,7 +140,7 @@ public class CameraMovement : MonoBehaviour
     #region Movement
     private void UpdateVelocity()
     {
-        horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
+        horizontalVelocity = (transform.position - lastPosition) / Time.fixedDeltaTime;
         horizontalVelocity.y = 0f;
         lastPosition = transform.position;
     }
@@ -154,66 +149,48 @@ public class CameraMovement : MonoBehaviour
     {
         if (targetPosition.sqrMagnitude > 0.1f)
         {
-            //create a ramp up or acceleration
-            speed = Mathf.Lerp(speed, maxSpeed, Time.deltaTime * acceleration);
-            transform.position += targetPosition * speed * Time.deltaTime;
+            speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * acceleration);
+            transform.position += targetPosition * speed * Time.fixedDeltaTime;
         }
         else
         {
-            //create smooth slow down
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.fixedDeltaTime * damping);
+            //Hotfix
+            //transform.position += horizontalVelocity * Time.fixedDeltaTime;
         }
 
-        //reset for next frame
         targetPosition = Vector3.zero;
     }
 
     private void ZoomCamera(InputAction.CallbackContext obj)
     {
-        Vector2 scrollValue = obj.ReadValue<Vector2>();
-        float inputValue = -scrollValue.y;
+        float scrollValue = -obj.ReadValue<Vector2>().y;
 
-        if (Mathf.Abs(inputValue) > 0.01f)
+        if (Mathf.Abs(scrollValue) > 0.01f)
         {
-            zoomHeight = cameraTransform.localPosition.y + (inputValue * stepSize * zoomMultiplier);
-
-            if (zoomHeight < minHeight)
-                zoomHeight = minHeight;
-            else if (zoomHeight > maxHeight)
-                zoomHeight = maxHeight;
+            targetZoom += (scrollValue * stepSize);
+            targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
         }
     }
 
     private void UpdateCameraPosition()
     {
-        // 1. Calculamos el porcentaje del zoom (0 a 1).
-        // 0 = Estamos en minHeight (muy cerca del suelo).
-        // 1 = Estamos en maxHeight (muy alto).
-        float zoomPercent = (zoomHeight - minHeight) / (maxHeight - minHeight);
+        currentZoom = Mathf.Lerp(currentZoom, targetZoom, Time.deltaTime * zoomDampening);
+        Vector3 zoomOffset = cameraTransform.localRotation * Vector3.forward * -currentZoom;
 
-        // 2. Calculamos la posiciï¿½n Z deseada usando ese porcentaje.
-        // Si el porcentaje es 1 (lejos), Z serï¿½ 0 (justo encima, visiï¿½n vertical).
-        // Si el porcentaje es 0 (cerca), Z serï¿½ -maxZoomDistance (alejado, visiï¿½n horizontal).
-        float targetZ = Mathf.Lerp(-maxZoomDistance, 0f, zoomPercent);
-
-        // 3. Creamos el target de posiciï¿½n local usando X=0 para mantenerla centrada.
-        Vector3 zoomTarget = new Vector3(0f, zoomHeight, targetZ);
-
-        // 4. Suavizamos la transiciï¿½n hacia ese punto local, usando tu variable zoomDampening.
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDampening);
-
-        // 5. Mirar al CameraRig. Al cambiar la posiciï¿½n en Z e Y, LookAt ajustarï¿½ el ï¿½ngulo X automï¿½ticamente[cite: 1].
-        cameraTransform.LookAt(transform);
+        cameraTransform.localPosition = cameraInitialLocalPos + zoomOffset;
     }
+    #endregion
 
-    private void RotateCamera(InputAction.CallbackContext obj)
+    #region Bounds
+    private void ClampPosition()
     {
-        if (!Mouse.current.middleButton.isPressed)
-            return;
+        Vector3 pos = transform.position;
 
-        float inputValue = obj.ReadValue<Vector2>().x;
-        transform.rotation = Quaternion.Euler(0f, inputValue * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
+            pos.x = Mathf.Clamp(pos.x, minBounds.x, maxBounds.x);
+            pos.z = Mathf.Clamp(pos.z, minBounds.y, maxBounds.y);
+
+            transform.position = pos;
     }
     #endregion
 
@@ -222,13 +199,12 @@ public class CameraMovement : MonoBehaviour
     {
         cameraCanMove = true;
 
-        zoomHeight = cameraTransform.localPosition.y;
-        cameraTransform.LookAt(transform);
+        cameraInitialLocalPos = cameraTransform.localPosition;
 
-        lastPosition = transform.position;
+        targetZoom = 0f;
+        currentZoom = 0f;
 
         movement = cameraActions.FindAction("Movement");
-        cameraActions.FindAction("RotateCamera").performed += RotateCamera;
         cameraActions.FindAction("ZoomCamera").performed += ZoomCamera;
         cameraActions.Enable();
     }
@@ -237,7 +213,6 @@ public class CameraMovement : MonoBehaviour
     {
         cameraCanMove = false;
 
-        cameraActions.FindAction("RotateCamera").performed -= RotateCamera;
         cameraActions.FindAction("ZoomCamera").performed -= ZoomCamera;
     }
     #endregion

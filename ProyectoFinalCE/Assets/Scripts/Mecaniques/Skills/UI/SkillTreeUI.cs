@@ -4,33 +4,24 @@ using TMPro;
 public class SkillTreeUI : MonoBehaviour
 {
     [Header("UI")]
-    public Transform contentParent;
-    public SkillUIItem itemPrefab;
     public TextMeshProUGUI statsText;
 
-    [Header("Data")]
-    public SkillData[] allSkills;
+    private void OnEnable()
+    {
+        if (StatManager.Instance != null)
+            StatManager.Instance.OnStatsChanged += UpdateStats;
+    }
+
+    private void OnDisable()
+    {
+        if (StatManager.Instance != null)
+            StatManager.Instance.OnStatsChanged -= UpdateStats;
+    }
 
     private void Start()
     {
-        InvokeRepeating(nameof(UpdateStats), 0f, 0.5f);
-        Debug.Log("SkillTreeUI STARTED");
-
-        BuildUI();
+        UpdateStats();
     }
-
-void BuildUI()
-{
-    Debug.Log("Building UI...");
-
-    foreach (var skill in allSkills)
-    {
-        Debug.Log("Creating: " + skill.SkillName);
-
-        var item = Instantiate(itemPrefab, contentParent);
-        item.Setup(skill);
-    }
-}
 
     void UpdateStats()
     {

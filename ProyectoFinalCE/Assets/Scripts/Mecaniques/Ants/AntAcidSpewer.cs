@@ -7,14 +7,14 @@ public class AntAcidSpewer : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
-        HP = 15f;
+        /*HP = 15f;
         armor = 0.30f;
         speed = 10f;
         strength = 5f;
         reach = 9;
         vision = 1;
         linePriority = 10;
-        acidBased = true;
+        acidBased = true;*/
     }
     public override void Attack(Ant target)
     {

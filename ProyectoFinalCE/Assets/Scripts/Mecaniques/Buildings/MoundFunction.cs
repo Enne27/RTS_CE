@@ -92,7 +92,6 @@ public class MoundFunction : StructuresPlayer
                 hudView.UpdateMCText();
                 hudView.UpdateFoodText();
             }
-
         }
     }
 

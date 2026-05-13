@@ -31,10 +31,10 @@ public class GameManager : MonoBehaviour
     public int startingMC = 0;
 
     [Tooltip("Cantidad inicial de hormigas obreras.")]
-    public int startingWorkerAnts = 4;
+    public int startingWorkerAnts = 1;
 
     [Tooltip("Cantidad inicial proporcionada de hormigas exploradoras.")]
-    public int startingExplorerAnts = 4;
+    public int startingExplorerAnts = 2;
 
 
     [Header("Starting structures (Map constructions)")]

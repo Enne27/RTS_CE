@@ -31,10 +31,12 @@ public class ControlsView : View
     {
         base.Show();
         UIEffects.instance.SlideUI(panel, shownPos, effectTime);
+        Time.timeScale = 0;
     }
 
     public override void Hide()
     {
+        Time.timeScale = 1;
         UIEffects.instance.SlideUI(panel, hiddenPos, effectTime, ()=> base.Hide());
     }
 }

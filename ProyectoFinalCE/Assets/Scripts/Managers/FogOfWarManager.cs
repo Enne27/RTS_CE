@@ -12,19 +12,19 @@ public class FogOfWarManager : MonoBehaviour
     #region Variables
     public static FogOfWarManager Instance { get; private set; }
 
-    [Header("ConfiguraciÛn del Mapa")]
-    [Tooltip("TamaÒo del mapa en unidades de Unity (ej. 100x100)")]
+    [Header("Configuraci√≥n del Mapa")]
+    [Tooltip("Tama√±o del mapa en unidades de Unity (ej. 100x100)")]
     public float mapSize = 100f;
-    [Tooltip("ResoluciÛn de la textura (A mayor resoluciÛn, bordes m·s suaves pero m·s coste de CPU)")]
+    [Tooltip("Resoluci√≥n de la textura (A mayor resoluci√≥n, bordes m√°s suaves pero m√°s coste de CPU)")]
     public int textureRes = 256;
-    //[Tooltip("Frecuencia de actualizaciÛn en segundos (0.1s = 10 FPS)")]
+    //[Tooltip("Frecuencia de actualizaci√≥n en segundos (0.1s = 10 FPS)")]
     //public float updateInterval = 0.1f;
 
     [Header("Materiales")]
     [Tooltip("El material que tiene el Shader de la Niebla")]
     public Material fogMaterial;
 
-    [SerializeField]private RenderTexture fogTexture;
+    [SerializeField] private RenderTexture fogTexture;
     private Color32[] pixels;
     private List<FogRevealer> activeRevealers = new List<FogRevealer>();
 
@@ -85,14 +85,14 @@ public class FogOfWarManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Permite a las entidades preguntar el estado de visibilidad en su posiciÛn.
+    /// Permite a las entidades preguntar el estado de visibilidad en su posici√≥n.
     /// Retorna un Color32 donde R=Visible actual, G=Explorado.
     /// </summary>
     public Color32 GetVisibilityAtPosition(Vector3 worldPos)
     {
         Vector2Int texCoords = WorldToFogCoords(worldPos);
 
-        // Evitar errores si la entidad sale de los lÌmites del mapa
+        // Evitar errores si la entidad sale de los l√≠mites del mapa
         if (texCoords.x < 0 || texCoords.x >= textureRes || texCoords.y < 0 || texCoords.y >= textureRes)
             return new Color32(0, 0, 0, 255); // Considerar negro fuera del mapa
 
@@ -147,9 +147,9 @@ public class FogOfWarManager : MonoBehaviour
 
     private Vector2Int WorldToFogCoords(Vector3 worldPos)
     {
-        // Mapear posiciÛn del mundo (ejes X y Z) a coordenadas de textura 2D (0 a textureRes)
+        // Mapear posici√≥n del mundo (ejes X y Z) a coordenadas de textura 2D (0 a textureRes)
         float mappedX = (worldPos.x + mapOriginOffset) / mapSize;
-        float mappedY = (worldPos.z + mapOriginOffset) / mapSize; // Usamos Z porque el mapa est· en el plano XZ
+        float mappedY = (worldPos.z + mapOriginOffset) / mapSize; // Usamos Z porque el mapa est√° en el plano XZ
 
         int texX = Mathf.RoundToInt(mappedX * textureRes);
         int texY = Mathf.RoundToInt(mappedY * textureRes);

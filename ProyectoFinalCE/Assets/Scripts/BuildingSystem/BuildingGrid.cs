@@ -7,7 +7,7 @@ public class BuildingGrid : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
 
-    private BuildingGridCell[,] grid;
+    [SerializeField] public BuildingGridCell[,] grid;
 
     private void Start()
     {
@@ -71,6 +71,7 @@ public class BuildingGrid : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class BuildingGridCell
 {
     private Building building;
