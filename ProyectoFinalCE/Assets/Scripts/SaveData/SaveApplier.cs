@@ -37,7 +37,7 @@ public static class SaveApplier
 
         foreach (StructureSaveData data in structuresData)
         {
-            Building building = GameFactory.CreateBuilding(data.type, data.position, data.rotation);
+            Building building = GameFactory.Instance.CreateBuilding(data.type, data.position, data.rotation);
 
             if (building == null)
                 continue;
@@ -84,7 +84,7 @@ public static class SaveApplier
 
         foreach (var antData in antsData)
         {
-            Ant ant = GameFactory.CreateAnt(antData.type, antData.position);
+            Ant ant = GameFactory.Instance.CreateAnt(antData.type, antData.position);
 
             if (ant == null)
                 continue;
