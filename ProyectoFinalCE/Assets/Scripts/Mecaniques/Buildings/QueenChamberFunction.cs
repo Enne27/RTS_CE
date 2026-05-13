@@ -58,16 +58,13 @@ public class QueenChamberFunction : StructuresPlayer
         //Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
-        GameManager.instance.player.inventory.RemoveEggs(queenBuildingScriptable.costHV);
-        GameManager.instance.player.inventory.RemoveMC(queenBuildingScriptable.costMC);
-
-        if (hudView != null)
-        {
-            hudView.UpdateMCText();
-            hudView.UpdateEggsText();
-        }
 
         currentStructureState = StructureState.Idle;
+
+        foreach(AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            worker.HasFinishedWork();
+        } 
     }
 
     #endregion
