@@ -189,7 +189,7 @@ public class BuildingManager : MonoBehaviour
         grid.SetBuilding(building, buildingPositions);
 
         building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
-        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+        VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
 
         switch (preview.data.buildingType)
         {

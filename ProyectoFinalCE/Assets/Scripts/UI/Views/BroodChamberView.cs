@@ -66,7 +66,7 @@ public class BroodChamberView : View
     private void OnEnable()
     {
         InitializeView();
-        if (antsSpawnPoint == null || workersSpawnPoint == null)
+        if ((antsSpawnPoint == null || workersSpawnPoint == null) && AntCreation.Instance != null)
         {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
             workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;

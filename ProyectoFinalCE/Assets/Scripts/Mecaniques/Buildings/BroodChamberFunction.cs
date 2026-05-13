@@ -72,6 +72,8 @@ public class BroodChamberFunction : StructuresPlayer
     #region BUILDING_METHODS
     public override void OnConstructionFinished()
     {
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.BroodChamberMaterial;
+
         GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
         GameManager.instance.player.inventory.RemoveMC(broodBuildingScriptable.costMC);
 

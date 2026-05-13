@@ -55,7 +55,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
-        Debug.Log("Queen Chamber Construida");
+        //Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
         GameManager.instance.player.inventory.RemoveEggs(queenBuildingScriptable.costHV);
@@ -71,11 +71,6 @@ public class QueenChamberFunction : StructuresPlayer
     }
 
     #endregion
-
-    /*private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden
-    {
-        TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
-    }*/
 
     private void OnDisable()
     {
