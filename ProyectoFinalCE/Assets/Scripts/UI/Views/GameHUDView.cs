@@ -79,13 +79,15 @@ public class GameHUDView : View
           constructionButton.onClick.AddListener(()=> {
               if(constructionMenuActived == false)
               {
-                  ViewManager.Show<ConstructionMenuView>();
+                  //ViewManager.Show<ConstructionMenuView>();
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(true);
                   constructionMenuActived = true;
               }
               else 
               { 
                   constructionMenuActived = false;
-                  ViewManager.ShowLastView(); 
+                  //ViewManager.ShowLastView(); 
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
               }
           });
         }

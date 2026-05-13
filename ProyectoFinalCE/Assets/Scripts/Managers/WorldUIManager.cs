@@ -7,7 +7,7 @@ public class WorldUIManager : MonoBehaviour
     public static WorldUIManager Instance;
 
     [SerializeField] private TimerUI timerPrefab;
-    [SerializeField] private TimerUI timerAnts;
+    [SerializeField] private TimerUI timerAntsPrefab;
 
     private List<TimerUI> poolUI = new();
     private List<TimerUI> poolUIAnts = new();
@@ -27,7 +27,7 @@ public class WorldUIManager : MonoBehaviour
                 return t;
         }
 
-        var newTimer = Instantiate(timerPrefab);
+        var newTimer = Instantiate(timerAntsPrefab);
         poolUIAnts.Add(newTimer);
         return newTimer;
     }

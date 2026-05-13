@@ -177,9 +177,6 @@ public class VFXManager : MonoBehaviour
         if (hammer != null)
         {
             hammer.gameObject.SetActive(true);
-            hammer.localPosition = Vector3.zero;
-            hammer.localRotation = Quaternion.Euler(0, 90, 0);
-            hammer.localScale = Vector3.one * 3f;
         }
 
         

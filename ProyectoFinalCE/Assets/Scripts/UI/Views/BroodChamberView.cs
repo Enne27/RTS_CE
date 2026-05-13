@@ -6,7 +6,6 @@ using UnityEngine.Localization;
 using UnityEngine.UI;
 using static PlayerConstants;
 using static ConstantsAndKeys;
-using Unity.VisualScripting;
 
 public class BroodChamberView : View
 {
@@ -124,6 +123,7 @@ public class BroodChamberView : View
 
     }
 
+    #region BUTTONS
     private void InitializeButtons()
     {
         if (antsButton.Count > 0)
@@ -202,7 +202,9 @@ public class BroodChamberView : View
 
         currentPreview = null;
     }
+    #endregion
 
+    #region PREVIEW
     /// <summary>
     /// Actualización de la información para todas las hormigas excepto worker.
     /// </summary>
@@ -261,6 +263,7 @@ public class BroodChamberView : View
         currentPreview.transform.localPosition = Vector3.zero;
         currentPreview.transform.localRotation = Quaternion.identity;
     }
+    #endregion
 
     private void OnDisable()
     {

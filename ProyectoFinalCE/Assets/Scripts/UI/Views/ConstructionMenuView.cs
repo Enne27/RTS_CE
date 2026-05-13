@@ -168,13 +168,13 @@ public class ConstructionMenuView : View
     public override void Hide()
     {
         base.Hide();
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
     }
 
     public override void Show()
     {
         base.Show();
-        Time.timeScale = 0;
+        //Time.timeScale = 1;
         ViewManager.GetView<GameHUDView>().Show();
     }
 }
