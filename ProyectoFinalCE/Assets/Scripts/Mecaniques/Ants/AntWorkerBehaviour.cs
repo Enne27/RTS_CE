@@ -19,20 +19,41 @@ public class AntWorkerBehaviour : MonoBehaviour
     [SerializeField] private TunnelFunction currentTunnel;
     [SerializeField] private TunnelFunction targetTunnel;
 
-    public StateMachineComponent stateMachineManager;
-    public TunnelFunction previousTunnel;
-    public Animator animationController;
-    
-    public bool isMoving;
+    [Header("Work")]
+    [SerializeField] private Building currentBuilding;
+
+    private StateMachineComponent stateMachineManager;
+    private Animator animationController;
+
+    private TunnelFunction previousTunnel;
+
+    private bool isMoving;
+
+    private List<TunnelFunction> currentPath = new();
+    private int currentPathIndex = 0;
 
     private void Start()
     {
         stateMachineManager = GetComponent<StateMachineComponent>();
-        currentTunnel = FindCurrentTunnel();
         animationController = GetComponent<Animator>();
     }
 
     private void Update()
+    {
+        isMoving = targetTunnel != null;
+        animationController.SetBool("IsMoving", isMoving);
+
+        if (stateMachineManager.GetCurrentStateName() == "Wander")
+            Wander();
+        else if (stateMachineManager.GetCurrentStateName() == "Working")
+            Work();
+    }
+
+    // =========================
+    // WANDER
+    // =========================
+
+    private void Wander()
     {
         if (currentTunnel == null)
         {
@@ -40,59 +61,229 @@ public class AntWorkerBehaviour : MonoBehaviour
             return;
         }
 
-        isMoving = targetTunnel != null;
-        animationController.SetBool("IsMoving", isMoving);
-
-        // Escoger siguiente túnel
         if (targetTunnel == null)
         {
             ChooseNextTunnel();
         }
 
-        // Moverse
         if (targetTunnel != null)
         {
             MoveToTunnel();
         }
     }
 
+    // =========================
+    // WORK
+    // =========================
+
+    private void Work()
+    {
+        if (currentBuilding == null)
+            return;
+
+        if (currentTunnel == null)
+        {
+            currentTunnel = FindCurrentTunnel();
+            return;
+        }
+
+        TunnelFunction targetWorkTunnel = currentBuilding.gameObject.GetComponentInChildren<TunnelFunction>();
+
+        if (targetWorkTunnel == null)
+            return;
+
+        // recalcular constantemente
+        RecalculatePath(targetWorkTunnel);
+
+        // ya llegamos
+        if (currentTunnel == targetWorkTunnel)
+        {
+            targetTunnel = null;
+
+            // quedarse quieta aquí
+            return;
+        }
+
+        // seguir path
+        if (targetTunnel != null)
+        {
+            MoveToTunnel();
+        }
+    }
+
+    public void CallToBuild(Building buildToWork)
+    {
+        currentBuilding = buildToWork;
+
+        stateMachineManager.GetStateContext().hasWork = true;
+    }
+
+    // =========================
+    // PATHFINDING
+    // =========================
+
+    private void RecalculatePath(TunnelFunction destination)
+    {
+        List<TunnelFunction> path = FindPath(currentTunnel, destination);
+
+        // no existe camino
+        if (path == null || path.Count <= 1)
+        {
+            TunnelFunction closestReachable =
+                FindClosestReachableTunnel(destination);
+
+            if (closestReachable == null)
+            {
+                targetTunnel = null;
+                return;
+            }
+
+            path = FindPath(currentTunnel, closestReachable);
+
+            if (path == null || path.Count <= 1)
+            {
+                targetTunnel = null;
+                return;
+            }
+        }
+
+        currentPath = path;
+
+        // siguiente nodo
+        currentPathIndex = 1;
+
+        if (currentPathIndex < currentPath.Count)
+        {
+            targetTunnel = currentPath[currentPathIndex];
+        }
+    }
+
+    private List<TunnelFunction> FindPath(
+        TunnelFunction start,
+        TunnelFunction goal)
+    {
+        Queue<TunnelFunction> queue = new();
+        Dictionary<TunnelFunction, TunnelFunction> cameFrom = new();
+
+        queue.Enqueue(start);
+        cameFrom[start] = null;
+
+        while (queue.Count > 0)
+        {
+            TunnelFunction current = queue.Dequeue();
+
+            if (current == goal)
+            {
+                return ReconstructPath(cameFrom, goal);
+            }
+
+            foreach (TunnelFunction next in current.TunnelConnections)
+            {
+                if (!cameFrom.ContainsKey(next))
+                {
+                    queue.Enqueue(next);
+                    cameFrom[next] = current;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private List<TunnelFunction> ReconstructPath(
+        Dictionary<TunnelFunction, TunnelFunction> cameFrom,
+        TunnelFunction end)
+    {
+        List<TunnelFunction> path = new();
+
+        TunnelFunction current = end;
+
+        while (current != null)
+        {
+            path.Add(current);
+            current = cameFrom[current];
+        }
+
+        path.Reverse();
+
+        return path;
+    }
+
+    private TunnelFunction FindClosestReachableTunnel(
+        TunnelFunction destination)
+    {
+        Queue<TunnelFunction> queue = new();
+        HashSet<TunnelFunction> visited = new();
+
+        queue.Enqueue(currentTunnel);
+        visited.Add(currentTunnel);
+
+        TunnelFunction closest = currentTunnel;
+        float closestDistance =
+            Vector2.Distance(
+                currentTunnel.transform.position,
+                destination.transform.position);
+
+        while (queue.Count > 0)
+        {
+            TunnelFunction current = queue.Dequeue();
+
+            float dist =
+                Vector2.Distance(
+                    current.transform.position,
+                    destination.transform.position);
+
+            if (dist < closestDistance)
+            {
+                closestDistance = dist;
+                closest = current;
+            }
+
+            foreach (TunnelFunction next in current.TunnelConnections)
+            {
+                if (!visited.Contains(next))
+                {
+                    visited.Add(next);
+                    queue.Enqueue(next);
+                }
+            }
+        }
+
+        return closest;
+    }
+
+    // =========================
+    // MOVEMENT
+    // =========================
+
     private void MoveToTunnel()
     {
         Vector3 currentPos = transform.position;
         Vector3 targetPos = targetTunnel.transform.position;
 
-        // Mantener Z fijo
         targetPos.z = currentPos.z;
 
-        // Movimiento
         transform.position = Vector3.MoveTowards(
             currentPos,
             targetPos,
             moveSpeed * Time.deltaTime
         );
 
-        // Dirección de movimiento
         Vector2 dir = (targetPos - currentPos).normalized;
-
-        // =========================
-        // ROTACIÓN ORGÁNICA
-        // =========================
 
         if (dir != Vector2.zero)
         {
-            // Ángulo real de movimiento
             float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            // CORRECCIÓN BASE DEL MODELO (ajusta SOLO aquí una vez)
-            Quaternion baseRotation = Quaternion.Euler(0, 90f, -90f);
+            Quaternion baseRotation =
+                Quaternion.Euler(0, 90f, -90f);
 
-            // Rotación hacia dirección en Z
-            Quaternion lookRotation = Quaternion.Euler(0, 0, angle);
+            Quaternion lookRotation =
+                Quaternion.Euler(0, 0, angle);
 
-            // Combinamos base + dirección
-            Quaternion targetRotation = lookRotation * baseRotation;
+            Quaternion targetRotation =
+                lookRotation * baseRotation;
 
-            // Suavizado
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
@@ -100,8 +291,8 @@ public class AntWorkerBehaviour : MonoBehaviour
             );
         }
 
-        // Llegó al túnel
-        if (Vector2.Distance(transform.position, targetPos) <= reachDistance)
+        if (Vector2.Distance(transform.position, targetPos)
+            <= reachDistance)
         {
             previousTunnel = currentTunnel;
             currentTunnel = targetTunnel;
@@ -109,16 +300,20 @@ public class AntWorkerBehaviour : MonoBehaviour
         }
     }
 
+    // =========================
+    // RANDOM WANDER
+    // =========================
+
     private void ChooseNextTunnel()
     {
-        List<TunnelFunction> connections = currentTunnel.TunnelConnections;
+        List<TunnelFunction> connections =
+            currentTunnel.TunnelConnections;
 
         if (connections == null || connections.Count == 0)
             return;
 
         List<TunnelFunction> possibleTunnels = new();
 
-        // Evitar volver atrás instantáneamente
         foreach (TunnelFunction tunnel in connections)
         {
             if (tunnel != previousTunnel)
@@ -127,16 +322,20 @@ public class AntWorkerBehaviour : MonoBehaviour
             }
         }
 
-        // Si no hay opciones -> usar cualquiera
         if (possibleTunnels.Count == 0)
         {
             possibleTunnels = connections;
         }
 
-        int randomIndex = Random.Range(0, possibleTunnels.Count);
+        int randomIndex =
+            Random.Range(0, possibleTunnels.Count);
 
         targetTunnel = possibleTunnels[randomIndex];
     }
+
+    // =========================
+    // DETECTION
+    // =========================
 
     private TunnelFunction FindCurrentTunnel()
     {
@@ -148,7 +347,8 @@ public class AntWorkerBehaviour : MonoBehaviour
 
         foreach (Collider hit in hits)
         {
-            TunnelFunction tunnel = hit.GetComponentInParent<TunnelFunction>();
+            TunnelFunction tunnel =
+                hit.GetComponentInParent<TunnelFunction>();
 
             if (tunnel != null)
                 return tunnel;
@@ -157,15 +357,24 @@ public class AntWorkerBehaviour : MonoBehaviour
         return null;
     }
 
+    // =========================
+    // DEBUG
+    // =========================
+
     private void OnDrawGizmos()
     {
         if (targetTunnel != null)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, targetTunnel.transform.position);
+            Gizmos.DrawLine(
+                transform.position,
+                targetTunnel.transform.position);
         }
 
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, tunnelSearchRadius);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            tunnelSearchRadius);
     }
 }
