@@ -1,4 +1,5 @@
 using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -114,7 +115,7 @@ public class TroopsSelection : MonoBehaviour
             {
                 //Home cursor
             }
-            else if (hit.transform.gameObject.CompareTag("EnemyAnt"))
+            else if (hit.transform.gameObject.CompareTag("EnemyAnt")||hit.transform.gameObject.CompareTag("AI_AntHill"))
             {
                 Cursor.SetCursor(attackCursor, Vector2.zero, CursorMode.Auto);
             }
@@ -128,21 +129,25 @@ public class TroopsSelection : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 worldMousePos = hit.point;
-
 
             if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
             {
                 foreach (Ant ant in unitsSelected)
                 {
-                    if(ant is AntExlporer antExlporer){
+                    if (ant is AntExlporer antExlporer)
+                    {
                         antExlporer.asignedResourceZone = hit.transform.gameObject;
                     }
-                    UnitController.MoveTo(ant, worldMousePos);
+                    UnitController.MoveTo(ant, hit.transform.gameObject);
                 }
             }
             else if (hit.transform.gameObject.CompareTag("Terrain"))
             {
+                GameObject worldMousePos = new GameObject("TemporaryPosGameObject");
+                worldMousePos.transform.position = hit.point;
+
+                //TODO, mantener una lista de objetos creados de esta manera y destruirlos cuando haga falta (cancelación de movimiento, nuevo movimiento, muerte de hormigas...)
+
                 foreach (Ant ant in unitsSelected)
                 {
                     UnitController.MoveTo(ant, worldMousePos);
@@ -158,17 +163,26 @@ public class TroopsSelection : MonoBehaviour
 
                 foreach (Ant ant in unitsSelected)
                 {
-                    UnitController.MoveTo(ant, worldMousePos);
+                    UnitController.MoveTo(ant, hit.transform.gameObject);
                 }
             }
             else if (hit.transform.gameObject.CompareTag("EnemyAnt"))
             {
+                Ant target = hit.transform.GetComponent<Ant>();
                 foreach (Ant ant in unitsSelected)
                 {
-                    Ant target = hit.transform.GetComponent<Ant>();
-                    Vector3 direction = (target.transform.position - transform.position).normalized;
-                    UnitController.MoveTo(ant, direction);
-                    ant.IsRange(target);
+                    float distance = Vector3.Distance(ant.transform.position, target.transform.position);
+
+                    if (ant.reach >= distance)
+                    {
+                        ant.IsRange(target);
+                    }
+                    else if (ant.reach < distance)
+                    {
+                        
+                     UnitController.MoveTo(ant, ant.objective);
+                        
+                    }
                 }
             }
         }

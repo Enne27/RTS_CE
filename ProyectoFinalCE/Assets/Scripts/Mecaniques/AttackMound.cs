@@ -7,9 +7,17 @@ public class AttackMound : MonoBehaviour
         Ant ant = other.gameObject.GetComponent<Ant>();
         if (ant != null)
         {
-            //Debug.Log("I am attacking the mound");
             ant.AttackMound(gameObject);
+            ant.anthillContact = true;
         }
-        //else Debug.Log("Not an Ant.");
+    }
+
+    private void OnTriggerExit(Collider other) 
+    {
+        Ant ant = other.gameObject.GetComponent<Ant>();
+        if (ant != null)
+        {
+            ant.anthillContact = false;
+        }
     }
 }

@@ -55,7 +55,7 @@ public class UnitController : MonoBehaviour
             //    avoidance = reflect.normalized * avoidStrength;
             //}
 
-            Vector3 direction = (ant.objective - ant.transform.position).normalized;
+            Vector3 direction = (ant.objective.transform.position - ant.transform.position).normalized;
             Vector3 finalDir = (direction + separation/* + avoidance*/).normalized;
             Vector3 newPos = ant.transform.position + finalDir * ant.GetSpeed() * Time.fixedDeltaTime;
             newPos.y = terrain.SampleHeight(newPos) + terrain.transform.position.y;
@@ -70,11 +70,11 @@ public class UnitController : MonoBehaviour
         }
     }
 
-    public static void MoveTo(Ant ant, Vector3 objective)
+    public static void MoveTo(Ant ant, GameObject objective)
     {
         ant.objective = objective;
         activeAnts.Add(ant);
-        spawnFlag(objective);
+        spawnFlag(objective.transform.position);
     }
 
     private static void spawnFlag(Vector3 objective)

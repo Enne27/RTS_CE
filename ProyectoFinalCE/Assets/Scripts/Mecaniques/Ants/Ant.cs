@@ -18,7 +18,8 @@ public abstract class Ant : MonoBehaviour
 
     public int flowFieldInxex;
     public Vector3 currentVelocity;
-    public Vector3 objective;
+    public GameObject objective = null;
+    public Boolean anthillContact;
     Material material;
     Color defaultColor;
 

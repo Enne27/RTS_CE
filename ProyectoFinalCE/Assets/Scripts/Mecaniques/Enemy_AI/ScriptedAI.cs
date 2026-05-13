@@ -16,7 +16,7 @@ public class ScriptedAI : MonoBehaviour
             if(ant is AntExlporer antExplorer)
             {
                 antExplorer.asignedResourceZone = zonaRecursos;
-                UnitController.MoveTo(antExplorer, zonaRecursos.transform.position);
+                UnitController.MoveTo(antExplorer, zonaRecursos);
             }
         }
     }

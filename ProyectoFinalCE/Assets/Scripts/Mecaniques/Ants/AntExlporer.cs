@@ -39,6 +39,7 @@ public class AntExlporer : Ant
         //{
         //    gameObject.tag = "EnemyAnt";
         //}
+        anthillContact = false;
     }
 
     public override void IsRange(Ant target) 
@@ -84,20 +85,21 @@ public class AntExlporer : Ant
     {
         TimeManager.Instance.OneShotTimer(3f, () => 
         {
-            Vector3 position = new Vector3();
+            GameObject position = null;
             food = UnityEngine.Random.Range(1, 3);
             MC = UnityEngine.Random.Range(1, 2);
             switch (antOwner)
             {
                 case (Owner.Player):
-                    position = GameManager.instance.player.structures[0].transform.position;
+                    position = GameManager.instance.player.structures[0];
                     break;
                 case (Owner.AI):
                     if(GameManager.instance.playerIA.structures[0] != null)
-                        position = GameManager.instance.playerIA.structures[0].transform.position;
+                        position = GameManager.instance.playerIA.structures[0];
                     break;
             }
-            UnitController.MoveTo(this, position);
+            if( position != null )
+                UnitController.MoveTo(this, position);
         }); 
         if (antOwner == Owner.Player)
         {
@@ -134,17 +136,20 @@ public class AntExlporer : Ant
         food = 0;
         MC = 0;
         if (asignedResourceZone != null)
-        UnitController.MoveTo(this, asignedResourceZone.transform.position);
+        UnitController.MoveTo(this, asignedResourceZone);
     }
 
     public override void AttackMound(GameObject mound)
     {
+
+        
         MoundFunction target;
         //La trucada del AttackMound no pasa el if
         if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") ||antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
         {
             target = mound.GetComponent<MoundFunction>();
             target.TakeDamage((int)Math.Round(strength), antOwner);
+            CheckMoundTrigger(mound);
         }
 
         else
@@ -152,7 +157,15 @@ public class AntExlporer : Ant
             return;
         }
     }
-
+    public void CheckMoundTrigger(GameObject mound)
+    {
+        if (anthillContact == true)
+        {
+            TimeManager.Instance.OneShotTimer(3f,()=> AttackMound(mound));
+        }
+        else
+            return;
+    }
     public override void Die()
     {
         gameObject.SetActive(false);
