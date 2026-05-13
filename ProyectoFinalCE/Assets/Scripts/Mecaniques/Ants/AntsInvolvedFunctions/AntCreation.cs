@@ -76,8 +76,11 @@ public class AntCreation : MonoBehaviour
                 {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                    else if(addsQuantity) 
+                    else if(addsQuantity)
+                    {
                         GameManager.instance.player.inventory.workerAnts++;
+                        GameManager.instance.player.workers.Add(newAnt.GetComponent<AntWorkerBehaviour>());
+                    }
                     
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
