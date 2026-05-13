@@ -188,12 +188,12 @@ public class BuildingManager : MonoBehaviour
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
 
-        building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
-        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+        VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
 
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
 
                 if (TimeManager.Instance)
                 {
@@ -206,6 +206,7 @@ public class BuildingManager : MonoBehaviour
                 break;
 
             case BuildingType.BroodChamber:
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
 
                 if (TimeManager.Instance)
                 {
@@ -218,7 +219,7 @@ public class BuildingManager : MonoBehaviour
                 break;
 
             case BuildingType.StorageChamber:
-                //building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
 
                 if (TimeManager.Instance)
                 {

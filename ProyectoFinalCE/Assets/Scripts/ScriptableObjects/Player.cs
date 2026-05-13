@@ -18,6 +18,7 @@ public class Player
     //public List<Structure> structures;
     public List<GameObject> structures;
     public List<Ant> ants;
+    public List<AntWorkerBehaviour> workers;
 
     public Player()
     {
