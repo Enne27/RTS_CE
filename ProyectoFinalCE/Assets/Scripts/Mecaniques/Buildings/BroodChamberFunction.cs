@@ -29,7 +29,7 @@ public class BroodChamberFunction : StructuresPlayer
     int[] timeUpgrade_ = { 30, 60, 60, 70, 90, 120 };
 
     [Tooltip("Cantidad de hormigas que puede generar por nivel.")]
-    int[] broodingCapacity = { 1, 2, 3, 4, 5, 6 };
+    [HideInInspector] public int[] broodingCapacity = { 1, 2, 3, 4, 5, 6 };
 
     [Tooltip("Tiempo que tarda en crear una hormiga base.")]
     int timeGeneratingAnt = 60;
@@ -56,81 +56,37 @@ public class BroodChamberFunction : StructuresPlayer
     private void Awake()
     {
         gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
+
+    }
+    private void OnDestroy()
+    {
+        currentBreedingQuantity = 0;
     }
 
     public void CreateAnt(ANT_TYPES antType, Transform position)
     {
-        if(AntCreation.Instance != null && currentBreedingQuantity < broodingCapacity[currentLevel])
-            AntCreation.Instance.PlayerAntCreation(antType, position, timeGeneratingAnt);
-       /* //Debug.Log(antType);
-        GameObject antInstantiate = workerAnt;
+        if (AntCreation.Instance == null || position == null)
+            return;
 
-        if (position != null)
+        int limit = broodingCapacity[currentLevel - 1];
+            //currentBreedingQuantity--;
+
+        Debug.Log(currentBreedingQuantity + "   " + limit);
+        // LÍMITE REAL (antes de reservar)
+        if (currentBreedingQuantity >= limit)
         {
-            switch (antType)
-            {
-                case ANT_TYPES.ACID:
-                    antInstantiate = acidAnt;
-                    break;
-                case ANT_TYPES.BERSERKER:
-                    antInstantiate = berserkerAnt;
-                    break;
-                case ANT_TYPES.EXPLORER:
-                    antInstantiate = explorerAnt;
-                    break;
-                case ANT_TYPES.SOLDIER:
-                    antInstantiate = soldierAnt;
-                    break;
-                case ANT_TYPES.CRAZY: 
-                    antInstantiate = crazyAnt;
-                    break;
-                case ANT_TYPES.KAMIKAZE:
-                    antInstantiate = kamikazeAnt;
-                    break;
-                case ANT_TYPES.WORKER:
-                    antInstantiate = workerAnt;
-                    break;
-            }
+            Debug.Log("Límite");
+            return;
+        }
+        else
+        {
+            //currentBreedingQuantity--;
+            currentBreedingQuantity++;
 
-            Ant antScript = antInstantiate.GetComponent<Ant>();
-            int foodCosts = 0;
-            int hvCosts = 0;
-            if (antScript != null)
-            {
-                foodCosts = antScript.GetBreedingCost()[0];
-                hvCosts = antScript.GetBreedingCost()[1];
-            }
+            AntCreation.Instance.PlayerAntCreation(antType, position, timeGeneratingAnt);
+        }
 
-            
-            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            // FALTARÍA AÑADIR EL TIEMPO DE CONSTRUCCIÓN DE ESA HORMIGA, SIMPLEMENTE USAR EL REGISTER DEL TIME MANAGER Y LUEGO UNREGISTER, PERO CUANDO SE TENGA FEEDBACK
-            if(SpawnAnt(foodCosts, hvCosts))
-            {
-                GameObject newAnt = Instantiate(antInstantiate, position.position, Quaternion.identity);
-                if(antType != ANT_TYPES.WORKER)
-                    GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                else
-                    GameManager.instance.player.inventory.workerAnts++;
-                if (antType == ANT_TYPES.EXPLORER)
-                    //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
-                    newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
-
-                // Actualización HUD
-                if (gameHUDView == null)
-                    gameHUDView = FindFirstObjectByType<GameHUDView>();
-
-                gameHUDView.UpdateAntText(antType, 1);
-
-                GameManager.instance.player.inventory.RemoveFood(foodCosts);
-                gameHUDView.UpdateFoodText();
-                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
-                gameHUDView.UpdateEggsText();
-            }
-            else
-            {
-                Debug.Log("Insuficient hv or food");
-            }
-        }*/
+        // RESERVA SLOT (IMPORTANTE: aquí es el único sitio)
     }
 
     /*private bool SpawnAnt(int foodCosts, int hvCosts)
@@ -149,4 +105,5 @@ public class BroodChamberFunction : StructuresPlayer
             gameHUDView.UpdateEggsText();
         }
     }
+
 }

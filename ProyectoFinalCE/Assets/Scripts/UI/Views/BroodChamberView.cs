@@ -65,7 +65,7 @@ public class BroodChamberView : View
 
     private void OnEnable()
     {
-        //Initialize();
+        InitializeView();
         if (antsSpawnPoint == null || workersSpawnPoint == null)
         {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
@@ -80,8 +80,8 @@ public class BroodChamberView : View
         }
 
     }
-
-    public override void Initialize()
+    public override void Initialize() { }
+    public void InitializeView()
     {
         if (AntCreation.Instance != null)
         {
@@ -90,7 +90,7 @@ public class BroodChamberView : View
         }
 
         if (soldierButton != null)
-            soldierButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));
+            soldierButton.onClick.AddListener(()=> broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));
 
         if (berserkerButton != null)
             berserkerButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.BERSERKER, antsSpawnPoint));
@@ -257,7 +257,7 @@ public class BroodChamberView : View
         currentPreview.transform.localRotation = Quaternion.identity;
     }
 
-    /*private void OnDisable()
+    private void OnDisable()
     {
         soldierButton.onClick.RemoveAllListeners();
         berserkerButton.onClick.RemoveAllListeners();
@@ -266,7 +266,7 @@ public class BroodChamberView : View
         acidButton.onClick.RemoveAllListeners();
         crazyutton.onClick.RemoveAllListeners();
         kamikazeButton.onClick.RemoveAllListeners();
-    }*/
+    }
 
 
 }

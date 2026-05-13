@@ -203,9 +203,9 @@ public class BuildingManager : MonoBehaviour
                     TimeManager.Instance.OneShotTimer(building.data.constructionTime,
                         () => building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished()
                     );
+                    broodChambersCount++;
+                    constructionsBuilt.Add(building);
                 }
-                broodChambersCount++;
-                constructionsBuilt.Add(building);
                 break;
 
             case BuildingType.StorageChamber:

@@ -54,7 +54,6 @@ public class AntCreation : MonoBehaviour
 
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
                 
-        broodChamberFunction = FindFirstObjectByType<BroodChamberFunction>();
     }
 
     /// <summary>
@@ -64,54 +63,53 @@ public class AntCreation : MonoBehaviour
     /// <param name="position">Transform de la posición donde instanciar.</param>
     public void PlayerAntCreation(ANT_TYPES antType, Transform position, float time)
     {
-        //Debug.Log(antType);
-        if (position != null)
+        if (position == null) return;
+
+        if (broodChamberFunction == null)
+            broodChamberFunction = FindFirstObjectByType<BroodChamberFunction>();
+
+        ChangeAntTypeToInstantiate(antType);
+
+        positionInstantiate = position;
+
+        Ant antScript = antToInstantiate.GetComponent<Ant>();
+        int foodCosts = 0;
+        int hvCosts = 0;
+
+        if (antScript != null)
         {
-            ChangeAntTypeToInstantiate(antType);
-            positionInstantiate = position;
-
-
-            Ant antScript = antToInstantiate.GetComponent<Ant>();
-            int foodCosts = 0;
-            int hvCosts = 0;
-            if (antScript != null)
-            {
-                foodCosts = antScript.GetBreedingCost()[0];
-                hvCosts = antScript.GetBreedingCost()[1];
-            }
-
-
-            // FALTARÍA AÑADIR LO DE QUE SI HAY UNA HORMIGA DE ESE TIPO DESACTIVADA, USARLA, NO CREAR.
-            if (CanSpawnAnt(foodCosts, hvCosts))
-            {
-                if (TimeManager.Instance)
-                {
-                    TimeManager.Instance.OneShotTimer(time, () =>
-                    {
-                        SystemAntCreation(1, antType, position, true, true);
-                        if (broodChamberFunction)
-                            broodChamberFunction.currentBreedingQuantity--;
-                    });
-                }
-
-                if(broodChamberFunction) 
-                    broodChamberFunction.currentBreedingQuantity++;
-
-                if (gameHUDView == null)
-                    gameHUDView = FindFirstObjectByType<GameHUDView>();
-
-                gameHUDView.UpdateAntText(antType, 1);
-
-                GameManager.instance.player.inventory.RemoveFood(foodCosts);
-                gameHUDView.UpdateFoodText();
-                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
-                gameHUDView.UpdateEggsText();
-            }
-            else
-            {
-                Debug.Log("Insuficient hv or food");
-            }
+            foodCosts = antScript.GetBreedingCost()[0];
+            hvCosts = antScript.GetBreedingCost()[1];
         }
+
+        if (!CanSpawnAnt(foodCosts, hvCosts))
+        {
+            Debug.Log("Insuficient hv or food");
+                broodChamberFunction.currentBreedingQuantity--;
+            return;
+        }
+
+        TimeManager.Instance?.OneShotTimer(time, () =>
+        {
+            SystemAntCreation(1, antType, position, true, true);
+
+            // LIBERA SLOT SOLO CUANDO REALMENTE NACE
+            if (broodChamberFunction != null)
+                broodChamberFunction.currentBreedingQuantity--;
+        });
+
+        VFXManager.Instance?.PlayBroodingChamberParticles(broodChamberFunction.gameObject.transform.position, time);
+
+        gameHUDView ??= FindFirstObjectByType<GameHUDView>();
+
+        gameHUDView?.UpdateAntText(antType, 1);
+
+        GameManager.instance.player.inventory.RemoveFood(foodCosts);
+        GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+
+        gameHUDView?.UpdateFoodText();
+        gameHUDView?.UpdateEggsText();
+
     }
 
     /// <summary>
@@ -174,7 +172,7 @@ public class AntCreation : MonoBehaviour
     /// <returns>True si hay suficiente comida y huevas en el inventario del jugador.</returns>
     private bool CanSpawnAnt(int foodCosts, int hvCosts)
     {
-        Debug.Log(GameManager.instance.player.inventory.food >= foodCosts && GameManager.instance.player.inventory.eggs >= hvCosts);
+        //Debug.Log(GameManager.instance.player.inventory.food >= foodCosts && GameManager.instance.player.inventory.eggs >= hvCosts);
         return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
     }
 
