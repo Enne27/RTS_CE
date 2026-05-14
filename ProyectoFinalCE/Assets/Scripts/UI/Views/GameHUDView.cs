@@ -72,7 +72,8 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
+        if(currentEra != null)
+            currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {

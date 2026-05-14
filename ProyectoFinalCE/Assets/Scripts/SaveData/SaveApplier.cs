@@ -59,13 +59,13 @@ public static class SaveApplier
             if (structuresPlayer != null)
             {
                 structuresPlayer.currentLevel = data.level;
-                if (System.Enum.TryParse(data.state, out StructuresPlayer.StructureState state))
+                if (System.Enum.TryParse(data.state, out StructureState state))
                 {
                     structuresPlayer.currentStructureState = state;
                 }
                 else
                 {
-                    structuresPlayer.currentStructureState = StructuresPlayer.StructureState.Idle;
+                    structuresPlayer.currentStructureState = StructureState.Idle;
                 }
             }
 
