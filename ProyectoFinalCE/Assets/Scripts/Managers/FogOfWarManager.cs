@@ -67,7 +67,7 @@ public class FogOfWarManager : MonoBehaviour
         fogTexture.anisoLevel = 4;
         fogTexture.Create();
 
-        fogMaterial.SetTexture("_Texture2D", fogTexture);
+        fogMaterial.SetTexture("_Mask", fogTexture);
         //fogMaterial.SetFloat("_Size", mapSize);
     }
 

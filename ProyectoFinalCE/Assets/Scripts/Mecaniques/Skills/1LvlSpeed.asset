@@ -10,17 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: Inperceb
+  m_Name: 1LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: La formiga exploradora no pot ser percebuda
-  description: Fa que les formigues no siguin percebudes pel mini mapa.
+  skillName: Boost de Velocitat
+  description: Dona un petit boost en la velocitat de les formigues.
   skillType: 2
-  cost: 10
-  prerequisites:
-  - {fileID: 11400000, guid: 18bc2484ea900e44889c6c20e5c901cb, type: 2}
-  - {fileID: 11400000, guid: 5adfbce376ad55c4b81c2241ee8b6f23, type: 2}
+  cost: 2
+  prerequisites: []
   effects:
-  - effectType: 3
-    statType: 10
-    value: 1
-    specialID: Inperceb
+  - effectType: 0
+    statType: 7
+    value: 5
+    specialID: 1LvlSpeed

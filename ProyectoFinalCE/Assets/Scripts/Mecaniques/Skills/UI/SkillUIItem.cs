@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class SkillUIItem : MonoBehaviour
+public class SkillUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI descText;
     public Button unlockButton;
     public TextMeshProUGUI statusText;
+    public GameObject skillDetailsPanel;
 
     private SkillData skill;
 
@@ -26,29 +28,44 @@ public class SkillUIItem : MonoBehaviour
     public void Setup(SkillData data)
     {
         skill = data;
-
         nameText.text = data.SkillName;
         descText.text = data.Description;
-
+        descText.gameObject.SetActive(false);
+        skillDetailsPanel.SetActive(false);
         unlockButton.onClick.RemoveAllListeners();
         unlockButton.onClick.AddListener(OnClick);
+
         Refresh();
 
         Debug.Log("Setup: " + data.SkillName);
     }
+
     private void OnClick()
     {
         if (skill == null) return;
+
         Debug.Log("BUTTON CLICKED: " + skill.SkillName);
 
         SkillManager.Instance.UnlockSkill(skill);
     }
+
     public void Refresh()
     {
         if (skill == null || SkillManager.Instance == null) return;
+
         bool unlocked = SkillManager.Instance.IsSkillUnlocked(skill);
 
         statusText.text = unlocked ? "UNLOCKED" : "LOCKED";
         unlockButton.interactable = !unlocked;
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        descText.gameObject.SetActive(true);
+        skillDetailsPanel.SetActive(true);
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        descText.gameObject.SetActive(false);
+        skillDetailsPanel.SetActive(false);
     }
 }

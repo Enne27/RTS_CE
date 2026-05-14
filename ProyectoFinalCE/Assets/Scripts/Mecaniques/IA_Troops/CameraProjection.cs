@@ -7,13 +7,21 @@ using UnityEngine.UI;
 
 public class CameraProjection : MonoBehaviour
 {
+
     [SerializeField] Camera mainCamera;
     [SerializeField] Camera minimapCamera;
     [SerializeField] GameObject plane;
     [SerializeField] GameObject cameraRig;
     [SerializeField] GraphicRaycaster m_Raycaster;
     [SerializeField] InputActionAsset inputAsset;
+
+    [SerializeField] Color playerAntColor = Color.green;
+    [SerializeField] Color enemyAntColor = Color.red;
+    [SerializeField] float antSize = 0.005f;
+
     private InputActionMap general;
+    private InputAction leftClickAction;
+
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
 
@@ -24,12 +32,12 @@ public class CameraProjection : MonoBehaviour
 
     bool leftclickStarted = false;
 
-
     static Material lineMaterial;
 
     private void Awake()
     {
         general = inputAsset.FindActionMap("Gameplay");
+        // leftClickAction = general.FindAction("leftClick");
     }
     private void OnEnable()
     {
@@ -47,7 +55,28 @@ public class CameraProjection : MonoBehaviour
         SetRenderingEnabled(false);
     }
 
+    // private void OnDisable()
+    // {
+    //     leftClickAction.started -= OnLeftClickStarted;
+    //     leftClickAction.canceled -= OnLeftClickCanceled;
 
+    //     SetRenderingEnabled(false);
+    // }
+
+    // private void Start()
+    // {
+    //     m_EventSystem = EventSystem.current;
+    // }
+
+    // private void OnLeftClickStarted(InputAction.CallbackContext ctx)
+    // {
+    //     leftclickStarted = true;
+    // }
+
+    // private void OnLeftClickCanceled(InputAction.CallbackContext ctx)
+    // {
+    //     leftclickStarted = false;
+    // }
 
     void Update()
     {
@@ -78,6 +107,7 @@ public class CameraProjection : MonoBehaviour
             foreach (RaycastResult result in results)
             {
                 RectTransform rect = result.gameObject.GetComponent<RectTransform>();
+                if (rect == null) continue;
                 Vector2 size = rect.sizeDelta;
                 if (result.gameObject.GetComponent<RawImage>())
                 {
@@ -125,7 +155,7 @@ public class CameraProjection : MonoBehaviour
 
         GL.Begin(GL.LINES);
         GL.Color(Color.red);
-
+        
         GL.Vertex(new Vector3(tl.x, tl.y, 0));
         GL.Vertex(new Vector3(tr.x, tr.y, 0));
 
@@ -139,6 +169,29 @@ public class CameraProjection : MonoBehaviour
         GL.Vertex(new Vector3(tl.x, tl.y, 0));
 
         GL.End();
+
+        lineMaterial.SetPass(0);
+
+        GL.Begin(GL.QUADS);
+
+        GL.Color(playerAntColor);
+
+        foreach (Ant ant in GameManager.instance.player.ants)
+        {
+            if (ant == null) continue;
+            DrawAntOnMinimap(ant);
+        }
+
+        GL.Color(enemyAntColor);
+
+        foreach (Ant ant in GameManager.instance.playerIA.ants)
+        {
+            if (ant == null) continue;
+            DrawAntOnMinimap(ant);
+        }
+
+        GL.End();
+
         GL.PopMatrix();
     }
 
@@ -159,5 +212,30 @@ public class CameraProjection : MonoBehaviour
     public static Vector3 GetPointAtHeight(Ray ray, float height)
     {
         return ray.origin + (((ray.origin.y - height) / -ray.direction.y) * ray.direction);
-    }  
+    }
+
+    private void DrawAntOnMinimap(Ant ant)
+    {
+        Vector3 vp = minimapCamera.WorldToViewportPoint(ant.transform.position);
+
+        if (vp.z < 0 ||
+            vp.x < 0 || vp.x > 1 ||
+            vp.y < 0 || vp.y > 1)
+            return;
+
+        float s = antSize;
+
+        GL.Vertex(new Vector3(vp.x - s, vp.y - s, 0));
+        GL.Vertex(new Vector3(vp.x - s, vp.y + s, 0));
+        GL.Vertex(new Vector3(vp.x + s, vp.y + s, 0));
+        GL.Vertex(new Vector3(vp.x + s, vp.y - s, 0));
+    }
+
+    // public void SetRenderingEnabled(bool enabled)
+    // {
+    //     if (enabled)
+    //         RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+    //     else
+    //         RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+    // }
 }
