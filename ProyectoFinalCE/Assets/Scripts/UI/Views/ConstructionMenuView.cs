@@ -45,12 +45,16 @@ public class ConstructionMenuView : View
     [Tooltip("Event Emitter del sonido para onHover un botón.")] 
     [SerializeField] StudioEventEmitter onHoverEmitter;
 
-    private BuildingManager buildingMa;
+    public BuildingManager buildingMa;
     #endregion
+    private void Start()
+    {
+        buildingMa = BuildingManager.Instance;
+
+    }
 
     public override void Initialize()
     {
-        buildingMa = BuildingManager.Instance;
 
         InitializeButtons();
         queenChamberButton.onClick.AddListener(() =>
