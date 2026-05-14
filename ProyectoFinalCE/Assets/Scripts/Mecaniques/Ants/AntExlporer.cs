@@ -71,6 +71,7 @@ public class AntExlporer : Ant
             damageTaken = other.GetStrength() - (armor * other.GetStrength());
             damageTaken = Mathf.Max(0, damageTaken);
             HP -= damageTaken;
+            Debug.Log("Ouch! me quedan " + GetCurrentHP() + " puntos de vida");
         }
         if(HP <= 0)
         {
@@ -78,7 +79,7 @@ public class AntExlporer : Ant
             Die();
         }
         OnAnyAntDamaged?.Invoke(this);
-        Debug.Log("Ouch! me quedan " + GetCurrentHP() + " puntos de vida");
+       
     }
 
     public void Collect()
