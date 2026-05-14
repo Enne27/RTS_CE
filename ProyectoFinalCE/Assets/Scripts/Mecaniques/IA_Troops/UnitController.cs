@@ -19,7 +19,7 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float separationRadius = 2f;
+        float separationRadius = 7f;
         float separationStrength = 3f;
 
         foreach (Ant ant in activeAnts)
