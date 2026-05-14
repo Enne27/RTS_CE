@@ -38,12 +38,18 @@ public class GameModesView : View
 
     private IEnumerator LoadGameAfterScene()
     {
+        Debug.Log("GameModesView.LoadGameAfterScene: start");
+
+        // Marcar que se va a cargar una partida ANTES de cambiar de escena
+        AntCreation.MarkLoaded();
+        Debug.Log("GameModesView.LoadGameAfterScene: MarkLoaded called");
+
         // Cambiar escena
         ScenesManager.Instance.ChangeScene(SINGLE_PLAYER_GAME_SCENE_NAME, false);
-        
-        yield return new WaitForSeconds(0.5f);
-        
-        // La llamada a AntCreation.MarkLoaded() se hace dentro de SaveSystem.LoadGame()
+
+        yield return new WaitUntil(() => GameManager.instance != null && GameManager.instance.player != null && AntCreation.Instance != null && GameFactory.Instance != null);
+
+        Debug.Log("GameModesView.LoadGameAfterScene: scene ready, loading save");
         SaveSystem.LoadGame();
     }
 

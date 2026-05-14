@@ -21,6 +21,7 @@ internal class AntSoldier : Ant
         vision = 1;
         linePriority = 2;
         acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target) {

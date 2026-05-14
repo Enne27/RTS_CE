@@ -38,6 +38,8 @@ public static class SaveSystem
     }
     public static void LoadGame()
     {
+        Debug.Log("SaveSystem.LoadGame() start. Path: " + Path);
+
         if (!File.Exists(Path))
         {
             Debug.LogWarning("No save file found");
@@ -48,6 +50,7 @@ public static class SaveSystem
         AntCreation.MarkLoaded();
 
         string json = File.ReadAllText(Path);
+        Debug.Log("Save file length: " + json.Length);
 
         SaveGameData data = JsonUtility.FromJson<SaveGameData>(json);
 
@@ -56,6 +59,14 @@ public static class SaveSystem
             Debug.LogError("Failed to parse save file");
             return;
         }
+
+        if (data.player == null)
+        {
+            Debug.LogError("Saved player data is null");
+            return;
+        }
+
+        Debug.Log($"SaveSystem.LoadGame() data loaded: playerName={data.player.playerName}, era={data.player.currentEra}, ants={data.player.ants?.Count ?? 0}, structures={data.player.structures?.Count ?? 0}");
 
         SaveApplier.ApplyPlayer(data.player);
         SaveApplier.ApplyStats(data.stats);

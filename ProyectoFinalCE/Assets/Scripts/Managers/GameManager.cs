@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static ConstantsAndKeys;
 
 public class GameManager : MonoBehaviour
 {
@@ -59,22 +61,25 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        // Comprobar si existe una partida guardada
+        // Asegurar que los objetos Player existen antes de cargar
+        player = new Player();
+        playerIA = new Player();
+
         if (SaveSystem.CanLoadGame())
         {
-            // Asegurar que los objetos Player existen antes de cargar
-            player = new Player();
-            playerIA = new Player();
-
-            // Cargar la partida (rellena player, stats, skills)
-            SaveSystem.LoadGame();
+            if (SceneManager.GetActiveScene().name == SINGLE_PLAYER_GAME_SCENE_NAME)
+            {
+                Debug.Log("GameManager.OnEnable: save exists and current scene is game scene, loading save.");
+                SaveSystem.LoadGame();
+            }
+            else
+            {
+                Debug.Log("GameManager.OnEnable: save exists, deferring load until game scene.");
+            }
         }
         else
         {
             // Crear nuevos jugadores con valores iniciales
-            player = new Player();
-            playerIA = new Player();
-
             player.inventory.AddEggs(startingEggs);
             player.inventory.AddFood(startingFood);
             player.inventory.AddMC(startingMC);

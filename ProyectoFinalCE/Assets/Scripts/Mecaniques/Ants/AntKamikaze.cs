@@ -20,6 +20,7 @@ public class AntKamikaze : Ant
         linePriority = 2;
         acidBased = false;
         maxHP = HP;
+        base.Awake();
     }
 
     public void Update()
