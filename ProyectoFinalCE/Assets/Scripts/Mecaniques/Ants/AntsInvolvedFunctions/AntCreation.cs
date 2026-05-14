@@ -82,6 +82,8 @@ public class AntCreation : MonoBehaviour
 
                 positionInstantiate = position;
                 GameObject newAnt = AntInstantiation();
+                FogRevealer fogRevealer = newAnt.AddComponent<FogRevealer>();
+                fogRevealer.visionRadius = newAnt.GetComponent<Ant>().vision;
 
                 if (isPlayer)
                 {
