@@ -1,7 +1,6 @@
-using Unity.VectorGraphics;
 #if UNITY_EDITOR
+using Unity.VectorGraphics;
 using UnityEditor;
-#endif
 using UnityEngine;
 
 [InitializeOnLoad]
@@ -23,3 +22,4 @@ public static class DisableFogOfWar
         }
     }
 }
+#endif

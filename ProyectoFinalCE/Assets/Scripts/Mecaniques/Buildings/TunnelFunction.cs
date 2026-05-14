@@ -235,27 +235,27 @@ public class TunnelFunction : MonoBehaviour
             { 
                 pathType = PathType.T_Up;
                 transform.rotation = Quaternion.Euler(0, 0, 270);
-                Debug.Log("arriba");
+                //Debug.Log("arriba");
 
             }
             else if (!up)
             {
                 pathType = PathType.T_Down;
                 transform.rotation = Quaternion.Euler(0, 0, 90);
-                Debug.Log("abajo");
+                //Debug.Log("abajo");
 
             }
             else if (!left)
             {
                 pathType = PathType.T_Right;
                 transform.rotation = Quaternion.Euler(0, 0, 180);
-                Debug.Log("derecha");
+                //Debug.Log("derecha");
             }
             else
             {
                 pathType = PathType.T_Left;
                 transform.rotation = Quaternion.Euler(0, 0, 0);
-                Debug.Log("izquierda");
+                //Debug.Log("izquierda");
             } 
         }
         else
