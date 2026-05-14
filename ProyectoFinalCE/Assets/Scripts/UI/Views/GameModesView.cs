@@ -22,7 +22,7 @@ public class GameModesView : View
 
         singleLoadPlayerButton.onClick.AddListener(() =>
         {
-            StartCoroutine(LoadGameAfterScene());
+            GameManager.instance.StartCoroutine(LoadGameAfterScene());
         });
 
         creativeModeButton.onClick.AddListener(() =>
