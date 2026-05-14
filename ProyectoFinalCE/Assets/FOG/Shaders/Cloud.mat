@@ -37,6 +37,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MapMask:
+        m_Texture: {fileID: 2800000, guid: 659ace5dfb69c52458a5bbb6cb8cdc9c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Mask:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -64,16 +68,16 @@ Material:
     - _FresnelPower: 8
     - _NoiseEdge: -1
     - _NoiseEdge2: 2
-    - _NoiseHeight: 30
+    - _NoiseHeight: 10
     - _NoisePower: 2
     - _NoiseScale: 0.02
-    - _NoiseSpeed: 30
-    - _Opacity: 0.93
+    - _NoiseSpeed: 10
+    - _Opacity: 0.94
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _ColorPeak: {r: 0.6392157, g: 0.6392157, b: 0.6392157, a: 1}
-    - _ColorValley: {r: 0.5098038, g: 0.5098038, b: 0.5098038, a: 1}
+    - _ColorPeak: {r: 0.6226415, g: 0.61721087, b: 0.61721087, a: 1}
+    - _ColorValley: {r: 0.4517622, g: 0.43336475, b: 0.29342833, a: 1}
     - _NoiseRemap: {r: 0, g: 1, b: -0.3, a: 2.7}
     - _RotateProjection: {r: 1, g: 0, b: 0, a: 90}
   m_BuildTextureStacks: []
