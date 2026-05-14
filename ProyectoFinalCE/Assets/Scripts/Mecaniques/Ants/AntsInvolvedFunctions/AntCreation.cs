@@ -63,6 +63,82 @@ public class AntCreation : MonoBehaviour
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
 
+    public void PlayerAntCreation(ANT_TYPES antType, Transform position)
+    {
+        if (position == null)
+            return;
+
+        ChangeAntTypeToInstantiate(antType);
+
+        positionInstantiate = position;
+
+        Ant antScript = antToInstantiate.GetComponent<Ant>();
+
+        int foodCosts = 0;
+        int hvCosts = 0;
+
+        if (antScript != null)
+        {
+            foodCosts = antScript.GetBreedingCost()[0];
+            hvCosts = antScript.GetBreedingCost()[1];
+        }
+
+        if (CanSpawnAnt(foodCosts, hvCosts))
+        {
+            SystemAntCreation(1, antType, position, true);
+
+            if (gameHUDView == null)
+                gameHUDView = FindFirstObjectByType<GameHUDView>();
+
+            gameHUDView.UpdateAntText(antType, 1);
+        }
+        else
+        {
+            Debug.Log("Insufficient hv or food");
+        }
+    }
+
+    private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
+    {
+        if (position == null)
+            return;
+
+        for (int i = 0; i < quantity; i++)
+        {
+            ChangeAntTypeToInstantiate(antType);
+
+            positionInstantiate = position;
+
+            Ant antScript = antToInstantiate.GetComponent<Ant>();
+
+            int foodCosts = 0;
+            int hvCosts = 0;
+
+            if (antScript != null)
+            {
+                foodCosts = antScript.GetBreedingCost()[0];
+                hvCosts = antScript.GetBreedingCost()[1];
+            }
+
+            if (CanSpawnAnt(foodCosts, hvCosts))
+            {
+                SystemAntCreation(1, antType, position, isPlayer, true);
+
+                if (gameHUDView == null)
+                    gameHUDView = FindFirstObjectByType<GameHUDView>();
+
+                gameHUDView.UpdateAntText(antType, 1);
+
+                GameManager.instance.player.inventory.RemoveFood(foodCosts);
+                gameHUDView.UpdateFoodText();
+
+                GameManager.instance.player.inventory.RemoveEggs(hvCosts);
+                gameHUDView.UpdateEggsText();
+            }
+        }
+        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
+
+    }
 
     /// <summary>
     /// M�todo para generar hormigas sin involucrar la interfaz.
@@ -82,29 +158,36 @@ public class AntCreation : MonoBehaviour
 
                 positionInstantiate = position;
                 GameObject newAnt = AntInstantiation();
-                FogRevealer fogRevealer = newAnt.AddComponent<FogRevealer>();
-                fogRevealer.visionRadius = newAnt.GetComponent<Ant>().vision;
+                if (antType != ANT_TYPES.WORKER)
+                {
+                    FogRevealer fogRevealer = newAnt.AddComponent<FogRevealer>();
+
+                    fogRevealer.visionRadius = newAnt.GetComponent<Ant>().vision;
+                }
 
                 if (isPlayer)
                 {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                        //GameManager.instance.player.ants.Add(newAnt.GetComponentInChildren<Ant>());
-                    else if (addsQuantity) GameManager.instance.player.inventory.workerAnts++; 
-                    
-                    if(antType == ANT_TYPES.WORKER)
-                       GameManager.instance.player.workers.Add(newAnt.GetComponentInChildren<AntWorkerBehaviour>());
-                    
-                    
+                    //GameManager.instance.player.ants.Add(newAnt.GetComponentInChildren<Ant>());
+                    else
+                    {
+                        if (addsQuantity) 
+                            GameManager.instance.player.inventory.workerAnts++;
+
+                        GameManager.instance.player.workers.Add(newAnt.GetComponentInChildren<AntWorkerBehaviour>());
+                    }
+
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
                 }
-                else {
+                else
+                {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.playerIA.ants.Add(newAnt.GetComponent<Ant>());
                     else if (addsQuantity) GameManager.instance.playerIA.inventory.workerAnts++;
-                    
+
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.playerIA.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
