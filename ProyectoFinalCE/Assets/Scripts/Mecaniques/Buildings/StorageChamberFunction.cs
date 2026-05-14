@@ -47,17 +47,12 @@ public class StorageChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-        UpdateCapacityLimits();
-
-        GameManager.instance.player.inventory.RemoveEggs(storageBuildingScriptable.costHV);
-        GameManager.instance.player.inventory.RemoveMC(storageBuildingScriptable.costMC);
-
-        if (hudView != null)
-        {
-            hudView.UpdateMCText();
-            hudView.UpdateEggsText();
-        }
+        UpdateCapacityLimits();        
+        currentStructureState = StructureState.Idle;
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
     }
     public override void OnUpgradeFinished()
     {

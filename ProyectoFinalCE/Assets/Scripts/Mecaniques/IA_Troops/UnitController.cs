@@ -74,23 +74,16 @@ public class UnitController : MonoBehaviour
     {
         ant.objective = objective;
         activeAnts.Add(ant);
-        spawnFlag(objective);
+        SpawnFlag(objective);
     }
 
-    private static void spawnFlag(Vector3 objective)
+    private static void SpawnFlag(Vector3 objective)
     {
-        if (staticFlagPrefab == null)
-            return;
-
-        if (currentFlag != null)
+        if (currentFlag == null)
         {
-            Destroy(currentFlag);
+            currentFlag = Instantiate(staticFlagPrefab, objective, staticFlagPrefab.transform.rotation);
         }
 
-        currentFlag = Instantiate(
-            staticFlagPrefab,
-            objective,
-            Quaternion.identity
-        );
+        currentFlag.transform.position = objective;
     }
 } 

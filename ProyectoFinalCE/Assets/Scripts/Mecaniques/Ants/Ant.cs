@@ -158,9 +158,13 @@ public abstract class Ant : MonoBehaviour
         return baseDamage;
     }
 
-    private void Start()
+    protected virtual void Awake()
     {
         CacheBaseStats();
+    }
+
+    private void Start()
+    {
         ApplySkillModifiers();
     }
 

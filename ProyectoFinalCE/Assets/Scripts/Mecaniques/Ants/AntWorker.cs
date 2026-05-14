@@ -31,6 +31,7 @@ public class AntWorker : Ant
         vision = 2;
         linePriority = 1;
         acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target)

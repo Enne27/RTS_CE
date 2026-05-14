@@ -18,6 +18,7 @@ public class AntCrazy : Ant
         vision = 1;
         linePriority = 6;
         acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target)

@@ -1,6 +1,87 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9077483116865826821
+--- !u!114 &-9140679722194006273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/ObtainingFood
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/ObtainingFood
+  Guid:
+    Data1: -1378499157
+    Data2: 1096300926
+    Data3: 2068289193
+    Data4: -2143728924
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 992
+--- !u!114 &-8117118196785971389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/EraLevelUp
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/EraLevelUp
+  Guid:
+    Data1: 273229988
+    Data2: 1101608443
+    Data3: 299585169
+    Data4: -1684157205
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2000
+--- !u!114 &-2935677130535207574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Lose
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Lose
+  Guid:
+    Data1: 1015773592
+    Data2: 1101166380
+    Data3: 1703570342
+    Data4: 1824312634
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4500
+--- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,13 +101,19 @@ MonoBehaviour:
   - {fileID: 7391235706263231894}
   - {fileID: 6792710345477394073}
   - {fileID: 2105998761828834784}
+  - {fileID: 6185729030113539779}
+  - {fileID: 2932317497662644033}
+  - {fileID: -2935677130535207574}
+  - {fileID: -8117118196785971389}
+  - {fileID: -9140679722194006273}
+  - {fileID: 3315221747125907651}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3633299139380811838}
   StringsBanks:
   - {fileID: 3366873555263581982}
   cacheVersion: 131858
-  cacheTime: 639141268041421385
+  cacheTime: 639142930247389705
   SerializableEventsDict:
   - key: event:/Music/WarMusic
     index: 0
@@ -36,6 +123,18 @@ MonoBehaviour:
     index: 2
   - key: event:/SFX/UIClick
     index: 3
+  - key: event:/SFX/Win
+    index: 4
+  - key: event:/SFX/MaterialsAcquisition
+    index: 5
+  - key: event:/SFX/Lose
+    index: 6
+  - key: event:/SFX/EraLevelUp
+    index: 7
+  - key: event:/SFX/ObtainingFood
+    index: 8
+  - key: event:/SFX/Strike
+    index: 9
 --- !u!114 &1050287332260932354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,7 +154,7 @@ MonoBehaviour:
     Data3: -117001831
     Data4: -1675027416
   Banks:
-  - {fileID: -3889342903304455185}
+  - {fileID: 3633299139380811838}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -90,6 +189,60 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 168
+--- !u!114 &2932317497662644033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/MaterialsAcquisition
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/MaterialsAcquisition
+  Guid:
+    Data1: 975095412
+    Data2: 1260730900
+    Data3: -1196832586
+    Data4: 463522854
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1500
+--- !u!114 &3315221747125907651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Strike
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Strike
+  Guid:
+    Data1: -973026616
+    Data2: 1304762084
+    Data3: -1846516608
+    Data4: 1700505021
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1080
 --- !u!114 &3366873555263581982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,10 +258,10 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639125593475254237
+  lastModified: 639142930247389705
   FileSizes:
   - Name: Desktop
-    Value: 1078
+    Value: 1332
   Exists: 1
 --- !u!114 &3633299139380811838
 MonoBehaviour:
@@ -125,11 +278,38 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639141268041421385
+  lastModified: 639142930247379322
   FileSizes:
   - Name: Desktop
-    Value: 46364352
+    Value: 46562368
   Exists: 1
+--- !u!114 &6185729030113539779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Win
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/Win
+  Guid:
+    Data1: 1566829326
+    Data2: 1135096635
+    Data3: -1076531012
+    Data4: -1819649522
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1410
 --- !u!114 &6792710345477394073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +356,7 @@ MonoBehaviour:
     Data3: 2086370483
     Data4: 41472065
   Banks:
-  - {fileID: -3889342903304455185}
+  - {fileID: 3633299139380811838}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -184,259 +364,3 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1400000
---- !u!114 &-4370983105938007302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/UIClick
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/UIClick
-  Guid:
-    Data1: 1919009535
-    Data2: 1198004945
-    Data3: 1792893627
-    Data4: 194533610
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 168
---- !u!114 &-3889342903304455185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.bank
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
-  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
-  Name: Master
-  StudioPath: bank:/Master
-  lastModified: 639141237108292815
-  FileSizes:
-  - Name: Desktop
-    Value: 46562240
-  Exists: 1
---- !u!114 &-3568101091745848411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: bank:/Master.strings.bank
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorBankRef
-  Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
-  Name: Master.strings
-  StudioPath: bank:/Master.strings
-  lastModified: 639141237108292815
-  FileSizes:
-  - Name: Desktop
-    Value: 1332
-  Exists: 1
---- !u!114 &-1284680488677414813
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Music/BackgroundMenuMusic
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/Music/BackgroundMenuMusic
-  Guid:
-    Data1: -354518780
-    Data2: 1226633083
-    Data3: -1615264861
-    Data4: -1350616598
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 1
-  Is3D: 0
-  IsOneShot: 0
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 160000
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
-  m_Name: FMODStudioCache
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EventCache
-  EditorBanks:
-  - {fileID: -3568101091745848411}
-  - {fileID: -3889342903304455185}
-  EditorEvents:
-  - {fileID: -1284680488677414813}
-  - {fileID: 4399665946481246298}
-  - {fileID: 6669706847050670762}
-  - {fileID: -9077483116865826821}
-  - {fileID: -7028868149900433453}
-  - {fileID: 6144388916531486116}
-  - {fileID: -7599659978246165394}
-  - {fileID: 6253594056258490056}
-  - {fileID: -6879941315943750773}
-  - {fileID: -4370983105938007302}
-  EditorParameters: []
-  MasterBanks:
-  - {fileID: -3889342903304455185}
-  StringsBanks:
-  - {fileID: -3568101091745848411}
-  cacheVersion: 131858
-  cacheTime: 639141237108292815
-  SerializableEventsDict:
-  - key: event:/Music/BackgroundMenuMusic
-    index: 0
-  - key: event:/SFX/Win
-    index: 1
-  - key: event:/SFX/MaterialsAcquisition
-    index: 2
-  - key: event:/SFX/Lose
-    index: 3
-  - key: event:/Music/WarMusic
-    index: 4
-  - key: event:/SFX/EraLevelUp
-    index: 5
-  - key: event:/SFX/ObtainingFood
-    index: 6
-  - key: event:/SFX/Strike
-    index: 7
-  - key: event:/Music/BackgroundGameMusic
-    index: 8
-  - key: event:/SFX/UIClick
-    index: 9
---- !u!114 &4399665946481246298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Win
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/Win
-  Guid:
-    Data1: 1566829326
-    Data2: 1135096635
-    Data3: -1076531012
-    Data4: -1819649522
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 1410
---- !u!114 &6144388916531486116
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/EraLevelUp
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/EraLevelUp
-  Guid:
-    Data1: 273229988
-    Data2: 1101608443
-    Data3: 299585169
-    Data4: -1684157205
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 2000
---- !u!114 &6253594056258490056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/Strike
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/Strike
-  Guid:
-    Data1: -973026616
-    Data2: 1304762084
-    Data3: -1846516608
-    Data4: 1700505021
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 1080
---- !u!114 &6669706847050670762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SFX/MaterialsAcquisition
-  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
-  Path: event:/SFX/MaterialsAcquisition
-  Guid:
-    Data1: 975095412
-    Data2: 1260730900
-    Data3: -1196832586
-    Data4: 463522854
-  Banks:
-  - {fileID: -3889342903304455185}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 1500

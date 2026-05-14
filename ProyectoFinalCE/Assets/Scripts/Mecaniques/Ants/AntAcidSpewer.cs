@@ -17,6 +17,7 @@ public class AntAcidSpewer : Ant
         vision = 1;
         linePriority = 10;
         acidBased = true;
+        base.Awake();
     }
     public override void Attack(Ant target)
     {

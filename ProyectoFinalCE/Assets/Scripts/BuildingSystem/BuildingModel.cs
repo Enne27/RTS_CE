@@ -15,8 +15,13 @@ public class BuildingModel : MonoBehaviour
     private void Awake()
     {
         shapeUnits = GetComponentsInChildren<BuildingShapeUnit>();
-        buildingMaterial = GetComponentInChildren<Renderer>().material;
         model = GetComponentInChildren<Renderer>();
+        buildingMaterial = model.material;
+    }
+
+    private void Update()
+    {
+        buildingMaterial = model.material;
     }
 
     public void Rotate(float rotationStep)

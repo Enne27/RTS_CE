@@ -45,7 +45,7 @@ public static class SaveConverter
 
             data.Add(new StructureSaveData
             {
-                type = building.data.name,
+                type = building.data.buildingType.ToString(),
                 position = building.transform.position,
                 level = structuresPlayer != null ? structuresPlayer.currentLevel : 1,
                 state = structuresPlayer != null ? structuresPlayer.currentStructureState.ToString() : "Idle",
