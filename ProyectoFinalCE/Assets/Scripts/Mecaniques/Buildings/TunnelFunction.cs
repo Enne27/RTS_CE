@@ -54,9 +54,10 @@ public class TunnelFunction : MonoBehaviour
     public List<TunnelFunction> TunnelConnections;
     public float detectionDistance = 1.1f;
     public LayerMask tunnelLayer;
-    public bool isBuilding;
     public bool tileConnectedToEntrance;
     public PathType pathType;
+    public bool isBuilding;
+    public bool isConstructingHerePosible;
 
     [Header("TunnelMeshes")]
     [SerializeField] private Mesh isolatedMesh;
@@ -69,6 +70,9 @@ public class TunnelFunction : MonoBehaviour
     private bool up, down, left, right;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+
+    [Header("Construction")]
+    public TunnelFunction constructionAccessTunnel;
 
     private void Start()
     {
@@ -95,6 +99,32 @@ public class TunnelFunction : MonoBehaviour
         if (right) Gizmos.DrawLine(center, center + Vector3.right * detectionDistance);
     }
 
+    private void UpdateConstructionPossibility()
+    {
+        isConstructingHerePosible = false;
+        constructionAccessTunnel = null;
+
+        // solo edificios
+        if (!isBuilding)
+            return;
+
+        foreach (TunnelFunction neighbor in TunnelConnections)
+        {
+            if (neighbor == null)
+                continue;
+
+            // necesitamos un vecino NO edificio
+            if (!neighbor.isBuilding)
+            {
+                isConstructingHerePosible = true;
+
+                // guardar referencia del túnel que lo permite
+                constructionAccessTunnel = neighbor;
+
+                return;
+            }
+        }
+    }
     void DetectNeighbors()
     {
         Vector3 center = transform.position;
@@ -251,6 +281,8 @@ public class TunnelFunction : MonoBehaviour
     {
         DetectTunnels();
         tileConnectedToEntrance = IsConnectedToEntrance();
+
+        UpdateConstructionPossibility();
     }
 
     public void DetectTunnels()

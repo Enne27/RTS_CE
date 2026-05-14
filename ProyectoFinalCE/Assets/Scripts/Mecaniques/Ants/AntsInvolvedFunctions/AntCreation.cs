@@ -14,8 +14,8 @@ public class AntCreation : MonoBehaviour
     [SerializeField] public Transform antsSpawnPointIA;
 
     [Header("Instantiation Values")]
-    private GameObject antToInstantiate;
-    private Transform positionInstantiate;
+    [HideInInspector] public GameObject antToInstantiate;
+    [HideInInspector] public Transform positionInstantiate;
 
     [Header("Ants Prefabs")]
     [SerializeField] GameObject soldierAnt;
@@ -136,6 +136,8 @@ public class AntCreation : MonoBehaviour
                 gameHUDView.UpdateEggsText();
             }
         }
+        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
+                
     }
 
     /// <summary>
@@ -146,7 +148,7 @@ public class AntCreation : MonoBehaviour
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
     /// <param name="position">Posici�n donde instanciar.</param>
     /// <param name="isPlayer">Es el jugador = true -> IA = false</param>
-    private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer, bool addsQuantity)
+    public void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer, bool addsQuantity)
     {
         if (position != null)
         {
@@ -161,8 +163,12 @@ public class AntCreation : MonoBehaviour
                 {
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
-                    else if(addsQuantity) 
-                        GameManager.instance.player.inventory.workerAnts++;
+                        //GameManager.instance.player.ants.Add(newAnt.GetComponentInChildren<Ant>());
+                    else if (addsQuantity) GameManager.instance.player.inventory.workerAnts++; 
+                    
+                    if(antType == ANT_TYPES.WORKER)
+                       GameManager.instance.player.workers.Add(newAnt.GetComponentInChildren<AntWorkerBehaviour>());
+                    
                     
                     if (antType == ANT_TYPES.EXPLORER)
                         //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
@@ -185,7 +191,7 @@ public class AntCreation : MonoBehaviour
     /// Instancia la hormiga en la posici�n indicada.
     /// </summary>
     /// <returns>GameObject instanciado.</returns>
-    private GameObject AntInstantiation()
+    public GameObject AntInstantiation()
     {
         GameObject newAnt = Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
 
@@ -202,7 +208,23 @@ public class AntCreation : MonoBehaviour
             && (GameManager.instance.player.inventory.eggs >= hvCosts);
     }
 
-    private void ChangeAntTypeToInstantiate(ANT_TYPES antType)
+    /// <summary>
+    /// Posibilidad de instanciaci�n de hormigas seg�n los par�metros necesarios.
+    /// </summary>
+    /// <param name="foodCosts">Comida necesaria para crearla.</param>
+    /// <param name="hvCosts">Huevas necesarias para crearla.</param>
+    /// <returns>True si hay suficiente comida y huevas en el inventario del jugador.</returns>
+    public bool CanSpawnAnt(int foodCosts, int hvCosts)
+    {
+        //Debug.Log(GameManager.instance.player.inventory.food >= foodCosts && GameManager.instance.player.inventory.eggs >= hvCosts);
+        return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
+    }
+
+    /// <summary>
+    /// Cambiamos el tipo de hormiga a instanciar por el par�metro.
+    /// </summary>
+    /// <param name="antType">Siguiente tipo de hormiga a instanciar.</param>
+    public void ChangeAntTypeToInstantiate(ANT_TYPES antType)
     {
         switch (antType)
         {

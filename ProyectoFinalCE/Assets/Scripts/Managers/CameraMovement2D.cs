@@ -1,8 +1,6 @@
 using Unity.Cinemachine;
-using UnityEditor.Build.Pipeline.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class CameraMovement2D : MonoBehaviour
 {
@@ -43,6 +41,7 @@ public class CameraMovement2D : MonoBehaviour
     [SerializeField] private float focusSpeed = 10f;
 
     private GameObject targuetFocus;
+    private GameObject lastTarguetFocus;
     #endregion
 
     private void Awake()
@@ -105,6 +104,12 @@ public class CameraMovement2D : MonoBehaviour
         if (targuetFocus == null && Time.timeScale == 1)
         {
             ViewManager.Show<GameHUDView>();
+
+            if (lastTarguetFocus != null) {
+                BroodChamberFunction broodView = lastTarguetFocus.GetComponentInChildren<BroodChamberFunction>();
+                if(broodView != null)
+                    broodView.broodView.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -283,6 +288,7 @@ public class CameraMovement2D : MonoBehaviour
         targetZoom = minZoom;
         isFocusing = true;
         targuetFocus = building.gameObject;
+        lastTarguetFocus = building.gameObject;
     }
     #endregion
 }
