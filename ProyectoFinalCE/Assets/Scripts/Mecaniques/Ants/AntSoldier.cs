@@ -20,7 +20,21 @@ internal class AntSoldier : Ant
         //linePriority = 2;
         //acidBased = false;
     }
-
+    public override void IsRange(Ant target)
+    {
+        Debug.Log("Comprobando el rango");
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+        bool inRange = false;
+        while (!inRange)
+        {
+            if (distance <= reach)
+            {
+                Debug.Log("Estoy en el rango");
+                Attack(target);
+                inRange = true;
+            }
+        }
+    }
     public override void Attack(Ant target) {
         if (target != null)
         {

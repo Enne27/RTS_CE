@@ -46,10 +46,15 @@ public class AntExlporer : Ant
     {
         Debug.Log("Comprobando el rango");
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance <= reach)
+        bool inRange = false;
+        while (!inRange)
         {
-            Debug.Log("Estoy en el rango");
-            Attack(target);
+            if (distance <= reach)
+            {
+                Debug.Log("Estoy en el rango");
+                Attack(target);
+                inRange = true;
+            }
         }
     }
     public override void Attack(Ant target)

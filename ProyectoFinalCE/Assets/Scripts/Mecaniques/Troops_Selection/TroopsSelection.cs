@@ -182,6 +182,7 @@ public class TroopsSelection : MonoBehaviour
                         UnitController.MoveTo(ant, target.gameObject);
                         if (ant.reach >= distance)
                         {
+                            Debug.Log("I am in range");
                             ant.IsRange(target);
                         }
                     }
