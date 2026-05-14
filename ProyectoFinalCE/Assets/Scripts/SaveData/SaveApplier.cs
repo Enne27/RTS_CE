@@ -55,17 +55,25 @@ public static class SaveApplier
                 continue;
             }
 
+            // *** AÑADE ESTAS LÍNEAS ***
+            // Escala especial para Mound al cargar desde save
+            if (data.type == "Mound" || data.type == "MoundData")
+            {
+                building.transform.localScale = Vector3.one * 15f;
+                Debug.Log($"SaveApplier.ApplyStructures: Applied scale 15 to Mound at position {data.position}");
+            }
+
             StructuresPlayer structuresPlayer = building.GetComponent<StructuresPlayer>();
             if (structuresPlayer != null)
             {
                 structuresPlayer.currentLevel = data.level;
-                if (System.Enum.TryParse(data.state, out StructuresPlayer.StructureState state))
+                if (System.Enum.TryParse(data.state, out StructureState state))
                 {
                     structuresPlayer.currentStructureState = state;
                 }
                 else
                 {
-                    structuresPlayer.currentStructureState = StructuresPlayer.StructureState.Idle;
+                    structuresPlayer.currentStructureState = StructureState.Idle;
                 }
             }
 

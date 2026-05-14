@@ -63,40 +63,40 @@ public class AntCreation : MonoBehaviour
         SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
 
-    public void PlayerAntCreation(ANT_TYPES antType, Transform position)
-    {
-        if (position == null)
-            return;
+    //public void PlayerAntCreation(ANT_TYPES antType, Transform position)
+    //{
+    //    if (position == null)
+    //        return;
 
-        ChangeAntTypeToInstantiate(antType);
+    //    ChangeAntTypeToInstantiate(antType);
 
-        positionInstantiate = position;
+    //    positionInstantiate = position;
 
-        Ant antScript = antToInstantiate.GetComponent<Ant>();
+    //    Ant antScript = antToInstantiate.GetComponent<Ant>();
 
-        int foodCosts = 0;
-        int hvCosts = 0;
+    //    int foodCosts = 0;
+    //    int hvCosts = 0;
 
-        if (antScript != null)
-        {
-            foodCosts = antScript.GetBreedingCost()[0];
-            hvCosts = antScript.GetBreedingCost()[1];
-        }
+    //    if (antScript != null)
+    //    {
+    //        foodCosts = antScript.GetBreedingCost()[0];
+    //        hvCosts = antScript.GetBreedingCost()[1];
+    //    }
 
-        if (CanSpawnAnt(foodCosts, hvCosts))
-        {
-            SystemAntCreation(1, antType, position, true);
+    //    if (CanSpawnAnt(foodCosts, hvCosts))
+    //    {
+    //        SystemAntCreation(1, antType, position, true);
 
-            if (gameHUDView == null)
-                gameHUDView = FindFirstObjectByType<GameHUDView>();
+    //        if (gameHUDView == null)
+    //            gameHUDView = FindFirstObjectByType<GameHUDView>();
 
-            gameHUDView.UpdateAntText(antType, 1);
-        }
-        else
-        {
-            Debug.Log("Insufficient hv or food");
-        }
-    }
+    //        gameHUDView.UpdateAntText(antType, 1);
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Insufficient hv or food");
+    //    }
+    //}
 
     private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
     {
@@ -202,12 +202,6 @@ public class AntCreation : MonoBehaviour
         return newAnt;
     }
 
-    private bool CanSpawnAnt(int foodCosts, int hvCosts)
-    {
-        return (GameManager.instance.player.inventory.food >= foodCosts)
-            && (GameManager.instance.player.inventory.eggs >= hvCosts);
-    }
-
     /// <summary>
     /// Posibilidad de instanciaci�n de hormigas seg�n los par�metros necesarios.
     /// </summary>
@@ -250,7 +244,7 @@ public class AntCreation : MonoBehaviour
 
             case ANT_TYPES.KAMIKAZE:
                 antToInstantiate = kamikazeAnt;
-                break;
+            break;
 
             case ANT_TYPES.WORKER:
                 antToInstantiate = workerAnt;
