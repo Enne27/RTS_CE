@@ -64,6 +64,11 @@ public class EraManager : MonoBehaviour
         {
             GameManager.instance.player.currentEra += 1;
             ChangesNewEra();
+            foreach(var construction in BuildingManager.Instance.constructionsBuilt)
+            {
+                StructuresPlayer consFunction = construction.gameObject.GetComponentInChildren<StructuresPlayer>();
+                consFunction.currentMaxLevel = consFunction.maxLevelByEra[(int)GameManager.instance.player.currentEra];
+            }
         }
         else GameManager.instance.playerIA.currentEra += 1;
     }

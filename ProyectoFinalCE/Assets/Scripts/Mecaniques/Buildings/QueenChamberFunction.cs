@@ -93,6 +93,6 @@ public class QueenChamberFunction : StructuresPlayer
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
-        //costsUpgradeHV[];
+        
     }
 }

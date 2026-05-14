@@ -19,6 +19,7 @@ public abstract class StructuresPlayer : MonoBehaviour
     public int currentCostsUpgradeHV;
     public int currentCostsUpgradeMC;
     public int currentTimeUpgrade;
+    public int currentMaxLevel;
 
     public StructureState currentStructureState = StructureState.OnConstruction;
     public int currentLevel = 1;

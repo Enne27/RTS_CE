@@ -25,7 +25,8 @@ public class GeneralInfoView : View
     [SerializeField] Button buildingsInfoButton;
 
     [Header("ScrollView buildings")]
-    [SerializeField] UnityEngine.UIElements.ScrollView scrollView;
+    [SerializeField] GameObject layoutHorizontal;
+    //[SerializeField] UnityEngine.UIElements.ScrollView scrollView;
     #endregion
     public override void Initialize()
     {
@@ -51,6 +52,8 @@ public class GeneralInfoView : View
 
         if(currentEraImage != null)
             currentEraImage.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
+
+        UpdateNextEraRequirements(GameManager.instance.player.currentEra);
     }
 
     /// <summary>
@@ -82,6 +85,11 @@ public class GeneralInfoView : View
         switch (currentEra)
         {
             case HIVE_ERAS.BROTE:
+                RequirementNextEraSlot firstSlot = Instantiate(slotRequirement, layoutHorizontal.transform);
+                RequirementNextEraSlot secondtSlot = Instantiate(slotRequirement, layoutHorizontal.transform);
+                RequirementNextEraSlot thirdSlot = Instantiate(slotRequirement, layoutHorizontal.transform);
+                RequirementNextEraSlot fourthSlot = Instantiate(slotRequirement, layoutHorizontal.transform);
+                RequirementNextEraSlot fifthtSlot = Instantiate(slotRequirement, layoutHorizontal.transform);
                 break;
             case HIVE_ERAS.NIDO:
                 break;
