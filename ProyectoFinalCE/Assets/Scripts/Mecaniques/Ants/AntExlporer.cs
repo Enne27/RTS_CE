@@ -32,6 +32,7 @@ public class AntExlporer : Ant
         vision = 4;
         linePriority = 8;
         acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target)

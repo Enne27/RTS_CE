@@ -58,13 +58,9 @@ public class QueenChamberFunction : StructuresPlayer
         //Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
-
         currentStructureState = StructureState.Idle;
-
-        foreach(AntWorkerBehaviour worker in GameManager.instance.player.workers)
-        {
-            worker.HasFinishedWork();
-        } 
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
     }
 
     #endregion

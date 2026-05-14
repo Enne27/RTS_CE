@@ -75,8 +75,9 @@ public class BroodChamberFunction : StructuresPlayer
     public override void OnConstructionFinished()
     {
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.BroodChamberMaterial;
-
         currentStructureState = StructureState.Idle;
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
     }
 
     #endregion

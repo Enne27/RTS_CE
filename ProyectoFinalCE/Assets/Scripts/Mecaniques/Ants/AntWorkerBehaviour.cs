@@ -206,7 +206,7 @@ public class AntWorkerBehaviour : MonoBehaviour
     public void CallToBuild(Building buildToWork)
     {
         currentBuilding = buildToWork;
-
+        buildToWork.GetComponentInChildren<StructuresPlayer>().workerWhoBuildThis = this;
         stateMachineManager.GetStateContext().workFinished = false;
         stateMachineManager.GetStateContext().hasWork = true;
     }
