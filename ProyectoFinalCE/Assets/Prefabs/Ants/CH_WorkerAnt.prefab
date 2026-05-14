@@ -206,6 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AntTunnelWander
   moveSpeed: 0.75
   reachDistance: 0.05
+  fastMoveSpeed: 2
   rotationSpeed: 8
   tunnelSearchRadius: 0.5
   tunnelLayer:
@@ -214,6 +215,17 @@ MonoBehaviour:
   currentTunnel: {fileID: 0}
   targetTunnel: {fileID: 0}
   currentBuilding: {fileID: 0}
+  stateMachineManager: {fileID: 0}
+  foragingChamber: {fileID: 0}
+  storageChamber: {fileID: 0}
+  isTransporting: 0
+  carryAmount: 2
+  carryingResources: 0
+  avoidanceRadius: 0.25
+  avoidanceStrength: 1.5
+  antLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!95 &3665521058351537988
 Animator:
   serializedVersion: 7

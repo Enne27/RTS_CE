@@ -66,7 +66,7 @@ public class BroodChamberView : View
             if (AntCreation.Instance != null)
             {
                 antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-                workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+                //workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
             }
         }
 
@@ -85,7 +85,7 @@ public class BroodChamberView : View
         if (AntCreation.Instance != null)
         {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+            //workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
         }
 
         if (soldierButton != null)

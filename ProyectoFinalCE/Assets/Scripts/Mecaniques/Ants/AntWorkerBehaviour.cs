@@ -54,6 +54,11 @@ public class AntWorkerBehaviour : MonoBehaviour
 
     private ResourceType carriedType;
 
+    [Header("Ant Avoidance")]
+    [SerializeField] private float avoidanceRadius = 0.25f;
+    [SerializeField] private float avoidanceStrength = 1.5f;
+    [SerializeField] private LayerMask antLayer;
+
     private enum TransportPhase
     {
         None,
@@ -636,11 +641,19 @@ public class AntWorkerBehaviour : MonoBehaviour
 
         targetPos.z = currentPos.z;
 
-        transform.position = Vector3.MoveTowards(
-            currentPos,
-            targetPos,
-            moveSpeed * Time.deltaTime
-        );
+        Vector2 moveDir =
+    (targetPos - currentPos).normalized;
+
+        // avoidance
+        Vector2 avoidance =
+            CalculateAvoidance() * avoidanceStrength;
+
+        // combinar dirección principal + avoidance
+        Vector2 finalDir =
+            (moveDir + avoidance).normalized;
+
+        transform.position +=
+            (Vector3)(finalDir * moveSpeed * Time.deltaTime);
 
         Vector2 dir = (targetPos - currentPos).normalized;
 
@@ -671,6 +684,42 @@ public class AntWorkerBehaviour : MonoBehaviour
             currentTunnel = targetTunnel;
             targetTunnel = null;
         }
+    }
+
+    private Vector2 CalculateAvoidance()
+    {
+        Collider[] hits = Physics.OverlapSphere(
+            transform.position,
+            avoidanceRadius,
+            antLayer
+        );
+
+        Vector2 avoidance = Vector2.zero;
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+
+            AntWorkerBehaviour other =
+                hit.GetComponent<AntWorkerBehaviour>();
+
+            if (other == null)
+                continue;
+
+            Vector2 dir =
+                (Vector2)(transform.position - other.transform.position);
+
+            float dist = dir.magnitude;
+
+            if (dist <= 0.001f)
+                continue;
+
+            // cuanto más cerca, más empuja
+            avoidance += dir.normalized / dist;
+        }
+
+        return avoidance.normalized;
     }
 
     // =========================

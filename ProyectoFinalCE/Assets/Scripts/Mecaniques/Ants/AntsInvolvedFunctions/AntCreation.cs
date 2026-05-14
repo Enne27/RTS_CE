@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using static PlayerConstants;
 
 public class AntCreation : MonoBehaviour
@@ -8,7 +9,7 @@ public class AntCreation : MonoBehaviour
 
     [Header("Transforms new ants Player")]
     [SerializeField] public Transform antsSpawnPoint;
-    [SerializeField] public Transform workersSpawnPoint;
+    [SerializeField] public List<Transform> workersSpawnPoint;
 
     [Header("Transforms new ants IA")]
     [SerializeField] public Transform antsSpawnPointIA;
@@ -58,7 +59,32 @@ public class AntCreation : MonoBehaviour
 
         // Creaci�n inicial de hormigas, tanto del jugador como de la IA.
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
-        SystemAntCreation(GameManager.instance.startingWorkerAnts, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
+        List<Transform> availableSpawnPoints = new List<Transform>(workersSpawnPoint);
+
+        for (int i = 0; i < GameManager.instance.startingWorkerAnts; i++)
+        {
+            if (availableSpawnPoints.Count <= 0)
+            {
+                Debug.LogWarning("No more spawn points available.");
+                break;
+            }
+
+            int randomIndex =
+                Random.Range(0, availableSpawnPoints.Count);
+
+            Transform selectedSpawn =
+                availableSpawnPoints[randomIndex];
+
+            // eliminar para evitar repetición
+            availableSpawnPoints.RemoveAt(randomIndex);
+
+            SystemAntCreation(
+                1,
+                ANT_TYPES.WORKER,
+                selectedSpawn,
+                true,
+                !GameManager.instance.tutorialShown);
+        }
 
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
