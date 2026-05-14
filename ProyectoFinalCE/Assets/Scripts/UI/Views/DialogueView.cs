@@ -44,6 +44,6 @@ public class DialogueView : View
     public override void Show()
     {
         base.Show();
-        Time.timeScale = 0;
+        Time.timeScale = 1;
     }
 }

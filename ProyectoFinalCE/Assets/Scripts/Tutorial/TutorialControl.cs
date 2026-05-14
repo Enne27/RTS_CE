@@ -26,6 +26,8 @@ public class TutorialControl : MonoBehaviour
     [Header("Control Tutorial")]
     public int lineNum = 0;
     public bool tutorialShowed = false;
+
+    private BuildingType? requiredBuildingType = null;
     #endregion
 
     void Awake()
@@ -36,6 +38,9 @@ public class TutorialControl : MonoBehaviour
             DialogueManager.instance.startLine.AddListener(TutorialController);
             dialogueView.ShowDialogue(TABLE_DIALOGUES, KEY_DIALOGUES_TUTORIAL);
             DialogueManager.instance.endDialogue.AddListener(EndTutorial);
+
+            //Avisamos al tutorial
+            BuildingManager.Instance.OnBuildingPlaced += CheckBuildingTask;
         }
     }
 
@@ -45,7 +50,8 @@ public class TutorialControl : MonoBehaviour
         {
             cameraMoveScript?.DisableCameraInput();
 
-            ViewManager.Show<DialogueView>();
+            //ViewManager.Show<DialogueView>();
+            ViewManager.GetView<DialogueView>().gameObject.SetActive(true);
             PauseController.instance.pausableMoment = false;
         }
         else ViewManager.Show<GameHUDView>();
@@ -53,40 +59,53 @@ public class TutorialControl : MonoBehaviour
 
     void TutorialController()
     {
-       /* switch (lineNum)
+        switch (lineNum)
         {
-            case 0:
-                invertedMask.SetActive(true);
-                StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
+            case 3: // Supongamos que en esta línea el texto dice: "Construye una cámara real"
+                requiredBuildingType = BuildingType.QueenChamber;
+                DialogueManager.instance.taskPending = true;
                 break;
-            case 1:
-                StartCoroutine(MoverSuavemente(invertedMask.transform, positions[1].position, 0.4f));
-                AntsType.SetActive(true);
-                resources.SetActive(true);
-                break;
-            case 2:
-                
-                StartCoroutine(MoverYEscalar(
-                    invertedMask.transform,
-                    positions[5].position,
-                    new Vector3(6f, 1f, 0f),
-                    0.5f));
-                break;
-            case 4:
-                
-                StartCoroutine(MoverYEscalar(
-                   invertedMask.transform,
-                   positions[1].position,
-                   new Vector3(1f, 1f, 0f),
-                   0.5f));
-                break;
-            case 5:
-                AntsType.SetActive(false);
-                resources.SetActive(false);
-                StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
-                break;
-        }*/
 
+            case 6: // "Ahora necesitamos un almacén"
+                requiredBuildingType = BuildingType.BroodChamber;
+                DialogueManager.instance.taskPending = true;
+                break;
+        }
+        
+        /* switch (lineNum)
+         {
+             case 0:
+                 invertedMask.SetActive(true);
+                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
+                 break;
+             case 1:
+                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[1].position, 0.4f));
+                 AntsType.SetActive(true);
+                 resources.SetActive(true);
+                 break;
+             case 2:
+
+                 StartCoroutine(MoverYEscalar(
+                     invertedMask.transform,
+                     positions[5].position,
+                     new Vector3(6f, 1f, 0f),
+                     0.5f));
+                 break;
+             case 4:
+
+                 StartCoroutine(MoverYEscalar(
+                    invertedMask.transform,
+                    positions[1].position,
+                    new Vector3(1f, 1f, 0f),
+                    0.5f));
+                 break;
+             case 5:
+                 AntsType.SetActive(false);
+                 resources.SetActive(false);
+                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
+                 break;
+         }*/
+        Debug.Log(lineNum.ToString());
         lineNum++;
     }
 
@@ -99,6 +118,17 @@ public class TutorialControl : MonoBehaviour
         tutorialShowed = true;
         GameManager.instance.tutorialShown = tutorialShowed;
         cameraMoveScript.EnableCameraInput();
+    }
+
+    void CheckBuildingTask(BuildingType builtType)
+    {
+        if (requiredBuildingType != null && builtType == requiredBuildingType)
+        {
+            // Tarea completada: Desbloqueamos el diálogo
+            DialogueManager.instance.taskPending = false;
+            requiredBuildingType = null;
+            Debug.Log("Tarea completada: " + builtType);
+        }
     }
 
     IEnumerator MoverSuavemente(Transform objeto, Vector3 destino, float duracion)

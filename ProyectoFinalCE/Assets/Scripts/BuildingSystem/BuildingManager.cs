@@ -2,6 +2,7 @@
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
@@ -43,6 +44,9 @@ public class BuildingManager : MonoBehaviour
     public int broodChambersCount;
     public int storageChambersCount;
     public int pathsCount;
+
+    //Se usa para revisar si se ha colocado la estructura en el tutorial
+    public UnityAction<BuildingType> OnBuildingPlaced;
 
     private void Update()
     {
@@ -271,7 +275,9 @@ public class BuildingManager : MonoBehaviour
             default:
                 break;
         }
-        
+
+        OnBuildingPlaced?.Invoke(preview.data.buildingType); // Se avisa al tutorial del tipo de edificio construido
+
         Destroy(preview.gameObject);
         preview = null;
 
