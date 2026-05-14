@@ -48,16 +48,11 @@ public class StorageChamberFunction : StructuresPlayer
     public override void OnConstructionFinished()
     {
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
-
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
         UpdateCapacityLimits();        
-
         currentStructureState = StructureState.Idle;
-
-        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
-        {
-            worker.HasFinishedWork();
-        }
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
     }
     public override void OnUpgradeFinished()
     {
