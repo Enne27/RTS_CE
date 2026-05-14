@@ -21,6 +21,7 @@ public abstract class StructuresPlayer : MonoBehaviour
     public StructureState currentStructureState = StructureState.OnConstruction;
     public int currentLevel = 1;
 
+    public AntWorkerBehaviour workerWhoBuildThis;
     #endregion
 
     /// <summary>
