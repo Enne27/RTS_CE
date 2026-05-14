@@ -33,8 +33,8 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI crazyAntsText;
     [SerializeField] TextMeshProUGUI kamikazeAntsText;
 
-    [Header("General Info Texts")]
-    [SerializeField] TextMeshProUGUI currentEraText;
+    [Header("General Info")]
+    [SerializeField] Image currentEra;
     #endregion
 
     public override void Initialize()
@@ -72,7 +72,7 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        currentEraText.text = GameManager.instance.player.currentEra.ToString();
+        currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {

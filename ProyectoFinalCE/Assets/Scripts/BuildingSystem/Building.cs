@@ -112,7 +112,7 @@ public class Building : MonoBehaviour
                 /*ViewManager.Show<BroodChamberView>();
                 ViewManager.GetView<GameHUDView>().Show();*/
                 BroodChamberFunction brood = GetComponentInChildren<BroodChamberFunction>();
-                if(brood.currentStructureState == StructuresPlayer.StructureState.Idle)
+                if(brood.currentStructureState == StructureState.Idle)
                     brood.broodView.gameObject.SetActive(true);
                 break;
             case BuildingType.StorageChamber:

@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using static PlayerConstants;
 
@@ -14,6 +16,7 @@ public class GeneralInfoView : View
     [Header("Era info")]
     [SerializeField] TextMeshProUGUI currentEraText;
     [SerializeField] Image currentEraImage;
+    [SerializeField] RequirementNextEraSlot slotRequirement;
     
 
     [Header("Buttons")]
@@ -45,18 +48,29 @@ public class GeneralInfoView : View
 
         if(userColorImage != null)
             userColorImage.color = GameManager.instance.player.playerColor;
+
+        if(currentEraImage != null)
+            currentEraImage.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
     }
 
     /// <summary>
     /// Actualización visual de la era actual del imperio.
     /// </summary>
     /// <param name="currentEra"></param>
-    public void UpdateCurrentEraVisuals(HIVE_ERAS currentEra)
+    public void UpdateCurrentEraVisuals(HIVE_ERAS currentEra, LocalizedString newEraName)
     {
-        //currentEraImage.sprite = ;
-        currentEraText.text = GameManager.instance.player.currentEra.ToString(); // TEMPORAL. SE REQUIERE KEYS DE LAS TABLAS
+        currentEraImage.sprite = EraManager.instance.ERAS_IMAGES[currentEra];
+
+        currentEraText.gameObject.GetComponent<LocalizeStringEvent>().StringReference = newEraName;
+
+        newEraName.StringChanged -= OnEraChanged;
+        newEraName.StringChanged += OnEraChanged;
 
         UpdateNextEraRequirements(currentEra);
+    }
+    private void OnEraChanged(string value)
+    {
+        currentEraText.text = value;
     }
 
     /// <summary>
@@ -65,6 +79,16 @@ public class GeneralInfoView : View
     /// <param name="currentEra"></param>
     private void UpdateNextEraRequirements(HIVE_ERAS currentEra)
     {
-        
+        switch (currentEra)
+        {
+            case HIVE_ERAS.BROTE:
+                break;
+            case HIVE_ERAS.NIDO:
+                break;
+            case HIVE_ERAS.COLONIA:
+                break;
+            case HIVE_ERAS.IMPERIO:
+                break;
+        }
     }
 }
