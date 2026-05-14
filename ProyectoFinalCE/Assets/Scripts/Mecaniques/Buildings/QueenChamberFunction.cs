@@ -89,4 +89,10 @@ public class QueenChamberFunction : StructuresPlayer
        if(hudView != null) hudView.UpdateEggsText();
     }
 
+
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        //costsUpgradeHV[];
+    }
 }
