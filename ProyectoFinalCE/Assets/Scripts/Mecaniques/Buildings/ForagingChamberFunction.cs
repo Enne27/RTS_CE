@@ -54,6 +54,41 @@ public class ForagingChamberFunction : StructuresPlayer
         UpdateUI();
     }
 
+    private void Update()
+    {
+        if (slotsOccupied <= 0)
+            return;
+
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            if (worker == null)
+                continue;
+
+            if (worker.storageChamber == null)
+                continue;
+
+            if (worker.stateMachineManager.GetCurrentStateName() != "Wander")
+                continue;
+
+            StorageChamberFunction storage =
+                worker.storageChamber;
+
+            bool canTransportFood =
+                foods > 0 &&
+                storage.FreeFoodSpace() > 0;
+
+            bool canTransportMaterials =
+                materials > 0 &&
+                storage.FreeMaterialSpace() > 0;
+
+            // No hay espacio para nada
+            if (!canTransportFood && !canTransportMaterials)
+                continue;
+
+            worker.CallToTransport();
+        }
+    }
+
     public bool AddResource(ResourceType resource, int quantity)
     {
         if (quantity <= 0)
@@ -124,11 +159,6 @@ public class ForagingChamberFunction : StructuresPlayer
         return true;
     }
 
-    public void MoveResourceToStorageBuild(ResourceType resource)
-    {
-
-    }
-
     public override int[] costsUpgradeHV => costsUpgradeHV_;
 
     public override int[] costsUpgradeMC => costsUpgradeMC_;
@@ -151,6 +181,5 @@ public class ForagingChamberFunction : StructuresPlayer
             fullAlertText.enabled = true;
         else
             fullAlertText.enabled = false;
-
     }
 }
