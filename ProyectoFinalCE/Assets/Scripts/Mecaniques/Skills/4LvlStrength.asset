@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
+  m_Name: 4LvlStrength
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillName: "Procentage de da\xF1o"
+  description: "50% m\xE1s de da\xF1o a unidades."
+  skillType: 1
+  cost: 10
+  prerequisites:
+  - {fileID: 11400000, guid: 03f8b962dd3baa34480bdd709125da8d, type: 2}
+  - {fileID: 11400000, guid: 299e7bfd20daf0040a6e2e76e9865371, type: 2}
+  - {fileID: 11400000, guid: 230dd2227898659449f4cd1110293121, type: 2}
+  - {fileID: 11400000, guid: 9592867186f9cde4580b3fa7689b45b2, type: 2}
+  effects:
+  - effectType: 2
+    statType: 0
+    value: 50
+    specialID: 4LvlStrength

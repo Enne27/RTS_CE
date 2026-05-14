@@ -10,29 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
-  m_Name: Smol
+  m_Name: 2LvlStrength
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Disminuci\xF3 de grand\xE0ria"
-  description: "Fa mes petites a les formigues d'aquesta manera dona un *boost en
-    el moviment i per\xF2 tamb\xE9 baixa la for\xE7a."
-  skillType: 2
+  skillName: "Aumento de tama\xF1o"
+  description: Da mas fuerza a las hormigas pero las hace mas lentas.
+  skillType: 1
   cost: 3
   prerequisites:
-  - {fileID: 11400000, guid: 5adfbce376ad55c4b81c2241ee8b6f23, type: 2}
+  - {fileID: 11400000, guid: 03f8b962dd3baa34480bdd709125da8d, type: 2}
   effects:
   - effectType: 0
-    statType: 1
+    statType: 3
     value: 10
-    specialID: Smol1
+    specialID: 2LvlStrength1
   - effectType: 0
-    statType: 2
-    value: 10
-    specialID: Smol2
-  - effectType: 0
-    statType: 0
+    statType: 7
     value: -5
-    specialID: Smol3
-  - effectType: 0
-    statType: 8
-    value: -5
-    specialID: Smol4
+    specialID: 2LvlStrength2

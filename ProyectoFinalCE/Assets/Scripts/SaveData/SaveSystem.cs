@@ -31,8 +31,18 @@ public static class SaveSystem
             return;
         }
 
+        // Marcar antes de cargar para evitar creación inicial de hormigas
+        AntCreation.MarkLoaded();
+
         string json = File.ReadAllText(Path);
+
         SaveGameData data = JsonUtility.FromJson<SaveGameData>(json);
+
+        if (data == null)
+        {
+            Debug.LogError("Failed to parse save file");
+            return;
+        }
 
         SaveApplier.ApplyPlayer(data.player);
         SaveApplier.ApplyStats(data.stats);

@@ -43,13 +43,11 @@ public class GameManager : MonoBehaviour
 
     // Mecánicas desbloqueables
     [Header("Unlockable mechanics")]
-    public bool canUseEggsAsFood;
     public bool explorersInvisible;
 
     // Modificadores especiales
     [Header("Special modifiers")]
     public float workerBonusPer10;
-    public float recoverMaterialsPercent;
 
     [Header("Player resources")]
     public Player player; // Jugador

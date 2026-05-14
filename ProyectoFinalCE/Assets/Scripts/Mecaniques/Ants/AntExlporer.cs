@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using static PlayerConstants;
 
 public enum Owner
 {
@@ -23,14 +23,15 @@ public class AntExlporer : Ant
     public GameObject asignedResourceZone;
     private void Awake()
     {
-        //HP = 15f;
-        //armor = 0.40f;
-        //speed = 16f;
-        //strength = 1f;
-        //reach = 1;
-        //vision = 4;
-        //linePriority = 8;
-        //acidBased = false;
+        antType = ANT_TYPES.EXPLORER;
+        HP = 15f;
+        armor = 0.40f;
+        speed = 16f;
+        strength = 1f;
+        reach = 1;
+        vision = 4;
+        linePriority = 8;
+        acidBased = false;
     }
 
     public override void Attack(Ant target)
@@ -38,7 +39,7 @@ public class AntExlporer : Ant
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
-            target.TakeDamage(this, strength, acidBased);
+            target.TakeDamage(this, GetEffectiveDamage(), acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -132,6 +133,26 @@ public class AntExlporer : Ant
 
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    public int GetFood()
+    {
+        return food;
+    }
+
+    public void SetFood(int value)
+    {
+        food = value;
+    }
+
+    public int GetMC()
+    {
+        return MC;
+    }
+
+    public void SetMC(int value)
+    {
+        MC = value;
     }
 }

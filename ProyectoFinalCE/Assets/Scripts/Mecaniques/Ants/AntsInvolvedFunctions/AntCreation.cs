@@ -8,11 +8,10 @@ public class AntCreation : MonoBehaviour
 
     [Header("Transforms new ants Player")]
     [SerializeField] public Transform antsSpawnPoint;
-    [SerializeField] public Transform workersSpawnPoint;  
-    
-    [Header("Transforms new ants Player")]
-    [SerializeField] public Transform antsSpawnPointIA;
+    [SerializeField] public Transform workersSpawnPoint;
 
+    [Header("Transforms new ants IA")]
+    [SerializeField] public Transform antsSpawnPointIA;
 
     [Header("Instantiation Values")]
     [HideInInspector] public GameObject antToInstantiate;
@@ -31,6 +30,14 @@ public class AntCreation : MonoBehaviour
     #region Singleton
     public static AntCreation Instance { get; private set; }
 
+    // IMPORTANTE -> static
+    private static bool loadedFromSave = false;
+
+    public static void MarkLoaded()
+    {
+        loadedFromSave = true;
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -42,24 +49,28 @@ public class AntCreation : MonoBehaviour
 
     private void Start()
     {
+        // Si venimos de save NO crear hormigas iniciales
+        if (loadedFromSave)
+            return;
+
         GameManager.instance.player.ants.Clear();
         GameManager.instance.playerIA.ants.Clear();
 
-        // Creación inicial de hormigas, tanto del jugador como de la IA.
-        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
-        SystemAntCreation(GameManager.instance.startingWorkerAnts, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
+        // Creaciï¿½n inicial de hormigas, tanto del jugador como de la IA.
+        SystemAntCreation(4, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
+        SystemAntCreation(4, ANT_TYPES.WORKER, workersSpawnPoint, true, !GameManager.instance.tutorialShown);
 
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
                 
     }
 
     /// <summary>
-    /// Método para generar hormigas sin involucrar la interfaz.
-    /// Añade al inventario del jugador o de la IA las hormigas creadas.
+    /// Mï¿½todo para generar hormigas sin involucrar la interfaz.
+    /// Aï¿½ade al inventario del jugador o de la IA las hormigas creadas.
     /// </summary>
     /// <param name="quantity">Cantidad de hormigas a instanciar.</param>
     /// <param name="antType">Tipo de hormiga a instanciar.</param>
-    /// <param name="position">Posición donde instanciar.</param>
+    /// <param name="position">Posiciï¿½n donde instanciar.</param>
     /// <param name="isPlayer">Es el jugador = true -> IA = false</param>
     public void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer, bool addsQuantity)
     {
@@ -100,16 +111,22 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Instancia la hormiga en la posición indicada.
+    /// Instancia la hormiga en la posiciï¿½n indicada.
     /// </summary>
     /// <returns>GameObject instanciado.</returns>
     public GameObject AntInstantiation()
     {
-        return Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
+        GameObject newAnt = Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
+
+        Ant antScript = newAnt.GetComponent<Ant>();
+        if (antScript != null)
+            SkillManager.Instance?.ApplyModifiersToAnt(antScript);
+
+        return newAnt;
     }
 
     /// <summary>
-    /// Posibilidad de instanciación de hormigas según los parámetros necesarios.
+    /// Posibilidad de instanciaciï¿½n de hormigas segï¿½n los parï¿½metros necesarios.
     /// </summary>
     /// <param name="foodCosts">Comida necesaria para crearla.</param>
     /// <param name="hvCosts">Huevas necesarias para crearla.</param>
@@ -121,7 +138,7 @@ public class AntCreation : MonoBehaviour
     }
 
     /// <summary>
-    /// Cambiamos el tipo de hormiga a instanciar por el parámetro.
+    /// Cambiamos el tipo de hormiga a instanciar por el parï¿½metro.
     /// </summary>
     /// <param name="antType">Siguiente tipo de hormiga a instanciar.</param>
     public void ChangeAntTypeToInstantiate(ANT_TYPES antType)
@@ -131,25 +148,30 @@ public class AntCreation : MonoBehaviour
             case ANT_TYPES.ACID:
                 antToInstantiate = acidAnt;
                 break;
+
             case ANT_TYPES.BERSERKER:
                 antToInstantiate = berserkerAnt;
                 break;
+
             case ANT_TYPES.EXPLORER:
                 antToInstantiate = explorerAnt;
                 break;
+
             case ANT_TYPES.SOLDIER:
                 antToInstantiate = soldierAnt;
                 break;
+
             case ANT_TYPES.CRAZY:
                 antToInstantiate = crazyAnt;
                 break;
+
             case ANT_TYPES.KAMIKAZE:
                 antToInstantiate = kamikazeAnt;
                 break;
+
             case ANT_TYPES.WORKER:
                 antToInstantiate = workerAnt;
                 break;
         }
     }
-
 }

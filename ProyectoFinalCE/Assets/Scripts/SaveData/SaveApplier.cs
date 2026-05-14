@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class SaveApplier
@@ -18,6 +19,45 @@ public static class SaveApplier
         );
 
         ApplyInventory(player.inventory, data.inventory);
+
+        ApplyStructures(player, data.structures);
+
+        ApplyAnts(player, data.ants);
+    }
+
+    public static void ApplyStructures(Player player, List<StructureSaveData> structuresData)
+    {
+        foreach (GameObject obj in player.structures)
+        {
+            if (obj != null)
+                GameObject.Destroy(obj);
+        }
+
+        player.structures.Clear();
+
+        foreach (StructureSaveData data in structuresData)
+        {
+            Building building = GameFactory.CreateBuilding(data.type, data.position, data.rotation);
+
+            if (building == null)
+                continue;
+
+            StructuresPlayer structuresPlayer = building.GetComponent<StructuresPlayer>();
+            if (structuresPlayer != null)
+            {
+                structuresPlayer.currentLevel = data.level;
+                if (System.Enum.TryParse(data.state, out StructuresPlayer.StructureState state))
+                {
+                    structuresPlayer.currentStructureState = state;
+                }
+                else
+                {
+                    structuresPlayer.currentStructureState = StructuresPlayer.StructureState.Idle;
+                }
+            }
+
+            player.structures.Add(building.gameObject);
+        }
     }
 
     public static void ApplyInventory(Inventory inv, InventorySaveData data)
@@ -27,10 +67,48 @@ public static class SaveApplier
         inv.materials = data.materials;
         inv.upgradePoints = data.upgradePoints;
         inv.workerAnts = data.workerAnts;
-
         inv.eggCapacity = data.eggCapacity;
         inv.foodCapacity = data.foodCapacity;
         inv.materialsCapacity = data.materialsCapacity;
+    }
+
+    public static void ApplyAnts(Player player, List<AntSaveData> antsData)
+    {
+        foreach (var ant in player.ants)
+        {
+            if (ant != null)
+                GameObject.Destroy(ant.gameObject);
+        }
+
+        player.ants.Clear();
+
+        foreach (var antData in antsData)
+        {
+            Ant ant = GameFactory.CreateAnt(antData.type, antData.position);
+
+            if (ant == null)
+                continue;
+
+            ant.SetHP(antData.hp);
+            ant.antOwner = antData.owner;
+            ant.SetArmor(antData.armor);
+            ant.SetSpeed(antData.speed);
+            ant.SetStrength(antData.strength);
+            ant.SetReach(antData.reach);
+            ant.SetVision(antData.vision);
+            ant.SetLinePriority(antData.linePriority);
+            ant.SetBreedingCost(antData.breedingCost);
+            ant.SetAcidBased(antData.acidBased);
+
+            AntExlporer explorerAnt = ant as AntExlporer;
+            if (explorerAnt != null)
+            {
+                explorerAnt.SetFood(antData.food);
+                explorerAnt.SetMC(antData.MC);
+            }
+
+            player.ants.Add(ant);
+        }
     }
 
     public static void ApplyStats(StatsSaveData data)
