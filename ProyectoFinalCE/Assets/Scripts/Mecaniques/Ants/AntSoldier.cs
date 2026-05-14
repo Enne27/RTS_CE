@@ -57,21 +57,27 @@ internal class AntSoldier : Ant
     public override void AttackMound(GameObject mound)
     {
         MoundFunction target;
-        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ mound.CompareTag("Player_AntHill"))
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
         {
-            target = GetComponent<MoundFunction>();
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
-                target.TakeDamage((int)Math.Round(strength), antOwner);
-            }
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+            CheckMoundTrigger(mound);
         }
 
         else
         {
-            Debug.Log("Este objeto no es el hormiguero");
             return;
         }
+    }
+    public void CheckMoundTrigger(GameObject mound)
+    {
+        if (anthillContact == true)
+        {
+            TimeManager.Instance.OneShotTimer(3f, () => AttackMound(mound));
+        }
+        else
+            return;
     }
     public override void Die()
     {

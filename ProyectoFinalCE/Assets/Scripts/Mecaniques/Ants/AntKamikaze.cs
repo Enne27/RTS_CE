@@ -75,12 +75,22 @@ public class AntKamikaze : Ant
         {
             target = mound.GetComponent<MoundFunction>();
             target.TakeDamage((int)Math.Round(strength), antOwner);
+            CheckMoundTrigger(mound);
         }
 
         else
         {
             return;
         }
+    }
+    public void CheckMoundTrigger(GameObject mound)
+    {
+        if (anthillContact == true)
+        {
+            TimeManager.Instance.OneShotTimer(3f, () => AttackMound(mound));
+        }
+        else
+            return;
     }
     public override void Die()
     {

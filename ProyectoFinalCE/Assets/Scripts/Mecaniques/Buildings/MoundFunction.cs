@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Splines;
 using UnityEngine.UI;
 
 public class MoundFunction : StructuresPlayer
@@ -57,6 +58,8 @@ public class MoundFunction : StructuresPlayer
     [SerializeField] TextMeshProUGUI textHPLabel;
 
     [HideInInspector] public Owner owner;
+
+    [SerializeField] private ParticleSystem dirtParticles;
     #endregion
 
     #region METHODS_STRUCTURES
@@ -107,6 +110,10 @@ public class MoundFunction : StructuresPlayer
         {
             moundHealthPoints -= damage;
             Debug.Log("La vida del hormiguero: " + moundHealthPoints);
+            if (dirtParticles != null)
+            {
+                Instantiate(dirtParticles, gameObject.transform.position ,Quaternion.identity);
+            }
         }
         else
         {

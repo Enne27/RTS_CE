@@ -141,8 +141,6 @@ public class AntExlporer : Ant
 
     public override void AttackMound(GameObject mound)
     {
-
-        
         MoundFunction target;
         //La trucada del AttackMound no pasa el if
         if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") ||antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
