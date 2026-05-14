@@ -122,6 +122,11 @@ public static class SaveApplier
                 continue;
             }
 
+            // *** AÑADE EL FOG REVEALER AQUÍ ***
+            FogRevealer fogRevealer = ant.gameObject.AddComponent<FogRevealer>();
+            fogRevealer.visionRadius = ant.vision;
+            Debug.Log($"Added FogRevealer to ant type={antData.type} with vision radius={ant.vision}");
+
             ant.SetHP(antData.hp);
             ant.antOwner = antData.owner;
             ant.SetArmor(antData.armor);
@@ -132,6 +137,12 @@ public static class SaveApplier
             ant.SetLinePriority(antData.linePriority);
             ant.SetBreedingCost(antData.breedingCost);
             ant.SetAcidBased(antData.acidBased);
+
+            // Actualizar el radio de visión del FogRevealer si la visión cambió después de SetVision
+            if (fogRevealer != null)
+            {
+                fogRevealer.visionRadius = ant.vision;
+            }
 
             AntExlporer explorerAnt = ant as AntExlporer;
             if (explorerAnt != null)
@@ -146,7 +157,6 @@ public static class SaveApplier
 
         Debug.Log($"SaveApplier.ApplyAnts() created ants: {createdCount}");
     }
-
     public static void ApplyStats(StatsSaveData data)
     {
         if (StatManager.Instance == null)
