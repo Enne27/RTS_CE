@@ -112,7 +112,9 @@ public class MoundFunction : StructuresPlayer
             Debug.Log("La vida del hormiguero: " + moundHealthPoints);
             if (dirtParticles != null)
             {
-                Instantiate(dirtParticles, gameObject.transform.position ,Quaternion.identity);
+                dirtParticles = Instantiate(dirtParticles, gameObject.transform.position ,Quaternion.identity);
+                dirtParticles.Emit(25);
+                dirtParticles.Stop();
             }
         }
         else
