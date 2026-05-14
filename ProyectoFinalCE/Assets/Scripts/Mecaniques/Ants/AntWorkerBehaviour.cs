@@ -44,11 +44,11 @@ public class AntWorkerBehaviour : MonoBehaviour
     [SerializeField] public ForagingChamberFunction foragingChamber;
     [SerializeField] public StorageChamberFunction storageChamber;
 
-    private bool isTransporting; 
+    public bool isTransporting; 
 
     [SerializeField] private int carryAmount = 2;
 
-    private bool carryingResources;
+    public bool carryingResources;
 
     private int carriedAmount;
 
@@ -258,8 +258,17 @@ public class AntWorkerBehaviour : MonoBehaviour
 
     public void CallToBuild(Building buildToWork)
     {
+        isTransporting = false;
+        carryingResources = false;
+        transportPhase = TransportPhase.None;
+
+        targetTunnel = null;
+        currentPath.Clear();
+
         currentBuilding = buildToWork;
+
         buildToWork.GetComponentInChildren<StructuresPlayer>().workerWhoBuildThis = this;
+
         stateMachineManager.GetStateContext().workFinished = false;
         stateMachineManager.GetStateContext().hasWork = true;
     }
@@ -494,6 +503,21 @@ public class AntWorkerBehaviour : MonoBehaviour
         if (currentPathIndex < currentPath.Count)
         {
             targetTunnel = currentPath[currentPathIndex];
+        }
+    }
+
+    public void InterruptTransportAndBuild(Building build)
+    {
+        // Si está transportando y aún NO ha recogido recursos, puede cambiar de tarea
+        if (isTransporting && !carryingResources)
+        {
+            isTransporting = false;
+            transportPhase = TransportPhase.None;
+
+            targetTunnel = null;
+            currentPath.Clear();
+
+            CallToBuild(build);
         }
     }
 

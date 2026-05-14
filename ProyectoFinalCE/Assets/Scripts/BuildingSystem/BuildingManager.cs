@@ -307,19 +307,30 @@ public class BuildingManager : MonoBehaviour
 
     private void SetSlavesToWork(Building build)
     {
-        bool hasSetASlaveToWork = false;
         foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
         {
-            if (worker.stateMachineManager.GetCurrentStateName() == "Wander")
+            if (worker == null)
+                continue;
+
+            string state =
+                worker.stateMachineManager.GetCurrentStateName();
+
+            // PRIORIDAD 1: trabajadores libres
+            if (state == "Wander")
             {
                 worker.CallToBuild(build);
-                hasSetASlaveToWork = true;
+                return;
+            }
+
+            // PRIORIDAD 2: trabajadores transportando SIN carga aún
+            if (worker.isTransporting && !worker.carryingResources)
+            {
+                worker.InterruptTransportAndBuild(build);
                 return;
             }
         }
 
-        if(!hasSetASlaveToWork)
-            waitingToBeBuilt.Add(build);
+        waitingToBeBuilt.Add(build);
     }
 
     private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
