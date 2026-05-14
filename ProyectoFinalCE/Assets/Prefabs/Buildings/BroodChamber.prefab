@@ -213,6 +213,7 @@ MonoBehaviour:
   kamikazeAnt: {fileID: 2413880518552433636, guid: 798fd16094586a74cbcb1ad21e02d059, type: 3}
   broodingCapacity: 010000000200000003000000040000000500000006000000
   gameHUDView: {fileID: 0}
+  broodView: {fileID: 1203353855325699631}
   currentBreedingQuantity: 0
 --- !u!1 &7226344355559717767
 GameObject:
@@ -1355,6 +1356,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a84cc395bcf797641a9541468db3c610, type: 3}
+--- !u!114 &1203353855325699631 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6543350857450824091, guid: a84cc395bcf797641a9541468db3c610, type: 3}
+  m_PrefabInstance: {fileID: 5367601479724195764}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c5f09fa812d1d488045e65a43f065f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BroodChamberView
 --- !u!224 &2022853112381088463 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6228217886332616059, guid: a84cc395bcf797641a9541468db3c610, type: 3}

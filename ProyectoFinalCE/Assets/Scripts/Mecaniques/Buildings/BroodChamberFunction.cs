@@ -48,7 +48,7 @@ public class BroodChamberFunction : StructuresPlayer
     public override int[] maxLevelByEra => maxLevelByEra_;
 
     public GameHUDView gameHUDView;
-    private BroodChamberView broodView;
+    [SerializeField] public BroodChamberView broodView;
 
     [Header("Limits")]
     /*[HideInInspector] */public int currentBreedingQuantity = 0;
@@ -57,7 +57,9 @@ public class BroodChamberFunction : StructuresPlayer
     private void Awake()
     {
         gameHUDView = FindFirstObjectByType<GameHUDView>().GetComponent<GameHUDView>();
-        broodView = ViewManager.GetView<BroodChamberView>();
+
+        if (broodView == null)
+            broodView = FindFirstObjectByType<BroodChamberView>();
     }
 
     private void OnEnable()
@@ -73,15 +75,6 @@ public class BroodChamberFunction : StructuresPlayer
     public override void OnConstructionFinished()
     {
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.BroodChamberMaterial;
-
-        GameManager.instance.player.inventory.RemoveEggs(broodBuildingScriptable.costHV);
-        GameManager.instance.player.inventory.RemoveMC(broodBuildingScriptable.costMC);
-
-        if (gameHUDView != null)
-        {
-            gameHUDView.UpdateMCText();
-            gameHUDView.UpdateEggsText();
-        }
 
         currentStructureState = StructureState.Idle;
     }
@@ -149,7 +142,7 @@ public class BroodChamberFunction : StructuresPlayer
             currentBreedingQuantity--;
         });
 
-        VFXManager.Instance?.PlayBroodingChamberParticles(/*GetTransformToSpawnTimer(antType)*/gameObject.transform.position, time);
+        VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType)/*gameObject.transform.position*/, time);
 
         gameHUDView?.UpdateAntText(antType, 1);
 

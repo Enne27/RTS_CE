@@ -9,7 +9,6 @@ public enum StructureState
 public abstract class StructuresPlayer : MonoBehaviour
 {
     #region VARIABLES
-    
 
     [HideInInspector] public Vector2 positionAntHill;
     public abstract int[] costsUpgradeHV { get; }
