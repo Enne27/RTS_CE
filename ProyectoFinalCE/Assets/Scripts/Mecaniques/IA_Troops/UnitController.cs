@@ -79,10 +79,7 @@ public class UnitController : MonoBehaviour
 
     private static void SpawnFlag(Vector3 objective)
     {
-        if (staticFlagPrefab == null)
-            return;
-
-        if (currentFlag != null)
+        if (currentFlag == null)
         {
             currentFlag = Instantiate(staticFlagPrefab, objective, staticFlagPrefab.transform.rotation);
         }
