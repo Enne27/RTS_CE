@@ -23,12 +23,20 @@ public class SkillTreeUI : MonoBehaviour
         UpdateStats();
     }
 
+    void Update()
+    {
+        UpdateStats();
+    }
+
     void UpdateStats()
     {
         statsText.text =
             $"Damage: {StatManager.Instance.GetStat(StatType.Damage)}\n" +
-            $"MoveSpeed: {StatManager.Instance.GetStat(StatType.MoveSpeed)}\n" +
-            $"BuildSpeed: {StatManager.Instance.GetStat(StatType.BuildSpeed)}\n" +
-            $"ResourceGain: {StatManager.Instance.GetStat(StatType.ResourceGain)}";
+            $"Speed: {StatManager.Instance.GetStat(StatType.Speed)}\n" +
+            $"HP: {StatManager.Instance.GetStat(StatType.HP)}\n" +
+            $"Armor: {StatManager.Instance.GetStat(StatType.Armor)}\n" +
+            $"Vision: {StatManager.Instance.GetStat(StatType.Vision)}\n" +
+            $"Reach: {StatManager.Instance.GetStat(StatType.Reach)}\n" +
+            $"Strength: {StatManager.Instance.GetStat(StatType.Strength)}";
     }
 }

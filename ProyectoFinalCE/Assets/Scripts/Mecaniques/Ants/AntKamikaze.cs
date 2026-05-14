@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static PlayerConstants;
 
 public class AntKamikaze : Ant
 {
@@ -9,15 +10,17 @@ public class AntKamikaze : Ant
     //int[] breedingCost = new int[] { 7, 18 };
     private void Awake()
     {
-        //HP = 11f;
-        //armor = 0.3f;
-        //speed = 13f;
-        //strength = 2f;
-        //reach = 1;
-        //vision = 1;
-        //linePriority = 2;
-        //acidBased = false;
-        //maxHP = HP;
+        antType = ANT_TYPES.KAMIKAZE;
+        HP = 11f;
+        armor = 0.3f;
+        speed = 13f;
+        strength = 2f;
+        reach = 1;
+        vision = 1;
+        linePriority = 2;
+        acidBased = false;
+        maxHP = HP;
+        base.Awake();
     }
 
     public void Update()
@@ -32,7 +35,7 @@ public class AntKamikaze : Ant
     {
         if (target != null)
         {
-            target.TakeDamage(target, strength, acidBased);
+            target.TakeDamage(this, GetEffectiveDamage(), acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -61,14 +64,22 @@ public class AntKamikaze : Ant
 
     public void Explode(Ant target)
     {
-        strength = 15;
+        float explosionDamage = 15f;
         acidBased = true;
-        target.TakeDamage(target,strength,acidBased);
+        float effectiveDamage = explosionDamage;
+        
+        if (SkillManager.Instance != null)
+        {
+            float damageBonus = SkillManager.Instance.GetTotalDamageBonus();
+            effectiveDamage = explosionDamage * (1f + damageBonus);
+        }
+        
+        target.TakeDamage(this, effectiveDamage, acidBased);
         Die();
     }
 
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
