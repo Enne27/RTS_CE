@@ -50,15 +50,13 @@ public class StorageChamberFunction : StructuresPlayer
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
 
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-        UpdateCapacityLimits();
+        UpdateCapacityLimits();        
 
-        GameManager.instance.player.inventory.RemoveEggs(storageBuildingScriptable.costHV);
-        GameManager.instance.player.inventory.RemoveMC(storageBuildingScriptable.costMC);
+        currentStructureState = StructureState.Idle;
 
-        if (hudView != null)
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
         {
-            hudView.UpdateMCText();
-            hudView.UpdateEggsText();
+            worker.HasFinishedWork();
         }
     }
     public override void OnUpgradeFinished()

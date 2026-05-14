@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
@@ -168,13 +167,13 @@ public class ConstructionMenuView : View
     public override void Hide()
     {
         base.Hide();
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
     }
 
     public override void Show()
     {
         base.Show();
-        Time.timeScale = 0;
+        //Time.timeScale = 1;
         ViewManager.GetView<GameHUDView>().Show();
     }
 }

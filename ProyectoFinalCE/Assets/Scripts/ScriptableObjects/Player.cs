@@ -25,7 +25,7 @@ public class Player
         structuresCount = new Dictionary<Type, int>();
         structures = new List<GameObject>();
         ants = new List<Ant>();
-        
+        workers = new List<AntWorkerBehaviour>();
         /* TBI
         foreach (var type in TypeCache.GetTypesDerivedFrom<Structure>())
         {

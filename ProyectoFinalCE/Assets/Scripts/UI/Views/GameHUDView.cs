@@ -33,8 +33,8 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI crazyAntsText;
     [SerializeField] TextMeshProUGUI kamikazeAntsText;
 
-    [Header("General Info Texts")]
-    [SerializeField] TextMeshProUGUI currentEraText;
+    [Header("General Info")]
+    [SerializeField] Image currentEra;
     #endregion
 
     public override void Initialize()
@@ -72,20 +72,22 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        currentEraText.text = GameManager.instance.player.currentEra.ToString();
+        currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {
           constructionButton.onClick.AddListener(()=> {
               if(constructionMenuActived == false)
               {
-                  ViewManager.Show<ConstructionMenuView>();
+                  //ViewManager.Show<ConstructionMenuView>();
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(true);
                   constructionMenuActived = true;
               }
               else 
               { 
                   constructionMenuActived = false;
-                  ViewManager.ShowLastView(); 
+                  //ViewManager.ShowLastView(); 
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
               }
           });
         }
