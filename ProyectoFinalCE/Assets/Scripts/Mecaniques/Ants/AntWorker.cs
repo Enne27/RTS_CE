@@ -1,8 +1,25 @@
 using UnityEngine;
+using static PlayerConstants;
 
-public class AntWorker : MonoBehaviour
+public class AntWorker : Ant
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private void Awake()
+    {
+        antType = ANT_TYPES.WORKER;
+        // Valores por defecto – ajústalos según tu diseño
+        HP = 12f;
+        armor = 0.25f;
+        speed = 8f;
+        strength = 1f;
+        reach = 1;
+        vision = 2;
+        linePriority = 1;
+        acidBased = false;
+        breedingCost = new int[] { 5, 5 }; // ejemplo
+
+        CacheBaseStats();
+    }
+
     void Start()
     {
         

@@ -31,7 +31,6 @@ public class AntCreation : MonoBehaviour
     #region Singleton
     public static AntCreation Instance { get; private set; }
 
-    // IMPORTANTE -> static
     private static bool loadedFromSave = false;
 
     public static void MarkLoaded()
@@ -50,14 +49,12 @@ public class AntCreation : MonoBehaviour
 
     private void Start()
     {
-        // Si venimos de save NO crear hormigas iniciales
         if (loadedFromSave)
             return;
 
         GameManager.instance.player.ants.Clear();
         GameManager.instance.playerIA.ants.Clear();
 
-        // Creaci�n inicial de hormigas, tanto del jugador como de la IA.
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPoint, true, !GameManager.instance.tutorialShown);
         List<Transform> availableSpawnPoints = new List<Transform>(workersSpawnPoint);
 
@@ -69,21 +66,11 @@ public class AntCreation : MonoBehaviour
                 break;
             }
 
-            int randomIndex =
-                Random.Range(0, availableSpawnPoints.Count);
-
-            Transform selectedSpawn =
-                availableSpawnPoints[randomIndex];
-
-            // eliminar para evitar repetición
+            int randomIndex = Random.Range(0, availableSpawnPoints.Count);
+            Transform selectedSpawn = availableSpawnPoints[randomIndex];
             availableSpawnPoints.RemoveAt(randomIndex);
 
-            SystemAntCreation(
-                1,
-                ANT_TYPES.WORKER,
-                selectedSpawn,
-                true,
-                !GameManager.instance.tutorialShown);
+            SystemAntCreation(1, ANT_TYPES.WORKER, selectedSpawn, true, !GameManager.instance.tutorialShown);
         }
 
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
@@ -115,7 +102,7 @@ public class AntCreation : MonoBehaviour
 
             if (gameHUDView == null)
                 gameHUDView = FindFirstObjectByType<GameHUDView>();
-
+            
             gameHUDView.UpdateAntText(antType, 1);
         }
         else
@@ -124,6 +111,7 @@ public class AntCreation : MonoBehaviour
         }
     }
 
+    // Sobrecarga privada (4 parámetros) - la usa PlayerAntCreation
     private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
     {
         if (position == null)
@@ -136,7 +124,7 @@ public class AntCreation : MonoBehaviour
             positionInstantiate = position;
 
             Ant antScript = antToInstantiate.GetComponent<Ant>();
-
+            
             int foodCosts = 0;
             int hvCosts = 0;
 
@@ -162,9 +150,9 @@ public class AntCreation : MonoBehaviour
                 gameHUDView.UpdateEggsText();
             }
         }
-        SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
-
     }
+
+    // Sobrecarga pública (5 parámetros) - la que realmente instancia y añade a las listas
 
     /// <summary>
     /// M�todo para generar hormigas sin involucrar la interfaz.
@@ -184,7 +172,7 @@ public class AntCreation : MonoBehaviour
 
                 positionInstantiate = position;
                 GameObject newAnt = AntInstantiation();
-                
+
 
                 if (isPlayer)
                 {
@@ -194,17 +182,22 @@ public class AntCreation : MonoBehaviour
                         fogRevealer.visionRadius = newAnt.GetComponent<Ant>().vision;
                         GameManager.instance.player.ants.Add(newAnt.GetComponent<Ant>());
                     }
-                    //GameManager.instance.player.ants.Add(newAnt.GetComponentInChildren<Ant>());
                     else
                     {
-                        if (addsQuantity) 
+                        if (addsQuantity)
                             GameManager.instance.player.inventory.workerAnts++;
 
                         GameManager.instance.player.workers.Add(newAnt.GetComponentInChildren<AntWorkerBehaviour>());
+
+                        //Añadir también a player.ants para guardado
+                        AntWorker workerAntComponent = newAnt.GetComponent<AntWorker>();
+                        if (workerAntComponent != null)
+                            GameManager.instance.player.ants.Add(workerAntComponent);
+                        else
+                            Debug.LogError("Worker prefab lacks AntWorker component!");
                     }
 
                     if (antType == ANT_TYPES.EXPLORER)
-                        //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.player.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.Player;
                 }
                 else
@@ -212,9 +205,15 @@ public class AntCreation : MonoBehaviour
                     if (antType != ANT_TYPES.WORKER)
                         GameManager.instance.playerIA.ants.Add(newAnt.GetComponent<Ant>());
                     else if (addsQuantity) GameManager.instance.playerIA.inventory.workerAnts++;
+                    // Para la IA también
+                    // if (antType == ANT_TYPES.WORKER)
+                    // {
+                    //     AntWorker workerAntComponent = newAnt.GetComponent<AntWorker>();
+                    //     if (workerAntComponent != null)
+                    //         GameManager.instance.playerIA.ants.Add(workerAntComponent);
+                    // }
 
                     if (antType == ANT_TYPES.EXPLORER)
-                        //newAnt.GetComponent<AntExlporer>().antHillPositionOwner = GameManager.instance.playerIA.structures[0].transform.position;
                         newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
                 }
             }
@@ -228,11 +227,11 @@ public class AntCreation : MonoBehaviour
     public GameObject AntInstantiation()
     {
         GameObject newAnt = Instantiate(antToInstantiate, positionInstantiate.position, Quaternion.identity);
-
+        
         Ant antScript = newAnt.GetComponent<Ant>();
         if (antScript != null)
             SkillManager.Instance?.ApplyModifiersToAnt(antScript);
-
+        
         return newAnt;
     }
 
@@ -244,7 +243,6 @@ public class AntCreation : MonoBehaviour
     /// <returns>True si hay suficiente comida y huevas en el inventario del jugador.</returns>
     public bool CanSpawnAnt(int foodCosts, int hvCosts)
     {
-        //Debug.Log(GameManager.instance.player.inventory.food >= foodCosts && GameManager.instance.player.inventory.eggs >= hvCosts);
         return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
     }
 
@@ -278,8 +276,8 @@ public class AntCreation : MonoBehaviour
 
             case ANT_TYPES.KAMIKAZE:
                 antToInstantiate = kamikazeAnt;
-            break;
-
+                break;
+                
             case ANT_TYPES.WORKER:
                 antToInstantiate = workerAnt;
                 break;

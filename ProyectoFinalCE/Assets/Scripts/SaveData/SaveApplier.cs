@@ -153,6 +153,20 @@ public static class SaveApplier
 
             player.ants.Add(ant);
         }
+
+        //Reconstruir la lista de workers a partir de los ants cargados
+        player.workers.Clear();
+        foreach (Ant ant in player.ants)
+        {
+            if (ant is AntWorker worker)
+            {
+                AntWorkerBehaviour behaviour = worker.GetComponent<AntWorkerBehaviour>();
+                if (behaviour != null)
+                    player.workers.Add(behaviour);
+                else
+                    Debug.LogWarning($"Worker ant at {worker.transform.position} has no AntWorkerBehaviour component.");
+            }
+        }
     }
 
     public static void ApplyStats(StatsSaveData data)
