@@ -84,8 +84,9 @@ public class AntWorkerBehaviour : MonoBehaviour
         stateMachineManager = GetComponent<StateMachineComponent>();
         animationController = GetComponent<Animator>();
         foragingChamber = FindFirstObjectByType<ForagingChamberFunction>();
-        oldMoveSpeed = moveSpeed;
+        RefreshReferences();
         resourceTransportingImage.enabled = false;
+        oldMoveSpeed = moveSpeed;
     }
 
     private void Update()
@@ -106,6 +107,14 @@ public class AntWorkerBehaviour : MonoBehaviour
             else
                 Work();
         }
+    }
+
+    public void RefreshReferences()
+    {
+        foragingChamber = FindFirstObjectByType<ForagingChamberFunction>();
+        storageChamber = FindFirstObjectByType<StorageChamberFunction>();
+        if (foragingChamber == null) Debug.LogWarning($"{name}: ForagingChamber not found after load");
+        if (storageChamber == null) Debug.LogWarning($"{name}: StorageChamber not found after load");
     }
 
     // =========================
@@ -159,7 +168,7 @@ public class AntWorkerBehaviour : MonoBehaviour
         {
             targetTunnel = null;
 
-            // mirar hacia la construcción
+            // mirar hacia la construcciï¿½n
             LookAtTunnel(targetBuildingTunnel);
 
             ArriveAtWork();
@@ -241,10 +250,10 @@ public class AntWorkerBehaviour : MonoBehaviour
             if (tunnel.isConstructingHerePosible &&
                 tunnel.constructionAccessTunnel != null)
             {
-                // guardamos el túnel del edificio
+                // guardamos el tï¿½nel del edificio
                 targetBuildingTunnel = tunnel;
 
-                // devolvemos el túnel exterior
+                // devolvemos el tï¿½nel exterior
                 return tunnel.constructionAccessTunnel;
             }
         }
@@ -392,7 +401,7 @@ public class AntWorkerBehaviour : MonoBehaviour
 
         List<ResourceType> availableResources = new();
 
-        // Ver qué recursos existen
+        // Ver quï¿½ recursos existen
         if (foragingChamber.foods > 0)
             availableResources.Add(ResourceType.food);
 
@@ -439,7 +448,7 @@ public class AntWorkerBehaviour : MonoBehaviour
                 availableAmount,
                 freeSpace);
 
-        // El storage ya está lleno
+        // El storage ya estï¿½ lleno
         if (amountToCarry <= 0)
             return;
 
@@ -547,7 +556,7 @@ public class AntWorkerBehaviour : MonoBehaviour
 
     public void InterruptTransportAndBuild(Building build)
     {
-        // Si está transportando y aún NO ha recogido recursos, puede cambiar de tarea
+        // Si estï¿½ transportando y aï¿½n NO ha recogido recursos, puede cambiar de tarea
         if (isTransporting && !carryingResources)
         {
             isTransporting = false;
@@ -682,7 +691,7 @@ public class AntWorkerBehaviour : MonoBehaviour
         Vector2 avoidance =
             CalculateAvoidance() * avoidanceStrength;
 
-        // combinar dirección principal + avoidance
+        // combinar direcciï¿½n principal + avoidance
         Vector2 finalDir =
             (moveDir + avoidance).normalized;
 
@@ -749,7 +758,7 @@ public class AntWorkerBehaviour : MonoBehaviour
             if (dist <= 0.001f)
                 continue;
 
-            // cuanto más cerca, más empuja
+            // cuanto mï¿½s cerca, mï¿½s empuja
             avoidance += dir.normalized / dist;
         }
 

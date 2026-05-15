@@ -74,16 +74,37 @@ public class AntExlporer : Ant
             Vector3 position = new Vector3();
             food = UnityEngine.Random.Range(1, 3);
             MC = UnityEngine.Random.Range(1, 2);
+            
             switch (antOwner)
             {
-                case (Owner.Player):
-                    position = GameManager.instance.player.structures[0].transform.position;
+                case Owner.Player:
+                    if (GameManager.instance.player.structures != null && 
+                        GameManager.instance.player.structures.Count > 0)
+                    {
+                        position = GameManager.instance.player.structures[0].transform.position;
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura del jugador a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
-                case (Owner.AI):
-                    if(GameManager.instance.playerIA.structures[0] != null)
+                    
+                case Owner.AI:
+                    if (GameManager.instance.playerIA.structures != null && 
+                        GameManager.instance.playerIA.structures.Count > 0 &&
+                        GameManager.instance.playerIA.structures[0] != null)
+                    {
                         position = GameManager.instance.playerIA.structures[0].transform.position;
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura de la IA a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
             }
+            
             UnitController.MoveTo(this, position);
         });
     }

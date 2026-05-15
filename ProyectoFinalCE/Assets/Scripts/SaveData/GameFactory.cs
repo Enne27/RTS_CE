@@ -147,28 +147,23 @@ public class GameFactory : MonoBehaviour
 
     public Ant CreateAnt(ANT_TYPES type, Vector3 pos)
     {
-        if (antPrefabs == null)
-        {
-            Debug.LogError("GameFactory.CreateAnt: Ant prefabs dictionary not initialized.");
-            return null;
-        }
+        Debug.Log($"CreateAnt: type={type}, pos={pos}");
+        if (antPrefabs == null) { Debug.LogError("antPrefabs dict null"); return null; }
         if (!antPrefabs.TryGetValue(type, out GameObject prefab) || prefab == null)
-        {
-            Debug.LogError($"GameFactory.CreateAnt: Prefab not assigned for ant type: {type}");
-            return null;
-        }
+        { Debug.LogError($"No prefab for {type}"); return null; }
+
+        Debug.Log($"Prefab found: {prefab.name}. Does it have Ant? {prefab.GetComponent<Ant>() != null}");
 
         GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
         Ant ant = obj.GetComponent<Ant>();
         if (ant == null)
         {
-            Debug.LogError($"GameFactory.CreateAnt: prefab for {type} has no Ant component.");
+            Debug.LogError($"Instanced object {obj.name} has no Ant component!");
             Destroy(obj);
             return null;
         }
-
         ant.antType = type;
-        Debug.Log($"GameFactory.CreateAnt: created ant type={type} at position={pos}");
+        Debug.Log($"Successfully created ant type={type} at {pos}, active={obj.activeSelf}");
         return ant;
     }
     // private void PlaceBuilding(List<Vector3> buildingPositions)

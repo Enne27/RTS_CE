@@ -24,8 +24,13 @@ public static class SaveApplier
         ApplyInventory(player.inventory, data.inventory);
 
         ApplyStructures(player, data.structures);
-
         ApplyAnts(player, data.ants);
+
+        // Asegurar que el número de obreras coincida con el inventario guardado
+        EnsureWorkerCount(player);
+
+        foreach (var worker in player.workers)
+            worker.RefreshReferences();
 
         Debug.Log("SaveApplier.ApplyPlayer() finished");
     }
@@ -50,44 +55,39 @@ public static class SaveApplier
     {
         Debug.Log($"ApplyStructures for player {player.playerName}, count={structuresData?.Count ?? 0}");
 
-        // 1. Identificar y preservar los mounds existentes (no se guardan ni destruyen)
-        List<GameObject> preservedMounds = new List<GameObject>();
+        // 1. Recorrer las estructuras actuales del jugador (las que hay en la escena)
+        //    y eliminar de la lista SOLO las que no son mounds (sin destruirlas todavía)
+        List<GameObject> toDestroy = new List<GameObject>();
         foreach (GameObject obj in player.structures)
         {
             if (obj == null) continue;
             Building building = obj.GetComponent<Building>();
             if (building != null && building.data.buildingType == BuildingType.Mound)
             {
-                preservedMounds.Add(obj);
-                Debug.Log($"Preserving mound for player {player.playerName} at {obj.transform.position}");
+                Debug.Log($"Preserving mound for {player.playerName} at {obj.transform.position}");
+                // No hacemos nada, lo conservamos
             }
             else
             {
-                // Destruir estructuras que no son mounds
-                GameObject.Destroy(obj);
+                toDestroy.Add(obj);
             }
         }
 
-        // Limpiar la lista y volver a añadir solo los mounds conservados
-        player.structures.Clear();
-        foreach (GameObject mound in preservedMounds)
+        // Eliminar de la lista y destruir los que no son mounds
+        foreach (GameObject obj in toDestroy)
         {
-            player.structures.Add(mound);
+            player.structures.Remove(obj);
+            UnityEngine.Object.Destroy(obj);
         }
 
-        // 2. Reconstruir el resto de estructuras desde el save (excluyendo posibles mounds que pudieran venir en el save)
+        // 2. Reconstruir las estructuras guardadas (excluyendo mounds)
         foreach (StructureSaveData data in structuresData)
         {
-            // Saltar por si acaso el save contiene algún mound (por compatibilidad)
             if (data.type == "Mound" || data.type == "MoundData")
                 continue;
 
             Building building = GameFactory.Instance.CreateBuilding(data.type, data.position, data.rotation);
             if (building == null) continue;
-
-            // Escala especial para Mound (aunque ya no debería llegar aquí)
-            if (data.type == "Mound" || data.type == "MoundData")
-                building.transform.localScale = Vector3.one * 15f;
 
             StructuresPlayer sp = building.GetComponent<StructuresPlayer>();
             if (sp != null)
@@ -100,7 +100,6 @@ public static class SaveApplier
             player.structures.Add(building.gameObject);
         }
     }
-
 
     public static void ApplyInventory(Inventory inv, InventorySaveData data)
     {
@@ -167,8 +166,52 @@ public static class SaveApplier
                     Debug.LogWarning($"Worker ant at {worker.transform.position} has no AntWorkerBehaviour component.");
             }
         }
+        foreach (var workerBehaviour in player.workers)
+        {
+            if (workerBehaviour != null)
+                workerBehaviour.RefreshReferences();
+        }
+        foreach (var workerBehaviour in player.workers)
+        {
+            workerBehaviour?.RefreshReferences();
+        }
     }
 
+    public static void EnsureWorkerCount(Player player)
+    {
+        int expected = player.inventory.workerAnts;
+        int current = player.workers.Count;
+
+        if (current >= expected) return;
+
+        int missing = expected - current;
+        Debug.Log($"Creating {missing} missing worker ants for player {player.playerName}");
+
+        // Obtener puntos de spawn desde AntCreation (se definen en el inspector)
+        AntCreation antCreation = AntCreation.Instance;
+        if (antCreation == null)
+        {
+            Debug.LogError("AntCreation.Instance not found. Cannot spawn workers.");
+            return;
+        }
+
+        // Usar cualquier punto de spawn disponible (el primero de la lista o un fallback)
+        Transform spawnPoint = null;
+        if (antCreation.workersSpawnPoint != null && antCreation.workersSpawnPoint.Count > 0)
+            spawnPoint = antCreation.workersSpawnPoint[0];
+        else if (antCreation.antsSpawnPoint != null)
+            spawnPoint = antCreation.antsSpawnPoint;
+
+        if (spawnPoint == null)
+        {
+            Debug.LogError("No spawn point available for workers.");
+            return;
+        }
+
+        // Crear obreras sin incrementar de nuevo el contador (addsQuantity = false)
+        antCreation.SystemAntCreation(missing, ANT_TYPES.WORKER, spawnPoint, isPlayer: true, addsQuantity: false);
+    }
+    
     public static void ApplyStats(StatsSaveData data)
     {
         if (StatManager.Instance == null)
