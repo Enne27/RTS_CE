@@ -11,13 +11,13 @@ public static class SaveSystem
         SaveGameData data = new SaveGameData
         {
             player = SaveConverter.ToSaveData(GameManager.instance.player),
+            playerIA = SaveConverter.ToSaveData(GameManager.instance.playerIA),
             stats = SaveConverter.GetStats(),
             skills = SaveConverter.GetSkills()
         };
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(Path, json);
-
         Debug.Log("Game Saved -> " + Path);
     }
     #endregion
@@ -69,6 +69,18 @@ public static class SaveSystem
         Debug.Log($"SaveSystem.LoadGame() data loaded: playerName={data.player.playerName}, era={data.player.currentEra}, ants={data.player.ants?.Count ?? 0}, structures={data.player.structures?.Count ?? 0}");
 
         SaveApplier.ApplyPlayer(data.player);
+        // Cargar IA solo si existe en el fichero (compatibilidad con saves antiguos)
+        if (data.playerIA != null)
+        {
+            SaveApplier.ApplyPlayerIA(data.playerIA);
+        }
+        else
+        {
+            Debug.LogWarning("Save file does not contain playerIA data. Initializing default IA.");
+            // Opcional: inicializar IA por defecto
+            GameManager.instance.playerIA = new Player();
+        }
+
         SaveApplier.ApplyStats(data.stats);
         SaveApplier.ApplySkills(data.skills);
 

@@ -33,12 +33,13 @@ public static class SaveConverter
 
         foreach (GameObject obj in structures)
         {
-            if (obj == null)
-                continue;
+            if (obj == null) continue;
 
             Building building = obj.GetComponent<Building>();
+            if (building == null) continue;
 
-            if (building == null)
+            // NO guardar los mounds (ant hills) porque ya existen en la escena
+            if (building.data.buildingType == BuildingType.Mound)
                 continue;
 
             StructuresPlayer structuresPlayer = obj.GetComponent<StructuresPlayer>();

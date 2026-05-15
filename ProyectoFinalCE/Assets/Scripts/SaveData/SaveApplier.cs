@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static PlayerConstants;
 public static class SaveApplier
 {
     public static void ApplyPlayer(PlayerSaveData data)
@@ -29,60 +30,77 @@ public static class SaveApplier
         Debug.Log("SaveApplier.ApplyPlayer() finished");
     }
 
+    // Aplica los datos a la IA
+    public static void ApplyPlayerIA(PlayerSaveData data)
+    {
+        Debug.Log($"SaveApplier.ApplyPlayerIA() start: id={data.id}, playerName={data.playerName}");
+        var playerIA = GameManager.instance.playerIA;
+
+        playerIA.id = data.id;
+        playerIA.playerName = data.playerName;
+        playerIA.currentEra = data.currentEra;
+        playerIA.playerColor = new Color(data.color[0], data.color[1], data.color[2], data.color[3]);
+
+        ApplyInventory(playerIA.inventory, data.inventory);
+        ApplyStructures(playerIA, data.structures);
+        ApplyAnts(playerIA, data.ants);
+    }
+
     public static void ApplyStructures(Player player, List<StructureSaveData> structuresData)
     {
-        Debug.Log($"SaveApplier.ApplyStructures() start: savedStructureCount={structuresData?.Count ?? 0}");
+        Debug.Log($"ApplyStructures for player {player.playerName}, count={structuresData?.Count ?? 0}");
 
+        // 1. Identificar y preservar los mounds existentes (no se guardan ni destruyen)
+        List<GameObject> preservedMounds = new List<GameObject>();
         foreach (GameObject obj in player.structures)
         {
-            if (obj != null)
+            if (obj == null) continue;
+            Building building = obj.GetComponent<Building>();
+            if (building != null && building.data.buildingType == BuildingType.Mound)
+            {
+                preservedMounds.Add(obj);
+                Debug.Log($"Preserving mound for player {player.playerName} at {obj.transform.position}");
+            }
+            else
+            {
+                // Destruir estructuras que no son mounds
                 GameObject.Destroy(obj);
+            }
         }
 
+        // Limpiar la lista y volver a añadir solo los mounds conservados
         player.structures.Clear();
+        foreach (GameObject mound in preservedMounds)
+        {
+            player.structures.Add(mound);
+        }
 
-        int createdCount = 0;
-
+        // 2. Reconstruir el resto de estructuras desde el save (excluyendo posibles mounds que pudieran venir en el save)
         foreach (StructureSaveData data in structuresData)
         {
-            Debug.Log($"Creating structure from save: type={data.type}, position={data.position}, rotation={data.rotation}, level={data.level}, state={data.state}");
+            // Saltar por si acaso el save contiene algún mound (por compatibilidad)
+            if (data.type == "Mound" || data.type == "MoundData")
+                continue;
 
             Building building = GameFactory.Instance.CreateBuilding(data.type, data.position, data.rotation);
+            if (building == null) continue;
 
-            if (building == null)
-            {
-                Debug.LogError($"CreateBuilding returned null for type={data.type}");
-                continue;
-            }
-
-            // *** AÑADE ESTAS LÍNEAS ***
-            // Escala especial para Mound al cargar desde save
+            // Escala especial para Mound (aunque ya no debería llegar aquí)
             if (data.type == "Mound" || data.type == "MoundData")
-            {
                 building.transform.localScale = Vector3.one * 15f;
-                Debug.Log($"SaveApplier.ApplyStructures: Applied scale 15 to Mound at position {data.position}");
-            }
 
-            StructuresPlayer structuresPlayer = building.GetComponent<StructuresPlayer>();
-            if (structuresPlayer != null)
+            StructuresPlayer sp = building.GetComponent<StructuresPlayer>();
+            if (sp != null)
             {
-                structuresPlayer.currentLevel = data.level;
-                if (System.Enum.TryParse(data.state, out StructureState state))
-                {
-                    structuresPlayer.currentStructureState = state;
-                }
-                else
-                {
-                    structuresPlayer.currentStructureState = StructureState.Idle;
-                }
+                sp.currentLevel = data.level;
+                if (Enum.TryParse(data.state, out StructureState state))
+                    sp.currentStructureState = state;
             }
 
             player.structures.Add(building.gameObject);
-            createdCount++;
         }
-
-        Debug.Log($"SaveApplier.ApplyStructures() created structures: {createdCount}");
     }
+
 
     public static void ApplyInventory(Inventory inv, InventorySaveData data)
     {
@@ -98,34 +116,23 @@ public static class SaveApplier
 
     public static void ApplyAnts(Player player, List<AntSaveData> antsData)
     {
-        Debug.Log($"SaveApplier.ApplyAnts() start: savedAntCount={antsData?.Count ?? 0}");
+        Debug.Log($"ApplyAnts for player {player.playerName}, count={antsData?.Count ?? 0}");
 
-        foreach (var ant in player.ants)
-        {
-            if (ant != null)
-                GameObject.Destroy(ant.gameObject);
-        }
-
+        foreach (Ant ant in player.ants)
+            if (ant != null) UnityEngine.Object.Destroy(ant.gameObject);
         player.ants.Clear();
 
-        int createdCount = 0;
-
-        foreach (var antData in antsData)
+        foreach (AntSaveData antData in antsData)
         {
-            Debug.Log($"Creating ant from save: type={antData.type}, position={antData.position}, hp={antData.hp}, owner={antData.owner}");
-
             Ant ant = GameFactory.Instance.CreateAnt(antData.type, antData.position);
+            if (ant == null) continue;
 
-            if (ant == null)
+            // Añadir FogRevealer si no es obrera
+            if (antData.type != ANT_TYPES.WORKER)
             {
-                Debug.LogError($"CreateAnt returned null for type={antData.type}");
-                continue;
+                FogRevealer fr = ant.gameObject.AddComponent<FogRevealer>();
+                fr.visionRadius = antData.vision;
             }
-
-            // *** AÑADE EL FOG REVEALER AQUÍ ***
-            FogRevealer fogRevealer = ant.gameObject.AddComponent<FogRevealer>();
-            fogRevealer.visionRadius = ant.vision;
-            Debug.Log($"Added FogRevealer to ant type={antData.type} with vision radius={ant.vision}");
 
             ant.SetHP(antData.hp);
             ant.antOwner = antData.owner;
@@ -138,25 +145,16 @@ public static class SaveApplier
             ant.SetBreedingCost(antData.breedingCost);
             ant.SetAcidBased(antData.acidBased);
 
-            // Actualizar el radio de visión del FogRevealer si la visión cambió después de SetVision
-            if (fogRevealer != null)
+            if (ant is AntExlporer explorer)
             {
-                fogRevealer.visionRadius = ant.vision;
-            }
-
-            AntExlporer explorerAnt = ant as AntExlporer;
-            if (explorerAnt != null)
-            {
-                explorerAnt.SetFood(antData.food);
-                explorerAnt.SetMC(antData.MC);
+                explorer.SetFood(antData.food);
+                explorer.SetMC(antData.MC);
             }
 
             player.ants.Add(ant);
-            createdCount++;
         }
-
-        Debug.Log($"SaveApplier.ApplyAnts() created ants: {createdCount}");
     }
+
     public static void ApplyStats(StatsSaveData data)
     {
         if (StatManager.Instance == null)
