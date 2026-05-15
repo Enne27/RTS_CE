@@ -66,8 +66,11 @@ public class BroodChamberView : View
             if (AntCreation.Instance != null)
             {
                 antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-                workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
             }
+            /*
+            workersSpawnPoint = FindFirstObjectByType<BroodChamberFunction>().transform;
+            workersSpawnPoint.position = new Vector3(workersSpawnPoint.position.x, workersSpawnPoint.position.y, 44);
+            */
         }
 
     }
@@ -83,9 +86,17 @@ public class BroodChamberView : View
     public void InitializeView()
     {
         if (AntCreation.Instance != null)
-        {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+
+        if (workersSpawnPoint == null)
+            workersSpawnPoint = Instantiate(new GameObject()).transform;
+
+        BroodChamberFunction broodChamberTransform = FindFirstObjectByType<BroodChamberFunction>();
+
+        if (broodChamberTransform != null)
+        {
+            Vector3 broodChamberPosition = broodChamberTransform.transform.position;
+            workersSpawnPoint.position = new Vector3(broodChamberPosition.x, broodChamberPosition.y, 44);
         }
 
         if (soldierButton != null)

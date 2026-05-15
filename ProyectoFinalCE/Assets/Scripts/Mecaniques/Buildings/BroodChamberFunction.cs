@@ -103,17 +103,29 @@ public class BroodChamberFunction : StructuresPlayer
 
         // Obtener costes ANTES de reservar slot
         AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+        int foodCosts = 0;
+        int hvCosts = 0;
 
-        Ant antScript = AntCreation.Instance.antToInstantiate.GetComponent<Ant>();
+        if (antType != ANT_TYPES.WORKER)
+        {
+            Ant antScript = AntCreation.Instance.antToInstantiate.GetComponent<Ant>();
 
-        int foodCosts = antScript.GetBreedingCost()[0];
-        int hvCosts = antScript.GetBreedingCost()[1];
+            foodCosts = antScript.GetBreedingCost()[0];
+            hvCosts = antScript.GetBreedingCost()[1];   
+        }
+        else
+        {
+            AntWorkerBehaviour antWorker = AntCreation.Instance.antToInstantiate.GetComponentInChildren<AntWorkerBehaviour>();
+            foodCosts = antWorker.foodCost;
+            hvCosts =  antWorker.hvCost;
+        }
 
         if (!AntCreation.Instance.CanSpawnAnt(foodCosts, hvCosts))
         {
             Debug.Log("Insuficient hv or food");
             return;
         }
+
 
         currentBreedingQuantity++;
 
@@ -141,6 +153,7 @@ public class BroodChamberFunction : StructuresPlayer
         {
             AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
             currentBreedingQuantity--;
+
         });
 
         VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType)/*gameObject.transform.position*/, time);

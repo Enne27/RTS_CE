@@ -2,13 +2,18 @@ using StateMachine.Runtime;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AntWorkerBehaviour : MonoBehaviour
 {
+    [Header("Costs")]
+    public int hvCost = 5;
+    public int foodCost = 5;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 0.75f;
     [SerializeField] private float reachDistance = 0.05f;
-    [SerializeField] private float fastMoveSpeed = 2f;
+    [SerializeField] private float fastMoveSpeed = 1.5f;
     private float oldMoveSpeed;
 
     [Header("Rotation")]
@@ -36,13 +41,51 @@ public class AntWorkerBehaviour : MonoBehaviour
     private int currentPathIndex = 0;
 
     private bool hasStartedConstruction;
+
+
     private TunnelFunction targetBuildingTunnel;
+
+    [Header("Transport")]
+    [SerializeField] public ForagingChamberFunction foragingChamber;
+    [SerializeField] public StorageChamberFunction storageChamber;
+    [SerializeField] public Image resourceTransportingImage; 
+
+    public bool isTransporting; 
+
+    [SerializeField] private int carryAmount = 2;
+
+    public bool carryingResources;
+
+    private int carriedAmount;
+
+    private ResourceType carriedType;
+
+    [Header("Ant Avoidance")]
+    [SerializeField] private float avoidanceRadius = 0.25f;
+    [SerializeField] private float avoidanceStrength = 1.5f;
+    [SerializeField] private LayerMask antLayer;
+
+    [Header("Sprites")]
+    [SerializeField] private Sprite foodIcon;
+    [SerializeField] private Sprite MCIcon;
+
+    private enum TransportPhase
+    {
+        None,
+        GoingToForaging,
+        GoingToStorage,
+        Delivering
+    }
+
+    private TransportPhase transportPhase;
 
     private void Start()
     {
         stateMachineManager = GetComponent<StateMachineComponent>();
         animationController = GetComponent<Animator>();
+        foragingChamber = FindFirstObjectByType<ForagingChamberFunction>();
         oldMoveSpeed = moveSpeed;
+        resourceTransportingImage.enabled = false;
     }
 
     private void Update()
@@ -51,9 +94,18 @@ public class AntWorkerBehaviour : MonoBehaviour
         animationController.SetBool("IsMoving", isMoving);
 
         if (stateMachineManager.GetCurrentStateName() == "Wander")
+        {
+            moveSpeed = oldMoveSpeed;
             Wander();
+        }
         else if (stateMachineManager.GetCurrentStateName() == "Working")
-            Work();
+        {
+            moveSpeed = fastMoveSpeed;
+            if (isTransporting)
+                Transport();
+            else
+                Work();
+        }
     }
 
     // =========================
@@ -155,6 +207,27 @@ public class AntWorkerBehaviour : MonoBehaviour
             });
     }
 
+    private TunnelFunction GetAccessibleTunnelFromBuilding(Building building)
+    {
+        TunnelFunction[] buildingTunnels =
+            building.GetComponentsInChildren<TunnelFunction>();
+
+        foreach (TunnelFunction tunnel in buildingTunnels)
+        {
+            if (tunnel == null)
+                continue;
+
+            if (tunnel.constructionAccessTunnel != null)
+            {
+                targetBuildingTunnel = tunnel;
+
+                return tunnel.constructionAccessTunnel;
+            }
+        }
+
+        return null;
+    }
+
     private TunnelFunction GetBestConstructionTunnel()
     {
         TunnelFunction[] buildingTunnels =
@@ -205,10 +278,225 @@ public class AntWorkerBehaviour : MonoBehaviour
 
     public void CallToBuild(Building buildToWork)
     {
+        isTransporting = false;
+        carryingResources = false;
+        transportPhase = TransportPhase.None;
+
+        targetTunnel = null;
+        currentPath.Clear();
+
         currentBuilding = buildToWork;
+
         buildToWork.GetComponentInChildren<StructuresPlayer>().workerWhoBuildThis = this;
+
         stateMachineManager.GetStateContext().workFinished = false;
         stateMachineManager.GetStateContext().hasWork = true;
+    }
+
+    public void CallToTransport()
+    {
+        stateMachineManager.GetStateContext().workFinished = false;
+        stateMachineManager.GetStateContext().hasWork = true;
+
+        isTransporting = true;
+
+        transportPhase = TransportPhase.GoingToForaging;
+    }
+
+    private void Transport()
+    {
+        if (currentTunnel == null)
+        {
+            currentTunnel = FindCurrentTunnel();
+            return;
+        }
+
+        TunnelFunction destination = null;
+
+        switch (transportPhase)
+        {
+            case TransportPhase.GoingToForaging:
+
+                destination = GetAccessibleTunnelFromBuilding(foragingChamber.GetComponentInParent<Building>());
+
+                break;
+
+            case TransportPhase.GoingToStorage:
+                destination = GetAccessibleTunnelFromBuilding(storageChamber.GetComponentInParent<Building>());
+
+                break;
+        }
+
+        // YA LLEGAMOS
+        if (currentTunnel == destination)
+        {
+            targetTunnel = null;
+
+            switch (transportPhase)
+            {
+                case TransportPhase.GoingToForaging:
+
+                    PickResources();
+
+                    if (!carryingResources)
+                    {
+                        FinishTransport();
+                        return;
+                    }
+
+                    transportPhase =
+                        TransportPhase.GoingToStorage;
+
+                    break;
+
+                case TransportPhase.GoingToStorage:
+
+                    DeliverResources();
+
+                    FinishTransport();
+
+                    break;
+            }
+
+            return;
+        }
+
+        // SOLO recalcular si NO hemos llegado
+        RecalculatePath(destination);
+
+        if (targetTunnel != null)
+        {
+            MoveToTunnel();
+        }
+    }
+
+    private void FinishTransport()
+    {
+        isTransporting = false;
+
+        transportPhase = TransportPhase.None;
+
+        carryingResources = false;
+
+        targetTunnel = null;
+
+        currentPath.Clear();
+
+        HasFinishedWork();
+    }
+
+    private void PickResources()
+    {
+        carriedAmount = 0;
+        carryingResources = false;
+
+        List<ResourceType> availableResources = new();
+
+        // Ver qué recursos existen
+        if (foragingChamber.foods > 0)
+            availableResources.Add(ResourceType.food);
+
+        if (foragingChamber.materials > 0)
+            availableResources.Add(ResourceType.material);
+
+        // No hay nada disponible
+        if (availableResources.Count == 0)
+            return;
+
+        // Elegir recurso aleatorio
+        ResourceType selectedType =
+            availableResources[
+                Random.Range(0, availableResources.Count)];
+
+        int availableAmount = 0;
+        int freeSpace = 0;
+
+        switch (selectedType)
+        {
+            case ResourceType.food:
+
+                availableAmount = foragingChamber.foods;
+
+                freeSpace =
+                    storageChamber.FreeFoodSpace();
+
+                break;
+
+            case ResourceType.material:
+
+                availableAmount = foragingChamber.materials;
+
+                freeSpace =
+                    storageChamber.FreeMaterialSpace();
+
+                break;
+        }
+
+        // Cantidad REAL que puede llevar
+        int amountToCarry =
+            Mathf.Min(
+                carryAmount,
+                availableAmount,
+                freeSpace);
+
+        // El storage ya está lleno
+        if (amountToCarry <= 0)
+            return;
+
+        bool removed =
+            foragingChamber.RemoveResource(
+                selectedType,
+                amountToCarry);
+
+        if (!removed)
+            return;
+
+        carriedType = selectedType;
+        carriedAmount = amountToCarry;
+        carryingResources = true;
+
+        resourceTransportingImage.enabled = true;
+
+        switch (carriedType)
+        {
+            case ResourceType.food:
+
+                resourceTransportingImage.sprite = foodIcon;
+
+                break;
+
+            case ResourceType.material:
+
+                resourceTransportingImage.sprite = MCIcon;
+
+                break;
+        }
+    }
+
+    private void DeliverResources()
+    {
+        if (!carryingResources || carriedAmount <= 0)
+            return;
+
+        switch (carriedType)
+        {
+            case ResourceType.food:
+
+                storageChamber.FoodAcquired(carriedAmount);
+
+                break;
+
+            case ResourceType.material:
+
+                storageChamber.MC_Acquired(carriedAmount);
+
+                break;
+        }
+
+        carryingResources = false;
+        carriedAmount = 0;
+
+        resourceTransportingImage.enabled = false;
     }
 
     public void HasFinishedWork()
@@ -254,6 +542,21 @@ public class AntWorkerBehaviour : MonoBehaviour
         if (currentPathIndex < currentPath.Count)
         {
             targetTunnel = currentPath[currentPathIndex];
+        }
+    }
+
+    public void InterruptTransportAndBuild(Building build)
+    {
+        // Si está transportando y aún NO ha recogido recursos, puede cambiar de tarea
+        if (isTransporting && !carryingResources)
+        {
+            isTransporting = false;
+            transportPhase = TransportPhase.None;
+
+            targetTunnel = null;
+            currentPath.Clear();
+
+            CallToBuild(build);
         }
     }
 
@@ -372,11 +675,19 @@ public class AntWorkerBehaviour : MonoBehaviour
 
         targetPos.z = currentPos.z;
 
-        transform.position = Vector3.MoveTowards(
-            currentPos,
-            targetPos,
-            moveSpeed * Time.deltaTime
-        );
+        Vector2 moveDir =
+    (targetPos - currentPos).normalized;
+
+        // avoidance
+        Vector2 avoidance =
+            CalculateAvoidance() * avoidanceStrength;
+
+        // combinar dirección principal + avoidance
+        Vector2 finalDir =
+            (moveDir + avoidance).normalized;
+
+        transform.position +=
+            (Vector3)(finalDir * moveSpeed * Time.deltaTime);
 
         Vector2 dir = (targetPos - currentPos).normalized;
 
@@ -407,6 +718,42 @@ public class AntWorkerBehaviour : MonoBehaviour
             currentTunnel = targetTunnel;
             targetTunnel = null;
         }
+    }
+
+    private Vector2 CalculateAvoidance()
+    {
+        Collider[] hits = Physics.OverlapSphere(
+            transform.position,
+            avoidanceRadius,
+            antLayer
+        );
+
+        Vector2 avoidance = Vector2.zero;
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+
+            AntWorkerBehaviour other =
+                hit.GetComponent<AntWorkerBehaviour>();
+
+            if (other == null)
+                continue;
+
+            Vector2 dir =
+                (Vector2)(transform.position - other.transform.position);
+
+            float dist = dir.magnitude;
+
+            if (dist <= 0.001f)
+                continue;
+
+            // cuanto más cerca, más empuja
+            avoidance += dir.normalized / dist;
+        }
+
+        return avoidance.normalized;
     }
 
     // =========================

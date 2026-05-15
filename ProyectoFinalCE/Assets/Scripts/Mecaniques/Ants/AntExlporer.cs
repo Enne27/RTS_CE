@@ -32,7 +32,7 @@ public class AntExlporer : Ant
         speed = 16f;
         strength = 1f;
         reach = 1;
-        vision = 4;
+        vision = 15;
         linePriority = 8;
         acidBased = false;
         base.Awake();

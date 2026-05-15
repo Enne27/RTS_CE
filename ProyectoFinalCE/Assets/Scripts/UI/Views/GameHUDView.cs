@@ -57,9 +57,9 @@ public class GameHUDView : View
         }
         else
         {
-            foodText.text = GameManager.instance.player.inventory.food.ToString();
+            foodText.text = GameManager.instance.player.inventory.food.ToString() + "/" + GameManager.instance.player.inventory.foodCapacity;
             eggsText.text = GameManager.instance.player.inventory.eggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
-            mcText.text = GameManager.instance.player.inventory.materials.ToString();
+            mcText.text = GameManager.instance.player.inventory.materials.ToString() + "/" + GameManager.instance.player.inventory.materialsCapacity; 
             antWorkersText.text = GameManager.instance.player.inventory.workerAnts.ToString();
 
             totalAntsText.text = GameManager.instance.player.ants.Count.ToString();

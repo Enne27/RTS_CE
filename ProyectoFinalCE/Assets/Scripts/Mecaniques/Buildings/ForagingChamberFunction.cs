@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -28,6 +29,9 @@ public class ForagingChamberFunction : StructuresPlayer
     [SerializeField] Slider capacitySlider; 
     [SerializeField] TextMeshProUGUI capacityText;
     [SerializeField] TextMeshProUGUI fullAlertText;
+    [SerializeField] TextMeshProUGUI foodCountText;
+    [SerializeField] TextMeshProUGUI materialsCountText;
+
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -44,6 +48,10 @@ public class ForagingChamberFunction : StructuresPlayer
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     int[] maxLevelByEra_ = { 1, 2, 4, 5 };
 
+    [Header("VisualResources")]
+    [SerializeField] RandomChildrenActivator foodVisual;
+    [SerializeField] RandomChildrenActivator MCVisual;
+
     private void Awake()
     {
         Instance = this;
@@ -52,6 +60,41 @@ public class ForagingChamberFunction : StructuresPlayer
     {
         slots = slotsUpgrade_[currentLevel - 1];
         UpdateUI();
+    }
+
+    private void Update()
+    {
+        if (slotsOccupied <= 0)
+            return;
+
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            if (worker == null)
+                continue;
+
+            if (worker.storageChamber == null)
+                continue;
+
+            if (worker.stateMachineManager.GetCurrentStateName() != "Wander")
+                continue;
+
+            StorageChamberFunction storage =
+                worker.storageChamber;
+
+            bool canTransportFood =
+                foods > 0 &&
+                storage.FreeFoodSpace() > 0;
+
+            bool canTransportMaterials =
+                materials > 0 &&
+                storage.FreeMaterialSpace() > 0;
+
+            // No hay espacio para nada
+            if (!canTransportFood && !canTransportMaterials)
+                continue;
+
+            worker.CallToTransport();
+        }
     }
 
     public bool AddResource(ResourceType resource, int quantity)
@@ -124,11 +167,6 @@ public class ForagingChamberFunction : StructuresPlayer
         return true;
     }
 
-    public void MoveResourceToStorageBuild(ResourceType resource)
-    {
-
-    }
-
     public override int[] costsUpgradeHV => costsUpgradeHV_;
 
     public override int[] costsUpgradeMC => costsUpgradeMC_;
@@ -147,10 +185,30 @@ public class ForagingChamberFunction : StructuresPlayer
         capacitySlider.value = ((float)slotsOccupied / slots) * 100;
         capacityText.text = $"{slotsOccupied}\n-\n{slots}";
 
-        if(slotsOccupied == slots)
-            fullAlertText.enabled = true;
-        else
-            fullAlertText.enabled = false;
+        foodCountText.text = $"{foods}";
+        materialsCountText.text = $"{materials}";
 
+        bool isFull = slotsOccupied >= slots;
+        fullAlertText.enabled = isFull;
+
+        float foodPercent;
+        float materialPercent;
+
+        if (isFull)
+        {
+            foodPercent = 100f;
+            materialPercent = 100f;
+        }
+        else
+        {
+            foodPercent = (slots == 0) ? 0 : ((float)foods / slots) * 100f;
+            materialPercent = (slots == 0) ? 0 : ((float)materials / slots) * 100f;
+        }
+
+        if (foodVisual != null)
+            foodVisual.SetPercentage(foodPercent);
+
+        if (MCVisual != null)
+            MCVisual.SetPercentage(materialPercent);
     }
 }
