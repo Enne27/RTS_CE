@@ -8,11 +8,16 @@ public class EndGameView : View
     #region VARIABLES
     [SerializeField] TextMeshProUGUI victoryTMP;
     [SerializeField] TextMeshProUGUI defeatTMP;
+    [SerializeField] Image imageVictoryDefeat;
 
     [Header("Buttons")]
     [SerializeField] Button restartButton;
     [SerializeField] Button exitButton;
     [SerializeField] Button creditsButton;
+
+    [Header("Sprites")]
+    [SerializeField] Sprite victorySprite;
+    [SerializeField] Sprite defeatSprite;
     #endregion
 
 
@@ -29,11 +34,14 @@ public class EndGameView : View
         {
             victoryTMP.gameObject.SetActive(true);
             defeatTMP.gameObject.SetActive(false);
+            imageVictoryDefeat.sprite = victorySprite;
         }
         else
         {
             victoryTMP.gameObject.SetActive(false);
             defeatTMP.gameObject.SetActive(true);
+            imageVictoryDefeat.sprite = defeatSprite;
+
         }
     }
 

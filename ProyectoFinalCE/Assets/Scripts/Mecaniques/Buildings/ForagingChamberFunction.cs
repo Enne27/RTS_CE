@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -28,6 +29,9 @@ public class ForagingChamberFunction : StructuresPlayer
     [SerializeField] Slider capacitySlider; 
     [SerializeField] TextMeshProUGUI capacityText;
     [SerializeField] TextMeshProUGUI fullAlertText;
+    [SerializeField] TextMeshProUGUI foodCountText;
+    [SerializeField] TextMeshProUGUI materialsCountText;
+
 
     [Header("Characteristics by level")]
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
@@ -43,6 +47,10 @@ public class ForagingChamberFunction : StructuresPlayer
 
     [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
     int[] maxLevelByEra_ = { 1, 2, 4, 5 };
+
+    [Header("VisualResources")]
+    [SerializeField] RandomChildrenActivator foodVisual;
+    [SerializeField] RandomChildrenActivator MCVisual;
 
     private void Awake()
     {
@@ -177,9 +185,30 @@ public class ForagingChamberFunction : StructuresPlayer
         capacitySlider.value = ((float)slotsOccupied / slots) * 100;
         capacityText.text = $"{slotsOccupied}\n-\n{slots}";
 
-        if(slotsOccupied == slots)
-            fullAlertText.enabled = true;
+        foodCountText.text = $"{foods}";
+        materialsCountText.text = $"{materials}";
+
+        bool isFull = slotsOccupied >= slots;
+        fullAlertText.enabled = isFull;
+
+        float foodPercent;
+        float materialPercent;
+
+        if (isFull)
+        {
+            foodPercent = 100f;
+            materialPercent = 100f;
+        }
         else
-            fullAlertText.enabled = false;
+        {
+            foodPercent = (slots == 0) ? 0 : ((float)foods / slots) * 100f;
+            materialPercent = (slots == 0) ? 0 : ((float)materials / slots) * 100f;
+        }
+
+        if (foodVisual != null)
+            foodVisual.SetPercentage(foodPercent);
+
+        if (MCVisual != null)
+            MCVisual.SetPercentage(materialPercent);
     }
 }
