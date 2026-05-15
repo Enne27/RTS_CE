@@ -16,6 +16,7 @@ public enum RequirementID
     EXPLORER_ANT,
     KAMIKAZE_ANT,
     SOLDIER_ANT,
+    CRAZY_ANT,
     WORKER_ANT,
 
     // Buildings

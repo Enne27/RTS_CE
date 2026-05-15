@@ -119,13 +119,13 @@ public class Building : MonoBehaviour
                 cameraMovement.ZoomOnBuilding(transform);
                 break;
             case BuildingType.Entrance:
-                CameraController.instance.ChangeCameraMode(CameraState.Outside);
-                hud.constructionButton.gameObject.SetActive(false);
+                CameraController.instance.ChangeCameraMode(CameraState.Outside, () => hud.SetConstructionButtonActive(false));
+                //hud.constructionButton.gameObject.SetActive(false);
                 BuildingManager.Instance.CancelPreview();
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
-                CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.constructionButton.gameObject.SetActive(true));
+                CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.SetConstructionButtonActive(true));
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:

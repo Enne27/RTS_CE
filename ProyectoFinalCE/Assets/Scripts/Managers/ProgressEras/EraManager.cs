@@ -1,3 +1,4 @@
+using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -18,6 +19,10 @@ public class EraManager : MonoBehaviour
 
     [Header("UI")]
     private GeneralInfoView generalInfoView;
+
+    [Header("Sound")]
+    [SerializeField] private EventReference advanceEraSoundEventReference;
+    private StudioEventEmitter advanceEraSound;
 
     [Header("Localization")]
     [SerializeField] LocalizedString brote_ls;
@@ -72,6 +77,9 @@ public class EraManager : MonoBehaviour
 
         if (generalInfoView == null)
             generalInfoView = FindFirstObjectByType<GeneralInfoView>();
+
+        if(advanceEraSound == null)
+            advanceEraSound = new StudioEventEmitter();
     }
 
 
@@ -104,21 +112,25 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.BROTE, new List<EraRequirement>()
                 {
-                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.ANT, 3, RequirementType.COUNT),
+                    /*new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT
+                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),),*/
+                    new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             { 
                 HIVE_ERAS.NIDO, new List<EraRequirement>()
                 {
-                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
-                    new EraRequirement(RequirementID.ANT, 5, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
-                    new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
-                    new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.EXPLORER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BERSERKER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    //new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    //new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
                 }
             },
             {
@@ -194,6 +206,9 @@ public class EraManager : MonoBehaviour
             }
 
             RefreshUI();
+
+            advanceEraSound.EventReference = advanceEraSoundEventReference;
+            SFXManager.PlaySFX(advanceEraSound);
         }
         else GameManager.instance.playerIA.currentEra += 1;
     }

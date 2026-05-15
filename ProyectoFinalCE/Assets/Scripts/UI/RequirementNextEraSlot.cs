@@ -27,6 +27,7 @@ public class RequirementNextEraSlot : MonoBehaviour
     [SerializeField] Sprite berserkerAnt;
     [SerializeField] Sprite explorerAnt;
     [SerializeField] Sprite kamikazeAnt;
+    [SerializeField] Sprite crazyAnt;
     [SerializeField] Sprite soldierAnt;
     [SerializeField] Sprite workerAnt;
 
@@ -42,6 +43,7 @@ public class RequirementNextEraSlot : MonoBehaviour
     [SerializeField] LocalizedString berserkerAnt_ls;
     [SerializeField] LocalizedString explorerAnt_ls;
     [SerializeField] LocalizedString kamikazeAnt_ls;
+    [SerializeField] LocalizedString crazyAnt_ls;
     [SerializeField] LocalizedString soldierAnt_ls;
     [SerializeField] LocalizedString workerAnt_ls;
 
@@ -86,6 +88,7 @@ public class RequirementNextEraSlot : MonoBehaviour
             { RequirementID.BERSERKER_ANT, berserkerAnt_ls },
             { RequirementID.EXPLORER_ANT, explorerAnt_ls },
             { RequirementID.KAMIKAZE_ANT, kamikazeAnt_ls },
+            { RequirementID.CRAZY_ANT, crazyAnt_ls },
             { RequirementID.SOLDIER_ANT, soldierAnt_ls },
             { RequirementID.WORKER_ANT, workerAnt_ls },
 

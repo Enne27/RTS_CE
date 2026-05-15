@@ -17,6 +17,8 @@ public class GeneralInfoView : View
     [Header("Era info")]
     [SerializeField] TextMeshProUGUI currentEraText;
     [SerializeField] Image currentEraImage;
+
+    [SerializeField] Image currentEraGameHUDButton;
     
     [Header("Requirements")]
     [SerializeField] RequirementNextEraSlot slotPrefab;
@@ -82,6 +84,7 @@ public class GeneralInfoView : View
     public void UpdateCurrentEraVisuals(HIVE_ERAS currentEra, LocalizedString newEraName)
     {
         currentEraImage.sprite = EraManager.instance.eraSprites[currentEra];
+        currentEraGameHUDButton.sprite = currentEraImage.sprite;
 
         currentEraText.gameObject.GetComponent<LocalizeStringEvent>().StringReference = newEraName;
 

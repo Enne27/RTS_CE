@@ -91,6 +91,7 @@ public class GameHUDView : View
                   ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
               }
           });
+
         }
 
         if (fakeAntsDropwdownButton != null)
@@ -110,6 +111,17 @@ public class GameHUDView : View
         {
             fakeAntsDropdown.gameObject.SetActive(true);
             isActive = true;
+        }
+    }
+
+    public void SetConstructionButtonActive(bool value)
+    {
+        constructionButton.gameObject.SetActive(value);
+
+        if (!value)
+        {
+            ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
+            constructionMenuActived = false;
         }
     }
 
