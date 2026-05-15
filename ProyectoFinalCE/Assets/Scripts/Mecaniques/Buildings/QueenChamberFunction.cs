@@ -50,15 +50,23 @@ public class QueenChamberFunction : StructuresPlayer
     private void Awake()
     {
         hudView = FindFirstObjectByType<GameHUDView>();
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(() => {
+            //RefreshUpgradeUI();
+            UpgradeStructure();
+        });
     }
 
 
     public override void OnConstructionFinished()
     {
+        base.OnConstructionFinished();
+
         //Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
-        currentStructureState = StructureState.Idle;
+        //currentStructureState = StructureState.Idle;
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
     }
@@ -66,7 +74,6 @@ public class QueenChamberFunction : StructuresPlayer
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
-        
     }
 
     #endregion

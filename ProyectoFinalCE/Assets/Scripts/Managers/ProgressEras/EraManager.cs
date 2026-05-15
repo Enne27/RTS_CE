@@ -123,14 +123,14 @@ public class EraManager : MonoBehaviour
             { 
                 HIVE_ERAS.NIDO, new List<EraRequirement>()
                 {
-                    //new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
-                    new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
+                    /*new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.EXPLORER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.BERSERKER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),
-                    //new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
-                    //new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
-                    //new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),*/
                 }
             },
             {
@@ -193,17 +193,11 @@ public class EraManager : MonoBehaviour
             GameManager.instance.player.currentEra += 1;
             ChangesNewEra();
 
-            HIVE_ERAS newEra = GameManager.instance.player.currentEra;
+            //HIVE_ERAS newEra = GameManager.instance.player.currentEra;
 
-            RefreshUI();
+            //RefreshUI();
 
-            foreach (var construction in BuildingManager.Instance.constructionsBuilt)
-            {
-                StructuresPlayer consFunction = construction.gameObject.GetComponentInChildren<StructuresPlayer>();
-                consFunction.currentMaxLevel = consFunction.maxLevelByEra[(int)newEra];
-                // la cantidad se actualiza en el placeBuilding según la era actual.
-
-            }
+            RefreshUpgradeUI();
 
             RefreshUI();
 
@@ -238,6 +232,22 @@ public class EraManager : MonoBehaviour
         generalInfoView.UpdateRequirements(
             eraRequirements[era]
         );
+    }
+
+    public void RefreshUpgradeUI()
+    {
+        HIVE_ERAS newEra = GameManager.instance.player.currentEra;
+
+        foreach (var construction in BuildingManager.Instance.constructionsBuilt)
+        {
+            StructuresPlayer consFunction = construction.gameObject.GetComponentInChildren<StructuresPlayer>();
+            consFunction.currentMaxLevel = consFunction.maxLevelByEra[(int)newEra];
+            consFunction.currentTimeUpgrade = consFunction.timeUpgrade[(int)newEra];
+            consFunction.currentCostsUpgradeHV = consFunction.costsUpgradeHV[(int)newEra];
+            consFunction.currentCostsUpgradeMC = consFunction.costsUpgradeMC[(int)newEra];
+            // la cantidad se actualiza en el placeBuilding según la era actual.
+            consFunction.RefreshUpgradeUI();
+        }
     }
 
 }

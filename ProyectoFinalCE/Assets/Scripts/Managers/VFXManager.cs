@@ -161,13 +161,26 @@ public class VFXManager : MonoBehaviour
 
     public void PlayConstructionParticles(Vector3 position, float duration)
     {
-        WorldUIManager.Instance.ShowTimer(position, duration);
+        if (WorldUIManager.Instance != null)
+            WorldUIManager.Instance.ShowTimer(position, duration);
+        else
+            Debug.LogWarning("WorldUIManager INSTANCE IS NULL");
 
         ParticleSystem ps = GetParticle(constructingParticles);
         ps.transform.position = position;
 
         var poolItem = GetPoolItem(ps, constructingParticles);
-        if (poolItem == null) return;
+        if (poolItem == null) 
+        {
+            poolItem = new PooledVFX
+            {
+                ps = ps,
+                inUse = true,
+                constructionLocked = true
+            };
+
+            poolsVFX[constructingParticles].Add(poolItem);
+        }
 
         poolItem.inUse = true;
         poolItem.constructionLocked = true;

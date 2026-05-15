@@ -47,6 +47,7 @@ public class StorageChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
+        base.OnConstructionFinished();
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
         UpdateCapacityLimits();        

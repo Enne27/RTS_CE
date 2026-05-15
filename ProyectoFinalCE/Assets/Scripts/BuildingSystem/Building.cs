@@ -44,8 +44,6 @@ public class Building : MonoBehaviour
         backgroundImage = GetComponentInChildren<Image>();
         if (backgroundImage != null)
             backgroundImage.enabled=false;
-
-
     }
 
     private void Update()
