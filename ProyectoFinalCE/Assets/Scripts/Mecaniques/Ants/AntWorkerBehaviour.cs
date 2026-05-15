@@ -2,13 +2,18 @@ using StateMachine.Runtime;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AntWorkerBehaviour : MonoBehaviour
 {
+    [Header("Costs")]
+    public int hvCost = 5;
+    public int foodCost = 5;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 0.75f;
     [SerializeField] private float reachDistance = 0.05f;
-    [SerializeField] private float fastMoveSpeed = 2f;
+    [SerializeField] private float fastMoveSpeed = 1.5f;
     private float oldMoveSpeed;
 
     [Header("Rotation")]
@@ -43,6 +48,7 @@ public class AntWorkerBehaviour : MonoBehaviour
     [Header("Transport")]
     [SerializeField] public ForagingChamberFunction foragingChamber;
     [SerializeField] public StorageChamberFunction storageChamber;
+    [SerializeField] public Image resourceTransportingImage; 
 
     public bool isTransporting; 
 
@@ -58,6 +64,10 @@ public class AntWorkerBehaviour : MonoBehaviour
     [SerializeField] private float avoidanceRadius = 0.25f;
     [SerializeField] private float avoidanceStrength = 1.5f;
     [SerializeField] private LayerMask antLayer;
+
+    [Header("Sprites")]
+    [SerializeField] private Sprite foodIcon;
+    [SerializeField] private Sprite MCIcon;
 
     private enum TransportPhase
     {
@@ -75,6 +85,7 @@ public class AntWorkerBehaviour : MonoBehaviour
         animationController = GetComponent<Animator>();
         foragingChamber = FindFirstObjectByType<ForagingChamberFunction>();
         oldMoveSpeed = moveSpeed;
+        resourceTransportingImage.enabled = false;
     }
 
     private void Update()
@@ -83,9 +94,13 @@ public class AntWorkerBehaviour : MonoBehaviour
         animationController.SetBool("IsMoving", isMoving);
 
         if (stateMachineManager.GetCurrentStateName() == "Wander")
+        {
+            moveSpeed = oldMoveSpeed;
             Wander();
+        }
         else if (stateMachineManager.GetCurrentStateName() == "Working")
         {
+            moveSpeed = fastMoveSpeed;
             if (isTransporting)
                 Transport();
             else
@@ -439,6 +454,23 @@ public class AntWorkerBehaviour : MonoBehaviour
         carriedType = selectedType;
         carriedAmount = amountToCarry;
         carryingResources = true;
+
+        resourceTransportingImage.enabled = true;
+
+        switch (carriedType)
+        {
+            case ResourceType.food:
+
+                resourceTransportingImage.sprite = foodIcon;
+
+                break;
+
+            case ResourceType.material:
+
+                resourceTransportingImage.sprite = MCIcon;
+
+                break;
+        }
     }
 
     private void DeliverResources()
@@ -463,6 +495,8 @@ public class AntWorkerBehaviour : MonoBehaviour
 
         carryingResources = false;
         carriedAmount = 0;
+
+        resourceTransportingImage.enabled = false;
     }
 
     public void HasFinishedWork()
