@@ -28,6 +28,7 @@ public class TutorialControl : MonoBehaviour
     public bool tutorialShowed = false;
 
     private BuildingType? requiredBuildingType = null;
+    private bool antCreated = false;
     #endregion
 
     void Awake()
@@ -41,6 +42,7 @@ public class TutorialControl : MonoBehaviour
 
             //Avisamos al tutorial
             BuildingManager.Instance.OnBuildingPlaced += CheckBuildingTask;
+            
         }
     }
 
@@ -61,13 +63,21 @@ public class TutorialControl : MonoBehaviour
     {
         switch (lineNum)
         {
-            case 3: // Supongamos que en esta línea el texto dice: "Construye una cámara real"
+            case 3: // "Construye una cámara real"
                 requiredBuildingType = BuildingType.QueenChamber;
                 DialogueManager.instance.taskPending = true;
                 break;
 
-            case 6: // "Ahora necesitamos un almacén"
+            case 6: // "Ahora necesitamos una cámara de cría"
                 requiredBuildingType = BuildingType.BroodChamber;
+                DialogueManager.instance.taskPending = true;
+                break;
+
+            case 7: // "Ahora crea una hormiga"
+                while (GameManager.instance.player.ants.Count <= 4)
+                {
+                    DialogueManager.instance.taskPending = false;
+                }
                 DialogueManager.instance.taskPending = true;
                 break;
         }
