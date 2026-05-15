@@ -63,6 +63,12 @@ public class QueenChamberFunction : StructuresPlayer
         workerWhoBuildThis = null;
     }
 
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        
+    }
+
     #endregion
 
     private void OnDisable()
@@ -90,9 +96,4 @@ public class QueenChamberFunction : StructuresPlayer
     }
 
 
-    public override void OnUpgradeFinished()
-    {
-        base.OnUpgradeFinished();
-        
-    }
 }

@@ -16,6 +16,8 @@ public abstract class StructuresPlayer : MonoBehaviour
     public abstract int[] timeUpgrade { get; }
     public abstract int[] maxLevelByEra { get; }
 
+   // public BuildingData buildingData;
+
     public int currentCostsUpgradeHV;
     public int currentCostsUpgradeMC;
     public int currentTimeUpgrade;
@@ -51,6 +53,8 @@ public abstract class StructuresPlayer : MonoBehaviour
         currentCostsUpgradeHV = costsUpgradeHV[currentLevel-1];
         currentCostsUpgradeMC = costsUpgradeMC[currentLevel-1];
         currentTimeUpgrade = timeUpgrade[currentLevel-1];
+
+
     }
     
 }

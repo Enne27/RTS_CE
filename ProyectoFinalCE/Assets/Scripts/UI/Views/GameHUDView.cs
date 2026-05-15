@@ -73,7 +73,7 @@ public class GameHUDView : View
         }
 
         if(currentEra != null)
-            currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
+            currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {
