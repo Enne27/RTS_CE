@@ -60,6 +60,10 @@ public class BroodChamberFunction : StructuresPlayer
 
         if (broodView == null)
             broodView = FindFirstObjectByType<BroodChamberView>();
+
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(UpgradeStructure);
     }
 
     private void OnEnable()
@@ -82,6 +86,11 @@ public class BroodChamberFunction : StructuresPlayer
         workerWhoBuildThis = null;
     }
 
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER, 1);
+    }
     #endregion
 
 

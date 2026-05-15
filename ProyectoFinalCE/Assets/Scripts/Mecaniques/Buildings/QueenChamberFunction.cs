@@ -74,6 +74,7 @@ public class QueenChamberFunction : StructuresPlayer
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER, 1);
     }
 
     #endregion

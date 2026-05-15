@@ -197,7 +197,7 @@ public class EraManager : MonoBehaviour
 
             //RefreshUI();
 
-            RefreshUpgradeUI();
+            UpgradeLimitsAndRefreshUpgradeButtonUI();
 
             RefreshUI();
 
@@ -234,7 +234,7 @@ public class EraManager : MonoBehaviour
         );
     }
 
-    public void RefreshUpgradeUI()
+    public void UpgradeLimitsAndRefreshUpgradeButtonUI()
     {
         HIVE_ERAS newEra = GameManager.instance.player.currentEra;
 

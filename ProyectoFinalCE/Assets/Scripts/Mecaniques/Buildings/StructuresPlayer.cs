@@ -52,10 +52,10 @@ public abstract class StructuresPlayer : MonoBehaviour
            return;
 
         currentStructureState = StructureState.OnUpdate;
-        Debug.Log(currentTimeUpgrade);
+        RefreshUpgradeUI();
+
         VFXManager.Instance.PlayConstructionParticles(gameObject.transform.position, currentTimeUpgrade);
 
-        Debug.Log(currentTimeUpgrade);
         TimeManager.Instance.OneShotTimer(currentTimeUpgrade, () =>
         {
             OnUpgradeFinished();

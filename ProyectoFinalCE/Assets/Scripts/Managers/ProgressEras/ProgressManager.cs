@@ -27,13 +27,13 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         AntExlporer.OnExplorationCompleted += AddExplorationProgress;
-        AntExlporer.OnExplorationCompleted += EraManager.instance.RefreshUpgradeUI;
+        AntExlporer.OnExplorationCompleted += EraManager.instance.UpgradeLimitsAndRefreshUpgradeButtonUI;
     }
 
     private void OnDisable()
     {
         AntExlporer.OnExplorationCompleted -= AddExplorationProgress;
-        AntExlporer.OnExplorationCompleted -= EraManager.instance.RefreshUpgradeUI;
+        AntExlporer.OnExplorationCompleted -= EraManager.instance.UpgradeLimitsAndRefreshUpgradeButtonUI;
     }
 
     private void AddExplorationProgress()

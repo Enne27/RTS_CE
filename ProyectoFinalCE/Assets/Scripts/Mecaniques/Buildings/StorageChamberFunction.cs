@@ -45,6 +45,21 @@ public class StorageChamberFunction : StructuresPlayer
     GameHUDView hudView;
     #endregion
 
+
+    private void Awake()
+    {
+        hudView = FindFirstObjectByType<GameHUDView>();
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(UpgradeStructure);
+    }
+
+    private void OnDisable()
+    {
+        TimeManager.Instance.Unregister(timeToProduceFood, ProduceFood);
+    }
+
+    #region BUILDING_METHODS
     public override void OnConstructionFinished()
     {
         base.OnConstructionFinished();
@@ -59,27 +74,14 @@ public class StorageChamberFunction : StructuresPlayer
             worker.storageChamber = this;
         }
     }
+
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
         UpdateCapacityLimits();
+        EraManager.instance.AddProgress(RequirementID.STORAGE_CHAMBER, 1);
     }
-
-    /* private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden. PRUEBASSS
-     {
-         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-         UpdateCapacityLimits();
-     }*/
-
-    private void Awake()
-    {
-        hudView = FindFirstObjectByType<GameHUDView>();
-    }
-
-    private void OnDisable()
-    {
-        TimeManager.Instance.Unregister(timeToProduceFood, ProduceFood);
-    }
+    #endregion
 
     private void ProduceFood()
     {
