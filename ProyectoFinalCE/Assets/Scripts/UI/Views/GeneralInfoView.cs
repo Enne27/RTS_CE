@@ -39,28 +39,29 @@ public class GeneralInfoView : View
         var era = GameManager.instance.player.currentEra;
 
         if (backButton != null)
-            backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
+            backButton.onClick.AddListener(()=> gameObject.SetActive(false));
+            //backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
 
-        /*
-         * if (antsInfoButton != null)
-            antsInfoButton.onClick.AddListener(()=> );
+            /*
+             * if (antsInfoButton != null)
+                antsInfoButton.onClick.AddListener(()=> );
 
-        if (buildingsInfoButton != null)
-            buildingsInfoButton.onClick.AddListener(()=> );
+            if (buildingsInfoButton != null)
+                buildingsInfoButton.onClick.AddListener(()=> );
 
-        
 
-        if(userNameText != null
-            userNameText.text = GameManager.instance.player.playerName;
 
-        if(userImage != null)
-            userImage = ;
+            if(userNameText != null
+                userNameText.text = GameManager.instance.player.playerName;
 
-        if(userColorImage != null)
-            userColorImage.color = GameManager.instance.player.playerColor;
-        */
+            if(userImage != null)
+                userImage = ;
 
-        if(currentEraImage != null)
+            if(userColorImage != null)
+                userColorImage.color = GameManager.instance.player.playerColor;
+            */
+
+        if (currentEraImage != null)
             currentEraImage.sprite = EraManager.instance.GetEraSprite(era);
 
         RefreshUI(era);

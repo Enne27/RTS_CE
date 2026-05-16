@@ -100,10 +100,8 @@ public class GameHUDView : View
         if (generalInfoButton != null)
             generalInfoButton.onClick.AddListener(()=>
             {
+                SetGeneralInfoActive(true);
                 //ViewManager.Show<GeneralInfoView>(true);
-                GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
-                infoView.gameObject.SetActive(true);
-                infoView.RefreshUI(GameManager.instance.player.currentEra);
             });
     }
 
@@ -125,6 +123,14 @@ public class GameHUDView : View
         }
     }
 
+
+    public void SetGeneralInfoActive(bool value)
+    {
+        GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
+        infoView.gameObject.SetActive(value);
+        if(infoView.gameObject.activeInHierarchy)
+            infoView.RefreshUI(GameManager.instance.player.currentEra);
+    }
     public void SetConstructionButtonActive(bool value)
     {
         constructionButton.gameObject.SetActive(value);
