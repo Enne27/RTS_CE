@@ -53,9 +53,7 @@ public class UnitController : MonoBehaviour
 
     public static void MoveTo(Ant ant, Vector3 objective)
     {
-        // Snap the objective onto the terrain surface
-        objective.y = 0; // will be resolved by SampleHeight at runtime
-        ant.objective = objective;
+        ant.objective = new Vector3(objective.x, 0, objective.z);
         activeAnts.Add(ant);
         SpawnFlag(objective);
     }
