@@ -50,7 +50,7 @@ public class TutorialControl : MonoBehaviour
     {
         if (tutorialShowed == false)
         {
-            cameraMoveScript?.DisableCameraInput();
+            //cameraMoveScript?.DisableCameraInput();
 
             //ViewManager.Show<DialogueView>();
             ViewManager.GetView<DialogueView>().gameObject.SetActive(true);
@@ -61,19 +61,26 @@ public class TutorialControl : MonoBehaviour
 
     void TutorialController()
     {
+        Debug.Log(requiredBuildingType.ToString());
         switch (lineNum)
         {
-            case 3: // "Construye una cámara real"
+            case 3: // "Construye un túnel"
+                requiredBuildingType = BuildingType.Tunnel;
+                Debug.Log(requiredBuildingType.ToString());
+                DialogueManager.instance.taskPending = true;
+                break;
+
+            case 4: // "Construye una cámara real"
                 requiredBuildingType = BuildingType.QueenChamber;
                 DialogueManager.instance.taskPending = true;
                 break;
 
-            case 6: // "Ahora necesitamos una cámara de cría"
+            case 7: // "Ahora necesitamos una cámara de cría"
                 requiredBuildingType = BuildingType.BroodChamber;
                 DialogueManager.instance.taskPending = true;
                 break;
 
-            case 7: // "Ahora crea una hormiga"
+            case 8: // "Ahora crea una hormiga"
                 while (GameManager.instance.player.ants.Count <= 4)
                 {
                     DialogueManager.instance.taskPending = false;

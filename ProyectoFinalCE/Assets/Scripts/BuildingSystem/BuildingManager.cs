@@ -200,113 +200,89 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
+        // 1. ¡Movemos el evento aquí arriba! 
+        // Así se ejecutará siempre en cuanto se coloque CUALQUIER construcción, antes de los 'return'.
+        OnBuildingPlaced?.Invoke(preview.data.buildingType);
+
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
-        GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
-        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
 
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
-                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
-                SetSlavesToWork(building);
+                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
                 queenChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
-
             case BuildingType.BroodChamber:
-                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
-                SetSlavesToWork(building);
+                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
                 broodChambersCount++;
                 constructionsBuilt.Add(building);
-                
                 break;
-
             case BuildingType.StorageChamber:
-                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
-                SetSlavesToWork(building);
+                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
                 storageChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
-
             case BuildingType.Tunnel:
-
                 TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
                 tunnel.DetectTunnels();
 
                 HashSet<int> neighborPathIDs = new();
-
                 foreach (TunnelFunction connection in tunnel.TunnelConnections)
                 {
                     if (connection.pathID != 0)
                         neighborPathIDs.Add(connection.pathID);
                 }
 
- 
                 if (neighborPathIDs.Count == 0)
                 {
                     pathsCount++;
                     tunnel.pathID = pathsCount;
-
                     TunnelPath newPath = new(pathsCount, tunnel);
                     pathsBuilt.Add(newPath);
-
-                    return;
+                    return; // Este return ahora ya no romperá el tutorial
                 }
 
                 if (neighborPathIDs.Count == 1)
                 {
                     int id = neighborPathIDs.First();
-
                     tunnel.pathID = id;
-
                     TunnelPath path = pathsBuilt.Find(p => p.pathID == id);
-
                     if (!path.TunnelPieces.Contains(tunnel))
                         path.TunnelPieces.Add(tunnel);
-
-                    return;
+                    return; // Este tampoco
                 }
-
 
                 int mainID = neighborPathIDs.First();
                 TunnelPath mainPath = pathsBuilt.Find(p => p.pathID == mainID);
-
-                // Añadir el nuevo túnel al principal
                 tunnel.pathID = mainID;
                 mainPath.TunnelPieces.Add(tunnel);
 
-                // Fusionar los demás
                 foreach (int otherID in neighborPathIDs)
                 {
                     if (otherID == mainID) continue;
-
                     TunnelPath otherPath = pathsBuilt.Find(p => p.pathID == otherID);
-
                     foreach (TunnelFunction piece in otherPath.TunnelPieces)
                     {
                         piece.pathID = mainID;
-
                         if (!mainPath.TunnelPieces.Contains(piece))
                             mainPath.TunnelPieces.Add(piece);
                     }
-
                     pathsBuilt.Remove(otherPath);
                     pathsCount--;
                 }
-
-                
-                
                 break;
             default:
                 break;
         }
 
-        OnBuildingPlaced?.Invoke(preview.data.buildingType); // Se avisa al tutorial del tipo de edificio construido
-
+        // 2. IMPORTANTE: Elimina la línea OnBuildingPlaced de aquí abajo 
+        // para evitar que las cámaras normales disparen el evento dos veces.
         Destroy(preview.gameObject);
         preview = null;
     }
