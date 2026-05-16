@@ -171,21 +171,10 @@ public class TroopsSelection : MonoBehaviour
                 Ant target = hit.transform.GetComponent<Ant>();
                 foreach (Ant ant in unitsSelected)
                 {
-                    float distance = Vector3.Distance(ant.transform.position, target.transform.position);
-
-                    if (ant.reach >= distance)
-                    {
+                    if (target != null)
                         ant.IsRange(target);
-                    }
-                    else if (ant.reach < distance)
-                    {                       
-                        UnitController.MoveTo(ant, target.gameObject);
-                        if (ant.reach >= distance)
-                        {
-                            Debug.Log("I am in range");
-                            ant.IsRange(target);
-                        }
-                    }
+                    else
+                        Debug.Log("TroopSelection target is null");
                 }
             }
         }

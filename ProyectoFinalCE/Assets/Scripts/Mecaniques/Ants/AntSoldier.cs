@@ -31,28 +31,34 @@ internal class AntSoldier : Ant
     public override void IsRange(Ant target)
     {
         if (target == null)
-            return;
+        {
+         Debug.Log("target is null");
+         return;
+        }
+
         currentTarget = target;
         float distance = Vector3.Distance(
             transform.position,
             target.transform.position
         );
 
-        if (distance <= reach)
+        if (Mathf.Floor(distance) <= reach)
         {
             Debug.Log("Estoy en el rango");
+            currentTarget = null;
             Attack(target);
         }
         else
         {
             UnitController.MoveTo(this, target.gameObject);
             Debug.Log("Sigue corriendo, sigue corriendo");
+            Debug.Log(distance);
         }
     }
     public override void Attack(Ant target) {
         if (target != null)
         {
-                target.TakeDamage(this, strength, acidBased);
+                target.TakeDamage(this, strength, acidBased);                                                           
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
