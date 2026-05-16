@@ -169,7 +169,7 @@ public class BroodChamberFunction : StructuresPlayer
             ProgressManager.instance.RegisterAntCreation(antType);
         });
 
-        VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType), time);
+        VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType), time, gameObject.transform);
 
 
         GameManager.instance.player.inventory.RemoveFood(foodCosts);
