@@ -29,7 +29,9 @@ public class Building : MonoBehaviour
 
     private void Awake()
     {
+        // Intenta buscar la cámara al despertar
         cameraMovement = FindFirstObjectByType<CameraMovement2D>();
+        Debug.LogWarning($"Building {name}: CameraMovement2D not found on Awake. Will retry on double-click.");
     }
 
     public void Setup(BuildingData data, float rotation)
@@ -42,7 +44,8 @@ public class Building : MonoBehaviour
         model.Rotate(rotation);
         descriptionTextBlock = GetComponentInChildren<TextMeshProUGUI>();
         backgroundImage = GetComponentInChildren<Image>();
-        backgroundImage.enabled=false;
+        if (backgroundImage != null)
+            backgroundImage.enabled=false;
 
 
     }
@@ -98,21 +101,33 @@ public class Building : MonoBehaviour
     private void OnDoubleClick()
     {
         Debug.Log("Double click en building");
-
+        cameraMovement = FindFirstObjectByType<CameraMovement2D>();
         GameHUDView hud = ViewManager.GetView<GameHUDView>();
 
         switch (data.buildingType)
         {
             case BuildingType.QueenChamber:
-                cameraMovement.ZoomOnBuilding(transform);
+                if (cameraMovement != null)
+                    cameraMovement.ZoomOnBuilding(transform);
+                else
+                    Debug.LogError("CameraMovement2D not found!");
                 break;
             case BuildingType.BroodChamber:
-                cameraMovement.ZoomOnBuilding(transform);
-                ViewManager.Show<BroodChamberView>();
-                ViewManager.GetView<GameHUDView>().Show();
+                if (cameraMovement != null)
+                    cameraMovement.ZoomOnBuilding(transform);
+                else
+                    Debug.LogError("CameraMovement2D not found!");
+                /*ViewManager.Show<BroodChamberView>();
+                ViewManager.GetView<GameHUDView>().Show();*/
+                BroodChamberFunction brood = GetComponentInChildren<BroodChamberFunction>();
+                if (brood != null && brood.currentStructureState == StructureState.Idle)
+                    brood.broodView.gameObject.SetActive(true);
                 break;
             case BuildingType.StorageChamber:
-                cameraMovement.ZoomOnBuilding(transform);
+                if (cameraMovement != null)
+                    cameraMovement.ZoomOnBuilding(transform);
+                else
+                    Debug.LogError("CameraMovement2D not found!");
                 break;
             case BuildingType.Entrance:
                 CameraController.instance.ChangeCameraMode(CameraState.Outside);
@@ -121,7 +136,7 @@ public class Building : MonoBehaviour
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
-                CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.constructionButton.gameObject.SetActive(true));
+                CameraController.instance.ChangeCameraMode(CameraState.Inside, () => hud.constructionButton.gameObject.SetActive(true));
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:

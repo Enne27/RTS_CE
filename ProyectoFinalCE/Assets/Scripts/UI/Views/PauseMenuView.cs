@@ -38,22 +38,22 @@ public class PauseMenuView : View
             ViewManager.Show<SettingsView>();
         });
 
-        /* TBI
+        /* TBI*/
         saveButton.onClick.AddListener(() =>
         {
             //Hide();
             SaveSystem.SaveGame();
         });
-        */
+        
 
         backButton.onClick.AddListener(() => 
         {
             //Hide();
             //ViewManager.ShowLastView(1, false);
-            PauseController.instance.TogglePause();
+            if (PauseController.instance != null)
+                PauseController.instance.TogglePause();
         });
     }
-
     public override void Show()
     {
         base.Show();

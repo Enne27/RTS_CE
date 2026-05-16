@@ -21,6 +21,6 @@ public class ResourcesZone : MonoBehaviour
         {
             antExlporer.Collect();
         }
-        else Debug.Log("Not a explorer."); 
+        //else Debug.Log("Not a explorer."); 
     }
 }

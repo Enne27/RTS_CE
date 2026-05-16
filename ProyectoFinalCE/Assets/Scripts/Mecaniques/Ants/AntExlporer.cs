@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using static PlayerConstants;
 
 public enum Owner
 {
@@ -17,20 +17,22 @@ public class AntExlporer : Ant
     private Vector3 targetPosition;
     [Obsolete("Use antOwner instead")]
     public Vector3 antHillPositionOwner;
-    public Owner antOwner;
+    //public Owner antOwner;
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
     private void Awake()
     {
-        //HP = 15f;
-        //armor = 0.40f;
-        //speed = 16f;
-        //strength = 1f;
-        //reach = 1;
-        //vision = 4;
-        //linePriority = 8;
-        //acidBased = false;
+        antType = ANT_TYPES.EXPLORER;
+        HP = 15f;
+        armor = 0.40f;
+        speed = 16f;
+        strength = 1f;
+        reach = 1;
+        vision = 15;
+        linePriority = 8;
+        acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target)
@@ -38,7 +40,7 @@ public class AntExlporer : Ant
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
-            target.TakeDamage(this, strength, acidBased);
+            target.TakeDamage(this, GetEffectiveDamage(), acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -72,16 +74,37 @@ public class AntExlporer : Ant
             Vector3 position = new Vector3();
             food = UnityEngine.Random.Range(1, 3);
             MC = UnityEngine.Random.Range(1, 2);
+            
             switch (antOwner)
             {
-                case (Owner.Player):
-                    position = GameManager.instance.player.structures[0].transform.position;
+                case Owner.Player:
+                    if (GameManager.instance.player.structures != null && 
+                        GameManager.instance.player.structures.Count > 0)
+                    {
+                        position = GameManager.instance.player.structures[0].transform.position;
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura del jugador a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
-                case (Owner.AI):
-                    if(GameManager.instance.playerIA.structures[0] != null)
+                    
+                case Owner.AI:
+                    if (GameManager.instance.playerIA.structures != null && 
+                        GameManager.instance.playerIA.structures.Count > 0 &&
+                        GameManager.instance.playerIA.structures[0] != null)
+                    {
                         position = GameManager.instance.playerIA.structures[0].transform.position;
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura de la IA a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
             }
+            
             UnitController.MoveTo(this, position);
         });
     }
@@ -113,9 +136,45 @@ public class AntExlporer : Ant
         if (asignedResourceZone != null)
         UnitController.MoveTo(this, asignedResourceZone.transform.position);
     }
-    
+
+    public override void AttackMound(GameObject mound)
+    {
+        MoundFunction target;
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") ||antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        {
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+        }
+
+        else
+        {   
+            return;
+        }
+    }
+
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    public int GetFood()
+    {
+        return food;
+    }
+
+    public void SetFood(int value)
+    {
+        food = value;
+    }
+
+    public int GetMC()
+    {
+        return MC;
+    }
+
+    public void SetMC(int value)
+    {
+        MC = value;
     }
 }

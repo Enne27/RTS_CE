@@ -47,16 +47,15 @@ public class StorageChamberFunction : StructuresPlayer
 
     public override void OnConstructionFinished()
     {
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-        UpdateCapacityLimits();
-
-        GameManager.instance.player.inventory.RemoveEggs(storageBuildingScriptable.costHV);
-        GameManager.instance.player.inventory.RemoveMC(storageBuildingScriptable.costMC);
-
-        if (hudView != null)
+        UpdateCapacityLimits();        
+        currentStructureState = StructureState.Idle;
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
         {
-            hudView.UpdateMCText();
-            hudView.UpdateEggsText();
+            worker.storageChamber = this;
         }
     }
     public override void OnUpgradeFinished()
@@ -90,7 +89,7 @@ public class StorageChamberFunction : StructuresPlayer
     /// Cuando la comida llega de la cámara de forrajeo a las de almacenamiento.
     /// También se llama mediante la generación que da la "granja de hongos".
     /// </summary>
-    void FoodAcquired(int foodToAdd)
+    public void FoodAcquired(int foodToAdd)
     {
         int currentFood = GameManager.instance.player.inventory.food;
         int currentFoodCapacity = GameManager.instance.player.inventory.foodCapacity;
@@ -105,11 +104,24 @@ public class StorageChamberFunction : StructuresPlayer
         if(hudView != null) hudView.UpdateFoodText();
     }
 
+    public int FreeFoodSpace()
+    {
+        return
+            GameManager.instance.player.inventory.foodCapacity -
+            GameManager.instance.player.inventory.food;
+    }
+
+    public int FreeMaterialSpace()
+    {
+        return
+            GameManager.instance.player.inventory.materialsCapacity -
+            GameManager.instance.player.inventory.materials;
+    }
     /// <summary>
     /// Cuando llegan los materiales de la cámara de forrajeo. (Se obtiene la cantidad de las exploraciones.)
     /// </summary>
     /// <param name="mcToAdd"></param>
-    void MC_Acquired(int mcToAdd)
+    public void MC_Acquired(int mcToAdd)
     {
         int currentMC = GameManager.instance.player.inventory.materials;
         int currentMC_Capacity = GameManager.instance.player.inventory.materialsCapacity;

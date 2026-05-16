@@ -32,11 +32,15 @@ public class AssignAntHill : MonoBehaviour
 
             GameManager.instance.player.structures.Clear();
             GameManager.instance.player.structuresCount.Clear();
+
             GameManager.instance.playerIA.structures.Clear();
             GameManager.instance.playerIA.structuresCount.Clear();
 
+
             GameManager.instance.player.structures.Add(antHills[0]);
             GameManager.instance.player.structuresCount.Add(typeof(BuildingData), 1);
+
+
             GameManager.instance.playerIA.structures.Add(antHills[1]);
             GameManager.instance.playerIA.structuresCount.Add(typeof(BuildingData), 1);
         }
