@@ -60,6 +60,10 @@ public class BroodChamberFunction : StructuresPlayer
 
         if (broodView == null)
             broodView = FindFirstObjectByType<BroodChamberView>();
+
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(UpgradeStructure);
     }
 
     private void OnEnable()
@@ -74,12 +78,21 @@ public class BroodChamberFunction : StructuresPlayer
     #region BUILDING_METHODS
     public override void OnConstructionFinished()
     {
+        base.OnConstructionFinished();
+
         GetComponentInChildren<Renderer>().material = BuildingManager.Instance.BroodChamberMaterial;
         currentStructureState = StructureState.Idle;
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
+
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER);
     }
 
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER);
+    }
     #endregion
 
 
@@ -97,7 +110,6 @@ public class BroodChamberFunction : StructuresPlayer
 
         if (currentBreedingQuantity >= limit)
         {
-            Debug.Log("Límite");
             return;
         }
 
@@ -152,20 +164,21 @@ public class BroodChamberFunction : StructuresPlayer
         TimeManager.Instance?.OneShotTimer(time, () =>
         {
             AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
+            gameHUDView?.UpdateAntText(antType, 1);
+
             currentBreedingQuantity--;
 
+            ProgressManager.instance.RegisterAntCreation(antType);
         });
 
-        VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType)/*gameObject.transform.position*/, time);
+        VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType), time, gameObject.transform);
 
-        gameHUDView?.UpdateAntText(antType, 1);
 
         GameManager.instance.player.inventory.RemoveFood(foodCosts);
         GameManager.instance.player.inventory.RemoveEggs(hvCosts);
 
         gameHUDView?.UpdateFoodText();
         gameHUDView?.UpdateEggsText();
-
     }
 
     private Vector3 GetTransformToSpawnTimer(ANT_TYPES antType)
