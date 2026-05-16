@@ -31,8 +31,7 @@ public class Building : MonoBehaviour
     {
         // Intenta buscar la cámara al despertar
         cameraMovement = FindFirstObjectByType<CameraMovement2D>();
-        if (cameraMovement == null)
-            Debug.LogWarning($"Building {name}: CameraMovement2D not found on Awake. Will retry on double-click.");
+        Debug.LogWarning($"Building {name}: CameraMovement2D not found on Awake. Will retry on double-click.");
     }
 
     public void Setup(BuildingData data, float rotation)
@@ -102,7 +101,7 @@ public class Building : MonoBehaviour
     private void OnDoubleClick()
     {
         Debug.Log("Double click en building");
-
+        cameraMovement = FindFirstObjectByType<CameraMovement2D>();
         GameHUDView hud = ViewManager.GetView<GameHUDView>();
 
         switch (data.buildingType)
