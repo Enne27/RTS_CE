@@ -39,8 +39,10 @@ public class VFXManager : MonoBehaviour
     [Header("Particles System")]
     [SerializeField] private ParticleSystem constructingParticles;
     [SerializeField] private ParticleSystem broodParticles;
+    [SerializeField] Vector3 offsetBroodParticles = new Vector3(1.2f, -0.3f, 0f);
 
     [Header("SFX")]
+    [SerializeField] private StudioEventEmitter constructionEmitter;
     [SerializeField] private StudioEventEmitter creationEmitter;
 
     #endregion
@@ -161,13 +163,24 @@ public class VFXManager : MonoBehaviour
 
     public void PlayConstructionParticles(Vector3 position, float duration)
     {
-        WorldUIManager.Instance.ShowTimer(position, duration);
+        if (WorldUIManager.Instance != null)
+            WorldUIManager.Instance.ShowTimer(position, duration);
 
         ParticleSystem ps = GetParticle(constructingParticles);
         ps.transform.position = position;
 
         var poolItem = GetPoolItem(ps, constructingParticles);
-        if (poolItem == null) return;
+        if (poolItem == null) 
+        {
+            poolItem = new PooledVFX
+            {
+                ps = ps,
+                inUse = true,
+                constructionLocked = true
+            };
+
+            poolsVFX[constructingParticles].Add(poolItem);
+        }
 
         poolItem.inUse = true;
         poolItem.constructionLocked = true;
@@ -196,21 +209,50 @@ public class VFXManager : MonoBehaviour
                     hammer.gameObject.SetActive(false);
 
                 if (SFXManager.instance != null)
-                    SFXManager.PlaySFX(creationEmitter);
+                    SFXManager.PlaySFX(constructionEmitter);
 
             });
         }
     }
 
-    public void PlayBroodingChamberParticles(Vector3 position, float duration)
+    public void PlayBroodingChamberParticles(Vector3 position, float duration, Transform broodChamberTransform)
     {
         WorldUIManager.Instance.ShowTimerAnts(position, duration);
 
-        
+        ParticleSystem ps = GetParticle(broodParticles);
+
+        ps.transform.position = new Vector3(broodChamberTransform.position.x, 
+            broodChamberTransform.position.y-0.05f, broodChamberTransform.position.z);
+
+        var poolItem = GetPoolItem(ps, broodParticles);
+        if (poolItem == null)
+        {
+            poolItem = new PooledVFX
+            {
+                ps = ps,
+                inUse = true,
+                constructionLocked = true
+            };
+
+            poolsVFX[constructingParticles].Add(poolItem);
+        }
+
+        poolItem.inUse = true;
+        poolItem.constructionLocked = true;
+        ps.Play();
+
         if (TimeManager.Instance)
         {
             TimeManager.Instance.OneShotTimer(duration, () =>
             {
+                if (ps != null)
+                    ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+                if (poolItem != null)
+                {
+                    poolItem.inUse = false;
+                    poolItem.constructionLocked = false;
+                }
 
                 if (SFXManager.instance != null)
                     SFXManager.PlaySFX(creationEmitter);

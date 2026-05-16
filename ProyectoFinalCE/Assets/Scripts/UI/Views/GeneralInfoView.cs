@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -9,48 +10,71 @@ public class GeneralInfoView : View
 {
     #region VARIABLES
     [Header("User info")]
-    [SerializeField] TextMeshProUGUI userNameText;
+    /*[SerializeField] TextMeshProUGUI userNameText;
     [SerializeField] Image userImage;
-    [SerializeField] Image userColorImage;
+    [SerializeField] Image userColorImage;*/
 
     [Header("Era info")]
     [SerializeField] TextMeshProUGUI currentEraText;
     [SerializeField] Image currentEraImage;
-    [SerializeField] RequirementNextEraSlot slotRequirement;
+
+    [SerializeField] Image currentEraGameHUDButton;
     
+    [Header("Requirements")]
+    [SerializeField] RequirementNextEraSlot slotPrefab;
+    [SerializeField] Transform layoutHorizontal;
 
     [Header("Buttons")]
     [SerializeField] Button backButton;
-    [SerializeField] Button antsInfoButton;
-    [SerializeField] Button buildingsInfoButton;
+    /*[SerializeField] Button antsInfoButton;
+    [SerializeField] Button buildingsInfoButton;*/
 
-    [Header("ScrollView buildings")]
-    [SerializeField] UnityEngine.UIElements.ScrollView scrollView;
+    private List<RequirementNextEraSlot> activeSlots = new();
+
     #endregion
+
+    private void OnEnable()
+    {
+        EraManager.instance.RefreshUI();
+    }
+
     public override void Initialize()
     {
+        var era = GameManager.instance.player.currentEra;
+
         if (backButton != null)
             backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
 
-        /*if (antsInfoButton != null)
+        /*
+         * if (antsInfoButton != null)
             antsInfoButton.onClick.AddListener(()=> );
 
         if (buildingsInfoButton != null)
             buildingsInfoButton.onClick.AddListener(()=> );
 
-        */
+        
 
-        if(userNameText != null)
+        if(userNameText != null
             userNameText.text = GameManager.instance.player.playerName;
 
-        /*if(userImage != null)
-            userImage = ;*/
+        if(userImage != null)
+            userImage = ;
 
         if(userColorImage != null)
             userColorImage.color = GameManager.instance.player.playerColor;
+        */
 
-        if(currentEraImage != null)
-            currentEraImage.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
+        /*if(currentEraImage != null)
+            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);*/
+
+        UpdateCurrentEraVisuals(
+            era,
+            EraManager.instance.GetEraName(era)
+        );
+
+        UpdateRequirements(
+            EraManager.instance.GetRequirements(era)
+        );
     }
 
     /// <summary>
@@ -59,36 +83,44 @@ public class GeneralInfoView : View
     /// <param name="currentEra"></param>
     public void UpdateCurrentEraVisuals(HIVE_ERAS currentEra, LocalizedString newEraName)
     {
-        currentEraImage.sprite = EraManager.instance.ERAS_IMAGES[currentEra];
+        currentEraImage.sprite = EraManager.instance.eraSprites[currentEra];
+        currentEraGameHUDButton.sprite = currentEraImage.sprite;
 
         currentEraText.gameObject.GetComponent<LocalizeStringEvent>().StringReference = newEraName;
 
         newEraName.StringChanged -= OnEraChanged;
         newEraName.StringChanged += OnEraChanged;
-
-        UpdateNextEraRequirements(currentEra);
     }
     private void OnEraChanged(string value)
     {
         currentEraText.text = value;
     }
 
-    /// <summary>
-    /// Cambio de requisitos al avanzar de era.
-    /// </summary>
-    /// <param name="currentEra"></param>
-    private void UpdateNextEraRequirements(HIVE_ERAS currentEra)
+    public void UpdateRequirements(List<EraRequirement> requirements)
     {
-        switch (currentEra)
+        if (requirements == null)
         {
-            case HIVE_ERAS.BROTE:
-                break;
-            case HIVE_ERAS.NIDO:
-                break;
-            case HIVE_ERAS.COLONIA:
-                break;
-            case HIVE_ERAS.IMPERIO:
-                break;
+            EraManager.instance.InitData();
+            EraManager.instance.InitRequirements();
+            EraManager.instance.RefreshUI();
         }
+
+        foreach (var s in activeSlots)
+            Destroy(s.gameObject);
+
+        activeSlots.Clear();
+
+        foreach (var req in requirements)
+        {
+            var slot = Instantiate(slotPrefab, layoutHorizontal);
+            slot.Bind(req);
+            activeSlots.Add(slot);
+        }
+    }
+
+    private void CreateSlot(RequirementID id,  int totalQuantity)
+    {
+        RequirementNextEraSlot slot = Instantiate(slotPrefab, layoutHorizontal.transform);
+        slot.Setup(id, 0, totalQuantity, false);
     }
 }
