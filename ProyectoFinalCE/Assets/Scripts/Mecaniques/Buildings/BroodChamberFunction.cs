@@ -85,13 +85,13 @@ public class BroodChamberFunction : StructuresPlayer
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
 
-        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER, 1);
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER);
     }
 
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
-        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER, 1);
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER);
     }
     #endregion
 

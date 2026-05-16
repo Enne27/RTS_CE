@@ -33,10 +33,6 @@ public class GeneralInfoView : View
 
     #endregion
 
-    private void OnEnable()
-    {
-        EraManager.instance.RefreshUI();
-    }
 
     public override void Initialize()
     {
@@ -64,9 +60,14 @@ public class GeneralInfoView : View
             userColorImage.color = GameManager.instance.player.playerColor;
         */
 
-        /*if(currentEraImage != null)
-            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);*/
+        if(currentEraImage != null)
+            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);
 
+        RefresUI(era);
+    }
+
+    public void RefresUI(HIVE_ERAS era)
+    {
         UpdateCurrentEraVisuals(
             era,
             EraManager.instance.GetEraName(era)
@@ -76,6 +77,7 @@ public class GeneralInfoView : View
             EraManager.instance.GetRequirements(era)
         );
     }
+
 
     /// <summary>
     /// Actualización visual de la era actual del imperio.

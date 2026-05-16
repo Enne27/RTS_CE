@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using static PlayerConstants;
 
@@ -19,21 +20,34 @@ public class ProgressManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        //else Destroy(gameObject);
     }
 
     private void OnEnable()
     {
         AntExlporer.OnExplorationCompleted += AddExplorationProgress;
+        StartCoroutine(SubscribeWhenReady());
+    }
+
+    /// <summary>
+    /// EraManager no está listo antes.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SubscribeWhenReady()
+    {
+        while (EraManager.instance == null)
+            yield return null;
+
         AntExlporer.OnExplorationCompleted += EraManager.instance.UpgradeLimitsAndRefreshUpgradeButtonUI;
     }
 
     private void OnDisable()
     {
         AntExlporer.OnExplorationCompleted -= AddExplorationProgress;
-        AntExlporer.OnExplorationCompleted -= EraManager.instance.UpgradeLimitsAndRefreshUpgradeButtonUI;
+        if (EraManager.instance != null)
+            AntExlporer.OnExplorationCompleted -= EraManager.instance.UpgradeLimitsAndRefreshUpgradeButtonUI;
     }
 
     private void AddExplorationProgress()
@@ -42,7 +56,7 @@ public class ProgressManager : MonoBehaviour
 
         //Debug.Log("Progreso exploración: " + explorationProgress);
 
-        EraManager.instance.AddProgress(RequirementID.EXPLORATION, 1);
+        EraManager.instance.AddProgress(RequirementID.EXPLORATION);
     }
 
     public void RegisterAntCreation(ANT_TYPES ant)
