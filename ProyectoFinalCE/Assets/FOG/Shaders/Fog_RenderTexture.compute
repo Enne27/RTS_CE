@@ -1,0 +1,51 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+struct RevealerData
+{
+    float2 position;
+    float radius;
+};
+
+StructuredBuffer<RevealerData> _Revealers;
+
+int _TextureSize;
+int _RevealerCount;
+
+float Easing(float a, float b, float x)
+{
+    float t = (x - a) / (b - a);
+    return t * t * t * t;
+}
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _TextureSize || id.y >= _TextureSize)
+        return;
+
+    float2 pixelPos = float2(id.x, id.y);
+
+    float visible = 0.0;
+
+    for (int i = 0; i < _RevealerCount; i++)
+    {
+        float2 diff = pixelPos - _Revealers[i].position;
+
+        float dist = length(diff);
+        float radius = _Revealers[i].radius;
+
+        float t = saturate(dist / radius);
+
+        float contribution = smoothstep(1.0, 0.0, t);
+        //float contribution = Easing(1.0, 0.0, t);
+
+        visible = max(visible, contribution);
+    }
+
+    float previous = Result[id.xy].r;
+
+    visible = max(visible, previous);
+
+    Result[id.xy] = float4(visible, 0.0, 0.0, 1.0);
+}

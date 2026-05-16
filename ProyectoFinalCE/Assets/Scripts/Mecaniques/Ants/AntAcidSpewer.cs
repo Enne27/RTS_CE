@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static PlayerConstants;
 
 public class AntAcidSpewer : Ant
 {
@@ -8,21 +9,23 @@ public class AntAcidSpewer : Ant
 
     private void Awake()
     {
-        /*HP = 15f;
+        antType = ANT_TYPES.ACID;
+        HP = 15f;
         armor = 0.30f;
         speed = 10f;
         strength = 5f;
         reach = 9;
-        vision = 1;
+        vision = 5;
         linePriority = 10;
-        acidBased = true;*/
+        acidBased = true;
+        base.Awake();
     }
     public override void Attack(Ant target)
     {
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
-            target.TakeDamage(this, strength, acidBased);
+            target.TakeDamage(this, GetEffectiveDamage(), acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -66,6 +69,6 @@ public class AntAcidSpewer : Ant
     }
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

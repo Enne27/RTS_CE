@@ -9,6 +9,14 @@ public class ScriptedAI : MonoBehaviour
         TimeManager.Instance.OneShotTimer(3, sendStarterAnts);   
     }
 
+    private void Update()
+    {
+        //GameManager.instance.playerIA.ants;
+        //GameManager.instance.playerIA.inventory;
+        //GameManager.instance.playerIA.structures;
+        //GameManager.instance.playerIA.currentEra;
+    }
+
     private void sendStarterAnts()
     {
         foreach (var ant in GameManager.instance.playerIA.ants)

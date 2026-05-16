@@ -19,14 +19,14 @@ public class MoundFunction : StructuresPlayer
     [Tooltip("Costes en huevas de las mejoras de cada nivel.")]
     int[] costsUpgradeHV_ = { 0, 10, 20, 40, 60 };
 
-    [Tooltip("Costes en materiales de construcción de las mejoras de cada nivel.")]
+    [Tooltip("Costes en materiales de construcciï¿½n de las mejoras de cada nivel.")]
     int[] costsUpgradeMC_ = { 0, 15, 25, 30, 45 };
 
     [Tooltip("Tiempo que tarda el edificio en mejorarse en cada nivel.")]
     int[] timeUpgrade_ = { 0, 60, 90, 90, 120 };
 
-    // El límite de huevas está en playerConstants
-    [Tooltip("Nivel máximo que puede alcanzar la construcción por cada era.")]
+    // El lï¿½mite de huevas estï¿½ en playerConstants
+    [Tooltip("Nivel mï¿½ximo que puede alcanzar la construcciï¿½n por cada era.")]
     int[] maxLevelByEra_ = { 1, 2, 4, 5 };
 
     [Tooltip("Cantidad de vida que tiene el monticulo por nivel.")]
@@ -56,10 +56,8 @@ public class MoundFunction : StructuresPlayer
     [Header("UI References")]
     [SerializeField] Slider sliderHPBar;
     [SerializeField] TextMeshProUGUI textHPLabel;
-
-    [HideInInspector] public Owner owner;
-
     [SerializeField] private ParticleSystem dirtParticles;
+    [HideInInspector] public Owner ownerAntAttacker;
     #endregion
 
     #region METHODS_STRUCTURES
@@ -124,7 +122,7 @@ public class MoundFunction : StructuresPlayer
             return;
         }
 
-        // Resetear regeneración
+        // Resetear regeneraciï¿½n
         allowRegeneration = false;
         intervalToRegenerateAfterDamage = 0;
         TimeManager.Instance.Unregister(1, AllowToRegenerate);
@@ -135,7 +133,7 @@ public class MoundFunction : StructuresPlayer
         // Empezar contador para poder regenerar
         TimeManager.Instance.Register(1, AllowToRegenerate);
         UpdateUI();
-        owner = antOwner;
+        ownerAntAttacker = antOwner;
     }
 
     public void AllowToRegenerate()
@@ -183,15 +181,16 @@ public class MoundFunction : StructuresPlayer
     void MoundDestruction()
     {
         isDead = true;
-        //ViewManager.Show<EndGameView>();
+        ViewManager.Show<EndGameView>();
+        EndGameView endGameView = ViewManager.GetView<EndGameView>();
 
-        if(owner == Owner.Player)
+        if(ownerAntAttacker == Owner.Player)
         {
-
+            endGameView.PlayerWin(true);
         }
         else
         {
-
+            endGameView.PlayerWin(false);
         }
 
         //Debug.Log("AUAUAU me muero deberia morirme porfavor poned el codigo para que me muera quiero morir ahora matadme no requiero vivir terminad con mi sufrimiento AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

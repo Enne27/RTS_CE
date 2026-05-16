@@ -6,19 +6,9 @@ using UnityEngine.Localization;
 using UnityEngine.UI;
 using static PlayerConstants;
 using static ConstantsAndKeys;
-using Unity.VisualScripting;
 
 public class BroodChamberView : View
 {
-    [System.Serializable]
-    public class AntButton
-    {
-        public Button buttonComponent;
-        public Ant antScript;
-        public GameObject previewModel;
-        public string antName;
-    }
-
     #region VARIABLES
     [Header("Info view")]
     [SerializeField] private List<AntButton> antsButton;
@@ -29,8 +19,9 @@ public class BroodChamberView : View
 
     [Header("Preview System")]
     [SerializeField] RawImage antImage;
-    [SerializeField] private Transform previewSpawnPoint;
-    [SerializeField] private RenderTexture previewTexture;
+    private Transform previewSpawnPoint;
+    private RenderTexture previewTexture;
+    [SerializeField] private ReferencesAntPreview referencesPreviewObject;
 
     private GameObject currentPreview;
 
@@ -46,13 +37,13 @@ public class BroodChamberView : View
 
 
     [Header("Buttons")]
-    [SerializeField] Button soldierButton;
-    [SerializeField] Button berserkerButton;
-    [SerializeField] Button workerButton;
-    [SerializeField] Button explorerButton;
-    [SerializeField] Button acidButton;
-    [SerializeField] Button crazyutton;
-    [SerializeField] Button kamikazeButton;
+    [SerializeField] public Button soldierButton;
+    [SerializeField] public Button berserkerButton;
+    [SerializeField] public Button workerButton;
+    [SerializeField] public Button explorerButton;
+    [SerializeField] public Button acidButton;
+    [SerializeField] public Button crazyButton;
+    [SerializeField] public Button kamikazeButton;
 
     [Header("Functionality")]
     [SerializeField] BroodChamberFunction broodChamberFunction;
@@ -65,12 +56,23 @@ public class BroodChamberView : View
 
     private void OnEnable()
     {
-        //Initialize();
-        if (antsSpawnPoint == null || workersSpawnPoint == null)
+        if (referencesPreviewObject == null)
+            referencesPreviewObject = FindFirstObjectByType<ReferencesAntPreview>();
+
+        InitializeView();
+
+        if ((antsSpawnPoint == null || workersSpawnPoint == null) && AntCreation.Instance != null)
         {
-            antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+            if (AntCreation.Instance != null)
+            {
+                antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
+            }
+            /*
+            workersSpawnPoint = FindFirstObjectByType<BroodChamberFunction>().transform;
+            workersSpawnPoint.position = new Vector3(workersSpawnPoint.position.x, workersSpawnPoint.position.y, 44);
+            */
         }
+
     }
     private void Update()
     {
@@ -80,17 +82,25 @@ public class BroodChamberView : View
         }
 
     }
-
-    public override void Initialize()
+    public override void Initialize() { }
+    public void InitializeView()
     {
         if (AntCreation.Instance != null)
-        {
             antsSpawnPoint = AntCreation.Instance.antsSpawnPoint;
-            workersSpawnPoint = AntCreation.Instance.workersSpawnPoint;
+
+        if (workersSpawnPoint == null)
+            workersSpawnPoint = Instantiate(new GameObject()).transform;
+
+        BroodChamberFunction broodChamberTransform = FindFirstObjectByType<BroodChamberFunction>();
+
+        if (broodChamberTransform != null)
+        {
+            Vector3 broodChamberPosition = broodChamberTransform.transform.position;
+            workersSpawnPoint.position = new Vector3(broodChamberPosition.x, broodChamberPosition.y, 44);
         }
 
         if (soldierButton != null)
-            soldierButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));
+            soldierButton.onClick.AddListener(()=> broodChamberFunction.CreateAnt(ANT_TYPES.SOLDIER, antsSpawnPoint));
 
         if (berserkerButton != null)
             berserkerButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.BERSERKER, antsSpawnPoint));
@@ -104,8 +114,8 @@ public class BroodChamberView : View
         if (acidButton != null)
             acidButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.ACID, antsSpawnPoint));
 
-        if (crazyutton != null)
-            crazyutton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.CRAZY, antsSpawnPoint));
+        if (crazyButton != null)
+            crazyButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.CRAZY, antsSpawnPoint));
 
         if (kamikazeButton != null)
             kamikazeButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.KAMIKAZE, antsSpawnPoint));
@@ -118,19 +128,28 @@ public class BroodChamberView : View
 
         InitializeButtons();
 
-        if (antImage != null && previewTexture != null)
-            antImage.texture = previewTexture;
+        if (antImage != null && referencesPreviewObject != null)
+        {
+            previewTexture = referencesPreviewObject.previewTexture;
+            previewSpawnPoint = referencesPreviewObject.gameObject.transform;
+            antImage.texture = referencesPreviewObject.previewTexture;
+        }
+
     }
 
+    #region BUTTONS
     private void InitializeButtons()
     {
         if (antsButton.Count > 0)
         {
+            int i = 0;
             foreach (var mb in antsButton)
             {
                 if (mb.buttonComponent != null)
                 {
+                    mb.previewModel = referencesPreviewObject.antsButton[i].previewModel;
                     SetupButtonEvents(mb);
+                    i++;
                 }
             }
         }
@@ -139,7 +158,7 @@ public class BroodChamberView : View
     /// <summary>
     /// Prepara los listeners de los botones para los diferentes eventos.
     /// </summary>
-    /// <param name="data">Clase serializable que contiene toda la información necesaria.</param>
+    /// <param name="data">Clase serializable que contiene toda la informaciï¿½n necesaria.</param>
     private void SetupButtonEvents(AntButton data)
     {
         EventTrigger trigger = data.buttonComponent.GetComponent<EventTrigger>() ??
@@ -166,8 +185,8 @@ public class BroodChamberView : View
     }
 
     /// <summary>
-    /// Evento que sucede al hacer hover del botón.
-    /// Actualiza la información a mostrar en la preview.
+    /// Evento que sucede al hacer hover del botï¿½n.
+    /// Actualiza la informaciï¿½n a mostrar en la preview.
     /// </summary>
     /// <param name="data"></param>
     private void OnButtonHoverStart(AntButton data)
@@ -197,9 +216,11 @@ public class BroodChamberView : View
 
         currentPreview = null;
     }
+    #endregion
 
+    #region PREVIEW
     /// <summary>
-    /// Actualización de la información para todas las hormigas excepto worker.
+    /// Actualizaciï¿½n de la informaciï¿½n para todas las hormigas excepto worker.
     /// </summary>
     /// <param name="data">Script de la hormiga.</param>
     /// <param name="antName">Key de la tabla correspondiente a la hormiga</param>
@@ -222,7 +243,7 @@ public class BroodChamberView : View
     }
 
     /// <summary>
-    /// Actualización de información para la hormiga trabajadora.
+    /// Actualizaciï¿½n de informaciï¿½n para la hormiga trabajadora.
     /// </summary>
     /// <param name="antName">Key de la tabla para el nombre de la hormiga.</param>
     private void UpdateWorkerPanel(string antName)
@@ -256,17 +277,18 @@ public class BroodChamberView : View
         currentPreview.transform.localPosition = Vector3.zero;
         currentPreview.transform.localRotation = Quaternion.identity;
     }
+    #endregion
 
-    /*private void OnDisable()
+    private void OnDisable()
     {
         soldierButton.onClick.RemoveAllListeners();
         berserkerButton.onClick.RemoveAllListeners();
         workerButton.onClick.RemoveAllListeners();
         explorerButton.onClick.RemoveAllListeners();
         acidButton.onClick.RemoveAllListeners();
-        crazyutton.onClick.RemoveAllListeners();
+        crazyButton.onClick.RemoveAllListeners();
         kamikazeButton.onClick.RemoveAllListeners();
-    }*/
+    }
 
 
 }

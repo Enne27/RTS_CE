@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using static ConstantsAndKeys;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,10 +33,10 @@ public class GameManager : MonoBehaviour
     public int startingMC = 0;
 
     [Tooltip("Cantidad inicial de hormigas obreras.")]
-    public int startingWorkerAnts = 4;
+    public int startingWorkerAnts = 1;
 
     [Tooltip("Cantidad inicial proporcionada de hormigas exploradoras.")]
-    public int startingExplorerAnts = 4;
+    public int startingExplorerAnts = 2;
 
 
     [Header("Starting structures (Map constructions)")]
@@ -43,13 +45,11 @@ public class GameManager : MonoBehaviour
 
     // Mecánicas desbloqueables
     [Header("Unlockable mechanics")]
-    public bool canUseEggsAsFood;
     public bool explorersInvisible;
 
     // Modificadores especiales
     [Header("Special modifiers")]
     public float workerBonusPer10;
-    public float recoverMaterialsPercent;
 
     [Header("Player resources")]
     public Player player; // Jugador
@@ -61,10 +61,33 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        // Asegurar que los objetos Player existen antes de cargar
         player = new Player();
-        player.inventory.AddEggs(startingEggs);
-        player.inventory.AddFood(startingFood);
-        player.inventory.AddMC(startingMC);
+        playerIA = new Player();
+
+        if (SaveSystem.CanLoadGame())
+        {
+            if (SceneManager.GetActiveScene().name == SINGLE_PLAYER_GAME_SCENE_NAME)
+            {
+                Debug.Log("GameManager.OnEnable: save exists and current scene is game scene, loading save.");
+                SaveSystem.LoadGame();
+            }
+            else
+            {
+                Debug.Log("GameManager.OnEnable: save exists, deferring load until game scene.");
+            }
+        }
+        else
+        {
+            // Crear nuevos jugadores con valores iniciales
+            player.inventory.AddEggs(startingEggs);
+            player.inventory.AddFood(startingFood);
+            player.inventory.AddMC(startingMC);
+            // Nota: Las hormigas iniciales se crearán en AntCreation (si no viene de carga)
+        }
+
+        // Asegurar que el objeto persista (ya se hizo en Awake, pero por claridad)
+        DontDestroyOnLoad(gameObject);
     }
 
     /// <summary>
@@ -75,13 +98,11 @@ public class GameManager : MonoBehaviour
         player.inventory.ResetAllVariables();
         playerIA.inventory.ResetAllVariables();
 
-        // FALTA A�ADIR LAS OTRAS HORMIGAS INICIALES
+        // FALTA AÑADIR LAS OTRAS HORMIGAS INICIALES
     }
 
     /// <summary>
     /// Desbloquea una mecánica global del juego a partir de su identificador.
-    /// Se utiliza cuando una skill activa una funcionalidad especial
-    /// (por ejemplo: usar huevos como comida, invisibilidad de exploradoras, etc.).
     /// </summary>
     public void UnlockMechanic(string id)
     {

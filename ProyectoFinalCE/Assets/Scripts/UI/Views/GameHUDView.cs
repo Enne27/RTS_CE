@@ -33,8 +33,8 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI crazyAntsText;
     [SerializeField] TextMeshProUGUI kamikazeAntsText;
 
-    [Header("General Info Texts")]
-    [SerializeField] TextMeshProUGUI currentEraText;
+    [Header("General Info")]
+    [SerializeField] Image currentEra;
     #endregion
 
     public override void Initialize()
@@ -57,9 +57,9 @@ public class GameHUDView : View
         }
         else
         {
-            foodText.text = GameManager.instance.player.inventory.food.ToString();
+            foodText.text = GameManager.instance.player.inventory.food.ToString() + "/" + GameManager.instance.player.inventory.foodCapacity;
             eggsText.text = GameManager.instance.player.inventory.eggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
-            mcText.text = GameManager.instance.player.inventory.materials.ToString();
+            mcText.text = GameManager.instance.player.inventory.materials.ToString() + "/" + GameManager.instance.player.inventory.materialsCapacity; 
             antWorkersText.text = GameManager.instance.player.inventory.workerAnts.ToString();
 
             totalAntsText.text = GameManager.instance.player.ants.Count.ToString();
@@ -72,20 +72,23 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        currentEraText.text = GameManager.instance.player.currentEra.ToString();
+        if(currentEra != null)
+            currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {
           constructionButton.onClick.AddListener(()=> {
               if(constructionMenuActived == false)
               {
-                  ViewManager.Show<ConstructionMenuView>();
+                  //ViewManager.Show<ConstructionMenuView>();
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(true);
                   constructionMenuActived = true;
               }
               else 
               { 
                   constructionMenuActived = false;
-                  ViewManager.ShowLastView(); 
+                  //ViewManager.ShowLastView(); 
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
               }
           });
         }

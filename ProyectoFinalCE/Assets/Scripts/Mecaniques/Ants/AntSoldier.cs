@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
-using static UnityEngine.GraphicsBuffer;
+using static PlayerConstants;
 
 internal class AntSoldier : Ant
 {
@@ -12,14 +12,16 @@ internal class AntSoldier : Ant
     Ant currentTarget;
     private void Awake()
     {
-        //HP = 25f;
-        //armor = 0.50f;
-        //speed = 12f;
-        //strength = 3f;
-        //reach = 1;
-        //vision = 1;
-        //linePriority = 2;
-        //acidBased = false;
+        antType = ANT_TYPES.SOLDIER;
+        HP = 25f;
+        armor = 0.50f;
+        speed = 12f;
+        strength = 3f;
+        reach = 1;
+        vision = 5;
+        linePriority = 2;
+        acidBased = false;
+        base.Awake();
     }
     private void FixedUpdate()
     {
@@ -90,8 +92,12 @@ internal class AntSoldier : Ant
         //La trucada del AttackMound no pasa el if
         if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
         {
-            target = mound.GetComponent<MoundFunction>();
-            target.TakeDamage((int)Math.Round(strength), antOwner);
+            target = GetComponent<MoundFunction>();
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+            if (distance <= reach)
+            {
+                target.TakeDamage((int)Math.Round(GetEffectiveDamage()), antOwner);
+            }
             CheckMoundTrigger(mound);
         }
 

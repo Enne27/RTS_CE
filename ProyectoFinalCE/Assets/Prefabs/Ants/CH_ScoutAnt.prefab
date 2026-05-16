@@ -73,8 +73,16 @@ PrefabInstance:
       value: CH_ScoutAnt
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7bf588b8a73a0d54b806f4b9b7cfef1c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7bf588b8a73a0d54b806f4b9b7cfef1c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7bf588b8a73a0d54b806f4b9b7cfef1c, type: 3}
+      propertyPath: m_TagString
+      value: Ant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -107,22 +115,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95e6eb0be93f164f8cefdf276c1c555, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntExlporer
+  antType: 0
   HP: 15
   armor: 0.4
   speed: 16
   strength: 1
   reach: 1
-  vision: 4
+  vision: 12
   linePriority: 8
   breedingCost: 070000000c000000
-  flowFieldInxex: 0
+  antOwner: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
   food: 0
   MC: 0
   targetTransform: {fileID: 0}
   antHillPositionOwner: {x: 0, y: 0, z: 0}
-  antOwner: 0
   asignedResourceZone: {fileID: 0}
 --- !u!136 &4214963978842064535
 CapsuleCollider:

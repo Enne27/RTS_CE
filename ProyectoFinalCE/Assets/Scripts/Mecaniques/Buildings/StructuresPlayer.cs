@@ -1,14 +1,14 @@
 using UnityEngine;
+public enum StructureState
+{
+    OnConstruction,
+    OnUpdate,
+    Idle,
+}
 
 public abstract class StructuresPlayer : MonoBehaviour
 {
     #region VARIABLES
-    public enum StructureState
-    {
-        OnConstruction,
-        OnUpdate,
-        Idle,
-    }
 
     [HideInInspector] public Vector2 positionAntHill;
     public abstract int[] costsUpgradeHV { get; }
@@ -16,10 +16,14 @@ public abstract class StructuresPlayer : MonoBehaviour
     public abstract int[] timeUpgrade { get; }
     public abstract int[] maxLevelByEra { get; }
 
+    public int currentCostsUpgradeHV;
+    public int currentCostsUpgradeMC;
+    public int currentTimeUpgrade;
 
     public StructureState currentStructureState = StructureState.OnConstruction;
     public int currentLevel = 1;
 
+    public AntWorkerBehaviour workerWhoBuildThis;
     #endregion
 
     /// <summary>
@@ -43,6 +47,9 @@ public abstract class StructuresPlayer : MonoBehaviour
     { 
         currentStructureState = StructureState.Idle;
         currentLevel++;
+        currentCostsUpgradeHV = costsUpgradeHV[currentLevel-1];
+        currentCostsUpgradeMC = costsUpgradeMC[currentLevel-1];
+        currentTimeUpgrade = timeUpgrade[currentLevel-1];
     }
     
 }

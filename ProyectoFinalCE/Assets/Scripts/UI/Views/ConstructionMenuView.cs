@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
@@ -46,12 +45,16 @@ public class ConstructionMenuView : View
     [Tooltip("Event Emitter del sonido para onHover un botón.")] 
     [SerializeField] StudioEventEmitter onHoverEmitter;
 
-    private BuildingManager buildingMa;
+    public BuildingManager buildingMa;
     #endregion
+    private void Start()
+    {
+        buildingMa = BuildingManager.Instance;
+
+    }
 
     public override void Initialize()
     {
-        buildingMa = BuildingManager.Instance;
 
         InitializeButtons();
         queenChamberButton.onClick.AddListener(() =>
@@ -168,13 +171,13 @@ public class ConstructionMenuView : View
     public override void Hide()
     {
         base.Hide();
-        Time.timeScale = 1;
+        //Time.timeScale = 1;
     }
 
     public override void Show()
     {
         base.Show();
-        Time.timeScale = 0;
+        //Time.timeScale = 1;
         ViewManager.GetView<GameHUDView>().Show();
     }
 }

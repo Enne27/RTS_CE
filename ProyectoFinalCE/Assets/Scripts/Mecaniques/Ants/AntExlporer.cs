@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using static PlayerConstants;
 
 public enum Owner
 {
@@ -22,15 +22,6 @@ public class AntExlporer : Ant
     public GameObject asignedResourceZone;
     private void Awake()
     {
-        //HP = 15f;
-        //armor = 0.40f;
-        //speed = 16f;
-        //strength = 1f;
-        //reach = 1;
-        //vision = 4;
-        //linePriority = 8;
-        //acidBased = false;
-
         //if (antOwner == Owner.Player)
         //{
         //    gameObject.tag = "PlayerAnt";
@@ -39,7 +30,17 @@ public class AntExlporer : Ant
         //{
         //    gameObject.tag = "EnemyAnt";
         //}
+        antType = ANT_TYPES.EXPLORER;
+        HP = 15f;
+        armor = 0.40f;
+        speed = 16f;
+        strength = 1f;
+        reach = 1;
+        vision = 15;
+        linePriority = 8;
+        acidBased = false;
         anthillContact = false;
+        base.Awake();
     }
 
     public override void IsRange(Ant target) 
@@ -59,7 +60,7 @@ public class AntExlporer : Ant
     }
     public override void Attack(Ant target)
     {
-        target.TakeDamage(this, strength, acidBased);
+        target.TakeDamage(this, GetEffectiveDamage(), acidBased);
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
     {
@@ -94,27 +95,47 @@ public class AntExlporer : Ant
             GameObject position = null;
             food = UnityEngine.Random.Range(1, 3);
             MC = UnityEngine.Random.Range(1, 2);
+            
+            if (antOwner == Owner.Player)
+            {
+                gameObject.tag = "PlayerAnt";
+            }
+            else if (antOwner == Owner.AI)
+            {
+                gameObject.tag = "EnemyAnt";
+            }
             switch (antOwner)
             {
-                case (Owner.Player):
-                    position = GameManager.instance.player.structures[0];
+                case Owner.Player:
+                    if (GameManager.instance.player.structures != null && 
+                        GameManager.instance.player.structures.Count > 0)
+                    {
+                        position = GameManager.instance.player.structures[0];
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura del jugador a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
-                case (Owner.AI):
-                    if(GameManager.instance.playerIA.structures[0] != null)
+                    
+                case Owner.AI:
+                    if (GameManager.instance.playerIA.structures != null && 
+                        GameManager.instance.playerIA.structures.Count > 0 &&
+                        GameManager.instance.playerIA.structures[0] != null)
+                    {
                         position = GameManager.instance.playerIA.structures[0];
+                    }
+                    else
+                    {
+                        Debug.LogError("AntExplorer.Collect: No hay estructura de la IA a la que regresar.");
+                        return; // Cancelar el movimiento
+                    }
                     break;
             }
-            if( position != null )
-                UnitController.MoveTo(this, position);
-        }); 
-        if (antOwner == Owner.Player)
-        {
-            gameObject.tag = "PlayerAnt";
-        }
-        else if (antOwner == Owner.AI)
-        {
-            gameObject.tag = "EnemyAnt";
-        }
+            
+            UnitController.MoveTo(this, position);
+        });
     }
     public void Deposit()
     {
@@ -172,6 +193,26 @@ public class AntExlporer : Ant
     }
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
+    public int GetFood()
+    {
+        return food;
+    }
+
+    public void SetFood(int value)
+    {
+        food = value;
+    }
+
+    public int GetMC()
+    {
+        return MC;
+    }
+
+    public void SetMC(int value)
+    {
+        MC = value;
     }
 }

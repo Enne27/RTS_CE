@@ -13,6 +13,7 @@ public class BuildingManager : MonoBehaviour
         keyboard = Keyboard.current;
         mouse = Mouse.current;
         Instance = this;
+        hudView = FindFirstObjectByType<GameHUDView>();
     }
     #endregion
     
@@ -43,6 +44,18 @@ public class BuildingManager : MonoBehaviour
     public int broodChambersCount;
     public int storageChambersCount;
     public int pathsCount;
+
+    [Header("BuildingMaterial")]
+    [SerializeField] Material ConstructionMaterial;
+
+    [SerializeField] public Material QueenChamberMaterial;
+    [SerializeField] public Material BroodChamberMaterial;
+    [SerializeField] public Material StorageChamberMaterial;
+
+    public List<Building> waitingToBeBuilt = new();
+
+    [Header("Visual player")]
+    GameHUDView hudView;
 
     private void Update()
     {
@@ -91,7 +104,7 @@ public class BuildingManager : MonoBehaviour
             // Recursos totales (storage + foraging)
             int totalMaterials = inventory.materials + inventory.materialsInForaging;
 
-            bool hasResources = totalMaterials >= data.costMC;
+            bool hasResources = totalMaterials >= data.costMC && inventory.eggs >= data.costHV;
 
             if (hasResources)
             {
@@ -130,11 +143,19 @@ public class BuildingManager : MonoBehaviour
                         materialsNeeded -= fromForaging;
 
                         inventory.materials -= materialsNeeded;
+                        
                     }
 
-                    
-                    foragingChamber.UpdateUI();
+                    GameManager.instance.player.inventory.RemoveEggs(data.costHV);
 
+                    if (hudView != null)
+                    {
+                        hudView.UpdateMCText();
+                        hudView.UpdateEggsText();
+                    }
+
+                    foragingChamber.UpdateUI();
+                    
                     PlaceBuilding(buildPosition);
                 }
 
@@ -179,26 +200,35 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
+        GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
-        
+        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
-                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 queenChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
+
             case BuildingType.BroodChamber:
-                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 broodChambersCount++;
                 constructionsBuilt.Add(building);
+                
                 break;
+
             case BuildingType.StorageChamber:
-                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 storageChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
+
             case BuildingType.Tunnel:
 
                 TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
@@ -274,8 +304,34 @@ public class BuildingManager : MonoBehaviour
         
         Destroy(preview.gameObject);
         preview = null;
+    }
 
+    private void SetSlavesToWork(Building build)
+    {
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            if (worker == null)
+                continue;
 
+            string state =
+                worker.stateMachineManager.GetCurrentStateName();
+
+            // PRIORIDAD 1: trabajadores libres
+            if (state == "Wander")
+            {
+                worker.CallToBuild(build);
+                return;
+            }
+
+            // PRIORIDAD 2: trabajadores transportando SIN carga aún
+            if (worker.isTransporting && !worker.carryingResources)
+            {
+                worker.InterruptTransportAndBuild(build);
+                return;
+            }
+        }
+
+        waitingToBeBuilt.Add(build);
     }
 
     private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)

@@ -6,6 +6,9 @@ public class SkillUIBuilder : MonoBehaviour
     [SerializeField] private Transform contentParent;
     [SerializeField] private SkillUIItem skillItemPrefab;
 
+    [Header("Manual Layout")]
+    [SerializeField] private float spacing = 125f;
+
     private void OnEnable()
     {
         if (SkillManager.Instance != null)
@@ -33,15 +36,36 @@ public class SkillUIBuilder : MonoBehaviour
             return;
         }
 
+        // Limpiar hijos
         foreach (Transform child in contentParent)
         {
             Destroy(child.gameObject);
         }
 
-        foreach (var skill in skills)
+        // Crear items manualmente
+        for (int i = 0; i < skills.Count; i++)
         {
             var item = Instantiate(skillItemPrefab, contentParent);
-            item.Setup(skill);
+
+            RectTransform rt = item.GetComponent<RectTransform>();
+
+            if (i > 11)
+            {
+                rt.anchoredPosition = new Vector2(580, (-i * spacing) + (spacing * 12) - 125);
+            }
+            else if (i > 5)
+            {
+                rt.anchoredPosition = new Vector2(390, ((-i * spacing) + (spacing * 6))/1.7f - 125/2);
+            }
+            else if (i > 2){
+                rt.anchoredPosition = new Vector2(200, (-i * spacing) + (spacing * 3) - 125);
+            }
+            else  
+            {
+                rt.anchoredPosition = new Vector2(0, (-i * spacing) - 125);
+            }
+
+            item.Setup(skills[i]);
         }
 
         Debug.Log("Skill UI built: " + skills.Count);

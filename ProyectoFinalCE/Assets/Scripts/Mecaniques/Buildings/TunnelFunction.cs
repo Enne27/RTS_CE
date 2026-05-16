@@ -1,5 +1,4 @@
-﻿using DG.Tweening;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum PathType
@@ -55,9 +54,10 @@ public class TunnelFunction : MonoBehaviour
     public List<TunnelFunction> TunnelConnections;
     public float detectionDistance = 1.1f;
     public LayerMask tunnelLayer;
-    public bool isBuilding;
     public bool tileConnectedToEntrance;
     public PathType pathType;
+    public bool isBuilding;
+    public bool isConstructingHerePosible;
 
     [Header("TunnelMeshes")]
     [SerializeField] private Mesh isolatedMesh;
@@ -67,17 +67,12 @@ public class TunnelFunction : MonoBehaviour
     [SerializeField] private Mesh T_CornerMesh;
     [SerializeField] private Mesh crossMesh;
 
-    [Header("TunnelMaterials")]
-    [SerializeField] private Material isolatedMaterial;
-    [SerializeField] private Material endMaterial;
-    [SerializeField] private Material straightMaterial;
-    [SerializeField] private Material cornerMaterial;
-    [SerializeField] private Material T_CornerMaterial;
-    [SerializeField] private Material crossMaterial;
-
     private bool up, down, left, right;
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+
+    [Header("Construction")]
+    public TunnelFunction constructionAccessTunnel;
 
     private void Start()
     {
@@ -104,6 +99,32 @@ public class TunnelFunction : MonoBehaviour
         if (right) Gizmos.DrawLine(center, center + Vector3.right * detectionDistance);
     }
 
+    private void UpdateConstructionPossibility()
+    {
+        isConstructingHerePosible = false;
+        constructionAccessTunnel = null;
+
+        // solo edificios
+        if (!isBuilding)
+            return;
+
+        foreach (TunnelFunction neighbor in TunnelConnections)
+        {
+            if (neighbor == null)
+                continue;
+
+            // necesitamos un vecino NO edificio
+            if (!neighbor.isBuilding)
+            {
+                isConstructingHerePosible = true;
+
+                // guardar referencia del túnel que lo permite
+                constructionAccessTunnel = neighbor;
+
+                return;
+            }
+        }
+    }
     void DetectNeighbors()
     {
         Vector3 center = transform.position;
@@ -214,27 +235,27 @@ public class TunnelFunction : MonoBehaviour
             { 
                 pathType = PathType.T_Up;
                 transform.rotation = Quaternion.Euler(0, 0, 270);
-                Debug.Log("arriba");
+                //Debug.Log("arriba");
 
             }
             else if (!up)
             {
                 pathType = PathType.T_Down;
                 transform.rotation = Quaternion.Euler(0, 0, 90);
-                Debug.Log("abajo");
+                //Debug.Log("abajo");
 
             }
             else if (!left)
             {
                 pathType = PathType.T_Right;
                 transform.rotation = Quaternion.Euler(0, 0, 180);
-                Debug.Log("derecha");
+                //Debug.Log("derecha");
             }
             else
             {
                 pathType = PathType.T_Left;
                 transform.rotation = Quaternion.Euler(0, 0, 0);
-                Debug.Log("izquierda");
+                //Debug.Log("izquierda");
             } 
         }
         else
@@ -260,6 +281,8 @@ public class TunnelFunction : MonoBehaviour
     {
         DetectTunnels();
         tileConnectedToEntrance = IsConnectedToEntrance();
+
+        UpdateConstructionPossibility();
     }
 
     public void DetectTunnels()
@@ -334,69 +357,6 @@ public class TunnelFunction : MonoBehaviour
                     queue.Enqueue(neighbor);
             }
         }
-
         return false;
-    }
-
-    public void ApplyCurrentPathMaterial()
-    {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        Debug.Log("Lo intento?");
-        switch (pathType)
-        {
-            case PathType.Isolated:
-                meshRenderer.material = isolatedMaterial;
-                break;
-
-            case PathType.End_Up:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Down:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Left:
-                meshRenderer.material = endMaterial;
-                break;
-            case PathType.End_Right:
-                meshRenderer.material = endMaterial;
-                break;
-
-            case PathType.Straight_Horizontal:
-                meshRenderer.material = straightMaterial;
-                break;
-            case PathType.Straight_Vertical:
-                meshRenderer.material = straightMaterial;
-                break;
-
-            case PathType.Corner_UpRight:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_UpLeft:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_DownRight:
-                meshRenderer.material = cornerMaterial;
-                break;
-            case PathType.Corner_DownLeft:
-                meshRenderer.material = cornerMaterial;
-                break;
-
-            case PathType.T_Up:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-            case PathType.T_Down:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-            case PathType.T_Left:
-                meshRenderer.material = T_CornerMaterial; 
-                break;
-            case PathType.T_Right:
-                meshRenderer.material = T_CornerMaterial;
-                break;
-
-            case PathType.Cross:
-                meshRenderer.material = crossMaterial;
-                break;
-        }
     }
 }
