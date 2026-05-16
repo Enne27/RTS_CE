@@ -89,10 +89,13 @@ public class MoundFunction : StructuresPlayer
         AntExlporer antExlporer = other.gameObject.GetComponent<AntExlporer>();
         if (antExlporer != null)
         {
-            antExlporer.Deposit();
-            if (hudView != null) {
-                hudView.UpdateMCText();
-                hudView.UpdateFoodText();
+            if(antExlporer.antOwner == Owner.AI && gameObject.tag == "AI_AntHill" || antExlporer.antOwner == Owner.Player && gameObject.tag == "Player_AntHill")
+            {
+                antExlporer.Deposit();
+                if (hudView != null) {
+                    hudView.UpdateMCText();
+                    hudView.UpdateFoodText();
+                }
             }
         }
     }
@@ -191,7 +194,7 @@ public class MoundFunction : StructuresPlayer
 
     void UpdateUI()
     {
-        textHPLabel.text = $"{maxHealthByUpgrade[currentLevel-1]}/{moundHealthPoints}";
+        textHPLabel.text = $"{moundHealthPoints}/{maxHealthByUpgrade[currentLevel - 1]}";
         sliderHPBar.value = moundHealthPoints * maxHealthByUpgrade[currentLevel - 1] / 100;
     }
 }

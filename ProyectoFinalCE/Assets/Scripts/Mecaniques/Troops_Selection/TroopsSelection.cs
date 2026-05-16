@@ -9,9 +9,14 @@ public class TroopsSelection : MonoBehaviour
     [SerializeField] InputActionAsset inputAsset;
     private InputActionMap general;
 
-
+    [Header("Cursor")]
     public Texture2D defaultCursor;
+    public Vector2 defaultCursor_Pointer;
     public Texture2D farmCursor;
+    public Vector2 farmCursor_Pointer;
+    public Texture2D attackCursor;
+    public Vector2 attackCursor_Pointer;
+
     public List<Ant> unitsSelected;
 
     [SerializeField] private float dragThreshold = 5f;
@@ -102,19 +107,19 @@ public class TroopsSelection : MonoBehaviour
         {
             if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
             {
-                Cursor.SetCursor(farmCursor, Vector2.zero, CursorMode.Auto);
+                Cursor.SetCursor(farmCursor, farmCursor_Pointer, CursorMode.Auto);
             }
             else if (hit.transform.gameObject.CompareTag("Terrain"))
             {
-                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+                Cursor.SetCursor(defaultCursor, defaultCursor_Pointer, CursorMode.Auto);
             }
             else if (false/*self anthill*/)
             {
                 //Home cursor
             }
-            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            else if (hit.transform.gameObject.CompareTag("AI_AntHill")/* && hit.transform.gameObject.CompareTag("Enemy_Ant")*//*enemy anthill / enemy structure / enemy ant */)
             {
-                //atack cursor
+                Cursor.SetCursor(attackCursor, attackCursor_Pointer, CursorMode.Auto);
             }
         }
     }
