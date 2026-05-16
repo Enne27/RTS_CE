@@ -9,6 +9,7 @@ internal class AntSoldier : Ant
 {
     //int[] breedingCost = { 9, 12 };
     public static event Action<Ant> OnAnyAntDamaged;
+    Ant currentTarget;
     private void Awake()
     {
         //HP = 25f;
@@ -20,29 +21,38 @@ internal class AntSoldier : Ant
         //linePriority = 2;
         //acidBased = false;
     }
+    private void FixedUpdate()
+    {
+        if (currentTarget != null)
+        {
+            IsRange(currentTarget);
+        }
+    }
     public override void IsRange(Ant target)
     {
-        Debug.Log("Comprobando el rango");
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-        bool inRange = false;
-        while (!inRange)
+        if (target == null)
+            return;
+        currentTarget = target;
+        float distance = Vector3.Distance(
+            transform.position,
+            target.transform.position
+        );
+
+        if (distance <= reach)
         {
-            if (distance <= reach)
-            {
-                Debug.Log("Estoy en el rango");
-                Attack(target);
-                inRange = true;
-            }
+            Debug.Log("Estoy en el rango");
+            Attack(target);
+        }
+        else
+        {
+            UnitController.MoveTo(this, target.gameObject);
+            Debug.Log("Sigue corriendo, sigue corriendo");
         }
     }
     public override void Attack(Ant target) {
         if (target != null)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
                 target.TakeDamage(this, strength, acidBased);
-            }
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
