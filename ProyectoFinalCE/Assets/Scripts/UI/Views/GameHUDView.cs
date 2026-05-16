@@ -98,7 +98,18 @@ public class GameHUDView : View
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
         
         if (generalInfoButton != null)
-            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
+            generalInfoButton.onClick.AddListener(()=>
+            {
+                //ViewManager.Show<GeneralInfoView>(true);
+                GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
+                infoView.gameObject.SetActive(true);
+                infoView.RefreshUI(GameManager.instance.player.currentEra);
+            });
+    }
+
+    public void UpdateCurrentEraImage()
+    {
+        currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
     }
 
     private void ShowAntsUI()

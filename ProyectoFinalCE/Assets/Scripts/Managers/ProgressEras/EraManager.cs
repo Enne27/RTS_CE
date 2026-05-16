@@ -32,8 +32,7 @@ public class EraManager : MonoBehaviour
     [SerializeField] LocalizedString colonia_ls;
     [SerializeField] LocalizedString imperio_ls;
 
-    [Header("Era requirements control")]
-    public int requirementsCurrentEra;
+    private GameHUDView gameHUDView;
     #endregion
 
     #region SINGLETON
@@ -103,7 +102,9 @@ public class EraManager : MonoBehaviour
         {
             case SINGLE_PLAYER_GAME_SCENE_NAME:
                 if (generalInfoView == null)
-                    generalInfoView = FindFirstObjectByType<GeneralInfoView>();
+                    generalInfoView = FindFirstObjectByType<GeneralInfoView>(FindObjectsInactive.Include);
+                if(gameHUDView == null)
+                    gameHUDView = FindFirstObjectByType<GameHUDView>(FindObjectsInactive.Include);
 
                 ForceRecalculateLevels();
                 RefreshUI();
@@ -144,12 +145,12 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.BROTE, new List<EraRequirement>()
                 {
-                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
+                    /*new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),
-                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),*/
+                    new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             { 
@@ -250,8 +251,6 @@ public class EraManager : MonoBehaviour
         }
     }
 
-
-
     private int CountStructuresMeetingRequirement(EraRequirement req)
     {
         int count = 0;
@@ -314,7 +313,9 @@ public class EraManager : MonoBehaviour
             }
 
             GameManager.instance.player.currentEra += 1;
-            ChangesNewEra();
+            HIVE_ERAS era = GameManager.instance.player.currentEra;
+
+            LocalizedString newEraName = eraNames[era];
 
             UpgradeLimitsAndRefreshUpgradeButtonUI();
 
@@ -329,18 +330,6 @@ public class EraManager : MonoBehaviour
         }
         else GameManager.instance.playerIA.currentEra += 1;
     }
-
-    public void ChangesNewEra()
-    {
-        HIVE_ERAS era = GameManager.instance.player.currentEra;
-
-        LocalizedString newEraName = eraNames[era];
-
-        if (generalInfoView == null)
-            generalInfoView = FindFirstObjectByType<GeneralInfoView>();
-
-        generalInfoView.UpdateCurrentEraVisuals(era, newEraName);
-}
 
     public void RefreshUI()
     {
@@ -357,13 +346,15 @@ public class EraManager : MonoBehaviour
         if (generalInfoView == null) 
             generalInfoView = FindFirstObjectByType<GeneralInfoView>();
 
+        if (gameHUDView == null)
+            gameHUDView = FindFirstObjectByType<GameHUDView>();
+
+        gameHUDView.UpdateCurrentEraImage();
+
         if (generalInfoView == null)
             return;
 
-        if (!generalInfoView.gameObject.activeInHierarchy)
-            return;
-
-       generalInfoView.RefresUI(era);
+        generalInfoView.RefreshUI(era);
     }
 
     public void UpgradeLimitsAndRefreshUpgradeButtonUI()

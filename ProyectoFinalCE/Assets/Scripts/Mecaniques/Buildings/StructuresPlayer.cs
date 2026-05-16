@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public enum StructureState
@@ -15,6 +16,7 @@ public abstract class StructuresPlayer : MonoBehaviour
     [SerializeField] public Image upgradeButtonBackground;
     [SerializeField] public Button upgradeButton;
     [SerializeField] public Canvas canvas;
+    [SerializeField] public TextMeshProUGUI lvl_TMP;
 
    // public BuildingData buildingData;
 
@@ -120,7 +122,9 @@ public abstract class StructuresPlayer : MonoBehaviour
     {
         bool canUpgrade = CanUpgrade();
 
-        upgradeButtonBackground.gameObject.SetActive(canUpgrade);
+        //upgradeButtonBackground.gameObject.SetActive(canUpgrade);
+        upgradeButtonBackground.gameObject.SetActive(true);
+        upgradeButton.interactable = canUpgrade;
 
         Color imgColor;
 
@@ -132,5 +136,7 @@ public abstract class StructuresPlayer : MonoBehaviour
             imgColor = Color.red;
 
         upgradeButton.image.color = imgColor;
+
+        lvl_TMP.text = $"LV.{currentLevel}";
     }
 }

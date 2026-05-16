@@ -63,10 +63,10 @@ public class GeneralInfoView : View
         if(currentEraImage != null)
             currentEraImage.sprite = EraManager.instance.GetEraSprite(era);
 
-        RefresUI(era);
+        RefreshUI(era);
     }
 
-    public void RefresUI(HIVE_ERAS era)
+    public void RefreshUI(HIVE_ERAS era)
     {
         UpdateCurrentEraVisuals(
             era,
