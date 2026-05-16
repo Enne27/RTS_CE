@@ -53,15 +53,15 @@ public class UnitController : MonoBehaviour
     }
 
 
-    public static void MoveTo(Ant ant, Vector3 objective)
+    public static void MoveTo(Ant ant, GameObject objective)
     {
         ant.objective = objective;
         activeAnts.Add(ant);
-        SpawnFlag(objective);
+        SpawnFlag(objective.transform.position);
     }
     private bool ReachedDestination(Ant ant)
     {
-        Vector3 dir = ant.objective - ant.transform.position;
+        Vector3 dir = ant.objective.transform.position - ant.transform.position;
         dir.y = 0;
 
         return dir.sqrMagnitude < 1.5f * 1.5f;
@@ -71,7 +71,7 @@ public class UnitController : MonoBehaviour
     {
         separationForce = Vector3.zero;
 
-        Vector3 direction = ant.objective - ant.transform.position;
+        Vector3 direction = ant.objective.transform.position - ant.transform.position;
 
         direction.y = 0;
 

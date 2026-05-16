@@ -36,14 +36,6 @@ public abstract class Ant : MonoBehaviour
     Color defaultColor;
 
     protected bool hasObjective = false;
-
-    public int flowFieldIndex;
-    public Vector3 currentVelocity;
-    public Vector3 objective;
-
-    private Material material;
-    private Color defaultColor;
-
     #region COMBAT
 
     public virtual void Attack(Ant target) { }
@@ -53,9 +45,6 @@ public abstract class Ant : MonoBehaviour
     public virtual void AttackMound(GameObject mound) { }
 
     public virtual void Die() { }
-
-    public virtual void AttackMound(GameObject mound) { }
-
     public virtual void IsRange(Ant target) { }
     #endregion
 
@@ -255,7 +244,7 @@ public abstract class Ant : MonoBehaviour
         if (!hasObjective)
             return;
 
-        Vector3 direction = (objective - transform.position).normalized;
+        Vector3 direction = (objective.transform.position - transform.position).normalized;
 
         Vector3 newPos =
             transform.position +
@@ -264,7 +253,7 @@ public abstract class Ant : MonoBehaviour
         transform.position = newPos;
     }
 
-    public void MoveTo(Vector3 _objective)
+    public void MoveTo(GameObject _objective)
     {
         hasObjective = true;
         objective = _objective;
