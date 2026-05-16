@@ -58,9 +58,17 @@ public class EraRequirement
 
     public void AddProgress(int amount)
     {
+        if (type != RequirementType.COUNT) return;
+
         if (IsCompleted) return;
 
         currentQuantity = Mathf.Min(currentQuantity + amount, targetQuantity);
+        OnChanged?.Invoke();
+    }
+
+    public void SetProgress(int value)
+    {
+        currentQuantity = Mathf.Min(value, targetQuantity);
         OnChanged?.Invoke();
     }
 }

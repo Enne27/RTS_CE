@@ -84,6 +84,8 @@ public class BroodChamberFunction : StructuresPlayer
         currentStructureState = StructureState.Idle;
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
+
+        EraManager.instance.AddProgress(RequirementID.BROOD_CHAMBER, 1);
     }
 
     public override void OnUpgradeFinished()

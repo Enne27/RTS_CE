@@ -73,6 +73,7 @@ public class StorageChamberFunction : StructuresPlayer
         {
             worker.storageChamber = this;
         }
+        EraManager.instance.AddProgress(RequirementID.STORAGE_CHAMBER, 1);
     }
 
     public override void OnUpgradeFinished()

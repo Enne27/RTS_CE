@@ -112,12 +112,12 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.BROTE, new List<EraRequirement>()
                 {
-                    /*new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT
-                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),),*/
-                    new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             { 
@@ -127,10 +127,10 @@ public class EraManager : MonoBehaviour
                     /*new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.EXPLORER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.BERSERKER_ANT, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),*/
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
-                    new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),*/
+                    new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
                 }
             },
             {
@@ -162,16 +162,63 @@ public class EraManager : MonoBehaviour
         {
             if (req.id == id)
             {
-                req.AddProgress(amount);
+                if (req.type == RequirementType.COUNT)
+                {
+                    req.AddProgress(amount);
+                }
+                else if (req.type == RequirementType.LEVEL)
+                {
+                    int count = CountStructuresMeetingRequirement(req);
+                    req.SetProgress(count);
+                }
+
                 changed = true;
+            }
+
+            if (changed)
+            {
+                RefreshUI();
+                CheckEraCompletion(era);
+            }
+        }
+    }
+
+    private int CountStructuresMeetingRequirement(EraRequirement req)
+    {
+        int count = 0;
+
+        foreach (var construction in BuildingManager.Instance.constructionsBuilt)
+        {
+            var structure = construction.GetComponentInChildren<StructuresPlayer>();
+            if (structure == null) continue;
+
+            // Filtrar por tipo
+            if (!MatchesID(structure, req.id)) continue;
+
+            if (structure.currentLevel >= req.requiredLevel)
+            {
+                count++;
             }
         }
 
-        if (changed)
+        return count;
+    }
+
+    private bool MatchesID(StructuresPlayer structure, RequirementID id)
+    {
+        switch (id)
         {
-            RefreshUI();
-            CheckEraCompletion(era);
+            case RequirementID.QUEEN_CHAMBER:
+                return structure is QueenChamberFunction;
+
+            case RequirementID.BROOD_CHAMBER:
+                return structure is BroodChamberFunction;
+
+            case RequirementID.STORAGE_CHAMBER:
+                return structure is StorageChamberFunction;
         }
+
+        return false;
     }
 
     private void CheckEraCompletion(HIVE_ERAS era)

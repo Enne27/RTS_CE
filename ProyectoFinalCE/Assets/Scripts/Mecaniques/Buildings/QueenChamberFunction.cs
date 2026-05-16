@@ -69,6 +69,7 @@ public class QueenChamberFunction : StructuresPlayer
         //currentStructureState = StructureState.Idle;
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER, 1);
     }
 
     public override void OnUpgradeFinished()

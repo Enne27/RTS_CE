@@ -96,7 +96,7 @@ public class Building : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        Debug.Log("Double click en building");
+        //Debug.Log("Double click en building");
 
         GameHUDView hud = ViewManager.GetView<GameHUDView>();
 
