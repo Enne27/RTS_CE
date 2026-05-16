@@ -72,8 +72,8 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        if(currentEra != null)
-            currentEra.sprite = EraManager.instance.ERAS_IMAGES[GameManager.instance.player.currentEra];
+        if(currentEra != null && EraManager.instance != null)
+            currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
         {
@@ -91,13 +91,23 @@ public class GameHUDView : View
                   ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
               }
           });
+
         }
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
         
         if (generalInfoButton != null)
-            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
+            generalInfoButton.onClick.AddListener(()=>
+            {
+                SetGeneralInfoActive(true);
+                //ViewManager.Show<GeneralInfoView>(true);
+            });
+    }
+
+    public void UpdateCurrentEraImage()
+    {
+        currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
     }
 
     private void ShowAntsUI()
@@ -110,6 +120,25 @@ public class GameHUDView : View
         {
             fakeAntsDropdown.gameObject.SetActive(true);
             isActive = true;
+        }
+    }
+
+
+    public void SetGeneralInfoActive(bool value)
+    {
+        GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
+        infoView.gameObject.SetActive(value);
+        if(infoView.gameObject.activeInHierarchy)
+            infoView.RefreshUI(GameManager.instance.player.currentEra);
+    }
+    public void SetConstructionButtonActive(bool value)
+    {
+        constructionButton.gameObject.SetActive(value);
+
+        if (!value)
+        {
+            ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
+            constructionMenuActived = false;
         }
     }
 

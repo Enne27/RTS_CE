@@ -21,6 +21,9 @@ public class AntExlporer : Ant
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
+
+    public static event Action OnExplorationCompleted;
+
     private void Awake()
     {
         antType = ANT_TYPES.EXPLORER;
@@ -115,6 +118,8 @@ public class AntExlporer : Ant
         switch (antOwner)
         {
             case (Owner.Player):
+                OnExplorationCompleted?.Invoke();
+
                 inventory = GameManager.instance.player.inventory;
                 if (foragingChamber.AddResource(ResourceType.food, food))
                     inventory.AddFoodInForaging(food);
@@ -125,6 +130,7 @@ public class AntExlporer : Ant
                 else
                     inventory.materialsInForaging = foragingChamber.materials;
                 break;
+
             case (Owner.AI):
                 inventory = GameManager.instance.playerIA.inventory;
                 inventory.AddFood(food);

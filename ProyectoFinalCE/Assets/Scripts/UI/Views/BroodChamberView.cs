@@ -12,6 +12,7 @@ public class BroodChamberView : View
     #region VARIABLES
     [Header("Info view")]
     [SerializeField] private List<AntButton> antsButton;
+    [SerializeField] AntWorkerBehaviour workerScript;
     [SerializeField] GameObject antInfo;
     [SerializeField] TextMeshProUGUI antNameText;
     [SerializeField] TextMeshProUGUI statsValuesText;
@@ -135,6 +136,8 @@ public class BroodChamberView : View
             antImage.texture = referencesPreviewObject.previewTexture;
         }
 
+        if(workerScript == null)
+            workerScript = FindFirstObjectByType<AntWorkerBehaviour>(FindObjectsInactive.Include);
     }
 
     #region BUTTONS
@@ -194,15 +197,16 @@ public class BroodChamberView : View
         if (data.antName.Contains("worker"))
         {
             antNameLocalized = new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = data.antName };
-            UpdateWorkerPanel(antNameLocalized.GetLocalizedString());
+            UpdateWorkerPanel(workerScript, antNameLocalized.GetLocalizedString());
+            ShowPreview(data.previewModel, true);
         }
         else
         {
             antNameLocalized = new LocalizedString { TableReference = TABLE_HUD, TableEntryReference = data.antName };
             UpdateInfoPanel(data.antScript, antNameLocalized.GetLocalizedString());
+            ShowPreview(data.previewModel, false);
         }
 
-        ShowPreview(data.previewModel);
 
         antInfo.SetActive(true);
     }
@@ -233,7 +237,7 @@ public class BroodChamberView : View
         statsValuesText.rectTransform.anchoredPosition = statsValuesTextOriginalPos;
 
         statsValuesText.text = $"<voffset=10><sprite name=\"huevas\"></voffset> {data.breedingCost[0]}" 
-            + $"<space=50><voffset=10><sprite name=\"materiales\"></voffset> {data.breedingCost[1]}"
+            + $"<space=50><voffset=10><sprite name=\"food\"></voffset> {data.breedingCost[1]}"
             + "\n" + data.HP
             + "\n" + data.armor
             + "\n" + data.speed
@@ -246,7 +250,7 @@ public class BroodChamberView : View
     /// Actualizaci�n de informaci�n para la hormiga trabajadora.
     /// </summary>
     /// <param name="antName">Key de la tabla para el nombre de la hormiga.</param>
-    private void UpdateWorkerPanel(string antName)
+    private void UpdateWorkerPanel(AntWorkerBehaviour worker, string antName)
     {
         antNameText.text = antName;
         statsText.gameObject.SetActive(false);
@@ -254,7 +258,10 @@ public class BroodChamberView : View
         statsValuesText.rectTransform.sizeDelta = statsValuesTextWorkersScale;
         statsValuesText.rectTransform.anchoredPosition = statsValuesTextWorkersPos;
 
-        statsValuesText.text = new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = KEY_WORKER_DESCRIPTION }
+        statsValuesText.text = $"<voffset=10><sprite name=\"huevas\"></voffset> {worker.hvCost}"
+            + $"<space=50><voffset=10><sprite name=\"food\"></voffset> {worker.foodCost}"
+            + "\n" 
+            + new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = KEY_WORKER_DESCRIPTION }
             .GetLocalizedString();
     }
 
@@ -262,7 +269,7 @@ public class BroodChamberView : View
     /// Muestra en la rawImage el modelo de hormiga correspondiente rotando.
     /// </summary>
     /// <param name="model"></param>
-    private void ShowPreview(GameObject model)
+    private void ShowPreview(GameObject model, bool worker)
     {
         if (model == null) return;
 
@@ -273,9 +280,18 @@ public class BroodChamberView : View
 
         currentPreview.SetActive(true);
 
-        // reset transform por seguridad
-        currentPreview.transform.localPosition = Vector3.zero;
-        currentPreview.transform.localRotation = Quaternion.identity;
+        if(worker == false)
+        {
+            // reset transform por seguridad
+            currentPreview.transform.localPosition = Vector3.zero;
+            currentPreview.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            currentPreview.transform.localPosition = Vector3.zero;
+        }
+
+        
     }
     #endregion
 
