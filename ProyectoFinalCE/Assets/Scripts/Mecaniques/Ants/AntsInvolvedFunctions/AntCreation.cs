@@ -194,7 +194,7 @@ public class AntCreation : MonoBehaviour
                         if (workerAntComponent != null)
                             GameManager.instance.player.ants.Add(workerAntComponent);
                         else
-                            Debug.LogError("Worker prefab lacks AntWorker component!");
+                            Debug.LogWarning("Worker prefab lacks AntWorker component!");
                     }
 
                     if (antType == ANT_TYPES.EXPLORER)
