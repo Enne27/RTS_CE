@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
-    static private HashSet<Ant> activeAnts;
+    static public HashSet<Ant> activeAnts;
     static private GameObject staticFlagPrefab;
     static private GameObject currentFlag;
 
@@ -56,6 +56,11 @@ public class UnitController : MonoBehaviour
         ant.objective = new Vector3(objective.x, 0, objective.z);
         activeAnts.Add(ant);
         SpawnFlag(objective);
+    }
+    public static void MoveToAi(Ant ant, Vector3 objective)
+    {
+        ant.objective = new Vector3(objective.x, 0, objective.z);
+        activeAnts.Add(ant);
     }
 
 

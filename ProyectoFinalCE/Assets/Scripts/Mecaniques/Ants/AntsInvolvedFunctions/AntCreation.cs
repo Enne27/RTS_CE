@@ -283,4 +283,18 @@ public class AntCreation : MonoBehaviour
                 break;
         }
     }
+
+    public void AIAntCreation(ANT_TYPES antType, Transform position, float time)
+    {
+        if (position == null) return;
+
+        AntCreation.Instance.ChangeAntTypeToInstantiate(antType);
+
+        AntCreation.Instance.positionInstantiate = position;
+
+        TimeManager.Instance?.OneShotTimer(time, () =>
+        {
+            AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
+        });
+    }
 }
