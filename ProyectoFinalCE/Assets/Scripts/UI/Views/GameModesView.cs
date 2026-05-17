@@ -27,7 +27,7 @@ public class GameModesView : View
 
         creativeModeButton.onClick.AddListener(() =>
         {
-            
+            ScenesManager.Instance.ChangeScene(CREATIVE_MODE_SCENE_NAME, false);
         });
 
         backButton.onClick.AddListener(() =>
