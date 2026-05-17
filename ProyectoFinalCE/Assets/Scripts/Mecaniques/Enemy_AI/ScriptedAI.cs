@@ -7,13 +7,12 @@ public class ScriptedAI : MonoBehaviour
     [SerializeField] private GameObject[] zonaRecursos;
 
     [SerializeField] Transform spawnPoint;
-
-
+    [SerializeField] Transform enemyAnthill;
 
 
     private void Start()
     {
-        TimeManager.Instance.OneShotTimer(45, () => TimeManager.Instance.Register(1, createAnts));
+        TimeManager.Instance.OneShotTimer(45, () => TimeManager.Instance.Register(80, createAnts));
     }
 
     private void Update()
@@ -49,14 +48,7 @@ public class ScriptedAI : MonoBehaviour
                 }
             }
 
-            foreach (var structure in GameManager.instance.player.structures)
-            {
-                if (structure.GetComponent<Anthill>() != null)
-                {
-                    //attack anthill
-                    UnitController.MoveToAi(ant, structure.transform.position);
-                }
-            }
+            UnitController.MoveToAi(ant, enemyAnthill.position);
         }
     }
 
