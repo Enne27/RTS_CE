@@ -70,6 +70,7 @@ public class RequirementNextEraSlot : MonoBehaviour
             { RequirementID.ACID_ANT, acidAnt },
             { RequirementID.BERSERKER_ANT, berserkerAnt },
             { RequirementID.EXPLORER_ANT, explorerAnt },
+            { RequirementID.CRAZY_ANT, crazyAnt },
             { RequirementID.KAMIKAZE_ANT, kamikazeAnt },
             { RequirementID.SOLDIER_ANT, soldierAnt },
             { RequirementID.WORKER_ANT, workerAnt },

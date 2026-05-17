@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 2LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Disminucion de tama\xF1o"
-  description: Da mas velocidad a las hormigas pero las hace menos fuertes.
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2009264726016
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2010170695680
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 2
   cost: 3
   prerequisites:
@@ -27,3 +43,6 @@ MonoBehaviour:
     statType: 3
     value: -5
     specialID: 2LvlSpeed2
+  references:
+    version: 2
+    RefIds: []

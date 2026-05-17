@@ -69,13 +69,13 @@ public class QueenChamberFunction : StructuresPlayer
         //currentStructureState = StructureState.Idle;
         workerWhoBuildThis.HasFinishedWork();
         workerWhoBuildThis = null;
-        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER, 1);
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER);
     }
 
     public override void OnUpgradeFinished()
     {
         base.OnUpgradeFinished();
-        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER, 1);
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER);
     }
 
     #endregion
@@ -98,7 +98,7 @@ public class QueenChamberFunction : StructuresPlayer
             GameManager.instance.player.inventory.AddEggs(eggsToAdd); 
             
        else {
-            GameManager.instance.player.inventory.eggs = currentEggCapacity; 
+            GameManager.instance.player.inventory.eggs = currentEggCapacity;
        }
 
        if(hudView != null) hudView.UpdateEggsText();

@@ -98,7 +98,7 @@ public class Building : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        //Debug.Log("Double click en building");
+        cameraMovement = FindFirstObjectByType<CameraMovement2D>();
 
         GameHUDView hud = ViewManager.GetView<GameHUDView>();
 
@@ -128,13 +128,16 @@ public class Building : MonoBehaviour
                     Debug.LogError("CameraMovement2D not found!");
                 break;
             case BuildingType.Entrance:
+                hud.SetGeneralInfoActive(false);
                 CameraController.instance.ChangeCameraMode(CameraState.Outside, () => hud.SetConstructionButtonActive(false));
-                //hud.constructionButton.gameObject.SetActive(false);
                 BuildingManager.Instance.CancelPreview();
+                ExtraSoundsSFX.instance.canSound = true;
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
+                hud.SetGeneralInfoActive(false);
                 CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.SetConstructionButtonActive(true));
+                ExtraSoundsSFX.instance.canSound = false;
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:

@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 1LvlGeneric
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: Boost de estats
-  description: "Da un peque\xF1o boost generico"
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 9168920576
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 580412153856
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 0
   cost: 2
   prerequisites: []
@@ -30,3 +46,6 @@ MonoBehaviour:
     statType: 3
     value: 3
     specialID: 1LvlGeneric3
+  references:
+    version: 2
+    RefIds: []

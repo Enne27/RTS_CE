@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 4LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: Exploradoras invisibles
-  description: Las hormigas exploradoras no son percividas.
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2768207257600
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2770824503296
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 2
   cost: 10
   prerequisites:
@@ -26,3 +42,6 @@ MonoBehaviour:
     statType: 8
     value: 1
     specialID: InvisibleExplorers
+  references:
+    version: 2
+    RefIds: []

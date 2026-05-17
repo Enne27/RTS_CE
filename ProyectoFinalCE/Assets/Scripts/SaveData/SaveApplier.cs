@@ -256,7 +256,7 @@ public static class SaveApplier
     {
         foreach (var skill in SkillManager.Instance.GetAllSkills())
         {
-            if (skill.SkillName == name)
+            if (skill.SkillName.GetLocalizedString() == name)
                 return skill;
         }
 

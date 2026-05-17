@@ -16,7 +16,7 @@ public class AntKamikaze : Ant
         speed = 13f;
         strength = 2f;
         reach = 1;
-        vision = 5;
+        vision = 10;
         linePriority = 2;
         acidBased = false;
         maxHP = HP;

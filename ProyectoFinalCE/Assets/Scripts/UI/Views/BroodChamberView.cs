@@ -198,14 +198,15 @@ public class BroodChamberView : View
         {
             antNameLocalized = new LocalizedString { TableReference = TABLE_ANTS, TableEntryReference = data.antName };
             UpdateWorkerPanel(workerScript, antNameLocalized.GetLocalizedString());
+            ShowPreview(data.previewModel, true);
         }
         else
         {
             antNameLocalized = new LocalizedString { TableReference = TABLE_HUD, TableEntryReference = data.antName };
             UpdateInfoPanel(data.antScript, antNameLocalized.GetLocalizedString());
+            ShowPreview(data.previewModel, false);
         }
 
-        ShowPreview(data.previewModel);
 
         antInfo.SetActive(true);
     }
@@ -268,7 +269,7 @@ public class BroodChamberView : View
     /// Muestra en la rawImage el modelo de hormiga correspondiente rotando.
     /// </summary>
     /// <param name="model"></param>
-    private void ShowPreview(GameObject model)
+    private void ShowPreview(GameObject model, bool worker)
     {
         if (model == null) return;
 
@@ -279,9 +280,18 @@ public class BroodChamberView : View
 
         currentPreview.SetActive(true);
 
-        // reset transform por seguridad
-        currentPreview.transform.localPosition = Vector3.zero;
-        currentPreview.transform.localRotation = Quaternion.identity;
+        if(worker == false)
+        {
+            // reset transform por seguridad
+            currentPreview.transform.localPosition = Vector3.zero;
+            currentPreview.transform.localRotation = Quaternion.identity;
+        }
+        else
+        {
+            currentPreview.transform.localPosition = Vector3.zero;
+        }
+
+        
     }
     #endregion
 

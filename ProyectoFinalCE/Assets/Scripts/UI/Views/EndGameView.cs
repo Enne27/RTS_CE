@@ -1,3 +1,4 @@
+using FMODUnity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,12 @@ public class EndGameView : View
     [Header("Sprites")]
     [SerializeField] Sprite victorySprite;
     [SerializeField] Sprite defeatSprite;
+
+    [Header("Sound")]
+    [SerializeField] StudioEventEmitter finalSFXSoundEmitter;
+    [SerializeField] EventReference finalSFXSoundReferenceVictory;
+    [SerializeField] EventReference finalSFXSoundReferenceDefeat;
+
     #endregion
 
 
@@ -35,6 +42,8 @@ public class EndGameView : View
             victoryTMP.gameObject.SetActive(true);
             defeatTMP.gameObject.SetActive(false);
             imageVictoryDefeat.sprite = victorySprite;
+
+            finalSFXSoundEmitter.EventReference = finalSFXSoundReferenceVictory;
         }
         else
         {
@@ -42,12 +51,30 @@ public class EndGameView : View
             defeatTMP.gameObject.SetActive(true);
             imageVictoryDefeat.sprite = defeatSprite;
 
+            finalSFXSoundEmitter.EventReference = finalSFXSoundReferenceDefeat;
         }
+
+        if (SFXManager.instance != null && finalSFXSoundEmitter != null)
+            SFXManager.PlaySFX(finalSFXSoundEmitter);
     }
 
     private void GoToMainMenu()
     {
         GameManager.instance.ResetValues();
         ScenesManager.Instance.ChangeScene(MAIN_MENU_SCENE_NAME, false);
-    } 
+
+        if (SFXManager.instance != null)
+            SFXManager.StopAllSFX();
+    }
+
+    public override void Show()
+    {
+        base.Show();
+
+    }
+
+    public override void Hide()
+    {
+        base.Hide();
+    }
 }

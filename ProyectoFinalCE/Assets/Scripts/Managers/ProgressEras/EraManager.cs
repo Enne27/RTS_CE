@@ -2,7 +2,9 @@ using FMODUnity;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.SceneManagement;
 using static PlayerConstants;
+using static ConstantsAndKeys;
 
 public class EraManager : MonoBehaviour
 {
@@ -30,8 +32,7 @@ public class EraManager : MonoBehaviour
     [SerializeField] LocalizedString colonia_ls;
     [SerializeField] LocalizedString imperio_ls;
 
-    [Header("Era requirements control")]
-    public int requirementsCurrentEra;
+    private GameHUDView gameHUDView;
     #endregion
 
     #region SINGLETON
@@ -73,15 +74,53 @@ public class EraManager : MonoBehaviour
 
         InitData();
         InitRequirements();
-        RefreshUI();
 
-        if (generalInfoView == null)
+        /*if (generalInfoView == null)
             generalInfoView = FindFirstObjectByType<GeneralInfoView>();
 
-        if(advanceEraSound == null)
+        ForceRecalculateLevels();
+        RefreshUI();*/
+
+        if (advanceEraSound == null)
             advanceEraSound = new StudioEventEmitter();
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /*private void Start()
+    {
+        AdvanceEra(true);
+        AdvanceEra(true);
+        AdvanceEra(true);
+    }*/
+
+    private void OnSceneLoaded(Scene escena, LoadSceneMode arg1)
+    {
+        switch (escena.name)
+        {
+            case SINGLE_PLAYER_GAME_SCENE_NAME:
+                if (generalInfoView == null)
+                    generalInfoView = FindFirstObjectByType<GeneralInfoView>(FindObjectsInactive.Include);
+                if(gameHUDView == null)
+                    gameHUDView = FindFirstObjectByType<GameHUDView>(FindObjectsInactive.Include);
+
+                ForceRecalculateLevels();
+                RefreshUI();
+
+                break;
+
+            case CREATIVE_MODE_SCENE_NAME:
+                break;
+        }
+    }
 
     public void InitData()
     {
@@ -124,11 +163,10 @@ public class EraManager : MonoBehaviour
                 HIVE_ERAS.NIDO, new List<EraRequirement>()
                 {
                     new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
-                    /*new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.EXPLORER_ANT, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.BERSERKER_ANT, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),*/
-                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
                 }
@@ -136,13 +174,27 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.COLONIA, new List<EraRequirement>()
                 {
-
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORER_ANT, 3, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BERSERKER_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORATION, 15, RequirementType.COUNT),
                 }
             },
             {
                 HIVE_ERAS.IMPERIO, new List<EraRequirement>()
                 {
-
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 5),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 3, RequirementType.LEVEL, 6),
+                    new EraRequirement(RequirementID.BERSERKER_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.KAMIKAZE_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.CRAZY_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.ACID_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 6),
+                    new EraRequirement(RequirementID.EXPLORATION, 35, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                    
                 }
             }
         };
@@ -158,27 +210,62 @@ public class EraManager : MonoBehaviour
         var requirements = GetRequirements(era);
         bool changed = false;
 
+        bool exists = false;
         foreach (var req in requirements)
         {
             if (req.id == id)
             {
-                if (req.type == RequirementType.COUNT)
-                {
-                    req.AddProgress(amount);
-                }
-                else if (req.type == RequirementType.LEVEL)
-                {
-                    int count = CountStructuresMeetingRequirement(req);
-                    req.SetProgress(count);
-                }
-
-                changed = true;
+                exists = true;
+                break;
             }
+        }
 
-            if (changed)
+        if (!exists) // No queremos progreso invalido
+            return;
+
+        foreach (var req in requirements)
+        {
+            if (req.id != id)
+                continue;
+
+            if (req.type == RequirementType.COUNT)
             {
-                RefreshUI();
-                CheckEraCompletion(era);
+                int before = req.currentQuantity;
+
+                req.AddProgress(amount);
+
+                if (req.currentQuantity != before)
+                    changed = true;
+            }
+            else if (req.type == RequirementType.LEVEL)
+            {
+                int newValue = CountStructuresMeetingRequirement(req);
+
+                if (newValue != req.currentQuantity)
+                {
+                    req.SetProgress(newValue);
+                    changed = true;
+                }
+            }
+        }
+
+        if (changed)
+        {
+            RefreshUI();
+            CheckEraCompletion(era);
+        }
+    }
+
+    public void ForceRecalculateLevels()
+    {
+        var era = GameManager.instance.player.currentEra;
+
+        foreach (var req in eraRequirements[era])
+        {
+            if (req.type == RequirementType.LEVEL)
+            {
+                int value = CountStructuresMeetingRequirement(req);
+                req.SetProgress(value);
             }
         }
     }
@@ -196,9 +283,7 @@ public class EraManager : MonoBehaviour
             if (!MatchesID(structure, req.id)) continue;
 
             if (structure.currentLevel >= req.requiredLevel)
-            {
                 count++;
-            }
         }
 
         return count;
@@ -229,6 +314,9 @@ public class EraManager : MonoBehaviour
                 return;
         }
 
+        if (era != GameManager.instance.player.currentEra)
+            return;
+
         AdvanceEra(true);
     }
 
@@ -237,48 +325,57 @@ public class EraManager : MonoBehaviour
     {
         if (isPlayer)
         {
+            if (GameManager.instance.player.currentEra >= HIVE_ERAS.IMPERIO)
+            {
+                EndGameView endView = ViewManager.GetView<EndGameView>();
+                endView.PlayerWin(true);
+                ViewManager.Show<EndGameView>();
+                return;
+            }
+
             GameManager.instance.player.currentEra += 1;
-            ChangesNewEra();
+            HIVE_ERAS era = GameManager.instance.player.currentEra;
 
-            //HIVE_ERAS newEra = GameManager.instance.player.currentEra;
-
-            //RefreshUI();
+            LocalizedString newEraName = eraNames[era];
 
             UpgradeLimitsAndRefreshUpgradeButtonUI();
+
+            ForceRecalculateLevels();
 
             RefreshUI();
 
             advanceEraSound.EventReference = advanceEraSoundEventReference;
-            SFXManager.PlaySFX(advanceEraSound);
+
+            if(SFXManager.instance != null)
+                SFXManager.PlaySFX(advanceEraSound);
         }
         else GameManager.instance.playerIA.currentEra += 1;
     }
 
-    public void ChangesNewEra()
-    {
-        HIVE_ERAS era = GameManager.instance.player.currentEra;
-
-        LocalizedString newEraName = eraNames[era];
-
-        generalInfoView.UpdateCurrentEraVisuals(era, newEraName);
-    }
-
     public void RefreshUI()
     {
-        if (generalInfoView == null) return;
-
-        if (!generalInfoView.gameObject.activeInHierarchy) return;
+        /*Debug.Log($"ERA: {GameManager.instance.player.currentEra}");
+        Debug.Log($"generalInfoView: {generalInfoView}");
+        Debug.Log($"eraNames null? {eraNames == null}");
+        Debug.Log($"eraRequirements null? {eraRequirements == null}");*/
 
         var era = GameManager.instance.player.currentEra;
 
-        generalInfoView.UpdateCurrentEraVisuals(
-            era,
-            eraNames[era]
-        );
+        if (!eraNames.ContainsKey(era) || !eraRequirements.ContainsKey(era))
+            return;
 
-        generalInfoView.UpdateRequirements(
-            eraRequirements[era]
-        );
+        if (generalInfoView == null) 
+            generalInfoView = FindFirstObjectByType<GeneralInfoView>();
+
+        if (gameHUDView == null)
+            gameHUDView = FindFirstObjectByType<GameHUDView>();
+
+        gameHUDView.UpdateCurrentEraImage();
+
+        if (generalInfoView == null)
+            return;
+
+        generalInfoView.RefreshUI(era);
     }
 
     public void UpgradeLimitsAndRefreshUpgradeButtonUI()

@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 1LvlStrength
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "Boost de For\xE7a"
-  description: "Dona un petit boost en la for\xE7a de les formigues"
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1824811819008
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1829840789504
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 1
   cost: 2
   prerequisites: []
@@ -22,3 +38,6 @@ MonoBehaviour:
     statType: 3
     value: 5
     specialID: Lvl1Strength
+  references:
+    version: 2
+    RefIds: []

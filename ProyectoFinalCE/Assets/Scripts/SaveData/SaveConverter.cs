@@ -150,7 +150,7 @@ public static class SaveConverter
         {
             if (SkillManager.Instance.IsSkillUnlocked(skill))
             {
-                data.unlockedSkills.Add(skill.SkillName);
+                data.unlockedSkills.Add(skill.SkillName.GetLocalizedString());
             }
         }
 

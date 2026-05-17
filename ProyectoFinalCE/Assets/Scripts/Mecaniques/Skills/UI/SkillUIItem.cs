@@ -28,8 +28,12 @@ public class SkillUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void Setup(SkillData data)
     {
         skill = data;
-        nameText.text = data.SkillName;
-        descText.text = data.Description;
+
+        skill.SkillName.StringChanged -= OnNameChanged;
+        skill.Description.StringChanged -= OnDescChanged;
+        data.SkillName.StringChanged += OnNameChanged;
+        data.Description.StringChanged += OnDescChanged;
+
         descText.gameObject.SetActive(false);
         skillDetailsPanel.SetActive(false);
         unlockButton.onClick.RemoveAllListeners();
@@ -38,6 +42,16 @@ public class SkillUIItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Refresh();
 
         Debug.Log("Setup: " + data.SkillName);
+    }
+
+    private void OnNameChanged(string value)
+    {
+        nameText.text = value;
+    }
+
+    private void OnDescChanged(string value)
+    {
+        descText.text = value;
     }
 
     private void OnClick()

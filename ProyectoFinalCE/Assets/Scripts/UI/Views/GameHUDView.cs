@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static PlayerConstants;
@@ -17,6 +16,7 @@ public class GameHUDView : View
 
     [Header("Buttons")]
     [SerializeField] public Button constructionButton;
+    [SerializeField] public Button skillsTreeButton;
     private bool constructionMenuActived = false;
     [SerializeField] Button generalInfoButton;
 
@@ -35,6 +35,9 @@ public class GameHUDView : View
 
     [Header("General Info")]
     [SerializeField] Image currentEra;
+
+    [Header("Skills")]
+    [SerializeField] GameObject skillsTree;
     #endregion
 
     public override void Initialize()
@@ -72,7 +75,7 @@ public class GameHUDView : View
             kamikazeAntsText.text = "0";*/
         }
 
-        if(currentEra != null)
+        if(currentEra != null && EraManager.instance != null)
             currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
 
         if(constructionButton != null)
@@ -96,9 +99,21 @@ public class GameHUDView : View
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
-        
+
+        if (skillsTreeButton != null && skillsTree != null)
+            skillsTreeButton.onClick.AddListener(()=> skillsTree.SetActive(true));
+
         if (generalInfoButton != null)
-            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
+            generalInfoButton.onClick.AddListener(()=>
+            {
+                SetGeneralInfoActive(true);
+                //ViewManager.Show<GeneralInfoView>(true);
+            });
+    }
+
+    public void UpdateCurrentEraImage()
+    {
+        currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
     }
 
     private void ShowAntsUI()
@@ -114,6 +129,14 @@ public class GameHUDView : View
         }
     }
 
+
+    public void SetGeneralInfoActive(bool value)
+    {
+        GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
+        infoView.gameObject.SetActive(value);
+        if(infoView.gameObject.activeInHierarchy)
+            infoView.RefreshUI(GameManager.instance.player.currentEra);
+    }
     public void SetConstructionButtonActive(bool value)
     {
         constructionButton.gameObject.SetActive(value);

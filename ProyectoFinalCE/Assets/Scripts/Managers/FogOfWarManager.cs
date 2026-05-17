@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 struct RevealerData
 {
@@ -7,6 +9,7 @@ struct RevealerData
     public float radius;
 }
 
+[DefaultExecutionOrder(-1)]
 public class FogOfWarManager : MonoBehaviour
 {
     #region Variables
@@ -33,7 +36,6 @@ public class FogOfWarManager : MonoBehaviour
     // Almacenamos el offset para centrar el mapa (asumiendo que el centro del mundo es 0,0,0)
     private float mapOriginOffset;
     #endregion
-
     private void Awake()
     {
         // Inicializar el Singleton

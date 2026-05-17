@@ -8,7 +8,7 @@ public class FogRevealer : MonoBehaviour
 
     // Usamos OnEnable y OnDisable en lugar de Start y OnDestroy.
     // Esto es vital si usas "Object Pooling" o si las unidades entran/salen de transportes.
-    private void Start()
+    private void Awake()
     {
         if (FogOfWarManager.Instance != null)
         {

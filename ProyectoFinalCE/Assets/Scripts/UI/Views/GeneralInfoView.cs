@@ -33,40 +33,42 @@ public class GeneralInfoView : View
 
     #endregion
 
-    private void OnEnable()
-    {
-        EraManager.instance.RefreshUI();
-    }
 
     public override void Initialize()
     {
         var era = GameManager.instance.player.currentEra;
 
         if (backButton != null)
-            backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
+            backButton.onClick.AddListener(()=> gameObject.SetActive(false));
+            //backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
 
-        /*
-         * if (antsInfoButton != null)
-            antsInfoButton.onClick.AddListener(()=> );
+            /*
+             * if (antsInfoButton != null)
+                antsInfoButton.onClick.AddListener(()=> );
 
-        if (buildingsInfoButton != null)
-            buildingsInfoButton.onClick.AddListener(()=> );
+            if (buildingsInfoButton != null)
+                buildingsInfoButton.onClick.AddListener(()=> );
 
-        
 
-        if(userNameText != null
-            userNameText.text = GameManager.instance.player.playerName;
 
-        if(userImage != null)
-            userImage = ;
+            if(userNameText != null
+                userNameText.text = GameManager.instance.player.playerName;
 
-        if(userColorImage != null)
-            userColorImage.color = GameManager.instance.player.playerColor;
-        */
+            if(userImage != null)
+                userImage = ;
 
-        /*if(currentEraImage != null)
-            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);*/
+            if(userColorImage != null)
+                userColorImage.color = GameManager.instance.player.playerColor;
+            */
 
+        if (currentEraImage != null)
+            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);
+
+        RefreshUI(era);
+    }
+
+    public void RefreshUI(HIVE_ERAS era)
+    {
         UpdateCurrentEraVisuals(
             era,
             EraManager.instance.GetEraName(era)
@@ -76,6 +78,7 @@ public class GeneralInfoView : View
             EraManager.instance.GetRequirements(era)
         );
     }
+
 
     /// <summary>
     /// Actualización visual de la era actual del imperio.

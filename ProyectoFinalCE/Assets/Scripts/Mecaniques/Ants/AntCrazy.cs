@@ -15,7 +15,7 @@ public class AntCrazy : Ant
         speed = 17f;
         strength = 2f;
         reach = 1;
-        vision = 5;
+        vision = 10;
         linePriority = 6;
         acidBased = false;
         base.Awake();

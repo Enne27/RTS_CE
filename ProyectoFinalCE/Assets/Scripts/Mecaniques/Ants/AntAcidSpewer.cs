@@ -14,7 +14,7 @@ public class AntAcidSpewer : Ant
         speed = 10f;
         strength = 5f;
         reach = 9;
-        vision = 5;
+        vision = 10;
         linePriority = 10;
         acidBased = true;
         base.Awake();

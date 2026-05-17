@@ -14,7 +14,7 @@ public class AntBerserker : Ant
         speed = 7f;
         strength = 4f;
         reach = 1;
-        vision = 5;
+        vision = 10;
         linePriority = 2;
         acidBased = false;
         base.Awake();

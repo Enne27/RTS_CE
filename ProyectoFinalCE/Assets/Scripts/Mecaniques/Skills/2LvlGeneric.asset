@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 2LvlGeneric
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: HP Boost
-  description: Da mas vida a las hormigas.
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1894827335680
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1918986526720
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 0
   cost: 3
   prerequisites:
@@ -23,3 +39,6 @@ MonoBehaviour:
     statType: 1
     value: 15
     specialID: 2LvlGeneric
+  references:
+    version: 2
+    RefIds: []

@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 1LvlSpeed
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: Boost de Velocitat
-  description: Dona un petit boost en la velocitat de les formigues.
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1699230162944
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 1778565423104
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 2
   cost: 2
   prerequisites: []
@@ -22,3 +38,6 @@ MonoBehaviour:
     statType: 7
     value: 5
     specialID: 1LvlSpeed
+  references:
+    version: 2
+    RefIds: []

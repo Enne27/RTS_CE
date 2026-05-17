@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Localization;
 
 /// <summary>
 /// ScriptableObject que defineix una skill de l'arbre
@@ -9,9 +10,9 @@ public class SkillData : ScriptableObject
 {
     #region Variables
     [Header("Info")]
-    [SerializeField] private string skillName;
-    [TextArea]
-    [SerializeField] private string description;
+    [SerializeField] private LocalizedString skillName;
+
+    [SerializeField] private LocalizedString description;
 
     [Header("Config")]
     [SerializeField] private SkillType skillType;
@@ -26,10 +27,10 @@ public class SkillData : ScriptableObject
 
     #region Getters
     // Nom de la skill
-    public string SkillName => skillName;
+    public LocalizedString SkillName => skillName;
 
     // Descripció de la skill
-    public string Description => description;
+    public LocalizedString Description => description;
 
     // Tipus de skill (branca)
     public SkillType SkillType => skillType;

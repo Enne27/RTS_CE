@@ -18,7 +18,7 @@ internal class AntSoldier : Ant
         speed = 12f;
         strength = 3f;
         reach = 1;
-        vision = 5;
+        vision = 10;
         linePriority = 2;
         acidBased = false;
         base.Awake();
