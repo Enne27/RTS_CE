@@ -26,7 +26,7 @@ public class MusicVolumeParams : MonoBehaviour
     {
         if (musicVolumeParamsScript == null)
         {
-            musicVolumeParamsScript = FindObjectOfType<MusicVolumeParams>();
+            musicVolumeParamsScript = FindFirstObjectByType<MusicVolumeParams>();
         }
         return musicVolumeParamsScript;
     }

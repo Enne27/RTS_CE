@@ -130,13 +130,14 @@ public class Building : MonoBehaviour
             case BuildingType.Entrance:
                 hud.SetGeneralInfoActive(false);
                 CameraController.instance.ChangeCameraMode(CameraState.Outside, () => hud.SetConstructionButtonActive(false));
-                //hud.constructionButton.gameObject.SetActive(false);
                 BuildingManager.Instance.CancelPreview();
+                ExtraSoundsSFX.instance.canSound = true;
                 StartCoroutine(ActivarMinimap());
                 break;
             case BuildingType.Mound:
                 hud.SetGeneralInfoActive(false);
                 CameraController.instance.ChangeCameraMode(CameraState.Inside, ()=> hud.SetConstructionButtonActive(true));
+                ExtraSoundsSFX.instance.canSound = false;
                 if (cameraMinimap != null) cameraMinimap.SetRenderingEnabled(false);
                 break;
             default:

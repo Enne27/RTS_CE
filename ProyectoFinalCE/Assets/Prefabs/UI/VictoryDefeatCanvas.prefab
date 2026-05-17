@@ -317,6 +317,73 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &3597469745880740083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4440634993893732876}
+  - component: {fileID: 4908204291855953035}
+  m_Layer: 5
+  m_Name: Emitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4440634993893732876
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3597469745880740083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2475317104856988929}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4908204291855953035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3597469745880740083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1015773592
+      Data2: 1101166380
+      Data3: 1703570342
+      Data4: 1824312634
+    Path: event:/SFX/Lose
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &4881666898346414136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,6 +1517,7 @@ RectTransform:
   - {fileID: 4056699876529697756}
   - {fileID: 8856002264278892825}
   - {fileID: 4799313799486005950}
+  - {fileID: 4440634993893732876}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1567,3 +1635,18 @@ MonoBehaviour:
   creditsButton: {fileID: 5395917133634347331}
   victorySprite: {fileID: 1421098476, guid: ff7734045695a5348b8987093f19020b, type: 3}
   defeatSprite: {fileID: -1355422517, guid: 15f4d280ddaa24049b1ce64dfceec32b, type: 3}
+  finalSFXSoundEmitter: {fileID: 4908204291855953035}
+  finalSFXSoundReferenceVictory:
+    Guid:
+      Data1: 1566829326
+      Data2: 1135096635
+      Data3: -1076531012
+      Data4: -1819649522
+    Path: event:/SFX/Win
+  finalSFXSoundReferenceDefeat:
+    Guid:
+      Data1: 1015773592
+      Data2: 1101166380
+      Data3: 1703570342
+      Data4: 1824312634
+    Path: event:/SFX/Lose
