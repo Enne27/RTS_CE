@@ -12,8 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
   m_Name: 4LvlGeneric
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: Bonificador por amistad
-  description: Las hormigas generan un bonificador por cada 10 de ellas.
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2663592927232
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2666218561536
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   skillType: 0
   cost: 10
   prerequisites:
@@ -26,3 +42,6 @@ MonoBehaviour:
     statType: 8
     value: 10
     specialID: WorkerBonusPer10
+  references:
+    version: 2
+    RefIds: []

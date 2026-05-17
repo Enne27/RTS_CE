@@ -93,10 +93,10 @@ public class ExtraSoundsSFX : MonoBehaviour
 
         WaterScript.instance.SetStrengthValue(currentValue);
 
-        // debug
+        /*// debug
         Debug.DrawLine(cameraTransform.position, nearestPointWorld, Color.red);
         Debug.DrawRay(nearestPointWorld, Vector3.up * 2f, Color.green);
 
-        Debug.Log($"Dist: {distance} | Norm: {normalized} | Value: {currentValue}");
+        Debug.Log($"Dist: {distance} | Norm: {normalized} | Value: {currentValue}");*/
     }
 }
