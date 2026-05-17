@@ -61,42 +61,37 @@ public class TutorialControl : MonoBehaviour
 
     void TutorialController()
     {
-        Debug.Log(requiredBuildingType.ToString());
         switch (lineNum)
         {
-            case 0:
-            case 1:
-            case 2:
-                break;
-
             case 3: // "Construye un túnel"
-                requiredBuildingType = BuildingType.Tunnel;
-                Debug.Log(requiredBuildingType.ToString());
-                DialogueManager.instance.taskPending = true;
+                    // Si el jugador AÚN NO ha construido ningún túnel, bloqueamos
+                if (BuildingManager.Instance.pathsCount == 0)
+            {
+                    requiredBuildingType = BuildingType.Tunnel;
+                    DialogueManager.instance.taskPending = true;
+            }
+                // Si ya construyó uno antes, taskPending se queda en 'false' y puede pasar con un clic
                 break;
 
             case 4: // "Construye una cámara real"
-                requiredBuildingType = BuildingType.QueenChamber;
-                DialogueManager.instance.taskPending = true;
+                if (BuildingManager.Instance.queenChambersCount == 0)
+            {
+                    requiredBuildingType = BuildingType.QueenChamber;
+                    DialogueManager.instance.taskPending = true;
+            }
                 break;
 
             case 7: // "Ahora necesitamos una cámara de cría"
-                requiredBuildingType = BuildingType.BroodChamber;
-                DialogueManager.instance.taskPending = true;
-                break;
-
-            case 8: // "Ahora crea una hormiga"
-                while (GameManager.instance.player.ants.Count <= 2)
-                {
-                    DialogueManager.instance.taskPending = false;
-                }
-                DialogueManager.instance.taskPending = true;
+                if (BuildingManager.Instance.broodChambersCount == 0)
+            {
+                    requiredBuildingType = BuildingType.BroodChamber;
+                    DialogueManager.instance.taskPending = true;
+            }
                 break;
         }
 
-        Debug.Log(lineNum.ToString());
         lineNum++;
-    }
+}
 
     public void EndTutorial()
     {

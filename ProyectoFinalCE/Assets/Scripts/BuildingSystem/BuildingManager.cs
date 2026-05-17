@@ -208,6 +208,7 @@ public class BuildingManager : MonoBehaviour
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
 
+        OnBuildingPlaced?.Invoke(preview.data.buildingType);
 
         switch (preview.data.buildingType)
         {
@@ -281,8 +282,6 @@ public class BuildingManager : MonoBehaviour
             default:
                 break;
         }
-
-        OnBuildingPlaced?.Invoke(preview.data.buildingType);
 
         Destroy(preview.gameObject);
         preview = null;
