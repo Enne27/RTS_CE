@@ -14,14 +14,14 @@ public class TutorialControl : MonoBehaviour
     [SerializeField] public DialogueView dialogueView;
     [SerializeField] CameraMovement cameraMoveScript;
 
-    [Header("Items")]
+    /*[Header("Items")]
     public GameObject resources;
     public GameObject AntsType;
     public GameObject generalInfo;
     public GameObject antHill;
 
     [Header("Transforms")]
-    [SerializeField] List<Transform> positions;
+    [SerializeField] List<Transform> positions;*/
 
     [Header("Control Tutorial")]
     public int lineNum = 0;
@@ -86,7 +86,7 @@ public class TutorialControl : MonoBehaviour
                 break;
 
             case 8: // "Ahora crea una hormiga"
-                while (GameManager.instance.player.ants.Count <= 4)
+                while (GameManager.instance.player.ants.Count <= 2)
                 {
                     DialogueManager.instance.taskPending = false;
                 }
