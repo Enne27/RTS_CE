@@ -57,6 +57,11 @@ public class UnitController : MonoBehaviour
         activeAnts.Add(ant);
         SpawnFlag(objective);
     }
+    public static void MoveToAi(Ant ant, Vector3 objective)
+    {
+        ant.objective = new Vector3(objective.x, 0, objective.z);
+        activeAnts.Add(ant);
+    }
 
 
     private void UpdateAnt(Ant ant)

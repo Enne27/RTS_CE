@@ -1,17 +1,3 @@
-
-/*
- *     private void sendStarterAnts()
-    {
-        foreach (var ant in GameManager.instance.playerIA.ants)
-        {
-            if(ant is AntExlporer antExplorer)
-            {
-                antExplorer.asignedResourceZone = zonaRecursos;
-                UnitController.MoveTo(antExplorer, zonaRecursos.transform.position);
-            }
-        }
-    }
- */
 using UnityEngine;
 
 using static PlayerConstants;
@@ -44,8 +30,9 @@ public class ScriptedAI : MonoBehaviour
 
             if (ant is AntExlporer antExplorer)
             {
-                antExplorer.asignedResourceZone = zonaRecursos[0];
-                UnitController.MoveTo(antExplorer, zonaRecursos[Random.Range(0, zonaRecursos.Length)].transform.position);
+                int Randomplace = Random.Range(0, zonaRecursos.Length);
+                antExplorer.asignedResourceZone = zonaRecursos[Randomplace];
+                UnitController.MoveToAi(antExplorer, zonaRecursos[Randomplace].transform.position);
                 continue;
             }
 
@@ -67,7 +54,7 @@ public class ScriptedAI : MonoBehaviour
                 if (structure.GetComponent<Anthill>() != null)
                 {
                     //attack anthill
-                    UnitController.MoveTo(ant, structure.transform.position);
+                    UnitController.MoveToAi(ant, structure.transform.position);
                 }
             }
         }
