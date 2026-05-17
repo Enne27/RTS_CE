@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static PlayerConstants;
@@ -17,6 +16,7 @@ public class GameHUDView : View
 
     [Header("Buttons")]
     [SerializeField] public Button constructionButton;
+    [SerializeField] public Button skillsTreeButton;
     private bool constructionMenuActived = false;
     [SerializeField] Button generalInfoButton;
 
@@ -35,6 +35,9 @@ public class GameHUDView : View
 
     [Header("General Info")]
     [SerializeField] Image currentEra;
+
+    [Header("Skills")]
+    [SerializeField] GameObject skillsTree;
     #endregion
 
     public override void Initialize()
@@ -96,7 +99,10 @@ public class GameHUDView : View
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
-        
+
+        if (skillsTreeButton != null && skillsTree != null)
+            skillsTreeButton.onClick.AddListener(()=> skillsTree.SetActive(true));
+
         if (generalInfoButton != null)
             generalInfoButton.onClick.AddListener(()=>
             {
