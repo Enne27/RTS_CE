@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
-    static private HashSet<Ant> activeAnts;
+    static public HashSet<Ant> activeAnts;
     static private GameObject staticFlagPrefab;
     static private GameObject currentFlag;
 
