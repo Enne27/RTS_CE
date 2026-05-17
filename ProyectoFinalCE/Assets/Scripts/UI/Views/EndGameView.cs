@@ -37,6 +37,9 @@ public class EndGameView : View
 
     public void PlayerWin(bool hasWon)
     {
+        if (SFXManager.instance != null)
+            SFXManager.StopAllSFX();
+
         if (hasWon)
         {
             victoryTMP.gameObject.SetActive(true);
