@@ -27,6 +27,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 992
+--- !u!114 &-8547497704046298944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/FinalConstructionSound
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/FinalConstructionSound
+  Guid:
+    Data1: -1661232825
+    Data2: 1134358137
+    Data3: -246714225
+    Data4: -916188155
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1175
 --- !u!114 &-8117118196785971389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,6 +81,30 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2000
+--- !u!114 &-6149798910617123265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/WaterSFX/DistanceVolume
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: DistanceVolume
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1522708182
+    data2: 2527412869
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
 --- !u!114 &-2935677130535207574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,6 +132,34 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4500
+--- !u!114 &-2623592866101778569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/WaterSFX
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/WaterSFX
+  Guid:
+    Data1: 1808883098
+    Data2: 1179719252
+    Data3: 474108314
+    Data4: -1443092363
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters:
+  - {fileID: -6149798910617123265}
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 156133
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,13 +186,16 @@ MonoBehaviour:
   - {fileID: -8117118196785971389}
   - {fileID: -9140679722194006273}
   - {fileID: 3315221747125907651}
+  - {fileID: -8547497704046298944}
+  - {fileID: 8299661231142084427}
+  - {fileID: -2623592866101778569}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3633299139380811838}
   StringsBanks:
   - {fileID: 3366873555263581982}
   cacheVersion: 131858
-  cacheTime: 639143856147380212
+  cacheTime: 639146429696669281
   SerializableEventsDict:
   - key: event:/Music/WarMusic
     index: 0
@@ -135,6 +217,12 @@ MonoBehaviour:
     index: 8
   - key: event:/SFX/Strike
     index: 9
+  - key: event:/SFX/FinalConstructionSound
+    index: 10
+  - key: event:/SFX/AnthillSound
+    index: 11
+  - key: event:/SFX/WaterSFX
+    index: 12
 --- !u!114 &1050287332260932354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,10 +346,10 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 639143823124736617
+  lastModified: 639146429696669281
   FileSizes:
   - Name: Desktop
-    Value: 1428
+    Value: 1586
   Exists: 1
 --- !u!114 &3633299139380811838
 MonoBehaviour:
@@ -278,10 +366,10 @@ MonoBehaviour:
   Path: ../FMOD_ProyectoFinalCE/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 639143856147380212
+  lastModified: 639146429696659393
   FileSizes:
   - Name: Desktop
-    Value: 46562240
+    Value: 48537792
   Exists: 1
 --- !u!114 &6185729030113539779
 MonoBehaviour:
@@ -360,7 +448,59 @@ MonoBehaviour:
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
-  Parameters: []
+  Parameters:
+  - {fileID: 7821304272639645916}
   MinDistance: 1
   MaxDistance: 20
   Length: 1400000
+--- !u!114 &7821304272639645916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/BackgroundGameMusic/Speaking
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorParamRef
+  Name: Speaking
+  StudioPath: 
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 1566495896
+    data2: 3429591536
+  Type: 0
+  IsGlobal: 0
+  Labels: []
+  Exists: 1
+--- !u!114 &8299661231142084427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/AnthillSound
+  m_EditorClassIdentifier: FMODUnityEditor::FMODUnity.EditorEventRef
+  Path: event:/SFX/AnthillSound
+  Guid:
+    Data1: 2056241543
+    Data2: 1234849552
+    Data3: -1375462745
+    Data4: -1306855114
+  Banks:
+  - {fileID: 3633299139380811838}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1175
