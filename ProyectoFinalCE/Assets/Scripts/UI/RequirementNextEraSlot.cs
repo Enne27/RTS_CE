@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -60,6 +60,7 @@ public class RequirementNextEraSlot : MonoBehaviour
 
 
     private EraRequirement requirement;
+    private LocalizedString currentLocalized;
     #endregion
 
     private void Awake()
@@ -103,64 +104,69 @@ public class RequirementNextEraSlot : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (requirement == null) return;
-        requirement.OnChanged -= RefreshQuantityText;
+        if (requirement != null)
+            requirement.OnChanged -= RefreshQuantityText;
+
+        if (currentLocalized != null)
+            currentLocalized.StringChanged -= UpdateName;
     }
 
     public void Bind(EraRequirement req)
     {
+        if (req == null)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
+        if (sprites == null) Awake();
+
+        if (!sprites.ContainsKey(req.id) || !localizedNames.ContainsKey(req.id))
+        {
+            Debug.LogError($"Falta config para {req.id}");
+            gameObject.SetActive(false);
+            return;
+        }
+
+        // 🔴 limpiar anterior
+        if (requirement != null)
+            requirement.OnChanged -= RefreshQuantityText;
+
+        if (currentLocalized != null)
+            currentLocalized.StringChanged -= UpdateName;
+
         requirement = req;
+
         imageObject.sprite = sprites[req.id];
 
-        req.OnChanged += RefreshQuantityText;
+        currentLocalized = localizedNames[req.id];
+        currentLocalized.StringChanged += UpdateName;
 
-        var localized = localizedNames[req.id];
+        UpdateName(currentLocalized.GetLocalizedString());
 
-        localized.StringChanged -= OnLocalizedChanged;
-        localized.StringChanged += OnLocalizedChanged;
+        requirement.OnChanged += RefreshQuantityText;
 
-        UpdateName(localized.GetLocalizedString());
         RefreshQuantityText();
     }
 
     private void UpdateName(string baseName)
     {
-        if (requirement.type == RequirementType.LEVEL)
-        {
-            name_TMP.text = $"{baseName} Lv. {requirement.requiredLevel}";
-        }
-        else
-        {
-            name_TMP.text = baseName;
-        }
-    }
+        if (requirement == null) return;
 
-    private void OnLocalizedChanged(string value)
-    {
-        UpdateName(value);
+        if (requirement.type == RequirementType.LEVEL)
+            name_TMP.text = $"{baseName} Lv. {requirement.requiredLevel}";
+        else
+            name_TMP.text = baseName;
     }
 
     private void RefreshQuantityText()
     {
+        if (requirement == null) return;
+
         Color color = requirement.IsCompleted ? completedColor : uncompletedColor;
         string hex = ColorUtility.ToHtmlStringRGB(color);
 
-        quantity_TMP.text = $"<color=#{hex}>{requirement.currentQuantity}/{requirement.targetQuantity}</color>";
+        quantity_TMP.text =
+            $"<color=#{hex}>{requirement.currentQuantity}/{requirement.targetQuantity}</color>";
     }
-
-
-    public void Setup(RequirementID id, int current, int total, bool completed)
-    {
-        imageObject.sprite = sprites[id];
-
-        var localized = localizedNames[id];
-
-        localized.StringChanged -= UpdateName;
-        localized.StringChanged += UpdateName;
-
-        name_TMP.text = localized.GetLocalizedString();
-
-        RefreshQuantityText();
-    }
-
 }

@@ -354,26 +354,20 @@ public class EraManager : MonoBehaviour
 
     public void RefreshUI()
     {
-        /*Debug.Log($"ERA: {GameManager.instance.player.currentEra}");
-        Debug.Log($"generalInfoView: {generalInfoView}");
-        Debug.Log($"eraNames null? {eraNames == null}");
-        Debug.Log($"eraRequirements null? {eraRequirements == null}");*/
-
         var era = GameManager.instance.player.currentEra;
 
         if (!eraNames.ContainsKey(era) || !eraRequirements.ContainsKey(era))
             return;
 
-        if (generalInfoView == null) 
-            generalInfoView = FindFirstObjectByType<GeneralInfoView>();
+        if (generalInfoView == null)
+            generalInfoView = FindFirstObjectByType<GeneralInfoView>(FindObjectsInactive.Include);
 
         if (gameHUDView == null)
-            gameHUDView = FindFirstObjectByType<GameHUDView>();
+            gameHUDView = FindFirstObjectByType<GameHUDView>(FindObjectsInactive.Include);
 
-        gameHUDView.UpdateCurrentEraImage();
+        gameHUDView?.UpdateCurrentEraImage();
 
-        if (generalInfoView == null)
-            return;
+        if (generalInfoView == null) return;
 
         generalInfoView.RefreshUI(era);
     }

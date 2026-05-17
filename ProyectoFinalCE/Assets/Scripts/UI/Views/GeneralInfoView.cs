@@ -1,3 +1,4 @@
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,67 +9,37 @@ using static PlayerConstants;
 
 public class GeneralInfoView : View
 {
-    #region VARIABLES
-    [Header("User info")]
-    /*[SerializeField] TextMeshProUGUI userNameText;
-    [SerializeField] Image userImage;
-    [SerializeField] Image userColorImage;*/
-
     [Header("Era info")]
     [SerializeField] TextMeshProUGUI currentEraText;
     [SerializeField] Image currentEraImage;
-
     [SerializeField] Image currentEraGameHUDButton;
-    
+
     [Header("Requirements")]
     [SerializeField] RequirementNextEraSlot slotPrefab;
     [SerializeField] Transform layoutHorizontal;
 
     [Header("Buttons")]
     [SerializeField] Button backButton;
-    /*[SerializeField] Button antsInfoButton;
-    [SerializeField] Button buildingsInfoButton;*/
 
     private List<RequirementNextEraSlot> activeSlots = new();
 
-    #endregion
-
-
     public override void Initialize()
     {
-        var era = GameManager.instance.player.currentEra;
-
         if (backButton != null)
-            backButton.onClick.AddListener(()=> gameObject.SetActive(false));
-            //backButton.onClick.AddListener(()=> ViewManager.ShowLastView(1, false));
+            backButton.onClick.AddListener(() => gameObject.SetActive(false));
+    }
 
-            /*
-             * if (antsInfoButton != null)
-                antsInfoButton.onClick.AddListener(()=> );
+    private IEnumerator Start()
+    {
+        yield return null; // 🔴 IMPORTANTE: esperar a EraManager
 
-            if (buildingsInfoButton != null)
-                buildingsInfoButton.onClick.AddListener(()=> );
-
-
-
-            if(userNameText != null
-                userNameText.text = GameManager.instance.player.playerName;
-
-            if(userImage != null)
-                userImage = ;
-
-            if(userColorImage != null)
-                userColorImage.color = GameManager.instance.player.playerColor;
-            */
-
-        if (currentEraImage != null)
-            currentEraImage.sprite = EraManager.instance.GetEraSprite(era);
-
-        RefreshUI(era);
+        RefreshUI(GameManager.instance.player.currentEra);
     }
 
     public void RefreshUI(HIVE_ERAS era)
     {
+        if (EraManager.instance == null) return;
+
         UpdateCurrentEraVisuals(
             era,
             EraManager.instance.GetEraName(era)
@@ -79,21 +50,18 @@ public class GeneralInfoView : View
         );
     }
 
-
-    /// <summary>
-    /// Actualizaci�n visual de la era actual del imperio.
-    /// </summary>
-    /// <param name="currentEra"></param>
     public void UpdateCurrentEraVisuals(HIVE_ERAS currentEra, LocalizedString newEraName)
     {
-        currentEraImage.sprite = EraManager.instance.eraSprites[currentEra];
+        currentEraImage.sprite = EraManager.instance.GetEraSprite(currentEra);
         currentEraGameHUDButton.sprite = currentEraImage.sprite;
 
-        currentEraText.gameObject.GetComponent<LocalizeStringEvent>().StringReference = newEraName;
+        var localize = currentEraText.GetComponent<LocalizeStringEvent>();
+        localize.StringReference = newEraName;
 
         newEraName.StringChanged -= OnEraChanged;
         newEraName.StringChanged += OnEraChanged;
     }
+
     private void OnEraChanged(string value)
     {
         currentEraText.text = value;
@@ -103,27 +71,26 @@ public class GeneralInfoView : View
     {
         if (requirements == null)
         {
-            EraManager.instance.InitData();
-            EraManager.instance.InitRequirements();
-            EraManager.instance.RefreshUI();
+            Debug.LogError("Requirements NULL -> abort");
+            return;
         }
 
+        // 🔴 LIMPIAR SIEMPRE
         foreach (var s in activeSlots)
-            Destroy(s.gameObject);
+            if (s != null) Destroy(s.gameObject);
 
         activeSlots.Clear();
 
         foreach (var req in requirements)
         {
+            if (req == null) continue;
+
             var slot = Instantiate(slotPrefab, layoutHorizontal);
             slot.Bind(req);
             activeSlots.Add(slot);
         }
-    }
 
-    private void CreateSlot(RequirementID id,  int totalQuantity)
-    {
-        RequirementNextEraSlot slot = Instantiate(slotPrefab, layoutHorizontal.transform);
-        slot.Setup(id, 0, totalQuantity, false);
+        // 🔴 FORZAR REBUILD UI
+        LayoutRebuilder.ForceRebuildLayoutImmediate(layoutHorizontal as RectTransform);
     }
 }
