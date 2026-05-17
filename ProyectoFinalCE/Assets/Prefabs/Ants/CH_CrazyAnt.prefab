@@ -91,6 +91,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 554589838966526822}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7887074228117794522}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4678583306089308551}
   m_SourcePrefab: {fileID: 100100000, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
 --- !u!1 &4045489679824311756 stripped
 GameObject:
@@ -122,3 +128,53 @@ MonoBehaviour:
   flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
+--- !u!136 &7887074228117794522
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4045489679824311756}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 1
+  m_Direction: 2
+  m_Center: {x: 0.0057937354, y: 0.20650664, z: -0.075709954}
+--- !u!54 &4678583306089308551
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4045489679824311756}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

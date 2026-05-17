@@ -294,7 +294,7 @@ public class AntCreation : MonoBehaviour
 
         TimeManager.Instance?.OneShotTimer(time, () =>
         {
-            AntCreation.Instance.SystemAntCreation(1, antType, position, true, true);
+            AntCreation.Instance.SystemAntCreation(1, antType, position, false, true);
         });
     }
 }

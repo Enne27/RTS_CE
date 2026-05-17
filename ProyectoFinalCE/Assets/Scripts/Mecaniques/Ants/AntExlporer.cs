@@ -91,6 +91,7 @@ public class AntExlporer : Ant
                         Debug.LogError("AntExplorer.Collect: No hay estructura del jugador a la que regresar.");
                         return; // Cancelar el movimiento
                     }
+                    UnitController.MoveTo(this, position);
                     break;
                     
                 case Owner.AI:
@@ -105,10 +106,10 @@ public class AntExlporer : Ant
                         Debug.LogError("AntExplorer.Collect: No hay estructura de la IA a la que regresar.");
                         return; // Cancelar el movimiento
                     }
+                    UnitController.MoveToAi(this, position);
+
                     break;
             }
-            
-            UnitController.MoveTo(this, position);
         });
     }
     public void Deposit()

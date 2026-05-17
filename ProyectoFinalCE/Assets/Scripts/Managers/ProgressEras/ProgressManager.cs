@@ -27,7 +27,9 @@ public class ProgressManager : MonoBehaviour
 
     private void OnEnable()
     {
+        AntExlporer.OnExplorationCompleted -= AddExplorationProgress;
         AntExlporer.OnExplorationCompleted += AddExplorationProgress;
+
         StartCoroutine(SubscribeWhenReady());
     }
 

@@ -33,6 +33,8 @@ public class DialogueManager : MonoBehaviour
     private bool inputPressed = false;
     private bool waitingForInput = false;
 
+    public bool taskPending = false;
+
 
     #endregion
 
@@ -188,7 +190,7 @@ public class DialogueManager : MonoBehaviour
         waitingForInput = true;
         inputPressed = false;
 
-        while (!inputPressed)
+        while (!inputPressed || taskPending)
         {
             yield return null;
         }

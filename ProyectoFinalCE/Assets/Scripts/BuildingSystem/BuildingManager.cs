@@ -2,6 +2,7 @@
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
@@ -45,6 +46,8 @@ public class BuildingManager : MonoBehaviour
     public int storageChambersCount;
     public int pathsCount;
 
+    //Se usa para revisar si se ha colocado la estructura en el tutorial
+    public UnityAction<BuildingType> OnBuildingPlaced;
     [Header("BuildingMaterial")]
     [SerializeField] Material ConstructionMaterial;
 
@@ -143,7 +146,7 @@ public class BuildingManager : MonoBehaviour
                         materialsNeeded -= fromForaging;
 
                         inventory.materials -= materialsNeeded;
-                        
+
                     }
 
                     GameManager.instance.player.inventory.RemoveEggs(data.costHV);
@@ -155,7 +158,7 @@ public class BuildingManager : MonoBehaviour
                     }
 
                     foragingChamber.UpdateUI();
-                    
+
                     PlaceBuilding(buildPosition);
                 }
 
@@ -197,13 +200,15 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
         GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
-        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+
+        OnBuildingPlaced?.Invoke(preview.data.buildingType);
 
         switch (preview.data.buildingType)
         {
@@ -213,95 +218,71 @@ public class BuildingManager : MonoBehaviour
                 queenChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
-
             case BuildingType.BroodChamber:
                 building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
                 SetSlavesToWork(building);
                 broodChambersCount++;
                 constructionsBuilt.Add(building);
-                
                 break;
-
             case BuildingType.StorageChamber:
                 building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
                 SetSlavesToWork(building);
                 storageChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
-
             case BuildingType.Tunnel:
-
                 TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
                 tunnel.DetectTunnels();
 
                 HashSet<int> neighborPathIDs = new();
-
                 foreach (TunnelFunction connection in tunnel.TunnelConnections)
                 {
                     if (connection.pathID != 0)
                         neighborPathIDs.Add(connection.pathID);
                 }
 
- 
                 if (neighborPathIDs.Count == 0)
                 {
                     pathsCount++;
                     tunnel.pathID = pathsCount;
-
                     TunnelPath newPath = new(pathsCount, tunnel);
                     pathsBuilt.Add(newPath);
-
-                    return;
+                    return; // Este return ahora ya no romperá el tutorial
                 }
 
                 if (neighborPathIDs.Count == 1)
                 {
                     int id = neighborPathIDs.First();
-
                     tunnel.pathID = id;
-
                     TunnelPath path = pathsBuilt.Find(p => p.pathID == id);
-
                     if (!path.TunnelPieces.Contains(tunnel))
                         path.TunnelPieces.Add(tunnel);
-
-                    return;
+                    return; // Este tampoco
                 }
-
 
                 int mainID = neighborPathIDs.First();
                 TunnelPath mainPath = pathsBuilt.Find(p => p.pathID == mainID);
-
-                // Añadir el nuevo túnel al principal
                 tunnel.pathID = mainID;
                 mainPath.TunnelPieces.Add(tunnel);
 
-                // Fusionar los demás
                 foreach (int otherID in neighborPathIDs)
                 {
                     if (otherID == mainID) continue;
-
                     TunnelPath otherPath = pathsBuilt.Find(p => p.pathID == otherID);
-
                     foreach (TunnelFunction piece in otherPath.TunnelPieces)
                     {
                         piece.pathID = mainID;
-
                         if (!mainPath.TunnelPieces.Contains(piece))
                             mainPath.TunnelPieces.Add(piece);
                     }
-
                     pathsBuilt.Remove(otherPath);
                     pathsCount--;
                 }
-
-                
-                
                 break;
             default:
                 break;
         }
-        
+
         Destroy(preview.gameObject);
         preview = null;
     }
