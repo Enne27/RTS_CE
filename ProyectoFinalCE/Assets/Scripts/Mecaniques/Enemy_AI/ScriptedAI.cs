@@ -13,6 +13,7 @@ public class ScriptedAI : MonoBehaviour
     private void Start()
     {
         TimeManager.Instance.OneShotTimer(45, () => TimeManager.Instance.Register(80, createAnts));
+        //TimeManager.Instance.OneShotTimer(1, () => TimeManager.Instance.Register(3, createAnts));
     }
 
     private void Update()

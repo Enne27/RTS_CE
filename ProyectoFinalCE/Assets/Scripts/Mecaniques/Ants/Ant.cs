@@ -43,8 +43,16 @@ public abstract class Ant : MonoBehaviour
 
     public virtual void TakeDamage(Ant other, float strength, bool acidBased) { }
 
-    public virtual void AttackMound(GameObject mound) { }
-
+    public virtual void AttackMound(GameObject mound)
+    {
+        MoundFunction target;
+        //La trucada del AttackMound no pasa el if
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        {
+            target = mound.GetComponent<MoundFunction>();
+            target.TakeDamage((int)Math.Round(strength), antOwner);
+        }
+    }
     public virtual void Die() { }
 
     #endregion
