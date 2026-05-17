@@ -213,8 +213,7 @@ public class AntCreation : MonoBehaviour
                     //         GameManager.instance.playerIA.ants.Add(workerAntComponent);
                     // }
 
-                    if (antType == ANT_TYPES.EXPLORER)
-                        newAnt.GetComponent<AntExlporer>().antOwner = Owner.AI;
+                    newAnt.GetComponent<Ant>().antOwner = Owner.AI;
                 }
             }
         }
