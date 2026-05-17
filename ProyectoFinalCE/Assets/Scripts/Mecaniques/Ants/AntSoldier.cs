@@ -57,25 +57,25 @@ internal class AntSoldier : Ant
         OnAnyAntDamaged?.Invoke(this);
     }
 
-    public override void AttackMound(GameObject mound)
-    {
-        MoundFunction target;
-        if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ mound.CompareTag("Player_AntHill"))
-        {
-            target = GetComponent<MoundFunction>();
-            float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance <= reach)
-            {
-                target.TakeDamage((int)Math.Round(GetEffectiveDamage()), antOwner);
-            }
-        }
+    //public override void AttackMound(GameObject mound)
+    //{
+    //    MoundFunction target;
+    //    if (/*Owner == Owner.Player &&*/ mound.CompareTag("AI_AntHill")||/*Owner == Owner.AI &&*/ mound.CompareTag("Player_AntHill"))
+    //    {
+    //        target = GetComponent<MoundFunction>();
+    //        float distance = Vector3.Distance(transform.position, target.transform.position);
+    //        if (distance <= reach)
+    //        {
+    //            target.TakeDamage((int)Math.Round(GetEffectiveDamage()), antOwner);
+    //        }
+    //    }
 
-        else
-        {
-            Debug.Log("Este objeto no es el hormiguero");
-            return;
-        }
-    }
+    //    else
+    //    {
+    //        Debug.Log("Este objeto no es el hormiguero");
+    //        return;
+    //    }
+    //}
     public override void Die()
     {
         gameObject.SetActive(false);    
