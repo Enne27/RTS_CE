@@ -24,13 +24,12 @@ public class ExtraSoundsSFX : MonoBehaviour
         float3 nearestPoint;
         float t;
 
-        // Obtener punto más cercano del spline
         SplineUtility.GetNearestPoint(spline.Spline, cameraTransform.position, out nearestPoint, out t);
 
         float distance = Vector3.Distance(cameraTransform.position, nearestPoint);
 
-        // Normalizar distancia (más cerca = más fuerte)
         float normalized = Mathf.InverseLerp(maxDistance, 0f, distance);
+        normalized = Mathf.Clamp01(normalized);
 
         float finalValue = Mathf.Lerp(paramValueMin, paramValueMax, normalized);
 

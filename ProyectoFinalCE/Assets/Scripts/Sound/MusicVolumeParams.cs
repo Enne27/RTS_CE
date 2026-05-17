@@ -32,7 +32,7 @@ public class MusicVolumeParams : MonoBehaviour
     }
     #endregion
 
-    private void Awake()
+    private void Start()
     {
         musicEmitter = MusicManager.instance.GetEventEmitter();
     }

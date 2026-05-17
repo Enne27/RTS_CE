@@ -26,11 +26,11 @@ public class WaterScript : MonoBehaviour
 
     #region VARIABLES
     [SerializeField, Tooltip("EventEmitter del agua")] StudioEventEmitter waterSound;
-    const string windStrengthParameter = "WaterStrength";
+    const string windStrengthParameter = "DistanceVolume";
     #endregion
 
 
-    private void Start()
+    private void Awake()
     {
         PlaySound();
     }
