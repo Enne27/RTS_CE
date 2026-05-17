@@ -60,7 +60,7 @@ internal class AntSoldier : Ant
     public override void Attack(Ant target) {
         if (target != null)
         {
-                target.TakeDamage(this, strength, acidBased);                                                           
+           target.TakeDamage(this, strength, acidBased);                                                           
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -85,7 +85,6 @@ internal class AntSoldier : Ant
         }
         OnAnyAntDamaged?.Invoke(this);
     }
-
     public override void AttackMound(GameObject mound)
     {
         MoundFunction target;

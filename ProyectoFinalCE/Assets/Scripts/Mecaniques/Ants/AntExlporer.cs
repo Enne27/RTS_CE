@@ -20,6 +20,7 @@ public class AntExlporer : Ant
     private bool useTransformTarget;
 
     public GameObject asignedResourceZone;
+    public bool defending = false;
     private void Awake()
     {
         //if (antOwner == Owner.Player)
@@ -85,7 +86,7 @@ public class AntExlporer : Ant
             Die();
         }
         OnAnyAntDamaged?.Invoke(this);
-       
+        Defend(other);
     }
 
     public void Collect()
@@ -191,11 +192,22 @@ public class AntExlporer : Ant
         else
             return;
     }
+
+    public void Defend(Ant other)
+    {
+        if (!defending)
+        {
+            IsRange(other);
+            defending = true;
+        }
+        else
+            return;
+    }
     public override void Die()
     {
         Destroy(gameObject);
     }
-
+    #region Getters/Setters
     public int GetFood()
     {
         return food;
@@ -215,4 +227,5 @@ public class AntExlporer : Ant
     {
         MC = value;
     }
+    #endregion
 }
