@@ -24,6 +24,7 @@ public class EndGameView : View
     [SerializeField] StudioEventEmitter finalSFXSoundEmitter;
     [SerializeField] EventReference finalSFXSoundReferenceVictory;
     [SerializeField] EventReference finalSFXSoundReferenceDefeat;
+
     #endregion
 
 
@@ -69,6 +70,7 @@ public class EndGameView : View
     public override void Show()
     {
         base.Show();
+
     }
 
     public override void Hide()

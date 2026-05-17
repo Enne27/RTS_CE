@@ -100,8 +100,6 @@ public class MoundFunction : StructuresPlayer
         }
     }
 
-
-
     public void TakeDamage(int damage, Owner antOwner)
     {
         if (isDead) return;

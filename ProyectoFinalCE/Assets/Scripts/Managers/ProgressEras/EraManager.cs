@@ -95,6 +95,12 @@ public class EraManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /*private void Start()
+    {
+        AdvanceEra(true);
+        AdvanceEra(true);
+        AdvanceEra(true);
+    }*/
 
     private void OnSceneLoaded(Scene escena, LoadSceneMode arg1)
     {
@@ -145,23 +151,22 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.BROTE, new List<EraRequirement>()
                 {
-                    /*new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),*/
-                    new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.EXPLORATION, 3, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             { 
                 HIVE_ERAS.NIDO, new List<EraRequirement>()
                 {
                     new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
-                    /*new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.WORKER_ANT, 1, RequirementType.COUNT),
                     new EraRequirement(RequirementID.EXPLORER_ANT, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.BERSERKER_ANT, 1, RequirementType.COUNT),
-                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),*/
-                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.SOLDIER_ANT, 1, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
                 }
@@ -169,13 +174,27 @@ public class EraManager : MonoBehaviour
             {
                 HIVE_ERAS.COLONIA, new List<EraRequirement>()
                 {
-
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORER_ANT, 3, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BERSERKER_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORATION, 15, RequirementType.COUNT),
                 }
             },
             {
                 HIVE_ERAS.IMPERIO, new List<EraRequirement>()
                 {
-
+                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 5),
+                    new EraRequirement(RequirementID.STORAGE_CHAMBER, 3, RequirementType.LEVEL, 6),
+                    new EraRequirement(RequirementID.BERSERKER_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.KAMIKAZE_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.CRAZY_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.ACID_ANT, 2, RequirementType.COUNT),
+                    new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 6),
+                    new EraRequirement(RequirementID.EXPLORATION, 35, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                    
                 }
             }
         };
@@ -308,7 +327,9 @@ public class EraManager : MonoBehaviour
         {
             if (GameManager.instance.player.currentEra >= HIVE_ERAS.IMPERIO)
             {
-                Debug.LogWarning("No more eras.");
+                EndGameView endView = ViewManager.GetView<EndGameView>();
+                endView.PlayerWin(true);
+                ViewManager.Show<EndGameView>();
                 return;
             }
 
@@ -333,10 +354,10 @@ public class EraManager : MonoBehaviour
 
     public void RefreshUI()
     {
-        Debug.Log($"ERA: {GameManager.instance.player.currentEra}");
+        /*Debug.Log($"ERA: {GameManager.instance.player.currentEra}");
         Debug.Log($"generalInfoView: {generalInfoView}");
         Debug.Log($"eraNames null? {eraNames == null}");
-        Debug.Log($"eraRequirements null? {eraRequirements == null}");
+        Debug.Log($"eraRequirements null? {eraRequirements == null}");*/
 
         var era = GameManager.instance.player.currentEra;
 
