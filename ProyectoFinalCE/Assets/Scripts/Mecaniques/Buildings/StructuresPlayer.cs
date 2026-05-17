@@ -43,7 +43,7 @@ public abstract class StructuresPlayer : MonoBehaviour
 
 
     /// <summary>
-    /// Mientras se está actualizando la construcción.
+    /// Mientras se estï¿½ actualizando la construcciï¿½n.
     /// </summary>
     public void UpgradeStructure()
     {
@@ -74,7 +74,7 @@ public abstract class StructuresPlayer : MonoBehaviour
     }
 
     /// <summary>
-    /// Cuando termina de actualizarse la construcción.
+    /// Cuando termina de actualizarse la construcciï¿½n.
     /// </summary>
     public virtual void OnUpgradeFinished() 
     { 
@@ -120,14 +120,17 @@ public abstract class StructuresPlayer : MonoBehaviour
 
     public void RefreshUpgradeUI()
     {
-        bool canUpgrade = CanUpgrade();
+        if (upgradeButton == null || upgradeButtonBackground == null || lvl_TMP == null)
+        {
+            Debug.LogWarning($"RefreshUpgradeUI: alguno de los elementos UI es null en {gameObject.name}");
+            return;
+        }
 
-        //upgradeButtonBackground.gameObject.SetActive(canUpgrade);
+        bool canUpgrade = CanUpgrade();
         upgradeButtonBackground.gameObject.SetActive(true);
         upgradeButton.interactable = canUpgrade;
 
         Color imgColor;
-
         if (IsMaxLevelForEra())
             imgColor = Color.black;
         else if (HasEnoughResources())
@@ -136,7 +139,6 @@ public abstract class StructuresPlayer : MonoBehaviour
             imgColor = Color.red;
 
         upgradeButton.image.color = imgColor;
-
         lvl_TMP.text = $"LV.{currentLevel}";
     }
 }

@@ -69,6 +69,12 @@ public static class SaveSystem
         Debug.Log($"SaveSystem.LoadGame() data loaded: playerName={data.player.playerName}, era={data.player.currentEra}, ants={data.player.ants?.Count ?? 0}, structures={data.player.structures?.Count ?? 0}");
 
         SaveApplier.ApplyPlayer(data.player);
+        // Forzar que EraManager refresque la UI y los requisitos de nivel
+        if (EraManager.instance != null)
+        {
+            EraManager.instance.ForceRecalculateLevels();
+            EraManager.instance.RefreshUI();
+        }
         // Cargar IA solo si existe en el fichero (compatibilidad con saves antiguos)
         if (data.playerIA != null)
         {

@@ -79,14 +79,11 @@ public static class SaveConverter
 
         foreach (Ant ant in ants)
         {
-            if (ant == null)
-                continue;
-
-            if (!ant.gameObject.activeSelf)
-                continue;
+            if (ant == null) continue;
+            if (!ant.gameObject.activeSelf) continue;
 
             AntExlporer explorerAnt = ant as AntExlporer;
-            data.Add(new AntSaveData
+            AntSaveData saveData = new AntSaveData
             {
                 type = ant.antType,
                 position = ant.transform.position,
@@ -101,8 +98,14 @@ public static class SaveConverter
                 breedingCost = ant.GetBreedingCost(),
                 acidBased = ant.GetAcidBased(),
                 food = explorerAnt != null ? explorerAnt.GetFood() : 0,
-                MC = explorerAnt != null ? explorerAnt.GetMC() : 0
-            });
+                MC = explorerAnt != null ? explorerAnt.GetMC() : 0,
+                // NUEVO: guardar posición de la zona asignada
+                assignedResourceZonePosition = explorerAnt != null && explorerAnt.asignedResourceZone != null
+                    ? explorerAnt.asignedResourceZone.transform.position
+                    : Vector3.zero
+            };
+
+            data.Add(saveData);
         }
 
         return data;

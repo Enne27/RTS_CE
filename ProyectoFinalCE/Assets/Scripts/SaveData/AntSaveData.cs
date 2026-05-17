@@ -19,4 +19,5 @@ public class AntSaveData
     public bool acidBased;
     public int food;
     public int MC;
+    public Vector3 assignedResourceZonePosition;
 }

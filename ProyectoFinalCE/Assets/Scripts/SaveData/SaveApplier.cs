@@ -55,8 +55,7 @@ public static class SaveApplier
     {
         Debug.Log($"ApplyStructures for player {player.playerName}, count={structuresData?.Count ?? 0}");
 
-        // 1. Recorrer las estructuras actuales del jugador (las que hay en la escena)
-        //    y eliminar de la lista SOLO las que no son mounds (sin destruirlas todavía)
+        // 1. Destruir estructuras que no son mounds (igual que antes)
         List<GameObject> toDestroy = new List<GameObject>();
         foreach (GameObject obj in player.structures)
         {
@@ -65,22 +64,19 @@ public static class SaveApplier
             if (building != null && building.data.buildingType == BuildingType.Mound)
             {
                 Debug.Log($"Preserving mound for {player.playerName} at {obj.transform.position}");
-                // No hacemos nada, lo conservamos
             }
             else
             {
                 toDestroy.Add(obj);
             }
         }
-
-        // Eliminar de la lista y destruir los que no son mounds
         foreach (GameObject obj in toDestroy)
         {
             player.structures.Remove(obj);
             UnityEngine.Object.Destroy(obj);
         }
 
-        // 2. Reconstruir las estructuras guardadas (excluyendo mounds)
+        // 2. Reconstruir las estructuras guardadas
         foreach (StructureSaveData data in structuresData)
         {
             if (data.type == "Mound" || data.type == "MoundData")
@@ -89,12 +85,23 @@ public static class SaveApplier
             Building building = GameFactory.Instance.CreateBuilding(data.type, data.position, data.rotation);
             if (building == null) continue;
 
-            StructuresPlayer sp = building.GetComponent<StructuresPlayer>();
+            StructuresPlayer sp = building.GetComponentInChildren<StructuresPlayer>();
             if (sp != null)
             {
                 sp.currentLevel = data.level;
+                // NUEVO: actualizar costes y tiempos de mejora según el nivel cargado
+                int levelIndex = data.level; // 1-based
+                if (levelIndex < sp.costsUpgradeHV.Length)
+                {
+                    sp.currentCostsUpgradeHV = sp.costsUpgradeHV[levelIndex];
+                    sp.currentCostsUpgradeMC = sp.costsUpgradeMC[levelIndex];
+                    sp.currentTimeUpgrade = sp.timeUpgrade[levelIndex];
+                }
+                // Restaurar estado
                 if (Enum.TryParse(data.state, out StructureState state))
                     sp.currentStructureState = state;
+                // Forzar actualización de UI de mejora
+                sp.RefreshUpgradeUI();
             }
 
             player.structures.Add(building.gameObject);
@@ -148,12 +155,21 @@ public static class SaveApplier
             {
                 explorer.SetFood(antData.food);
                 explorer.SetMC(antData.MC);
+                // NUEVO: restaurar la zona de recursos asignada
+                if (antData.assignedResourceZonePosition != Vector3.zero)
+                {
+                    Collider[] hits = Physics.OverlapSphere(antData.assignedResourceZonePosition, 0.5f, LayerMask.GetMask("ResourceZone"));
+                    if (hits.Length > 0)
+                        explorer.asignedResourceZone = hits[0].gameObject;
+                    else
+                        Debug.LogWarning($"No se encontró ResourceZone en {antData.assignedResourceZonePosition} para {ant.name}");
+                }
             }
 
             player.ants.Add(ant);
         }
 
-        //Reconstruir la lista de workers a partir de los ants cargados
+        // Reconstruir workers
         player.workers.Clear();
         foreach (Ant ant in player.ants)
         {
@@ -161,19 +177,18 @@ public static class SaveApplier
             {
                 AntWorkerBehaviour behaviour = worker.GetComponent<AntWorkerBehaviour>();
                 if (behaviour != null)
+                {
                     player.workers.Add(behaviour);
-                else
-                    Debug.LogWarning($"Worker ant at {worker.transform.position} has no AntWorkerBehaviour component.");
+                    // NUEVO: forzar que las obreras encuentren su túnel actual inmediatamente
+                    behaviour.ForceFindCurrentTunnel();
+                }
             }
         }
+
         foreach (var workerBehaviour in player.workers)
         {
             if (workerBehaviour != null)
                 workerBehaviour.RefreshReferences();
-        }
-        foreach (var workerBehaviour in player.workers)
-        {
-            workerBehaviour?.RefreshReferences();
         }
     }
 

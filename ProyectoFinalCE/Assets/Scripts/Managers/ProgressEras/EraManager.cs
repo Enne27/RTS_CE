@@ -258,7 +258,15 @@ public class EraManager : MonoBehaviour
 
     public void ForceRecalculateLevels()
     {
+        if (BuildingManager.Instance == null)
+        {
+            Debug.LogWarning("BuildingManager.Instance es null, reintentando en 0.1s");
+            StartCoroutine(RecalculateNextFrame());
+            return;
+        }
+
         var era = GameManager.instance.player.currentEra;
+        if (!eraRequirements.ContainsKey(era)) return;
 
         foreach (var req in eraRequirements[era])
         {
@@ -268,6 +276,12 @@ public class EraManager : MonoBehaviour
                 req.SetProgress(value);
             }
         }
+    }
+
+    private System.Collections.IEnumerator RecalculateNextFrame()
+    {
+        yield return null;
+        ForceRecalculateLevels();
     }
 
     private int CountStructuresMeetingRequirement(EraRequirement req)
@@ -389,7 +403,7 @@ public class EraManager : MonoBehaviour
             consFunction.currentTimeUpgrade = consFunction.timeUpgrade[(int)newEra];
             consFunction.currentCostsUpgradeHV = consFunction.costsUpgradeHV[(int)newEra];
             consFunction.currentCostsUpgradeMC = consFunction.costsUpgradeMC[(int)newEra];
-            // la cantidad se actualiza en el placeBuilding según la era actual.
+            // la cantidad se actualiza en el placeBuilding segï¿½n la era actual.
             consFunction.RefreshUpgradeUI();
         }
     }

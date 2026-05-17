@@ -379,6 +379,15 @@ public class AntWorkerBehaviour : MonoBehaviour
         }
     }
 
+    public void ForceFindCurrentTunnel()
+    {
+        currentTunnel = FindCurrentTunnel();
+        if (currentTunnel == null)
+            Debug.LogWarning($"{name}: No se encontró túnel actual tras cargar.");
+        else
+            Debug.Log($"{name}: Túnel actual encontrado = {currentTunnel.name}");
+    }
+
     private void FinishTransport()
     {
         isTransporting = false;
