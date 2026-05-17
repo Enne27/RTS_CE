@@ -22,12 +22,12 @@ public class GameModesView : View
 
         singleLoadPlayerButton.onClick.AddListener(() =>
         {
+            GameManager.instance.tutorialShown = true; // Marcar que el tutorial ya se ha mostrado para evitar que aparezca al cargar la partida
             GameManager.instance.StartCoroutine(LoadGameAfterScene());
         });
 
         creativeModeButton.onClick.AddListener(() =>
         {
-            
         });
 
         backButton.onClick.AddListener(() =>
