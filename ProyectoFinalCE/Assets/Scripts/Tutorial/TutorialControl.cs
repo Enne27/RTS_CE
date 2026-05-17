@@ -64,6 +64,11 @@ public class TutorialControl : MonoBehaviour
         Debug.Log(requiredBuildingType.ToString());
         switch (lineNum)
         {
+            case 0:
+            case 1:
+            case 2:
+                break;
+
             case 3: // "Construye un túnel"
                 requiredBuildingType = BuildingType.Tunnel;
                 Debug.Log(requiredBuildingType.ToString());
@@ -88,40 +93,7 @@ public class TutorialControl : MonoBehaviour
                 DialogueManager.instance.taskPending = true;
                 break;
         }
-        
-        /* switch (lineNum)
-         {
-             case 0:
-                 invertedMask.SetActive(true);
-                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
-                 break;
-             case 1:
-                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[1].position, 0.4f));
-                 AntsType.SetActive(true);
-                 resources.SetActive(true);
-                 break;
-             case 2:
 
-                 StartCoroutine(MoverYEscalar(
-                     invertedMask.transform,
-                     positions[5].position,
-                     new Vector3(6f, 1f, 0f),
-                     0.5f));
-                 break;
-             case 4:
-
-                 StartCoroutine(MoverYEscalar(
-                    invertedMask.transform,
-                    positions[1].position,
-                    new Vector3(1f, 1f, 0f),
-                    0.5f));
-                 break;
-             case 5:
-                 AntsType.SetActive(false);
-                 resources.SetActive(false);
-                 StartCoroutine(MoverSuavemente(invertedMask.transform, positions[0].position, 0.4f));
-                 break;
-         }*/
         Debug.Log(lineNum.ToString());
         lineNum++;
     }

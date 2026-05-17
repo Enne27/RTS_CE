@@ -146,7 +146,7 @@ public class BuildingManager : MonoBehaviour
                         materialsNeeded -= fromForaging;
 
                         inventory.materials -= materialsNeeded;
-                        
+
                     }
 
                     GameManager.instance.player.inventory.RemoveEggs(data.costHV);
@@ -158,7 +158,7 @@ public class BuildingManager : MonoBehaviour
                     }
 
                     foragingChamber.UpdateUI();
-                    
+
                     PlaceBuilding(buildPosition);
                 }
 
@@ -203,28 +203,29 @@ public class BuildingManager : MonoBehaviour
 
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
-        // 1. ¡Movemos el evento aquí arriba! 
-        // Así se ejecutará siempre en cuanto se coloque CUALQUIER construcción, antes de los 'return'.
-        OnBuildingPlaced?.Invoke(preview.data.buildingType);
-
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
+        GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
+
 
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
-                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 queenChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
             case BuildingType.BroodChamber:
-                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 broodChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
             case BuildingType.StorageChamber:
-                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 storageChambersCount++;
                 constructionsBuilt.Add(building);
                 break;
@@ -281,8 +282,8 @@ public class BuildingManager : MonoBehaviour
                 break;
         }
 
-        // 2. IMPORTANTE: Elimina la línea OnBuildingPlaced de aquí abajo 
-        // para evitar que las cámaras normales disparen el evento dos veces.
+        OnBuildingPlaced?.Invoke(preview.data.buildingType);
+
         Destroy(preview.gameObject);
         preview = null;
     }
