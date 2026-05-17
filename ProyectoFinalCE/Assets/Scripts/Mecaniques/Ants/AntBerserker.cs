@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static PlayerConstants;
 
 public class AntBerserker : Ant
 {
@@ -7,14 +8,16 @@ public class AntBerserker : Ant
     public static event Action<Ant> OnAnyAntDamaged;
     private void Awake()
     {
+        antType = ANT_TYPES.BERSERKER;
         HP = 80f;
         armor = 0.7f;
         speed = 7f;
         strength = 4f;
         reach = 1;
-        vision = 1;
+        vision = 10;
         linePriority = 2;
         acidBased = false;
+        base.Awake();
     }
 
     public override void Attack(Ant target)
@@ -22,7 +25,7 @@ public class AntBerserker : Ant
         float distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= reach)
         {
-            target.TakeDamage(this, strength, acidBased);
+            target.TakeDamage(this, GetEffectiveDamage(), acidBased);
         }
     }
     public override void TakeDamage(Ant other, float strenght, bool acidBased)
@@ -50,6 +53,6 @@ public class AntBerserker : Ant
     }
     public override void Die()
     {
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }

@@ -15,18 +15,17 @@ public class Player
     [Tooltip("The era at wich the player's hive is at")]
     public HIVE_ERAS currentEra;
     public Dictionary<Type, int> structuresCount;
-    //public List<Structure> structures;
     public List<GameObject> structures;
     public List<Ant> ants;
+    public List<AntWorkerBehaviour> workers;
 
     public Player()
     {
         inventory = new Inventory();
         structuresCount = new Dictionary<Type, int>();
-        //structures = new List<Structure>();
         structures = new List<GameObject>();
         ants = new List<Ant>();
-
+        workers = new List<AntWorkerBehaviour>();
         /* TBI
         foreach (var type in TypeCache.GetTypesDerivedFrom<Structure>())
         {

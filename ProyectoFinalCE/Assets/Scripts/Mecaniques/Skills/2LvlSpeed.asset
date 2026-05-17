@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
+  m_Name: 2LvlSpeed
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2009264726016
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2010170695680
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  skillType: 2
+  cost: 3
+  prerequisites:
+  - {fileID: 11400000, guid: d931ffff75df20d45b70205e80f46f96, type: 2}
+  effects:
+  - effectType: 0
+    statType: 7
+    value: 10
+    specialID: 2LvlSpeed1
+  - effectType: 0
+    statType: 3
+    value: -5
+    specialID: 2LvlSpeed2
+  references:
+    version: 2
+    RefIds: []

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,38 +13,53 @@ public class BuildingManager : MonoBehaviour
         keyboard = Keyboard.current;
         mouse = Mouse.current;
         Instance = this;
+        hudView = FindFirstObjectByType<GameHUDView>();
     }
     #endregion
     
     public const float CELL_SIZE = 1f;
     [Header("Chambers Data")]
-    [SerializeField] private BuildingData queenChamberData;
-    [SerializeField] private BuildingData broodChamberData;
-    [SerializeField] private BuildingData storageChamberData;
-    [SerializeField] private BuildingData tunnelChamberData;
+    [SerializeField] public BuildingData queenChamberData;
+    [SerializeField] public BuildingData broodChamberData;
+    [SerializeField] public BuildingData storageChamberData;
+    [SerializeField] public BuildingData tunnelChamberData;
 
     [Header("Building References")]
     [SerializeField] private BuildingPreview previewPrefab;
     [SerializeField] private Building buildingPrefab;
     [SerializeField] private BuildingGrid grid;
 
-    private BuildingPreview preview;
+    [HideInInspector] public BuildingPreview preview;
 
     private Keyboard keyboard;
     private Mouse mouse;
+    [HideInInspector] public Vector3 mousePos;
 
     [Header("Builds")]
     public List<Building> constructionsBuilt;
+    public List<TunnelPath> pathsBuilt;
 
     [Header("Build Counts")]
     public int queenChambersCount;
     public int broodChambersCount;
     public int storageChambersCount;
+    public int pathsCount;
+
+    [Header("BuildingMaterial")]
+    [SerializeField] Material ConstructionMaterial;
+
+    [SerializeField] public Material QueenChamberMaterial;
+    [SerializeField] public Material BroodChamberMaterial;
+    [SerializeField] public Material StorageChamberMaterial;
+
+    public List<Building> waitingToBeBuilt = new();
+
+    [Header("Visual player")]
+    GameHUDView hudView;
 
     private void Update()
     {
-
-        Vector3 mousePos = GetMouseWorldPosition();
+        mousePos = GetMouseWorldPosition();
         //Debug.Log(GetMouseWorldPosition());
 
         if (preview != null)
@@ -72,23 +87,78 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void HandlePreview(BuildingData data ,Vector3 mouseWorldPosition)
+    private void HandlePreview(BuildingData data, Vector3 mouseWorldPosition)
     {
         preview.transform.position = mouseWorldPosition;
+
         List<Vector3> buildPosition = preview.model.GetAllBuilddingPositions();
         bool canBuild = grid.CanBuild(buildPosition);
 
         if (canBuild)
         {
             preview.transform.position = GetSnappedCenterPosition(buildPosition);
-            if((GameManager.instance.player.inventory.materials >= data.costMC) && (GameManager.instance.player.inventory.eggs >= data.costHV))
+
+            Inventory inventory = GameManager.instance.player.inventory;
+            ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
+
+            // Recursos totales (storage + foraging)
+            int totalMaterials = inventory.materials + inventory.materialsInForaging;
+
+            bool hasResources = totalMaterials >= data.costMC && inventory.eggs >= data.costHV;
+
+            if (hasResources)
             {
                 preview.ChangeState(BuildingPreview.BuildingPreviewState.POSITIVE);
 
                 if (mouse.leftButton.wasPressedThisFrame)
                 {
+                    // =========================
+                    // MATERIALES
+                    // =========================
+
+                    int materialsNeeded = data.costMC;
+
+                    // Primero gastar foraging
+                    if (inventory.materialsInForaging >= materialsNeeded)
+                    {
+                        inventory.materialsInForaging -= materialsNeeded;
+
+                        // Actualizar chamber visual
+                        foragingChamber.RemoveResource(ResourceType.material, materialsNeeded);
+                    }
+                    else
+                    {
+                        int fromForaging = inventory.materialsInForaging;
+
+                        // Vaciar foraging
+                        inventory.materialsInForaging = 0;
+
+                        // Actualizar chamber visual
+                        if (fromForaging > 0)
+                        {
+                            foragingChamber.RemoveResource(ResourceType.material, fromForaging);
+                        }
+
+                        // Lo restante desde storage
+                        materialsNeeded -= fromForaging;
+
+                        inventory.materials -= materialsNeeded;
+                        
+                    }
+
+                    GameManager.instance.player.inventory.RemoveEggs(data.costHV);
+
+                    if (hudView != null)
+                    {
+                        hudView.UpdateMCText();
+                        hudView.UpdateEggsText();
+                    }
+
+                    foragingChamber.UpdateUI();
+                    
                     PlaceBuilding(buildPosition);
                 }
+
                 if (mouse.middleButton.wasPressedThisFrame)
                 {
                     CancelPreview();
@@ -105,7 +175,6 @@ public class BuildingManager : MonoBehaviour
                     return;
                 }
             }
-            
         }
         else
         {
@@ -118,7 +187,8 @@ public class BuildingManager : MonoBehaviour
             }
         }
     }
-    private void CancelPreview()
+
+    public void CancelPreview()
     {
         if (preview != null)
         {
@@ -130,29 +200,138 @@ public class BuildingManager : MonoBehaviour
     private void PlaceBuilding(List<Vector3> buildingPositions)
     {
         Building building = Instantiate(buildingPrefab, preview.transform.position, Quaternion.identity);
+        GameManager.instance.player.structures.Add(building.gameObject);
         building.Setup(preview.data, preview.model.Rotation);
         grid.SetBuilding(building, buildingPositions);
-        
+        //VFXManager.Instance.PlayConstructionParticles(preview.transform.position, building.data.constructionTime);
+
         switch (preview.data.buildingType)
         {
             case BuildingType.QueenChamber:
-                building.gameObject.GetComponentInChildren<QueenChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 queenChambersCount++;
+                constructionsBuilt.Add(building);
                 break;
+
             case BuildingType.BroodChamber:
-                building.gameObject.GetComponentInChildren<BroodChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 broodChambersCount++;
+                constructionsBuilt.Add(building);
+                
                 break;
+
             case BuildingType.StorageChamber:
-                building.gameObject.GetComponentInChildren<StorageChamberFunction>().OnConstructionFinished();
+                building.gameObject.GetComponentInChildren<Renderer>().material = ConstructionMaterial;
+                SetSlavesToWork(building);
                 storageChambersCount++;
+                constructionsBuilt.Add(building);
+                break;
+
+            case BuildingType.Tunnel:
+
+                TunnelFunction tunnel = building.GetComponentInChildren<TunnelFunction>();
+                tunnel.DetectTunnels();
+
+                HashSet<int> neighborPathIDs = new();
+
+                foreach (TunnelFunction connection in tunnel.TunnelConnections)
+                {
+                    if (connection.pathID != 0)
+                        neighborPathIDs.Add(connection.pathID);
+                }
+
+ 
+                if (neighborPathIDs.Count == 0)
+                {
+                    pathsCount++;
+                    tunnel.pathID = pathsCount;
+
+                    TunnelPath newPath = new(pathsCount, tunnel);
+                    pathsBuilt.Add(newPath);
+
+                    return;
+                }
+
+                if (neighborPathIDs.Count == 1)
+                {
+                    int id = neighborPathIDs.First();
+
+                    tunnel.pathID = id;
+
+                    TunnelPath path = pathsBuilt.Find(p => p.pathID == id);
+
+                    if (!path.TunnelPieces.Contains(tunnel))
+                        path.TunnelPieces.Add(tunnel);
+
+                    return;
+                }
+
+
+                int mainID = neighborPathIDs.First();
+                TunnelPath mainPath = pathsBuilt.Find(p => p.pathID == mainID);
+
+                // Añadir el nuevo túnel al principal
+                tunnel.pathID = mainID;
+                mainPath.TunnelPieces.Add(tunnel);
+
+                // Fusionar los demás
+                foreach (int otherID in neighborPathIDs)
+                {
+                    if (otherID == mainID) continue;
+
+                    TunnelPath otherPath = pathsBuilt.Find(p => p.pathID == otherID);
+
+                    foreach (TunnelFunction piece in otherPath.TunnelPieces)
+                    {
+                        piece.pathID = mainID;
+
+                        if (!mainPath.TunnelPieces.Contains(piece))
+                            mainPath.TunnelPieces.Add(piece);
+                    }
+
+                    pathsBuilt.Remove(otherPath);
+                    pathsCount--;
+                }
+
+                
+                
                 break;
             default:
                 break;
         }
-        constructionsBuilt.Add(building);
+        
         Destroy(preview.gameObject);
         preview = null;
+    }
+
+    private void SetSlavesToWork(Building build)
+    {
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            if (worker == null)
+                continue;
+
+            string state =
+                worker.stateMachineManager.GetCurrentStateName();
+
+            // PRIORIDAD 1: trabajadores libres
+            if (state == "Wander")
+            {
+                worker.CallToBuild(build);
+                return;
+            }
+
+            // PRIORIDAD 2: trabajadores transportando SIN carga aún
+            if (worker.isTransporting && !worker.carryingResources)
+            {
+                worker.InterruptTransportAndBuild(build);
+                return;
+            }
+        }
+
+        waitingToBeBuilt.Add(build);
     }
 
     private Vector3 GetSnappedCenterPosition(List<Vector3> allbuildingPositions)
@@ -171,7 +350,7 @@ public class BuildingManager : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mouseScreen);
     }
 
-    private BuildingPreview CreatePreview(BuildingData data, Vector3 position)
+    public BuildingPreview CreatePreview(BuildingData data, Vector3 position)
     {
         BuildingPreview buildingPreview = Instantiate(previewPrefab, position, Quaternion.identity);
         buildingPreview.Setup(data);

@@ -9,28 +9,40 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.88
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.000000055502166
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.535546
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
-      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
-      propertyPath: m_LocalRotation.y
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.98480403
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalRotation.x
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.1736694
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
       propertyPath: m_LocalRotation.z
@@ -48,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -55,6 +71,18 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
       propertyPath: m_Name
       value: CH_CrazyAnt
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab158dc4c8f11274f9f9ddde98857a6c, type: 3}
+      propertyPath: m_TagString
+      value: Ant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -81,7 +109,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b66b93cbaf3cbe140b1c229b6da0bd4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntCrazy
+  antType: 0
+  HP: 17
+  armor: 0.35
+  speed: 17
+  strength: 2
+  reach: 1
+  vision: 3
+  linePriority: 6
   breedingCost: 0b0000000c000000
-  flowFieldInxex: 0
+  antOwner: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}

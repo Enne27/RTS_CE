@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1eb0c88fba0ddc459717aec91b4a464, type: 3}
+  m_Name: 4LvlGeneric
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillName:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2663592927232
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  description:
+    m_TableReference:
+      m_TableCollectionName: GUID:2ee86be5d4d867549b251de751113939
+    m_TableEntryReference:
+      m_KeyId: 2666218561536
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  skillType: 0
+  cost: 10
+  prerequisites:
+  - {fileID: 11400000, guid: a97f1490d47218c4f8d0254fff53d8b2, type: 2}
+  - {fileID: 11400000, guid: 1fdf802bc8eb00c4ab54976121d88435, type: 2}
+  - {fileID: 11400000, guid: 89ef7862d9b06ad43b524992f7058852, type: 2}
+  - {fileID: 11400000, guid: 8d1bf318c7ef7364dadc6c8abcb3423c, type: 2}
+  effects:
+  - effectType: 3
+    statType: 8
+    value: 10
+    specialID: WorkerBonusPer10
+  references:
+    version: 2
+    RefIds: []

@@ -1,0 +1,264 @@
+using FMODUnity;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class VFXManager : MonoBehaviour
+{
+    #region SINGLETON
+    public static VFXManager Instance;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+    #endregion
+
+    #region POOL STRUCTURE
+
+    private class PooledVFX
+    {
+        public ParticleSystem ps;
+        public bool inUse;
+        public bool constructionLocked;
+    }
+
+    private Dictionary<ParticleSystem, List<PooledVFX>> poolsVFX = new();
+    private Dictionary<ParticleSystem, Transform> hammerCache = new();
+
+    #endregion
+
+    #region VARIABLES
+
+    [Header("Particles System")]
+    [SerializeField] private ParticleSystem constructingParticles;
+    [SerializeField] private ParticleSystem broodParticles;
+    [SerializeField] Vector3 offsetBroodParticles = new Vector3(1.2f, -0.3f, 0f);
+
+    [Header("SFX")]
+    [SerializeField] private StudioEventEmitter constructionEmitter;
+    [SerializeField] private StudioEventEmitter creationEmitter;
+
+    #endregion
+
+    #region CORE POOL
+
+    public ParticleSystem GetParticle(ParticleSystem prefab)
+    {
+        if (!poolsVFX.ContainsKey(prefab))
+            poolsVFX[prefab] = new List<PooledVFX>();
+
+        var pool = poolsVFX[prefab];
+
+        pool.RemoveAll(p => p == null || p.ps == null);
+
+        foreach (var item in pool)
+        {
+            if (!item.inUse && !item.constructionLocked)
+            {
+                item.inUse = true;
+                return item.ps;
+            }
+        }
+
+        ParticleSystem newPS = Instantiate(prefab);
+
+        pool.Add(new PooledVFX
+        {
+            ps = newPS,
+            inUse = true,
+            constructionLocked = false
+        });
+
+        return newPS;
+    }
+
+    private PooledVFX GetPoolItem(ParticleSystem ps, ParticleSystem prefab)
+    {
+        if (!poolsVFX.ContainsKey(prefab)) return null;
+
+        foreach (var item in poolsVFX[prefab])
+        {
+            if (item.ps == ps)
+                return item;
+        }
+
+        return null;
+    }
+
+    #endregion
+
+    #region GENERIC PARTICLES
+
+    public void PlayParticleWithTime(ParticleSystem prefab, Vector3 position, float duration)
+    {
+        ParticleSystem ps = GetParticle(prefab);
+
+        ps.transform.position = position;
+
+        var main = ps.main;
+        main.duration = duration;
+        main.startLifetime = duration;
+
+        ps.Clear();
+        ps.Play();
+    }
+
+    public void PlayParticle(ParticleSystem prefab, Vector3 position)
+    {
+        ParticleSystem ps = GetParticle(prefab);
+
+        ps.transform.position = position;
+
+        ps.Clear();
+        ps.Play();
+    }
+
+    #endregion
+
+
+    #region RELEASE LOGIC
+
+    private IEnumerator ReleaseWhenFinished(ParticleSystem ps, PooledVFX poolItem, Transform hammer)
+    {
+        yield return new WaitUntil(() => ps == null || (!ps.IsAlive(true) && !ps.isEmitting));
+
+        if (hammer != null)
+            hammer.gameObject.SetActive(false);
+
+        if (poolItem != null)
+        {
+            poolItem.inUse = false;
+            poolItem.constructionLocked = false;
+        }
+    }
+
+    #endregion
+
+
+    #region HAMMER CACHE
+
+    private Transform GetHammer(ParticleSystem ps)
+    {
+        if (!hammerCache.TryGetValue(ps, out Transform hammer) || hammer == null)
+        {
+            hammer = ps.transform.Find("Hammer");
+
+            if (hammer != null)
+                hammerCache[ps] = hammer;
+        }
+
+        return hammer;
+    }
+
+    #endregion
+
+    #region CONSTRUCTION VFX
+
+    public void PlayConstructionParticles(Vector3 position, float duration)
+    {
+        if (WorldUIManager.Instance != null)
+            WorldUIManager.Instance.ShowTimer(position, duration);
+
+        ParticleSystem ps = GetParticle(constructingParticles);
+        ps.transform.position = position;
+
+        var poolItem = GetPoolItem(ps, constructingParticles);
+        if (poolItem == null) 
+        {
+            poolItem = new PooledVFX
+            {
+                ps = ps,
+                inUse = true,
+                constructionLocked = true
+            };
+
+            poolsVFX[constructingParticles].Add(poolItem);
+        }
+
+        poolItem.inUse = true;
+        poolItem.constructionLocked = true;
+
+        Transform hammer = GetHammer(ps);
+
+        if (hammer != null)
+        {
+            hammer.gameObject.SetActive(true);
+        }
+
+        
+        if (TimeManager.Instance)
+        {
+            TimeManager.Instance.OneShotTimer(duration, () =>
+            {
+                if (ps != null)
+                {
+                    ps.Clear();
+                    ps.Play();
+
+                    StartCoroutine(ReleaseWhenFinished(ps, poolItem, hammer));
+                }
+
+                if (hammer != null)
+                    hammer.gameObject.SetActive(false);
+
+                if (SFXManager.instance != null)
+                    SFXManager.PlaySFX(constructionEmitter);
+
+            });
+        }
+    }
+
+    public void PlayBroodingChamberParticles(Vector3 position, float duration, Transform broodChamberTransform)
+    {
+        WorldUIManager.Instance.ShowTimerAnts(position, duration);
+
+        ParticleSystem ps = GetParticle(broodParticles);
+
+        ps.transform.position = new Vector3(broodChamberTransform.position.x, 
+            broodChamberTransform.position.y-0.05f, broodChamberTransform.position.z);
+
+        var poolItem = GetPoolItem(ps, broodParticles);
+        if (poolItem == null)
+        {
+            poolItem = new PooledVFX
+            {
+                ps = ps,
+                inUse = true,
+                constructionLocked = true
+            };
+
+            poolsVFX[constructingParticles].Add(poolItem);
+        }
+
+        poolItem.inUse = true;
+        poolItem.constructionLocked = true;
+        ps.Play();
+
+        if (TimeManager.Instance)
+        {
+            TimeManager.Instance.OneShotTimer(duration, () =>
+            {
+                if (ps != null)
+                    ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+                if (poolItem != null)
+                {
+                    poolItem.inUse = false;
+                    poolItem.constructionLocked = false;
+                }
+
+                if (SFXManager.instance != null)
+                    SFXManager.PlaySFX(creationEmitter);
+
+            });
+        }
+    }
+    #endregion
+}

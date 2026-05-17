@@ -9,16 +9,23 @@ public class TroopsSelection : MonoBehaviour
     [SerializeField] InputActionAsset inputAsset;
     private InputActionMap general;
 
-
+    [Header("Cursor")]
     public Texture2D defaultCursor;
+    public Vector2 defaultCursor_Pointer;
     public Texture2D farmCursor;
+    public Vector2 farmCursor_Pointer;
+    public Texture2D attackCursor;
+    public Vector2 attackCursor_Pointer;
+
     public List<Ant> unitsSelected;
 
     [SerializeField] private float dragThreshold = 5f;
     private Vector2 startMousePos;
     private Vector2 currentMousePos;
     private bool isDragging;
-    [SerializeField]private bool atackMode = false;
+    private bool atackMode = false;
+
+    [SerializeField] Color selection_outline_color;
 
 
     //Input
@@ -100,19 +107,19 @@ public class TroopsSelection : MonoBehaviour
         {
             if (hit.transform.gameObject.CompareTag("ZonaRecursos"))
             {
-                Cursor.SetCursor(farmCursor, Vector2.zero, CursorMode.Auto);
+                Cursor.SetCursor(farmCursor, farmCursor_Pointer, CursorMode.Auto);
             }
             else if (hit.transform.gameObject.CompareTag("Terrain"))
             {
-                Cursor.SetCursor(defaultCursor, Vector2.zero, CursorMode.Auto);
+                Cursor.SetCursor(defaultCursor, defaultCursor_Pointer, CursorMode.Auto);
             }
             else if (false/*self anthill*/)
             {
                 //Home cursor
             }
-            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            else if (hit.transform.gameObject.CompareTag("AI_AntHill")/* && hit.transform.gameObject.CompareTag("Enemy_Ant")*//*enemy anthill / enemy structure / enemy ant */)
             {
-                //atack cursor
+                Cursor.SetCursor(attackCursor, attackCursor_Pointer, CursorMode.Auto);
             }
         }
     }
@@ -148,13 +155,15 @@ public class TroopsSelection : MonoBehaviour
             {
                 //Home cursor
             }
-            else if (false/*enemy anthill / enemy structure / enemy ant */)
+            else if (hit.transform.gameObject.CompareTag("AI_AntHill"))
             {
                 //atack cursor
+
+                foreach (Ant ant in unitsSelected)
+                {
+                    UnitController.MoveTo(ant, worldMousePos);
+                }
             }
-
-
-
         }
     }
 
@@ -205,7 +214,7 @@ public class TroopsSelection : MonoBehaviour
         for (int i = unitsSelected.Count - 1; i >= 0; i--)
         {
             Ant baseAnt = unitsSelected[i];
-            //baseAnt.transform.GetChild(0).gameObject.SetActive(false);
+            baseAnt.setDefaultOutline();
             unitsSelected.RemoveAt(i);
         }
 
@@ -217,8 +226,7 @@ public class TroopsSelection : MonoBehaviour
 
             if (selectionRect.Contains(screenPos))
             {
-
-                //baseAnt.transform.GetChild(0).gameObject.SetActive(true);
+                baseAnt.setOutline(selection_outline_color);
                 if (!unitsSelected.Contains(baseAnt))
                     unitsSelected.Add(baseAnt);
             }
@@ -237,13 +245,13 @@ public class TroopsSelection : MonoBehaviour
             for (int i = unitsSelected.Count - 1; i >= 0; i--)
             {
                 Ant ant = unitsSelected[i];
-                //ant.transform.GetChild(0).gameObject.SetActive(false);
+                ant.setDefaultOutline();
                 unitsSelected.RemoveAt(i);
             }
 
             if (clickedAnt != null)
             {
-                //clickedAnt.transform.GetChild(0).gameObject.SetActive(true);
+                clickedAnt.setOutline(selection_outline_color);
                 unitsSelected.Add(clickedAnt);
             }
         }

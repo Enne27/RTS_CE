@@ -11,6 +11,9 @@ public enum Conditions
    isCollect,
    isMove,
    isInRange,
+
+   hasWork,
+   workFinished
 }
 
 /// <summary>
@@ -25,6 +28,9 @@ public class Context
     public bool isAttack = false;
     public bool isCollect = false;
     public bool isMove = false;
+
+    public bool hasWork = false;
+    public bool workFinished = false;
 }
 
 /// <summary>
@@ -41,6 +47,8 @@ public class Condition
         context.isAttack = false;
         context.isCollect = false;
         context.isMove = false;
+        context.hasWork = false;
+        context.workFinished = false;
         Context = context;
     }
 
@@ -58,6 +66,10 @@ public class Condition
                 return IsCollect();
             case Conditions.isMove:
                 return IsMove();
+            case Conditions.hasWork:
+                return HasWork();
+            case Conditions.workFinished:
+                return WorkFinished();
             default:
                 Debug.LogError($"Unhandled Condition: {condition}");
                 return false;
@@ -98,6 +110,20 @@ public class Condition
     {
         if (Context.isMove) 
             return true;    
+        else return false;
+    }
+
+    public bool HasWork()
+    {
+        if (Context.hasWork)
+            return true;
+        else return false;
+    }
+
+    public bool WorkFinished()
+    {
+        if(Context.workFinished)
+            return true;
         else return false;
     }
     //TODO: Make functions for checking conditions booleans

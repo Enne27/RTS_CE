@@ -8,7 +8,8 @@ public class InventorySaveData
     public int materials;
     public int upgradePoints;
     public int workerAnts;
-
+    public int materialsInForaging;
+    public int foodInForaging;
     public int eggCapacity;
     public int foodCapacity;
     public int materialsCapacity;
