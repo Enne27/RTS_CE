@@ -124,8 +124,8 @@ public class CameraProjection : MonoBehaviour
                     );
 
                     cameraRig.transform.position = new Vector3(normalizedPoint.x * 500, cameraRig.transform.position.y, normalizedPoint.y * 500);
-                    Debug.Log("Local: " + localPoint);
-                    Debug.Log("Normalized [-1,1]: " + normalizedPoint);
+                    //Debug.Log("Local: " + localPoint);
+                    //Debug.Log("Normalized [-1,1]: " + normalizedPoint);
                 }
             }
         }

@@ -47,8 +47,9 @@ public abstract class Ant : MonoBehaviour
     {
         MoundFunction target;
         //La trucada del AttackMound no pasa el if
-        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && gameObject.CompareTag("Player_AntHill"))
+        if (antOwner == Owner.Player && mound.CompareTag("AI_AntHill") || antOwner == Owner.AI && mound.CompareTag("Player_AntHill"))
         {
+            Debug.Log("AI attacks");
             target = mound.GetComponent<MoundFunction>();
             target.TakeDamage((int)Math.Round(strength), antOwner);
         }
