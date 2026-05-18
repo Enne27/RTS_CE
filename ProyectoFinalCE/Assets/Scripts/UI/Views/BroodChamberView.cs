@@ -55,6 +55,15 @@ public class BroodChamberView : View
 
     #endregion
 
+    private void Awake()
+    {
+        if (statsValuesText != null)
+        {
+            statsValuesTextOriginalScale = statsValuesText.rectTransform.sizeDelta;
+            statsValuesTextOriginalPos = statsValuesText.rectTransform.anchoredPosition;
+        }
+    }
+
     private void OnEnable()
     {
         if (referencesPreviewObject == null)
@@ -120,12 +129,6 @@ public class BroodChamberView : View
 
         if (kamikazeButton != null)
             kamikazeButton.onClick.AddListener(()=>broodChamberFunction.CreateAnt(ANT_TYPES.KAMIKAZE, antsSpawnPoint));
-
-        if(statsValuesText != null)
-        {
-            statsValuesTextOriginalScale = statsValuesText.rectTransform.sizeDelta;
-            statsValuesTextOriginalPos = statsValuesText.rectTransform.anchoredPosition;
-        }
 
         InitializeButtons();
 
