@@ -25,6 +25,10 @@ public class EndGameView : View
     [SerializeField] EventReference finalSFXSoundReferenceVictory;
     [SerializeField] EventReference finalSFXSoundReferenceDefeat;
 
+
+    [Header("Cameras")]
+    [SerializeField] CameraMovement cameraMovement;
+
     #endregion
 
 
@@ -73,11 +77,14 @@ public class EndGameView : View
     public override void Show()
     {
         base.Show();
-
+        Time.timeScale = 0;
+        cameraMovement?.DisableCameraInput();
     }
 
     public override void Hide()
     {
         base.Hide();
+        Time.timeScale = 1;
+        cameraMovement?.EnableCameraInput();
     }
 }

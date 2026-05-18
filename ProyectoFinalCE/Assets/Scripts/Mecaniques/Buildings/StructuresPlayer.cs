@@ -43,6 +43,15 @@ public abstract class StructuresPlayer : MonoBehaviour
 
 
     /// <summary>
+    /// Cuando termina de construirse al inicio.
+    /// </summary>
+    public virtual void OnConstructionFinished()
+    {
+        currentStructureState = StructureState.Idle;
+        RefreshUpgradeUI();
+    }
+
+    /// <summary>
     /// Mientras se está actualizando la construcción.
     /// </summary>
     public void UpgradeStructure()
@@ -64,14 +73,6 @@ public abstract class StructuresPlayer : MonoBehaviour
         });
     }
 
-    /// <summary>
-    /// Cuando termina de construirse al inicio.
-    /// </summary>
-    public virtual void OnConstructionFinished()
-    {
-        currentStructureState = StructureState.Idle;
-        RefreshUpgradeUI();
-    }
 
     /// <summary>
     /// Cuando termina de actualizarse la construcción.
@@ -79,12 +80,22 @@ public abstract class StructuresPlayer : MonoBehaviour
     public virtual void OnUpgradeFinished() 
     { 
         currentStructureState = StructureState.Idle;
+
+        if (IsMaxLevelForEra())
+            return;
+
         currentLevel++;
-        currentCostsUpgradeHV = costsUpgradeHV[currentLevel];
-        currentCostsUpgradeMC = costsUpgradeMC[currentLevel];
-        currentTimeUpgrade = timeUpgrade[currentLevel];
+
+        int indexArray = currentLevel - 1;
+
+        currentCostsUpgradeHV = costsUpgradeHV[indexArray];
+        currentCostsUpgradeMC = costsUpgradeMC[indexArray];
+        currentTimeUpgrade = timeUpgrade[indexArray];
+
+        //Debug.Log($"LEVEL: {currentLevel}");
 
         RefreshUpgradeUI();
+        EraManager.instance.ForceRecalculateLevels();
     }
 
     #region UPGRADE_VALIDATIONS

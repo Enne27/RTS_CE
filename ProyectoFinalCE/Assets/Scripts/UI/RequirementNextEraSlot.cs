@@ -128,7 +128,7 @@ public class RequirementNextEraSlot : MonoBehaviour
             return;
         }
 
-        // 🔴 limpiar anterior
+        // Limpiar anterior
         if (requirement != null)
             requirement.OnChanged -= RefreshQuantityText;
 

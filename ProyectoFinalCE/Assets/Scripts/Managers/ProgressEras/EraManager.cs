@@ -169,6 +169,7 @@ public class EraManager : MonoBehaviour
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 1, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 2, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.EXPLORATION, 5, RequirementType.COUNT),
+                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             {
@@ -180,12 +181,13 @@ public class EraManager : MonoBehaviour
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 2, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 2),
                     new EraRequirement(RequirementID.EXPLORATION, 15, RequirementType.COUNT),
+                   // new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
                 }
             },
             {
                 HIVE_ERAS.IMPERIO, new List<EraRequirement>()
                 {
-                    new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 5),
+                   new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 5),
                     new EraRequirement(RequirementID.STORAGE_CHAMBER, 3, RequirementType.LEVEL, 6),
                     new EraRequirement(RequirementID.BERSERKER_ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.KAMIKAZE_ANT, 2, RequirementType.COUNT),
@@ -193,7 +195,8 @@ public class EraManager : MonoBehaviour
                     new EraRequirement(RequirementID.ACID_ANT, 2, RequirementType.COUNT),
                     new EraRequirement(RequirementID.BROOD_CHAMBER, 3, RequirementType.LEVEL, 6),
                     new EraRequirement(RequirementID.EXPLORATION, 35, RequirementType.COUNT),
-                    //new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),
+                   /*new EraRequirement(RequirementID.QUEEN_CHAMBER, 1, RequirementType.LEVEL, 2),
+                    new EraRequirement(RequirementID.EXPLORATION, 1, RequirementType.COUNT),*/
                     
                 }
             }
@@ -264,10 +267,15 @@ public class EraManager : MonoBehaviour
         {
             if (req.type == RequirementType.LEVEL)
             {
+                int before = req.currentQuantity;
+
                 int value = CountStructuresMeetingRequirement(req);
                 req.SetProgress(value);
             }
         }
+
+        RefreshUI();
+        CheckEraCompletion(era);
     }
 
     private int CountStructuresMeetingRequirement(EraRequirement req)
@@ -281,6 +289,9 @@ public class EraManager : MonoBehaviour
 
             // Filtrar por tipo
             if (!MatchesID(structure, req.id)) continue;
+
+            if (structure.currentStructureState != StructureState.Idle)
+                continue;
 
             if (structure.currentLevel >= req.requiredLevel)
                 count++;
