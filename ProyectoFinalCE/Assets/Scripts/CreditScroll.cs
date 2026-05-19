@@ -14,7 +14,7 @@ public class CreditScroll : MonoBehaviour
 
     [Header("Effects values")]
 
-    [Tooltip("Distancia a la que quiero que se active el botón cuando los créditos lleguen.")] 
+    [Tooltip("Distancia a la que quiero que se active el botï¿½n cuando los crï¿½ditos lleguen.")] 
     [SerializeField]float yDistance;
 
     Vector2 lastMousePos;
@@ -36,7 +36,7 @@ public class CreditScroll : MonoBehaviour
     void Update()
     {
         // Con el translate podemos mover hacia donde queramos.
-        transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime);
+        transform.Translate(Vector3.up * scrollSpeed * Time.unscaledDeltaTime);
 
         if (Keyboard.current.anyKey.isPressed || Mouse.current.leftButton.isPressed ||
         Mouse.current.rightButton.isPressed || Mouse.current.middleButton.isPressed)
@@ -69,7 +69,6 @@ public class CreditScroll : MonoBehaviour
             hideTimerRunning = false;
             view.ActivateButtons(false);
         });
-
     }
     private void ShowButtons()
     {
