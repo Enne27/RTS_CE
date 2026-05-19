@@ -15,7 +15,9 @@ public class GameHUDView : View
 
 
     [Header("Buttons")]
-    [SerializeField] Button constructionButton;
+    [SerializeField] public Button constructionButton;
+    [SerializeField] public Button skillsTreeButton;
+    private bool constructionMenuActived = false;
     [SerializeField] Button generalInfoButton;
 
     [Header("ANTS")]
@@ -31,35 +33,87 @@ public class GameHUDView : View
     [SerializeField] TextMeshProUGUI crazyAntsText;
     [SerializeField] TextMeshProUGUI kamikazeAntsText;
 
-    [Header("General Info Texts")]
-    [SerializeField] TextMeshProUGUI currentEraText;
+    [Header("General Info")]
+    [SerializeField] Image currentEra;
+
+    [Header("Skills")]
+    [SerializeField] GameObject skillsTree;
     #endregion
 
     public override void Initialize()
     {
-        foodText.text = GameManager.instance.startingFood.ToString();
-        eggsText.text = GameManager.instance.startingEggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
-        mcText.text = GameManager.instance.startingMC.ToString();
-        antWorkersText.text = GameManager.instance.startingWorkerAnts.ToString();
+        if (GameManager.instance.tutorialShown == false)
+        {
+            foodText.text = GameManager.instance.startingFood.ToString();
+            eggsText.text = GameManager.instance.startingEggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
+            mcText.text = GameManager.instance.startingMC.ToString();
+            antWorkersText.text = GameManager.instance.startingWorkerAnts.ToString();
 
-        totalAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
-        explorerAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
-        soldierAntsText.text = "0";
-        berserkerAntsText.text = "0";
-        acidAntsText.text = "0";
-        crazyAntsText.text = "0";
-        kamikazeAntsText.text = "0";
+            totalAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
+            explorerAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
+            soldierAntsText.text = "0";
+            berserkerAntsText.text = "0";
+            acidAntsText.text = "0";
+            crazyAntsText.text = "0";
+            kamikazeAntsText.text = "0";
 
-        currentEraText.text = GameManager.instance.player.currentEra.ToString();
+        }
+        else
+        {
+            foodText.text = GameManager.instance.player.inventory.food.ToString() + "/" + GameManager.instance.player.inventory.foodCapacity;
+            eggsText.text = GameManager.instance.player.inventory.eggs.ToString() + "/" + GameManager.instance.player.inventory.eggCapacity;
+            mcText.text = GameManager.instance.player.inventory.materials.ToString() + "/" + GameManager.instance.player.inventory.materialsCapacity; 
+            antWorkersText.text = GameManager.instance.player.inventory.workerAnts.ToString();
 
-        //if(constructionButton != null)
-        //  constructionButton.onClick.AddListener();
+            totalAntsText.text = GameManager.instance.player.ants.Count.ToString();
+
+            /*explorerAntsText.text = GameManager.instance.startingExplorerAnts.ToString();
+            soldierAntsText.text = "0";
+            berserkerAntsText.text = "0";
+            acidAntsText.text = "0";
+            crazyAntsText.text = "0";
+            kamikazeAntsText.text = "0";*/
+        }
+
+        if(currentEra != null && EraManager.instance != null)
+            currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
+
+        if(constructionButton != null)
+        {
+          constructionButton.onClick.AddListener(()=> {
+              if(constructionMenuActived == false)
+              {
+                  //ViewManager.Show<ConstructionMenuView>();
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(true);
+                  constructionMenuActived = true;
+              }
+              else 
+              { 
+                  constructionMenuActived = false;
+                  //ViewManager.ShowLastView(); 
+                  ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
+              }
+          });
+
+        }
 
         if (fakeAntsDropwdownButton != null)
             fakeAntsDropwdownButton.onClick.AddListener(ShowAntsUI);
-        
+
+        if (skillsTreeButton != null && skillsTree != null)
+            skillsTreeButton.onClick.AddListener(()=> skillsTree.SetActive(true));
+
         if (generalInfoButton != null)
-            generalInfoButton.onClick.AddListener(()=>ViewManager.Show<GeneralInfoView>(true));
+            generalInfoButton.onClick.AddListener(()=>
+            {
+                SetGeneralInfoActive(true);
+                //ViewManager.Show<GeneralInfoView>(true);
+            });
+    }
+
+    public void UpdateCurrentEraImage()
+    {
+        currentEra.sprite = EraManager.instance.eraSprites[GameManager.instance.player.currentEra];
     }
 
     private void ShowAntsUI()
@@ -72,6 +126,25 @@ public class GameHUDView : View
         {
             fakeAntsDropdown.gameObject.SetActive(true);
             isActive = true;
+        }
+    }
+
+
+    public void SetGeneralInfoActive(bool value)
+    {
+        GeneralInfoView infoView = ViewManager.GetView<GeneralInfoView>();
+        infoView.gameObject.SetActive(value);
+        if(infoView.gameObject.activeInHierarchy)
+            infoView.RefreshUI(GameManager.instance.player.currentEra);
+    }
+    public void SetConstructionButtonActive(bool value)
+    {
+        constructionButton.gameObject.SetActive(value);
+
+        if (!value)
+        {
+            ViewManager.GetView<ConstructionMenuView>().gameObject.SetActive(false);
+            constructionMenuActived = false;
         }
     }
 

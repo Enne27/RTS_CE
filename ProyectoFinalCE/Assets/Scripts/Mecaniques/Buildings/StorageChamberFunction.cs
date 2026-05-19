@@ -45,32 +45,44 @@ public class StorageChamberFunction : StructuresPlayer
     GameHUDView hudView;
     #endregion
 
-    public override void OnConstructionFinished()
-    {
-        TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-        UpdateCapacityLimits();
-    }
-    public override void OnUpgradeFinished()
-    {
-        base.OnUpgradeFinished();
-        UpdateCapacityLimits();
-    }
-
-    /* private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden. PRUEBASSS
-     {
-         TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
-         UpdateCapacityLimits();
-     }*/
 
     private void Awake()
     {
         hudView = FindFirstObjectByType<GameHUDView>();
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(UpgradeStructure);
     }
 
     private void OnDisable()
     {
         TimeManager.Instance.Unregister(timeToProduceFood, ProduceFood);
     }
+
+    #region BUILDING_METHODS
+    public override void OnConstructionFinished()
+    {
+        base.OnConstructionFinished();
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.StorageChamberMaterial;
+        TimeManager.Instance.Register(timeToProduceFood, ProduceFood);
+        UpdateCapacityLimits();        
+        currentStructureState = StructureState.Idle;
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
+        foreach (AntWorkerBehaviour worker in GameManager.instance.player.workers)
+        {
+            worker.storageChamber = this;
+        }
+        EraManager.instance.AddProgress(RequirementID.STORAGE_CHAMBER);
+    }
+
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        UpdateCapacityLimits();
+        EraManager.instance.AddProgress(RequirementID.STORAGE_CHAMBER);
+    }
+    #endregion
 
     private void ProduceFood()
     {
@@ -81,7 +93,7 @@ public class StorageChamberFunction : StructuresPlayer
     /// Cuando la comida llega de la cámara de forrajeo a las de almacenamiento.
     /// También se llama mediante la generación que da la "granja de hongos".
     /// </summary>
-    void FoodAcquired(int foodToAdd)
+    public void FoodAcquired(int foodToAdd)
     {
         int currentFood = GameManager.instance.player.inventory.food;
         int currentFoodCapacity = GameManager.instance.player.inventory.foodCapacity;
@@ -96,11 +108,24 @@ public class StorageChamberFunction : StructuresPlayer
         if(hudView != null) hudView.UpdateFoodText();
     }
 
+    public int FreeFoodSpace()
+    {
+        return
+            GameManager.instance.player.inventory.foodCapacity -
+            GameManager.instance.player.inventory.food;
+    }
+
+    public int FreeMaterialSpace()
+    {
+        return
+            GameManager.instance.player.inventory.materialsCapacity -
+            GameManager.instance.player.inventory.materials;
+    }
     /// <summary>
     /// Cuando llegan los materiales de la cámara de forrajeo. (Se obtiene la cantidad de las exploraciones.)
     /// </summary>
     /// <param name="mcToAdd"></param>
-    void MC_Acquired(int mcToAdd)
+    public void MC_Acquired(int mcToAdd)
     {
         int currentMC = GameManager.instance.player.inventory.materials;
         int currentMC_Capacity = GameManager.instance.player.inventory.materialsCapacity;

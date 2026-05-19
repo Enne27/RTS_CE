@@ -19,63 +19,95 @@ public static class SaveConverter
                 player.playerColor.a
             },
 
-            inventory = ToSaveData(player.inventory),
-            structures = GetStructures(),
-            ants = GetAnts(player)
+            inventory = ToSaveInventory(player.inventory),
+
+            ants = ToAntSaveData(player.ants),
+
+            structures = ToStructureSaveData(player.structures)
         };
     }
 
-    public static InventorySaveData ToSaveData(Inventory inv)
+    public static List<StructureSaveData> ToStructureSaveData(List<GameObject> structures)
+    {
+        List<StructureSaveData> data = new();
+
+        foreach (GameObject obj in structures)
+        {
+            if (obj == null) continue;
+
+            Building building = obj.GetComponent<Building>();
+            if (building == null) continue;
+
+            // NO guardar los mounds (ant hills) porque ya existen en la escena
+            if (building.data.buildingType == BuildingType.Mound)
+                continue;
+
+            StructuresPlayer structuresPlayer = obj.GetComponent<StructuresPlayer>();
+
+            data.Add(new StructureSaveData
+            {
+                type = building.data.buildingType.ToString(),
+                position = building.transform.position,
+                level = structuresPlayer != null ? structuresPlayer.currentLevel : 1,
+                state = structuresPlayer != null ? structuresPlayer.currentStructureState.ToString() : "Idle",
+                rotation = building.GetComponentInChildren<BuildingModel>() != null ? building.GetComponentInChildren<BuildingModel>().Rotation : 0f
+            });
+        }
+
+        return data;
+    }
+    
+    public static InventorySaveData ToSaveInventory(Inventory inventory)
     {
         return new InventorySaveData
         {
-            eggs = inv.eggs,
-            food = inv.food,
-            materials = inv.materials,
-            upgradePoints = inv.upgradePoints,
-            workerAnts = inv.workerAnts,
+            eggs = inventory.eggs,
+            food = inventory.food,
+            materials = inventory.materials,
+            upgradePoints = inventory.upgradePoints,
+            workerAnts = inventory.workerAnts,
 
-            eggCapacity = inv.eggCapacity,
-            foodCapacity = inv.foodCapacity,
-            materialsCapacity = inv.materialsCapacity
+            eggCapacity = inventory.eggCapacity,
+            foodCapacity = inventory.foodCapacity,
+            materialsCapacity = inventory.materialsCapacity
         };
     }
 
-    private static List<StructureSaveData> GetStructures()
+    public static List<AntSaveData> ToAntSaveData(List<Ant> ants)
     {
-        List<StructureSaveData> list = new();
+        List<AntSaveData> data = new();
 
-        foreach (var b in BuildingManager.Instance.constructionsBuilt)
+        foreach (Ant ant in ants)
         {
-            list.Add(new StructureSaveData
+            if (ant == null)
+                continue;
+
+            if (!ant.gameObject.activeSelf)
+                continue;
+
+            AntExlporer explorerAnt = ant as AntExlporer;
+            data.Add(new AntSaveData
             {
-                type = b.GetComponent<Building>().buildingID,
-                position = b.transform.position,
-                level = 1
-            });
-        }
-
-        return list;
-    }
-
-    private static List<AntSaveData> GetAnts(Player player)
-    {
-        List<AntSaveData> list = new();
-
-        foreach (var ant in player.ants)
-        {
-            list.Add(new AntSaveData
-            {
-                type = ant.GetType().Name,
+                type = ant.antType,
                 position = ant.transform.position,
                 hp = ant.GetCurrentHP(),
+                owner = ant.antOwner,
+                armor = ant.GetArmor(),
+                speed = ant.GetSpeed(),
+                strength = ant.GetStrength(),
+                reach = ant.GetReach(),
+                vision = ant.GetVision(),
+                linePriority = ant.GetLinePriority(),
+                breedingCost = ant.GetBreedingCost(),
+                acidBased = ant.GetAcidBased(),
+                food = explorerAnt != null ? explorerAnt.GetFood() : 0,
+                MC = explorerAnt != null ? explorerAnt.GetMC() : 0
             });
         }
 
-        return list;
+        return data;
     }
 
-    // Placeholder stats/skills
     public static StatsSaveData GetStats()
     {
         var data = new StatsSaveData
@@ -96,7 +128,7 @@ public static class SaveConverter
                 type = type,
                 value = StatManager.Instance.GetStat(type)
             });
-}
+        }
 
         return data;
     }
@@ -118,7 +150,7 @@ public static class SaveConverter
         {
             if (SkillManager.Instance.IsSkillUnlocked(skill))
             {
-                data.unlockedSkills.Add(skill.SkillName);
+                data.unlockedSkills.Add(skill.SkillName.GetLocalizedString());
             }
         }
 

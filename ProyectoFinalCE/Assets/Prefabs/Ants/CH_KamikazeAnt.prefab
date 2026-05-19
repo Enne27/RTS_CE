@@ -9,28 +9,40 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5217521
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.000000014357674
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.565965
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
-      propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
-      propertyPath: m_LocalRotation.y
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9677727
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalRotation.x
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.25182542
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: m_LocalRotation.z
@@ -48,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -56,6 +72,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: CH_KamikazeAnt
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      propertyPath: m_TagString
+      value: Ant
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -63,6 +91,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5177353308174405197}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3235154827269636511}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1940859240576148522}
   m_SourcePrefab: {fileID: 100100000, guid: 939c0691567fc4b4dbe018b083b5d702, type: 3}
 --- !u!1 &2413880518552433636 stripped
 GameObject:
@@ -81,7 +115,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0429849d28108a4ab672ec60be29fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AntKamikaze
+  antType: 0
+  HP: 11
+  armor: 0.3
+  speed: 13
+  strength: 2
+  reach: 1
+  vision: 3
+  linePriority: 3
   breedingCost: 0700000012000000
-  flowFieldInxex: 0
+  antOwner: 0
+  flowFieldIndex: 0
   currentVelocity: {x: 0, y: 0, z: 0}
   objective: {x: 0, y: 0, z: 0}
+--- !u!136 &3235154827269636511
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2413880518552433636}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 1
+  m_Direction: 2
+  m_Center: {x: 0.0057937354, y: 0.20650664, z: -0.075709954}
+--- !u!54 &1940859240576148522
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2413880518552433636}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

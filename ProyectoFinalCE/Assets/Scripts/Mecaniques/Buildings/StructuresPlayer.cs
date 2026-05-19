@@ -1,14 +1,30 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+public enum StructureState
+{
+    OnConstruction,
+    OnUpdate,
+    Idle,
+}
 
 public abstract class StructuresPlayer : MonoBehaviour
 {
     #region VARIABLES
-    public enum StructureState
-    {
-        OnConstruction,
-        OnUpdate,
-        Idle,
-    }
+
+    [Header("Upgrade Visuals")]
+    [SerializeField] public Image upgradeButtonBackground;
+    [SerializeField] public Button upgradeButton;
+    [SerializeField] public Canvas canvas;
+    [SerializeField] public TextMeshProUGUI lvl_TMP;
+
+   // public BuildingData buildingData;
+
+    [Header("Upgrade logic")]
+    public int currentCostsUpgradeHV;
+    public int currentCostsUpgradeMC;
+    public int currentTimeUpgrade = 60;
+    public int currentMaxLevel;
 
     [HideInInspector] public Vector2 positionAntHill;
     public abstract int[] costsUpgradeHV { get; }
@@ -17,24 +33,46 @@ public abstract class StructuresPlayer : MonoBehaviour
     public abstract int[] maxLevelByEra { get; }
 
 
+    [Header("Current Parameters")]
     public StructureState currentStructureState = StructureState.OnConstruction;
     public int currentLevel = 1;
 
+    [Header("Worker construction")]
+    public AntWorkerBehaviour workerWhoBuildThis;
     #endregion
+
+
+    /// <summary>
+    /// Cuando termina de construirse al inicio.
+    /// </summary>
+    public virtual void OnConstructionFinished()
+    {
+        currentStructureState = StructureState.Idle;
+        RefreshUpgradeUI();
+    }
 
     /// <summary>
     /// Mientras se está actualizando la construcción.
     /// </summary>
     public void UpgradeStructure()
     {
+        if (currentStructureState != StructureState.Idle)
+            return;
+
+        if (!HasEnoughResources())
+           return;
+
         currentStructureState = StructureState.OnUpdate;
-        OnUpgradeFinished();
+        RefreshUpgradeUI();
+
+        VFXManager.Instance.PlayConstructionParticles(gameObject.transform.position, currentTimeUpgrade);
+
+        TimeManager.Instance.OneShotTimer(currentTimeUpgrade, () =>
+        {
+            OnUpgradeFinished();
+        });
     }
 
-    /// <summary>
-    /// Cuando termina de construirse al inicio.
-    /// </summary>
-    public abstract void OnConstructionFinished();
 
     /// <summary>
     /// Cuando termina de actualizarse la construcción.
@@ -42,7 +80,74 @@ public abstract class StructuresPlayer : MonoBehaviour
     public virtual void OnUpgradeFinished() 
     { 
         currentStructureState = StructureState.Idle;
+
+        if (IsMaxLevelForEra())
+            return;
+
         currentLevel++;
+
+        int indexArray = currentLevel - 1;
+
+        currentCostsUpgradeHV = costsUpgradeHV[indexArray];
+        currentCostsUpgradeMC = costsUpgradeMC[indexArray];
+        currentTimeUpgrade = timeUpgrade[indexArray];
+
+        //Debug.Log($"LEVEL: {currentLevel}");
+
+        RefreshUpgradeUI();
+        EraManager.instance.ForceRecalculateLevels();
     }
-    
+
+    #region UPGRADE_VALIDATIONS
+
+    public bool IsMaxLevelForEra()
+    {
+        int currentEra = (int)GameManager.instance.player.currentEra;
+
+        int maxLevel = maxLevelByEra[currentEra];
+
+        return currentLevel >= maxLevel;
+    }
+
+    public bool HasEnoughResources()
+    {
+        var inventory = GameManager.instance.player.inventory;
+
+        return inventory.eggs >= currentCostsUpgradeHV &&
+               (inventory.materials >= currentCostsUpgradeMC || inventory.materialsInForaging >= currentCostsUpgradeMC);
+    }
+
+    public bool CanUpgrade()
+    {
+        if (currentStructureState != StructureState.Idle)
+            return false;
+
+        if (IsMaxLevelForEra())
+            return false;
+
+        return true;
+    }
+    #endregion
+
+    public void RefreshUpgradeUI()
+    {
+        bool canUpgrade = CanUpgrade();
+
+        //upgradeButtonBackground.gameObject.SetActive(canUpgrade);
+        upgradeButtonBackground.gameObject.SetActive(true);
+        upgradeButton.interactable = canUpgrade;
+
+        Color imgColor;
+
+        if (IsMaxLevelForEra())
+            imgColor = Color.black;
+        else if (HasEnoughResources())
+            imgColor = Color.green;
+        else
+            imgColor = Color.red;
+
+        upgradeButton.image.color = imgColor;
+
+        lvl_TMP.text = $"LV.{currentLevel}";
+    }
 }

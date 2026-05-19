@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class QueenChamberFunction : StructuresPlayer
@@ -41,6 +42,7 @@ public class QueenChamberFunction : StructuresPlayer
 
     [Header("Visual player")]
     GameHUDView hudView;
+
     #endregion
 
 
@@ -48,20 +50,35 @@ public class QueenChamberFunction : StructuresPlayer
     private void Awake()
     {
         hudView = FindFirstObjectByType<GameHUDView>();
+        canvas.worldCamera = Camera.main;
+
+        upgradeButton.onClick.AddListener(() => {
+            //RefreshUpgradeUI();
+            UpgradeStructure();
+        });
     }
 
 
     public override void OnConstructionFinished()
     {
+        base.OnConstructionFinished();
+
+        //Debug.Log("Queen Chamber Construida");
         TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
+        GetComponentInChildren<Renderer>().material = BuildingManager.Instance.QueenChamberMaterial;
+        //currentStructureState = StructureState.Idle;
+        workerWhoBuildThis.HasFinishedWork();
+        workerWhoBuildThis = null;
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER);
+    }
+
+    public override void OnUpgradeFinished()
+    {
+        base.OnUpgradeFinished();
+        EraManager.instance.AddProgress(RequirementID.QUEEN_CHAMBER);
     }
 
     #endregion
-
-    /*private void Start()  // OnEnable realmente, pero a veces decide ejecutar en otro orden
-    {
-        TimeManager.Instance.Register(timeToProduceEggs, ProduceEggs);
-    }*/
 
     private void OnDisable()
     {
@@ -81,10 +98,11 @@ public class QueenChamberFunction : StructuresPlayer
             GameManager.instance.player.inventory.AddEggs(eggsToAdd); 
             
        else {
-            GameManager.instance.player.inventory.eggs = currentEggCapacity; 
+            GameManager.instance.player.inventory.eggs = currentEggCapacity;
        }
 
        if(hudView != null) hudView.UpdateEggsText();
     }
+
 
 }

@@ -1,5 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class CameraProjection : MonoBehaviour
 {
@@ -7,17 +11,43 @@ public class CameraProjection : MonoBehaviour
     [SerializeField] Camera mainCamera;
     [SerializeField] Camera minimapCamera;
     [SerializeField] GameObject plane;
+    [SerializeField] GameObject cameraRig;
+    [SerializeField] GraphicRaycaster m_Raycaster;
+    [SerializeField] InputActionAsset inputAsset;
+
+    [SerializeField] Color playerAntColor = Color.green;
+    [SerializeField] Color enemyAntColor = Color.red;
+    [SerializeField] float antSize = 0.005f;
+
+    private InputActionMap general;
+    private InputAction leftClickAction;
+
+    PointerEventData m_PointerEventData;
+    EventSystem m_EventSystem;
 
     Vector3 bottomLeftPosition;
     Vector3 topLeftPosition;
     Vector3 topRightPosition;
     Vector3 bottomRightPosition;
 
+    bool leftclickStarted = false;
+
     static Material lineMaterial;
 
+    private void Awake()
+    {
+        general = inputAsset.FindActionMap("Gameplay");
+        // leftClickAction = general.FindAction("leftClick");
+    }
+    private void OnEnable()
+    {
+        general.FindAction("leftClick").started += (InputAction.CallbackContext ctx) => { leftclickStarted = true; };
+        general.FindAction("leftClick").canceled += (InputAction.CallbackContext ctx) => { leftclickStarted = false; };
+    }
     void Start()
     {
         SetRenderingEnabled(true);
+        m_EventSystem = GetComponent<EventSystem>();
     }
 
     void OnDestroy()
@@ -25,16 +55,28 @@ public class CameraProjection : MonoBehaviour
         SetRenderingEnabled(false);
     }
 
-    public void SetRenderingEnabled(bool enabled)
-    {
-        if (enabled) RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
-        else RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
-    }
+    // private void OnDisable()
+    // {
+    //     leftClickAction.started -= OnLeftClickStarted;
+    //     leftClickAction.canceled -= OnLeftClickCanceled;
 
-    private void OnValidate()
-    {
-        //minimapCamera.orthographicSize = 5 * plane.transform.lossyScale.x;
-    }
+    //     SetRenderingEnabled(false);
+    // }
+
+    // private void Start()
+    // {
+    //     m_EventSystem = EventSystem.current;
+    // }
+
+    // private void OnLeftClickStarted(InputAction.CallbackContext ctx)
+    // {
+    //     leftclickStarted = true;
+    // }
+
+    // private void OnLeftClickCanceled(InputAction.CallbackContext ctx)
+    // {
+    //     leftclickStarted = false;
+    // }
 
     void Update()
     {
@@ -51,8 +93,49 @@ public class CameraProjection : MonoBehaviour
         topLeftPosition = GetPointAtHeight(topLeft, planeY);
         topRightPosition = GetPointAtHeight(topRight, planeY);
         bottomRightPosition = GetPointAtHeight(bottomRight, planeY);
+
+        if (leftclickStarted)
+        {
+            m_PointerEventData = new PointerEventData(m_EventSystem);
+            m_PointerEventData.position = Input.mousePosition;
+
+            List<RaycastResult> results = new List<RaycastResult>();
+
+            m_Raycaster.Raycast(m_PointerEventData, results);
+
+            Vector2 localPoint;
+            foreach (RaycastResult result in results)
+            {
+                RectTransform rect = result.gameObject.GetComponent<RectTransform>();
+                if (rect == null) continue;
+                Vector2 size = rect.sizeDelta;
+                if (result.gameObject.GetComponent<RawImage>())
+                {
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        rect,
+                        m_PointerEventData.position,
+                        null,
+                        out localPoint
+                    );
+
+                    Vector2 normalizedPoint = new Vector2(
+                        localPoint.x / (size.x * 0.5f),
+                        localPoint.y / (size.y * 0.5f)
+                    );
+
+                    cameraRig.transform.position = new Vector3(normalizedPoint.x * 500, cameraRig.transform.position.y, normalizedPoint.y * 500);
+                    //Debug.Log("Local: " + localPoint);
+                    //Debug.Log("Normalized [-1,1]: " + normalizedPoint);
+                }
+            }
+        }
     }
 
+    public void SetRenderingEnabled(bool enabled)
+    {
+        if (enabled) RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+        else RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+    }
     void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
     {
         if (camera != minimapCamera) return;
@@ -72,7 +155,7 @@ public class CameraProjection : MonoBehaviour
 
         GL.Begin(GL.LINES);
         GL.Color(Color.red);
-
+        
         GL.Vertex(new Vector3(tl.x, tl.y, 0));
         GL.Vertex(new Vector3(tr.x, tr.y, 0));
 
@@ -86,6 +169,29 @@ public class CameraProjection : MonoBehaviour
         GL.Vertex(new Vector3(tl.x, tl.y, 0));
 
         GL.End();
+
+        lineMaterial.SetPass(0);
+
+        GL.Begin(GL.QUADS);
+
+        GL.Color(playerAntColor);
+
+        foreach (Ant ant in GameManager.instance.player.ants)
+        {
+            if (ant == null) continue;
+            DrawAntOnMinimap(ant);
+        }
+
+        GL.Color(enemyAntColor);
+
+        foreach (Ant ant in GameManager.instance.playerIA.ants)
+        {
+            if (ant == null) continue;
+            DrawAntOnMinimap(ant);
+        }
+
+        GL.End();
+
         GL.PopMatrix();
     }
 
@@ -108,142 +214,28 @@ public class CameraProjection : MonoBehaviour
         return ray.origin + (((ray.origin.y - height) / -ray.direction.y) * ray.direction);
     }
 
-
-    /*
-
-    [Header("Minimap Settings")]
-    [SerializeField] float mapOriginX = -50f;
-    [SerializeField] float mapOriginZ = -50f;
-    [SerializeField] float mapWidth = 100f;
-    [SerializeField] float mapHeight = 100f;
-    [SerializeField] int texWidth = 256;
-    [SerializeField] int texHeight = 256;
-
-    [SerializeField]private Texture2D minimapTex;
-
-
-    void Update()
+    private void DrawAntOnMinimap(Ant ant)
     {
-        if (Camera.main == null || plane == null) return;
+        Vector3 vp = minimapCamera.WorldToViewportPoint(ant.transform.position);
 
-        Camera camera = Camera.main;
-        float planeY = plane.transform.position.y;
+        if (vp.z < 0 ||
+            vp.x < 0 || vp.x > 1 ||
+            vp.y < 0 || vp.y > 1)
+            return;
 
-        Ray bottomLeft = camera.ViewportPointToRay(new Vector3(0, 0, 0));
-        Ray topLeft = camera.ViewportPointToRay(new Vector3(0, 1, 0));
-        Ray topRight = camera.ViewportPointToRay(new Vector3(1, 1, 0));
-        Ray bottomRight = camera.ViewportPointToRay(new Vector3(1, 0, 0));
+        float s = antSize;
 
-        bottomLeftPosition = GetPointAtHeight(bottomLeft, planeY);
-        topLeftPosition    = GetPointAtHeight(topLeft, planeY);
-        topRightPosition   = GetPointAtHeight(topRight, planeY);
-        bottomRightPosition= GetPointAtHeight(bottomRight, planeY);
-
-        //Vector3 bl = GetPointAtHeight(bottomLeft, planeY);
-        //Vector3 tl = GetPointAtHeight(topLeft, planeY);
-        //Vector3 tr = GetPointAtHeight(topRight, planeY);
-        //Vector3 br = GetPointAtHeight(bottomRight, planeY);
-
-        //Vector2 worldMin = new Vector2(mapOriginX, mapOriginZ);
-        //Vector2 worldMax = new Vector2(mapOriginX + mapWidth, mapOriginZ + mapHeight);
-
-        //Vector2 blUV = WorldToUV(bl, worldMin, worldMax);
-        //Vector2 tlUV = WorldToUV(tl, worldMin, worldMax);
-        //Vector2 trUV = WorldToUV(tr, worldMin, worldMax);
-        //Vector2 brUV = WorldToUV(br, worldMin, worldMax);
-
-        //Vector2 blPixel = new Vector2(blUV.x * texWidth, blUV.y * texHeight);
-        //Vector2 tlPixel = new Vector2(tlUV.x * texWidth, tlUV.y * texHeight);
-        //Vector2 trPixel = new Vector2(trUV.x * texWidth, trUV.y * texHeight);
-        //Vector2 brPixel = new Vector2(brUV.x * texWidth, brUV.y * texHeight);
-
-        //if (minimapTex == null || minimapTex.width != texWidth || minimapTex.height != texHeight)
-        //    minimapTex = new Texture2D(texWidth, texHeight);
-
-        //Color clear = Color.black;
-        //Color lineColor = Color.yellow;
-        //for (int x = 0; x < texWidth; x++)
-        //    for (int y = 0; y < texHeight; y++)
-        //        minimapTex.SetPixel(x, y, clear);
-
-        //DrawLine(minimapTex, blPixel, tlPixel, lineColor);
-        //DrawLine(minimapTex, tlPixel, trPixel, lineColor);
-        //DrawLine(minimapTex, trPixel, brPixel, lineColor);
-        //DrawLine(minimapTex, brPixel, blPixel, lineColor);
-
-        //minimapTex.Apply();
+        GL.Vertex(new Vector3(vp.x - s, vp.y - s, 0));
+        GL.Vertex(new Vector3(vp.x - s, vp.y + s, 0));
+        GL.Vertex(new Vector3(vp.x + s, vp.y + s, 0));
+        GL.Vertex(new Vector3(vp.x + s, vp.y - s, 0));
     }
 
-
-    void Start()
-    {
-        RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
-    }
-
-    void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
-    {
-        GL.PushMatrix();
-        {
-            GL.LoadOrtho();
-            GL.Begin(GL.LINES);
-            {
-                GL.Color(Color.red);
-                GL.Vertex(topLeftPosition);
-                GL.Vertex(topRightPosition);
-                GL.Vertex(topRightPosition);
-                GL.Vertex(bottomRightPosition);
-                GL.Vertex(bottomRightPosition);
-                GL.Vertex(bottomLeftPosition);
-                GL.Vertex(bottomLeftPosition);
-                GL.Vertex(topLeftPosition);
-            }
-            //GL.Begin(GL.TRIANGLES);
-            //{
-            //    GL.Color(Color.red);
-            //    GL.Vertex(new Vector3(-1f, 1f, -1f));
-            //    GL.Vertex(new Vector3(1f, 1f, 1f));
-            //    GL.Vertex(new Vector3(1f, 1f, -1f));
-            //}
-            GL.End();
-        }
-        GL.PopMatrix();
-    }
-
-    public static Vector3 GetPointAtHeight(Ray ray, float height)
-    {
-        return ray.origin + (((ray.origin.y - height) / -ray.direction.y) * ray.direction);
-    }
-
-    Vector2 WorldToUV(Vector3 worldPos, Vector2 worldMin, Vector2 worldMax)
-    {
-        float u = (worldPos.x - worldMin.x) / (worldMax.x - worldMin.x);
-        float v = (worldPos.z - worldMin.y) / (worldMax.y - worldMin.y);
-        return new Vector2(u, v);
-    }
-
-    void DrawLine(Texture2D tex, Vector2 p1, Vector2 p2, Color col)
-    {
-        int x0 = Mathf.RoundToInt(p1.x);
-        int y0 = Mathf.RoundToInt(p1.y);
-        int x1 = Mathf.RoundToInt(p2.x);
-        int y1 = Mathf.RoundToInt(p2.y);
-
-        int dx = Mathf.Abs(x1 - x0);
-        int dy = Mathf.Abs(y1 - y0);
-        int sx = x0 < x1 ? 1 : -1;
-        int sy = y0 < y1 ? 1 : -1;
-        int err = dx - dy;
-
-        while (true)
-        {
-            if (x0 >= 0 && x0 < tex.width && y0 >= 0 && y0 < tex.height)
-                tex.SetPixel(x0, y0, col);
-
-            if (x0 == x1 && y0 == y1) break;
-            int e2 = 2 * err;
-            if (e2 > -dy) { err -= dy; x0 += sx; }
-            if (e2 < dx) { err += dx; y0 += sy; }
-        }
-    }
-    */
+    // public void SetRenderingEnabled(bool enabled)
+    // {
+    //     if (enabled)
+    //         RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+    //     else
+    //         RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+    // }
 }
