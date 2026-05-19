@@ -29,4 +29,10 @@ public class CreditsView : View
         restartButton.gameObject.SetActive(activate);
         exitButton.gameObject.SetActive(activate);
     }
+
+    public override void Show()
+    {
+        base.Show();
+        Time.timeScale = 1;
+    }
 }

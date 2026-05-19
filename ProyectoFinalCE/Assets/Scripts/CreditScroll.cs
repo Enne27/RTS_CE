@@ -36,7 +36,7 @@ public class CreditScroll : MonoBehaviour
     void Update()
     {
         // Con el translate podemos mover hacia donde queramos.
-        transform.Translate(Vector3.up * scrollSpeed * Time.deltaTime);
+        transform.Translate(Vector3.up * scrollSpeed * Time.unscaledDeltaTime);
 
         if (Keyboard.current.anyKey.isPressed || Mouse.current.leftButton.isPressed ||
         Mouse.current.rightButton.isPressed || Mouse.current.middleButton.isPressed)
@@ -69,7 +69,6 @@ public class CreditScroll : MonoBehaviour
             hideTimerRunning = false;
             view.ActivateButtons(false);
         });
-
     }
     private void ShowButtons()
     {
