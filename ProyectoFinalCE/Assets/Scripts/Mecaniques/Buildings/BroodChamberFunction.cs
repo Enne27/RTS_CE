@@ -173,8 +173,18 @@ public class BroodChamberFunction : StructuresPlayer
 
         VFXManager.Instance?.PlayBroodingChamberParticles(GetTransformToSpawnTimer(antType), time, gameObject.transform);
 
+        Inventory inventory = GameManager.instance.player.inventory;
+        ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
 
-        GameManager.instance.player.inventory.RemoveFood(foodCosts);
+        if (foragingChamber.foods >= foodCosts)
+        {
+            inventory.foodInForaging -= foodCosts;
+
+            foragingChamber.RemoveResource(ResourceType.food, foodCosts);
+        }
+        else
+            GameManager.instance.player.inventory.RemoveFood(foodCosts);
+
         GameManager.instance.player.inventory.RemoveEggs(hvCosts);
 
         gameHUDView?.UpdateFoodText();
