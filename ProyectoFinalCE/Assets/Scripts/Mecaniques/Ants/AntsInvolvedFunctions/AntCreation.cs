@@ -244,8 +244,7 @@ public class AntCreation : MonoBehaviour
     {
         return ((GameManager.instance.player.inventory.food >= foodCosts) 
                 ||(ForagingChamberFunction.Instance.foods >= foodCosts))
-            && ((GameManager.instance.player.inventory.eggs >= hvCosts)
-              || (ForagingChamberFunction.Instance.materials <= hvCosts));
+            && (GameManager.instance.player.inventory.eggs >= hvCosts);
     }
 
     /// <summary>

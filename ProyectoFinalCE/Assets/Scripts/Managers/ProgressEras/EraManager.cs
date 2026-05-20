@@ -349,6 +349,10 @@ public class EraManager : MonoBehaviour
 
             LocalizedString newEraName = eraNames[era];
 
+            GameManager.instance.player.inventory.SetEggCapacity(era);
+            GameHUDView hud = ViewManager.GetView<GameHUDView>();
+            hud.UpdateEggsText();
+
             UpgradeLimitsAndRefreshUpgradeButtonUI();
 
             ForceRecalculateLevels();
