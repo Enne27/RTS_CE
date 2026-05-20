@@ -68,12 +68,14 @@ public class PauseController : MonoBehaviour
             ViewManager.Hide<ControlsView>();
             ViewManager.Show<GameHUDView>();
             onUnPause?.Invoke();
+            MusicManager.instance.ResumeMusic();
         }
         else
         {
             //ViewManager.Hide<GameHUDView>(); // AQUÍ DEBERÍAMOS REVISAR LA VIEW, NO SIEMPRE SERÁ LA DE GAME, PUEDE SER INFO GENERAL, ETC.
             ViewManager.Show<PauseMenuView>();
             onPause?.Invoke();
+            MusicManager.instance.PauseMusic();
         }
     }
 }
