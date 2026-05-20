@@ -76,7 +76,7 @@ public class AntCreation : MonoBehaviour
         SystemAntCreation(GameManager.instance.startingExplorerAnts, ANT_TYPES.EXPLORER, antsSpawnPointIA, false, !GameManager.instance.tutorialShown);
     }
 
-    public void PlayerAntCreation(ANT_TYPES antType, Transform position)
+    /*public void PlayerAntCreation(ANT_TYPES antType, Transform position)
     {
         if (position == null)
             return;
@@ -109,7 +109,7 @@ public class AntCreation : MonoBehaviour
         {
             Debug.Log("Insufficient hv or food");
         }
-    }
+    }*/
 
     // Sobrecarga privada (4 parámetros) - la usa PlayerAntCreation
     private void SystemAntCreation(int quantity, ANT_TYPES antType, Transform position, bool isPlayer)
@@ -242,7 +242,10 @@ public class AntCreation : MonoBehaviour
     /// <returns>True si hay suficiente comida y huevas en el inventario del jugador.</returns>
     public bool CanSpawnAnt(int foodCosts, int hvCosts)
     {
-        return (GameManager.instance.player.inventory.food >= foodCosts) && (GameManager.instance.player.inventory.eggs >= hvCosts);
+        return ((GameManager.instance.player.inventory.food >= foodCosts) 
+                && (GameManager.instance.player.inventory.eggs >= hvCosts)) 
+            || (ForagingChamberFunction.Instance.foods >= foodCosts 
+                && ForagingChamberFunction.Instance.materials <= hvCosts);
     }
 
     /// <summary>
