@@ -42,7 +42,7 @@ public class TutorialControl : MonoBehaviour
 
             //Avisamos al tutorial
             BuildingManager.Instance.OnBuildingPlaced += CheckBuildingTask;
-            
+
         }
     }
 
@@ -55,6 +55,7 @@ public class TutorialControl : MonoBehaviour
             //ViewManager.Show<DialogueView>();
             ViewManager.GetView<DialogueView>().gameObject.SetActive(true);
             PauseController.instance.pausableMoment = false;
+            MusicVolumeParams.instance.ChangeMusicToSpeaking();
         }
         else ViewManager.Show<GameHUDView>();
     }
@@ -101,6 +102,9 @@ public class TutorialControl : MonoBehaviour
         PauseController.instance.pausableMoment = true;
         tutorialShowed = true;
         GameManager.instance.tutorialShown = tutorialShowed;
+
+        MusicVolumeParams.instance.ChangeMusicToNotSpeaking();
+
         cameraMoveScript.EnableCameraInput();
     }
 

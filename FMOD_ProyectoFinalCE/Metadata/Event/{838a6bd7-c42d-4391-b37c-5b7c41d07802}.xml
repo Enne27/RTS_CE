@@ -90,9 +90,6 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{de86df9f-7e61-4fa2-ae98-1115d02f2fb8}">
-		<property name="volume">
-			<value>10</value>
-		</property>
 		<relationship name="effectChain">
 			<destination>{eb3fa4a2-4d09-47fe-8e25-8f0bbd05d55e}</destination>
 		</relationship>
@@ -144,10 +141,10 @@
 	</object>
 	<object class="LoopRegion" id="{8c0df9b8-5ce7-485f-87e3-5e27b5a3dcde}">
 		<property name="position">
-			<value>100</value>
+			<value>0</value>
 		</property>
 		<property name="length">
-			<value>1250</value>
+			<value>1350</value>
 		</property>
 		<relationship name="timeline">
 			<destination>{b3c1f373-4b14-4ddc-b967-8410415a6a20}</destination>
@@ -204,7 +201,7 @@
 			<value>0</value>
 		</property>
 		<property name="value">
-			<value>-28</value>
+			<value>-50</value>
 		</property>
 		<property name="curveShape">
 			<value>0.298148185</value>
@@ -215,7 +212,7 @@
 			<value>1</value>
 		</property>
 		<property name="value">
-			<value>10</value>
+			<value>0</value>
 		</property>
 	</object>
 </objects>

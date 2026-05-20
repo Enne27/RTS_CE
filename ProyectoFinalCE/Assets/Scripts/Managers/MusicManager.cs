@@ -109,7 +109,7 @@ public class MusicManager : MonoBehaviour
         musicEventEmitter.Stop();
         yield return new WaitForSecondsRealtime(fadeOutDuration);
         musicEventEmitter.EventReference = newReference;
-        musicEventEmitter.ForceLookUp(); // Método para obligar al evento a buscar la referencia de nuevo, por si ya ha hecho play.
+        //musicEventEmitter.ForceLookUp(); // Método para obligar al evento a buscar la referencia de nuevo, por si ya ha hecho play.
         musicEventEmitter.Play();
     }
 
