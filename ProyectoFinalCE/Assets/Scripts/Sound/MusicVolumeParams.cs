@@ -8,7 +8,7 @@ public class MusicVolumeParams : MonoBehaviour
     private const string musicParamName = "Speaking";
     [SerializeField] private float musicVolumeValueMin;
     [SerializeField] private float musicVolumeValueMax;
-    private float currentValue = 1;
+    private float currentValue = 0.8f;
 
     #endregion
 
@@ -49,6 +49,8 @@ public class MusicVolumeParams : MonoBehaviour
     public void ApplyCurrentState()
     {
         var emitter = MusicManager.instance.GetEventEmitter();
+
+        Debug.Log(currentValue);
 
         if (emitter != null && emitter.EventInstance.isValid())
             emitter.EventInstance.setParameterByName(musicParamName, currentValue);

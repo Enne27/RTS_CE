@@ -59,7 +59,8 @@ public class PauseMenuView : View
         base.Show();
         Time.timeScale = 0;
         cameraMovement?.DisableCameraInput();
-        MusicManager.instance.PauseMusic();
+       /* if(MusicManager.instance != null)
+            MusicManager.instance.PauseMusic();*/
     }
 
     public override void Hide()
@@ -67,6 +68,7 @@ public class PauseMenuView : View
         base.Hide();
         Time.timeScale = 1;
         cameraMovement?.EnableCameraInput();
-        MusicManager.instance.ResumeMusic();
+       /* if (MusicManager.instance != null)
+            MusicManager.instance.ResumeMusic();*/
     }
 }

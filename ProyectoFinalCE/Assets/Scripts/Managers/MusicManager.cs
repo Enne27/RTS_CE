@@ -49,6 +49,7 @@ public class MusicManager : MonoBehaviour
     private void Awake()
     {
         musicEventEmitter = GetComponentInChildren<StudioEventEmitter>();
+        //OnSceneLoaded(SceneManager.GetActiveScene());
     }
 
     private void OnEnable()
@@ -78,6 +79,7 @@ public class MusicManager : MonoBehaviour
     {
         //UnityEngine.Debug.Log("Loaded Scene" + escena.name);
         StopMusic();
+        musicEventEmitter = GetComponentInChildren<StudioEventEmitter>();
         switch (escena.name)
         {
             case MAIN_MENU_SCENE_NAME:
@@ -88,6 +90,7 @@ public class MusicManager : MonoBehaviour
             case SINGLE_PLAYER_GAME_SCENE_NAME:
             case CREATIVE_MODE_SCENE_NAME:
                 SwitchMusicReference(gameMusic);
+                //MusicVolumeParams.instance.ApplyCurrentState();
                 break;
         }
     }
@@ -119,7 +122,9 @@ public class MusicManager : MonoBehaviour
         musicEventEmitter.EventReference = newReference;
         musicEventEmitter.ForceLookUp(); // Método para obligar al evento a buscar la referencia de nuevo, por si ya ha hecho play.
         PlayMusic();
-        MusicVolumeParams.instance.ApplyCurrentState();
+
+        if(newReference.Equals(gameMusic))
+            MusicVolumeParams.instance.ApplyCurrentState();
     }
 
     #endregion
@@ -152,7 +157,8 @@ public class MusicManager : MonoBehaviour
     /// </summary>
     public void PauseMusic()
     {
-        musicEventEmitter.EventInstance.setPaused(true);
+        //if (musicEventEmitter != null)
+            musicEventEmitter.EventInstance.setPaused(true);
     }
 
     /// <summary>
@@ -160,7 +166,8 @@ public class MusicManager : MonoBehaviour
     /// </summary>
     public void ResumeMusic()
     {
-        musicEventEmitter.EventInstance.setPaused(false); // En los event emitters no existe directamente un setPause
+        //if(musicEventEmitter != null)
+            musicEventEmitter.EventInstance.setPaused(false); // En los event emitters no existe directamente un setPause
     }
 
     /// <summary>
