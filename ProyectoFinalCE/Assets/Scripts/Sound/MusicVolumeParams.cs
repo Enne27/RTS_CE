@@ -50,7 +50,7 @@ public class MusicVolumeParams : MonoBehaviour
     {
         var emitter = MusicManager.instance.GetEventEmitter();
 
-        Debug.Log(currentValue);
+        //Debug.Log(currentValue);
 
         if (emitter != null && emitter.EventInstance.isValid())
             emitter.EventInstance.setParameterByName(musicParamName, currentValue);

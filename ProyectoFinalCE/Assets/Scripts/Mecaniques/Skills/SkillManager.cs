@@ -35,7 +35,7 @@ public class SkillManager : MonoBehaviour
         Instance = this;
         playerSkills = new Skills();
         playerSkills.Initialize(allSkills);
-        Debug.Log("SkillManager READY");
+        //Debug.Log("SkillManager READY");
     }
 
     #region Methods

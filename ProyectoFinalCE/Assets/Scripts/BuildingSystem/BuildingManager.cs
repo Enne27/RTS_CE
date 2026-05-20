@@ -105,7 +105,7 @@ public class BuildingManager : MonoBehaviour
             ForagingChamberFunction foragingChamber = ForagingChamberFunction.Instance;
 
             // Recursos totales (storage + foraging)
-            int totalMaterials = inventory.materials + inventory.materialsInForaging;
+            int totalMaterials = inventory.materials + foragingChamber.materials; /*inventory.materialsInForaging*/
 
             bool hasResources = totalMaterials >= data.costMC && inventory.eggs >= data.costHV;
 
@@ -115,18 +115,15 @@ public class BuildingManager : MonoBehaviour
 
                 if (mouse.leftButton.wasPressedThisFrame)
                 {
-                    // =========================
                     // MATERIALES
-                    // =========================
 
                     int materialsNeeded = data.costMC;
 
                     // Primero gastar foraging
-                    if (inventory.materialsInForaging >= materialsNeeded)
+                    if (/*inventory.materialsInForaging*/foragingChamber.materials >= materialsNeeded)
                     {
                         inventory.materialsInForaging -= materialsNeeded;
 
-                        // Actualizar chamber visual
                         foragingChamber.RemoveResource(ResourceType.material, materialsNeeded);
                     }
                     else
@@ -136,7 +133,6 @@ public class BuildingManager : MonoBehaviour
                         // Vaciar foraging
                         inventory.materialsInForaging = 0;
 
-                        // Actualizar chamber visual
                         if (fromForaging > 0)
                         {
                             foragingChamber.RemoveResource(ResourceType.material, fromForaging);

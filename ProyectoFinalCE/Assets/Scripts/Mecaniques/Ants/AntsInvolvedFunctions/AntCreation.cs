@@ -243,9 +243,9 @@ public class AntCreation : MonoBehaviour
     public bool CanSpawnAnt(int foodCosts, int hvCosts)
     {
         return ((GameManager.instance.player.inventory.food >= foodCosts) 
-                && (GameManager.instance.player.inventory.eggs >= hvCosts)) 
-            || (ForagingChamberFunction.Instance.foods >= foodCosts 
-                && ForagingChamberFunction.Instance.materials <= hvCosts);
+                ||(ForagingChamberFunction.Instance.foods >= foodCosts))
+            && ((GameManager.instance.player.inventory.eggs >= hvCosts)
+              || (ForagingChamberFunction.Instance.materials <= hvCosts));
     }
 
     /// <summary>
