@@ -57,6 +57,9 @@ public class MoundFunction : StructuresPlayer
     [SerializeField] TextMeshProUGUI textHPLabel;
 
     [HideInInspector] public Owner ownerAntAttacker;
+
+    [Header("Visual Effects")]
+    [SerializeField] ParticleSystem particlesCollision;
     #endregion
 
     #region METHODS_STRUCTURES
@@ -107,7 +110,9 @@ public class MoundFunction : StructuresPlayer
         if((moundHealthPoints - damage) > 0)
         {
             moundHealthPoints -= damage;
-            Debug.Log("La vida del hormiguero: " + moundHealthPoints);
+            //Debug.Log("La vida del hormiguero: " + moundHealthPoints);
+            if(particlesCollision != null)
+                particlesCollision.Play();
         }
         else
         {

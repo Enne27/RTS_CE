@@ -486,10 +486,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Build Options:\nNumKey 1 = Queen Chamber\nNumKey 2 = Brood Chamber\nNumKey
-    3 = Storage Chamber\nNumKey 4 = Tunnel\n\nControls:\nLeft Click = Build (if posible)\n\nWASD
-    | Rigth Click = Move \n\nScroll Wheel = Zoom\nDouble Right Click = Zoom to Building\n\nScroll
-    Click = Cancel building (while trying to building)"
+  m_text: "<b>General Controls:</b>\nP = Pause\nSpace = Next Line Dialogue\n\n<b>2D
+    Anthill controls:</b>\nWASD | Rigth Click = Move \nScroll Wheel = Zoom\nLeft
+    Click = Build\nScroll Click = Cancel building\nDouble Right Click = Zoom to Building\n<b>\nBuild
+    Options:</b>\nNumKey 1 = Queen Chamber\nNumKey 2 = Brood Chamber\nNumKey 3 =
+    Storage Chamber\nNumKey 4 = Tunnel"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
   m_sharedMaterial: {fileID: 1973153549898254127, guid: ec33c9e827da9c146af8fa008f93820b, type: 2}
@@ -516,11 +517,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 17.3
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 10
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
@@ -555,7 +556,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 10, y: 10.891281, z: 5.9407654, w: 5.940689}
+  m_margin: {x: 21.038132, y: 10.891281, z: 17.767288, w: 5.940689}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

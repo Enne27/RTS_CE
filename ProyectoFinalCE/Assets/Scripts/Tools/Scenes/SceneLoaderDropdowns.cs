@@ -10,8 +10,6 @@ public partial class SceneLoader
         public static void LoadCreditsScene() { OpenScene("Assets/scenes/FinalScenes/CreditsScene.unity"); }
         [MenuItem("Scenes/FinalScenes/MainMenuScene")]
         public static void LoadMainMenuScene() { OpenScene("Assets/scenes/FinalScenes/MainMenuScene.unity"); }
-        [MenuItem("Scenes/FinalScenes/SingleplayerGameScene UI")]
-        public static void LoadSingleplayerGameSceneUI() { OpenScene("Assets/scenes/FinalScenes/SingleplayerGameScene UI.unity"); }
         [MenuItem("Scenes/FinalScenes/SingleplayerGameScene")]
         public static void LoadSingleplayerGameScene() { OpenScene("Assets/scenes/FinalScenes/SingleplayerGameScene.unity"); }
         [MenuItem("Scenes/TestScenes/Assets_3D_Test")]
