@@ -8,6 +8,7 @@ public class MusicVolumeParams : MonoBehaviour
     private const string musicParamName = "Speaking";
     [SerializeField] private float musicVolumeValueMin;
     [SerializeField] private float musicVolumeValueMax;
+    private float currentValue = 1;
 
     #endregion
 
@@ -32,20 +33,24 @@ public class MusicVolumeParams : MonoBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        musicEmitter = MusicManager.instance.GetEventEmitter();
-    }
 
     public void ChangeMusicToSpeaking()
     {
-
-        musicEmitter = MusicManager.instance.GetEventEmitter();
-        MusicManager.instance.ChangeParameterValue(musicEmitter, musicParamName, musicVolumeValueMin);
+        currentValue = musicVolumeValueMin;
+        ApplyCurrentState();
     }
 
     public void ChangeMusicToNotSpeaking()
     {
-        MusicManager.instance.ChangeParameterValue(musicEmitter, musicParamName, musicVolumeValueMax);
+        currentValue = musicVolumeValueMax;
+        ApplyCurrentState();
+    }
+
+    public void ApplyCurrentState()
+    {
+        var emitter = MusicManager.instance.GetEventEmitter();
+
+        if (emitter != null && emitter.EventInstance.isValid())
+            emitter.EventInstance.setParameterByName(musicParamName, currentValue);
     }
 }

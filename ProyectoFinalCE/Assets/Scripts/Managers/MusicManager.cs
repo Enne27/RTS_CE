@@ -60,7 +60,13 @@ public class MusicManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded; // Debe eliminarse la subscripción para que no se llame más de una vez.
     }
-
+    private void OnDestroy()
+    {
+        if (musicEventEmitter != null)
+        {
+            musicEventEmitter.Stop();
+        }
+    }
     #region CHANGE_MUSIC_REFERENCE
 
     /// <summary>
@@ -70,8 +76,8 @@ public class MusicManager : MonoBehaviour
     /// <param name="arg1"></param>
     private void OnSceneLoaded(Scene escena, LoadSceneMode arg1)
     {
-        UnityEngine.Debug.Log("Loaded Scene" + escena.name);
-
+        //UnityEngine.Debug.Log("Loaded Scene" + escena.name);
+        StopMusic();
         switch (escena.name)
         {
             case MAIN_MENU_SCENE_NAME:
@@ -106,11 +112,14 @@ public class MusicManager : MonoBehaviour
     IEnumerator _SwitchMusicReference(EventReference newReference, float fadeOutDuration = 1.0f)
     {
         SFXManager.StopAllSFX();
-        musicEventEmitter.Stop();
+        StopMusic();
+
         yield return new WaitForSecondsRealtime(fadeOutDuration);
+
         musicEventEmitter.EventReference = newReference;
-        //musicEventEmitter.ForceLookUp(); // Método para obligar al evento a buscar la referencia de nuevo, por si ya ha hecho play.
-        musicEventEmitter.Play();
+        musicEventEmitter.ForceLookUp(); // Método para obligar al evento a buscar la referencia de nuevo, por si ya ha hecho play.
+        PlayMusic();
+        MusicVolumeParams.instance.ApplyCurrentState();
     }
 
     #endregion
@@ -133,7 +142,7 @@ public class MusicManager : MonoBehaviour
     /// <param name="newValue">Nuevo valor del parámetro.</param>
     public void ChangeParameterValue(StudioEventEmitter eventEmitter, string paramName, float newValue)
     {
-        eventEmitter.SetParameter(paramName, newValue);
+        eventEmitter.EventInstance.setParameterByName(paramName, newValue);
     }
     #endregion
 
